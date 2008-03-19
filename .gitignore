@@ -1,0 +1,9 @@
+*~
+*.pyc
+*.pyo
+.installed.cfg
+parts
+eggs
+develop-eggs
+bin
+cc.license.egg-info
