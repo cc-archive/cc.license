@@ -15,8 +15,6 @@ class ILicenseSelector(Interface):
         an ILicense object."""
 
     jurisdictions = Attribute(u"A sequence of IJurisdiction objects.")
-    
-    # YYY perhaps unnecessary
     versions = Attribute(u"A sequence of available versions for this class.")
 
 class ILicense(Interface):
@@ -29,11 +27,13 @@ class ILicense(Interface):
     jurisdiction = Attribute(u"The jurisdiction for the license.")
     uri = Attribute(u"The fully qualified URI of the license.")
 
-    current_version
-    deprecated
-    superseded
-    code
-
+    current_version = Attribute(u"The ILicense of the current version of "
+                                "this jurisdiction + license.")
+    deprecated = Attribute(u"Boolean attribute; True if this license is "
+                           "deprecated")
+    superseded = Attribute(u"Boolean attribute; True if this license has "
+                           "been replaced with a newer version.")
+    license_code = Attribute(u"The short alpha code for this license.")
     libre = Attribute(u"Returns True if this is a 'Libre' license.")
 
 class IJurisdiction(Interface):
