@@ -5,10 +5,10 @@ version = '8.3'
 
 setup(name='cc.license',
       version=version,
-      description=".",
+      description="License selection based on ccREL-based metadata.",
       long_description="""\
 """,
-      classifiers=[], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
+      classifiers=[],
       keywords='',
       author='Creative Commons',
       author_email='software@creativecommons.org',
