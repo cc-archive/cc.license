@@ -6,8 +6,6 @@ version = '8.3'
 setup(name='cc.license',
       version=version,
       description="License selection based on ccREL-based metadata.",
-      long_description="""\
-""",
       classifiers=[],
       keywords='',
       author='Creative Commons',
