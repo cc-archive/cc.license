@@ -1,21 +1,14 @@
 from zope.interface import Interface, Attribute
 
-class ILicenseSelector(Interface):
-    """License selection for a particular class of license."""
+class IJurisdiction(Interface):
+    """Jurisdiction metadata."""
 
-    def by_code(license_code, jurisdiction='-'):
-        pass
+    code = Attribute(u"The short code for this jurisdiction.")
+    local_url = Attribute(u"The URL of the local jurisdiction site.")
 
-    def by_uri(uri, absolute=True):
-        """Process a URI and return the appropriate ILicense object.
-        If unable to produce a License from the URI, return None."""
+    launched = Attribute(u"Boolean attribute; True if this jurisdiction has "
+                         "launched")
 
-    def by_answers(in_dict):
-        """Issue a license based on a dict of answers; return 
-        an ILicense object."""
-
-    jurisdictions = Attribute(u"A sequence of IJurisdiction objects.")
-    versions = Attribute(u"A sequence of available versions for this class.")
 
 class ILicense(Interface):
     """License metadata for a specific license."""
@@ -36,10 +29,40 @@ class ILicense(Interface):
     license_code = Attribute(u"The short alpha code for this license.")
     libre = Attribute(u"Returns True if this is a 'Libre' license.")
 
-class IJurisdiction(Interface):
-    """Jurisdiction metadata."""
 
-    code = Attribute(u"")
-    local_url = Attribute(u"")
+class ILicenseSelector(Interface):
+    """License selection for a particular class of license."""
 
-    launched = Attribute(u"")
+    id = Attribute(u"The unique identifier for this selector.")
+
+    def by_code(license_code, jurisdiction=None):
+        """Return the ILicense object cooresponding to the license code and
+        optional jurisdiction.  If jurisdiction is None, an Unported 
+        license is returned.  If a licese can not be found in this selector,
+        return None."""
+
+    def by_uri(uri, absolute=True):
+        """Process a URI and return the appropriate ILicense object.
+        If unable to produce a License from the URI, return None."""
+
+    def by_answers(answers_dict):
+        """Issue a license based on a dict of answers; return 
+        an ILicense object."""
+
+    def questions():
+        """Return a String(?) containing the XML describing the questions
+        for this license class."""
+
+    jurisdictions = Attribute(u"A sequence of IJurisdiction objects.")
+    versions = Attribute(u"A sequence of available versions for this class.")
+
+
+class ILicenseFormatter(Interface):
+    """Support for formatting license metadata for output."""
+
+    id = Attribute(u"The unique identifier for this formatter.")
+
+    def format(license, work_dict={}, locale='en'):
+        """Return a string serialization for the license, optionally 
+        incorporating the work metadata and locale."""
+
