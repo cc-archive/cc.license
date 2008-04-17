@@ -9,6 +9,9 @@ class IJurisdiction(Interface):
     local_url = Attribute(u"The URL of the local jurisdiction site, like http://creativecommons.org.mx/.")
     launched = Attribute(u"Boolean attribute; True if this jurisdiction has "
                          "launched")
+    # FIXME: Expose dc:title for the jurisdiction? How to deal with
+    # the language issue?  (This is probably the same as for ILicense,
+    # actually, and both seem to be dc:title.)
 
 class ILicense(Interface):
     """License metadata for a specific license."""
