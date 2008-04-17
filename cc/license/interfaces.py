@@ -4,7 +4,7 @@ class IJurisdiction(Interface):
     """Jurisdiction metadata."""
 
     code = Attribute(u"The short code for this jurisdiction.")
-    local_url = Attribute(u"The URL of the local jurisdiction site.")
+    local_url = Attribute(u"The URL of the local jurisdiction site, like http://creativecommons.org.mx/.")
 
     launched = Attribute(u"Boolean attribute; True if this jurisdiction has "
                          "launched")
