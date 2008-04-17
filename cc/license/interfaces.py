@@ -35,19 +35,24 @@ class ILicenseSelector(Interface):
 
     id = Attribute(u"The unique identifier for this selector.")
 
-    def by_code(license_code, jurisdiction=None):
-        """Return the ILicense object cooresponding to the license code and
-        optional jurisdiction.  If jurisdiction is None, an Unported 
-        license is returned.  If a licese can not be found in this selector,
-        return None."""
+    def by_code(license_code, jurisdiction=None, version=None):
+        """Return the ILicense object cooresponding to the license code (eg,
+        "by-sa") and optional jurisdiction and version.  If
+        jurisdiction is None, an Unported license is returned.  If
+        version is None, the latest available version is returned.  If
+        a license can not be found in this selector, return None."""
 
-    def by_uri(uri, absolute=True):
+    def by_uri(uri):
         """Process a URI and return the appropriate ILicense object.
         If unable to produce a License from the URI, return None."""
 
     def by_answers(answers_dict):
         """Issue a license based on a dict of answers; return 
-        an ILicense object."""
+        an ILicense object.
+
+        Question and answer information exists in questions.xml;
+        there is a jurisdiction "question" which should go away.
+        """
 
     def questions():
         """Return a String(?) containing the XML describing the questions
@@ -58,7 +63,7 @@ class ILicenseSelector(Interface):
 
 
 class ILicenseFormatter(Interface):
-    """Support for formatting license metadata for output."""
+    """Support for formatting metadata for an issued license for output."""
 
     id = Attribute(u"The unique identifier for this formatter.")
 
