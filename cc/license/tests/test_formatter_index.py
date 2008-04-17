@@ -20,6 +20,7 @@ def test_get_formatter():
     for formatter_id in cc.license.list_formatters():
 
         s = cc.license.get_formatter(formatter_id)
+        print formatter_id, 'baby'
         nose.tools.assert_true(
             interfaces.ILicenseFormatter in implementedBy(s))
     

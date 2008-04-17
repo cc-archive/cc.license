@@ -20,6 +20,7 @@ def test_get_selector():
     for selector_id in cc.license.list_selectors():
 
         s = cc.license.get_selector(selector_id)
+        print selector_id, 'baby'
         nose.tools.assert_true(
             interfaces.ILicenseSelector in implementedBy(s))
     
