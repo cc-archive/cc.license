@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '8.3'
+version = '0.1'
 
 setup(name='cc.license',
       version=version,
