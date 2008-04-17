@@ -1,5 +1,17 @@
 import RDF
 
+def query_to_single_value(model, subject, predicate, object):
+    query = RDF.Statement(subject, predicate, object)
+    results = list(model.find_statements(query))
+    assert len(results) == 1
+
+    # Assume either s, p, or o is None
+    # so that would be what we want back.
+    is_none = [thing for thing in ('subject', 'predicate', 'object')
+               if (eval(thing) is None)]
+    assert len(is_none) == 1
+    return uri2value(getattr(results[0], is_none[0]))
+
 def to_bool(s):
     s = s.lower()
     assert s in ('true', 'false')
@@ -12,7 +24,7 @@ type2converter = {
 def uri2value(uri):
     if uri.type == 1: # Is there a list of these somewhere?
         # a URI
-        return str(uri)
+        return str(uri.uri)
     if uri.type == 2:
         # It's a literal - but what kind?
         literal = uri.literal_value
