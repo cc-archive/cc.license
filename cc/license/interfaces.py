@@ -8,6 +8,8 @@ class IJurisdiction(Interface):
 
     launched = Attribute(u"Boolean attribute; True if this jurisdiction has "
                          "launched")
+    id = Attribute(u"String URL of the jurisdiction ID, like "
+                   "http://creativecommons.org/international/us")
 
 
 class ILicense(Interface):
