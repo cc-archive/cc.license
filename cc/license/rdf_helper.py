@@ -1,4 +1,5 @@
 import RDF
+import datetime
 NS_CC='http://creativecommons.org/ns#'
 NS_DC='http://purl.org/dc/elements/1.1/'
 NS_DCQ='http://purl.org/dc/terms/'
@@ -26,11 +27,23 @@ def query_to_language_value_dict(model, subject, predicate, object):
         ret[lang] = val
     return ret
 
-def query_to_single_value(model, subject, predicate, object):
+default_flag_value = object()
+
+def query_to_single_value(model, subject, predicate, object, default = default_flag_value):
     with_lang = query_to_language_value_dict(model, subject, predicate, object)
-    assert len(with_lang) == 1
-    
-    return with_lang.values()[0]
+    if len(with_lang) > 1:
+        raise AssertionError, "Somehow I found too many values."
+    if len(with_lang) == 1:
+        return with_lang.values()[0]
+    else: # Nothing to 
+        if default is default_flag_value:
+            # Then no default was specified
+            raise AssertionError, "No values found."
+        else:
+            return default
+
+def to_date(s):
+    return datetime.date(*s.split('/'))
 
 def to_bool(s):
     s = s.lower()
@@ -39,6 +52,7 @@ def to_bool(s):
 
 type2converter = {
     'http://www.w3.org/2001/XMLSchema-datatypes#boolean': to_bool,
+    'http://www.w3.org/2001/XMLSchema-datatypes#date': to_date,
 }
 
 def uri2lang_and_value(uri):
