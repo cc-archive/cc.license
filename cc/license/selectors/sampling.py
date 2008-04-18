@@ -1,6 +1,12 @@
+import re
 import zope.interface
+import glob
+import os
+import cc.license
+import RDF
 from cc.license.interfaces import ILicenseSelector, ILicense
-from cc.license.rdf_helper import query_to_single_value, NS_DC, NS_DCQ
+from cc.license.rdf_helper import query_to_single_value, NS_DC, NS_DCQ, NS_CC
+import urlparse
 
 # Note: this could be lazy, but then errors would be detected really late
 #  - is that really what we want?
@@ -23,7 +29,8 @@ class SamplingLicense(object):
         self.deprecated_date = query_to_single_value(model,
             RDF.Uri(uri),
             RDF.Uri(NS_CC + 'deprecatedOn'),
-            default=None)
+            None,
+            default = None)
         if self.deprecated_date is None:
             self.deprecated = False
         else:
@@ -50,12 +57,13 @@ class Selector(object):
     def by_uri(self, uri):
         return SamplingLicense(self.model, uri)
     def by_code(self, license_code, jurisdiction = None, version = None):
-        base = 'http://creativecommons.org/licenses/' + license_code + '/'
+        base = 'http://creativecommons.org/licenses/'
+        base = urlparse.urljoin(base, license_code + '/')
         if not version:
             version = '1.0'
-        base += '/' + version + '/'
+        base = urlparse.urljoin(base, version + '/')
         if jurisdiction:
-            base += '/' + jurisdiction + '/'
+            base = urlparse.urljoin(base, jurisdiction + '/')
         return self.by_uri(base)
     def by_answers(self, answers_dict):
         raise NotImplementedException
