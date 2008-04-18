@@ -1,5 +1,7 @@
 import RDF
 NS_CC='http://creativecommons.org/ns#'
+NS_DC='http://purl.org/dc/elements/1.1/'
+NS_DCQ='http://purl.org/dc/terms/'
 JURI_RDF_PATH='./license.rdf/rdf/jurisdictions.rdf'
 LIC_RDF_PATH ='./license.rdf/license_rdf/'
 # FIXME: Use package.requires for JURI_RDF_PATH
