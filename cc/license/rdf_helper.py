@@ -43,7 +43,7 @@ def query_to_single_value(model, subject, predicate, object, default = default_f
             return default
 
 def to_date(s):
-    return datetime.date(*s.split('/'))
+    return datetime.date(*map(int, s.split('-')))
 
 def to_bool(s):
     s = s.lower()
