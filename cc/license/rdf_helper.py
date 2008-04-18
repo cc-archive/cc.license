@@ -25,18 +25,21 @@ type2converter = {
     'http://www.w3.org/2001/XMLSchema-datatypes#boolean': to_bool,
 }
 
-def uri2value(uri):
+def uri2lang_and_value(uri):
     if uri.type == 1: # Is there a list of these somewhere?
         # a URI
-        return str(uri.uri)
+        return (None, str(uri.uri))
     if uri.type == 2:
         # It's a literal - but what kind?
         literal = uri.literal_value
         strvalue = uri.literal_value['string']
         type = literal['datatype']
         type = str(type)
-        return type2converter.get(type, lambda thing: thing)(strvalue)
+        return (literal['language'], type2converter.get(type, lambda thing: thing)(strvalue))
     raise "Your mom"
+
+def uri2value(uri):
+    return uri2lang_and_value(uri)[1]
 
 def init_model(filename):
     ''' Input: An RDF.Uri() to start from.
