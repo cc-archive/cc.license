@@ -33,10 +33,7 @@ class Selector(object):
     id = "Selector for public domain 'license'"
     def __init__(self):
         files = glob.glob(os.path.join(cc.license.rdf_helper.LIC_RDF_PATH ,'*publicdomain*'))
-        self.model = cc.license.rdf_helper.init_model(files.pop())
-        parser = RDF.Parser('raptor')
-        for file in files: # for remaining files
-            parser.parse_into_model(self.model, RDF.Uri(string='file:' + file))
+        self.model = cc.license.rdf_helper.init_model(*files)
 
     def by_uri(self, uri):
         value = cc.license.rdf_helper(self.model,

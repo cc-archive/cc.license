@@ -55,10 +55,11 @@ def uri2lang_and_value(uri):
 def uri2value(uri):
     return uri2lang_and_value(uri)[1]
 
-def init_model(filename):
+def init_model(*filenames):
     ''' Input: An RDF.Uri() to start from.
     Output: A model with that sucker parsed. '''
-    assert ':/' not in filename # not a URI
+    for filename in filenames:
+        assert ':/' not in filename # not a URI
 
     storage=RDF.Storage(storage_name="hashes",
                     name="test",
@@ -71,7 +72,8 @@ def init_model(filename):
       raise "new RDF.model failed"
 
     parser = RDF.Parser('raptor')
-    filename_uri = RDF.Uri(string="file:" + filename)
-    parser.parse_into_model(model, filename_uri)
+    for filename in filenames:
+        filename_uri = RDF.Uri(string="file:" + filename)
+        parser.parse_into_model(model, filename_uri)
     return model
 
