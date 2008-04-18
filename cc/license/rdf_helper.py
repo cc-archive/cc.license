@@ -1,4 +1,8 @@
 import RDF
+NS_CC='http://creativecommons.org/ns#'
+JURI_RDF_PATH='./license.rdf/rdf/jurisdictions.rdf'
+LIC_RDF_PATH ='./license.rdf/license_rdf/'
+# FIXME: Use package.requires for JURI_RDF_PATH
 
 def query_to_single_value(model, subject, predicate, object):
     query = RDF.Statement(subject, predicate, object)
