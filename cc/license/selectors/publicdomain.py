@@ -35,15 +35,6 @@ class Selector(object):
         files = glob.glob(os.path.join(cc.license.rdf_helper.LIC_RDF_PATH ,'*publicdomain*'))
         self.model = cc.license.rdf_helper.init_model(*files)
 
-    def by_uri(self, uri):
-        value = cc.license.rdf_helper(self.model,
-                                      RDF.Uri(uri),
-                                      RDF.Uri(cc.license.rdf_helper.NS_CC + 'legalcode'),
-                                      None)
-        if value:
-            return value
-        raise "your mom"
-    
     def by_code(self, code):
         if code == 'publicdomain':
             return self.by_uri('http://creativecommons.org/licenses/publicdomain/')
