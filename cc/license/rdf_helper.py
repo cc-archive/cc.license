@@ -4,17 +4,31 @@ JURI_RDF_PATH='./license.rdf/rdf/jurisdictions.rdf'
 LIC_RDF_PATH ='./license.rdf/license_rdf/'
 # FIXME: Use package.requires for JURI_RDF_PATH
 
-def query_to_single_value(model, subject, predicate, object):
-    query = RDF.Statement(subject, predicate, object)
-    results = list(model.find_statements(query))
-    assert len(results) == 1
-
+def query_to_language_value_dict(model, subject, predicate, object):
     # Assume either s, p, or o is None
     # so that would be what we want back.
     is_none = [thing for thing in ('subject', 'predicate', 'object')
                if (eval(thing) is None)]
     assert len(is_none) == 1
-    return uri2value(getattr(results[0], is_none[0]))
+
+    query = RDF.Statement(subject, predicate, object)
+    results = list(model.find_statements(query))
+
+    interesting_ones = [getattr(result, is_none[0]) for result in results]
+    values_with_lang = [uri2lang_and_value(result) for result in interesting_ones]
+
+    # Now, collapse this into a dict, ensuring there are no duplicate keys
+    ret = {}
+    for (lang, val) in values_with_lang:
+        assert lang not in ret
+        ret[lang] = val
+    return ret
+
+def query_to_single_value(model, subject, predicate, object):
+    with_lang = query_to_language_value_dict(model, subject, predicate, object)
+    assert len(with_lang) == 1
+    
+    return with_lang.values()[0]
 
 def to_bool(s):
     s = s.lower()
