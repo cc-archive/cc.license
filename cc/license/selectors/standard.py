@@ -10,7 +10,7 @@ import urlparse
 
 ## FIXME: One day make this not copy-pasta from sampling
 
-class SamplingLicense(object):
+class StandardLicense(object):
     zope.interface.implements(ILicense)
     def __init__(self, model, uri):
         assert ('by' in uri) or \
