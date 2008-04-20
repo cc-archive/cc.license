@@ -23,7 +23,8 @@ class StandardLicense(object):
             RDF.Uri(NS_DCQ + 'hasVersion'),
             None)
         self.jurisdiction = query_to_single_value(model,
-            RDF.Uri(uri), RDF.Uri(NS_CC + 'jurisdiction'), None)
+            RDF.Uri(uri), RDF.Uri(NS_CC + 'jurisdiction'), None,
+            'Your mother has no jurisdiction')
         self.uri = uri
         self.current_version = 'Your mom'  # FIXME: This should be calculated
                                          # and passed in by the Selector,
