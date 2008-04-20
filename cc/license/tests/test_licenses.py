@@ -7,6 +7,13 @@ def test_find_sampling_selector():
     sampling_selector = cc.license.get_selector('recombo')()
     return sampling_selector
 
+def test_find_standard_selector():
+    from zope.interface import implementedBy
+    import cc.license
+
+    standard_selector = cc.license.get_selector('standard')()
+    return standard_selector
+
 def test_find_sampling_licenses():
     selector = test_find_sampling_selector()
     lic = selector.by_code('sampling')
