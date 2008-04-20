@@ -50,10 +50,10 @@ class SamplingLicense(object):
 
 def relevant_rdf():
     ret = set()
-    set.update(glob.glob(os.path.join(cc.license.rdf_helper.LIC_RDF_PATH , '*by*.rdf')))
-    set.update(glob.glob(os.path.join(cc.license.rdf_helper.LIC_RDF_PATH , '*nc*.rdf')))
-    set.update(glob.glob(os.path.join(cc.license.rdf_helper.LIC_RDF_PATH , '*nd*.rdf')))
-    set.update(glob.glob(os.path.join(cc.license.rdf_helper.LIC_RDF_PATH , '*sa*.rdf')))
+    ret.update(glob.glob(os.path.join(cc.license.rdf_helper.LIC_RDF_PATH , '*by*.rdf')))
+    ret.update(glob.glob(os.path.join(cc.license.rdf_helper.LIC_RDF_PATH , '*nc*.rdf')))
+    ret.update(glob.glob(os.path.join(cc.license.rdf_helper.LIC_RDF_PATH , '*nd*.rdf')))
+    ret.update(glob.glob(os.path.join(cc.license.rdf_helper.LIC_RDF_PATH , '*sa*.rdf')))
     return ret
 
 class Selector(object):
