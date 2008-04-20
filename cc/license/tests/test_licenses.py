@@ -14,6 +14,19 @@ def test_find_standard_selector():
     standard_selector = cc.license.get_selector('standard')()
     return standard_selector
 
+def test_bysa_generic():
+    selector = test_find_standard_selector()
+    lic = selector.by_code('by-sa')
+    assert_true(lic.jurisdiction == 'Your mother has no jurisdiction')
+    # assert_true(lic.libre) # FIXME: Should this be here?
+
+def test_bysa_us():
+    selector = test_find_standard_selector()
+    lic = selector.by_code('by-sa', jurisdiction='us')
+    assert_true(lic.jurisdiction == 'http://creativecommons.org/international/us/')
+    # assert_true(lic.libre) # FIXME: Should this be here?
+
+
 def test_find_sampling_licenses():
     selector = test_find_sampling_selector()
     lic = selector.by_code('sampling')
