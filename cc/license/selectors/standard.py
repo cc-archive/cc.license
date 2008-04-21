@@ -50,8 +50,14 @@ class StandardLicense(object):
             self.deprecated = False
         else:
             self.deprecated = True
-        self.superseded = False # FIXME: Should be passed in by the Selector
-        # XXX (current_version != self)
+        replaced_by = query_to_single_value(model,
+            RDF.Uri(uri),
+            RDF.Uri(NS_DCQ + 'isReplacedBy'),
+            None, default = None)
+        if replaced_by:
+            self.superseded = StandardLicense(model, replaced_by) # FIXME: Should be passed in by the Selector
+        else:
+            self.superseded = None
 
         self.license_code = re.match(r'http://creativecommons.org/licenses/([^/]+)/.*',
                 uri).group(1) # FIXME: Hilariously lame regex until ML and NY and AL talk
