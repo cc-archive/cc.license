@@ -7,12 +7,24 @@ JURI_RDF_PATH='./license.rdf/rdf/jurisdictions.rdf'
 LIC_RDF_PATH ='./license.rdf/license_rdf/'
 # FIXME: Use package.requires for JURI_RDF_PATH
 
+class RdfHelperException(Exception):
+    pass
+
+class NoValuesFoundException(RdfHelperException):
+    pass
+
+def die_unless(cause, message):
+    if cause:
+        pass
+    else:
+        raise RdfHelperException, message
+
 def query_to_language_value_dict(model, subject, predicate, object):
     # Assume either s, p, or o is None
     # so that would be what we want back.
     is_none = [thing for thing in ('subject', 'predicate', 'object')
                if (eval(thing) is None)]
-    assert len(is_none) == 1
+    die_unless( len(is_none) == 1, "You gave me more than one None, so I don't know what you want back")
 
     query = RDF.Statement(subject, predicate, object)
     results = list(model.find_statements(query))
@@ -23,7 +35,7 @@ def query_to_language_value_dict(model, subject, predicate, object):
     # Now, collapse this into a dict, ensuring there are no duplicate keys
     ret = {}
     for (lang, val) in values_with_lang:
-        assert lang not in ret
+        die_unless( lang not in ret, "Duplicate language found; blowing up")
         ret[lang] = val
     return ret
 
@@ -32,13 +44,13 @@ default_flag_value = object()
 def query_to_single_value(model, subject, predicate, object, default = default_flag_value):
     with_lang = query_to_language_value_dict(model, subject, predicate, object)
     if len(with_lang) > 1:
-        raise AssertionError, "Somehow I found too many values."
+        raise RdfHelperException, "Somehow I found too many values."
     if len(with_lang) == 1:
         return with_lang.values()[0]
     else: # Nothing to 
         if default is default_flag_value:
             # Then no default was specified
-            raise AssertionError, "No values found."
+            raise NoValuesFoundException, "No values found."
         else:
             return default
 
@@ -47,7 +59,7 @@ def to_date(s):
 
 def to_bool(s):
     s = s.lower()
-    assert s in ('true', 'false')
+    die_unless( s in ('true', 'false'), "Non-bool found in literal; blowing up")
     return {'true': True, 'false': False}[s]
 
 type2converter = {
@@ -75,7 +87,7 @@ def init_model(*filenames):
     ''' Input: An RDF.Uri() to start from.
     Output: A model with that sucker parsed. '''
     for filename in filenames:
-        assert ':/' not in filename # not a URI
+        die_unless( ':/' not in filename, "You passed in something that looks like a URI; blowing up") # not a URI
 
     storage=RDF.Storage(storage_name="hashes",
                     name="test",

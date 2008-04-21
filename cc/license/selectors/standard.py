@@ -18,6 +18,13 @@ class StandardLicense(object):
                ('nd' in uri) or \
                ('sa' in uri) # I guess it should be a real license
         self.license_class = 'standard'
+
+        # Assert that the model knows something about this URI
+        # every CC license has a creator of http://creativecommons.org/
+        assert (query_to_single_value(model,
+                RDF.Uri(uri), RDF.Uri(NS_DC + 'creator'), None) \
+                == 'http://creativecommons.org')
+
         self.version = query_to_single_value(model,
             RDF.Uri(uri),
             RDF.Uri(NS_DCQ + 'hasVersion'),
@@ -66,6 +73,13 @@ class Selector(object):
         self.jurisdictions = None # FIXME
         self.versions = None # FIXME
     def by_uri(self, uri):
+        # Check that the model knows about this license (e.g., it has a creator)
+        try:
+            assert (query_to_single_value(self.model,
+                RDF.Uri(uri), RDF.Uri(NS_DC + 'creator'), None) \
+                == 'http://creativecommons.org')
+        except cc.license.rdf_helper.NoValuesFoundException:
+            return None
         return StandardLicense(self.model, uri)
     def by_code(self, license_code, jurisdiction = None, version = None):
         base = 'http://creativecommons.org/licenses/'

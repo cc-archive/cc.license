@@ -2,9 +2,9 @@ import selectors
 import formatters
 
 SELECTORS = {
-    'standard'     : selectors.standard.Selector,
-    'recombo'      : selectors.sampling.Selector,
-    'publicdomain' : selectors.publicdomain.Selector,
+    'standard'     : [selectors.standard.Selector, None],
+    'recombo'      : [selectors.sampling.Selector, None],
+    'publicdomain' : [selectors.publicdomain.Selector, None],
     }
 
 
@@ -18,9 +18,13 @@ def list_selectors():
     return SELECTORS.keys()
 
 def get_selector(license_class=''):
-    """Return the ILicenseSelector for a specific class."""
+    """Return an ILicenseSelector instance for a specific class."""
 
-    return SELECTORS[license_class]
+    klass, instance = SELECTORS[license_class]
+    if not instance: # then instantiate it
+        SELECTORS[license_class][1] = klass()
+    # No matter what, return the instance in the dictionary
+    return SELECTORS[license_class][1]
 
 def list_formatters():
     """Return a list of available formatter IDs."""
