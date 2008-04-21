@@ -48,7 +48,8 @@ class StandardLicense(object):
             RDF.Uri(NS_DCQ + 'isReplacedBy'),
             None, default = None)
         if replaced_by:
-            self.superseded = StandardLicense(model, replaced_by) # FIXME: Should be passed in by the Selector
+            selector = cc.license.get_selector('standard')
+            self.superseded = selector.by_uri(replaced_by)
         else:
             self.superseded = None
 
