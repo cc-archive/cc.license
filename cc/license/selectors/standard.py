@@ -33,13 +33,6 @@ class StandardLicense(object):
             RDF.Uri(uri), RDF.Uri(NS_CC + 'jurisdiction'), None,
             'Your mother has no jurisdiction')
         self.uri = uri
-        self.current_version = 'Your mom'  # FIXME: This should be calculated
-                                         # and passed in by the Selector,
-                                        # I guess?
-
-        # XXX crawl up (er, down?) isReplacedBy chain to find the current
-        # XXX this should return the ILicense for the current version, so...
-        # XXX lazy?
 
         self.deprecated_date = query_to_single_value(model,
             RDF.Uri(uri),
@@ -59,6 +52,8 @@ class StandardLicense(object):
         else:
             self.superseded = None
 
+        self._calculate_current_version()
+
         self.license_code = re.match(r'http://creativecommons.org/licenses/([^/]+)/.*',
                 uri).group(1) # FIXME: Hilariously lame regex until ML and NY and AL talk
         self.libre = False # FIXME: Pull out of freedomdefined.rdf
@@ -66,6 +61,16 @@ class StandardLicense(object):
              RDF.Uri(self.uri),
              RDF.Uri('http://purl.org/dc/elements/1.1/title'),
              None)
+    def _calculate_current_version(self):
+        best_version_found = self
+
+        # FIXME: use a real license version comparator
+        # Something aware of version numbers, like 1.5b2 maybe
+        ## Is there some Pythonland standard tool for this, like for Python itself?
+        while best_version_found.superseded:
+            best_version_found = best_version_found.superseded
+        self.current_version = best_version_found
+
     def name(self, language = 'en'):
         return self._names[language]
 
