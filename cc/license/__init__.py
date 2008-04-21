@@ -18,7 +18,7 @@ def list_selectors():
     return SELECTORS.keys()
 
 def get_selector(license_class=''):
-    """Return the ILicenseSelector for a specific class."""
+    """Return an ILicenseSelector instance for a specific class."""
 
     klass, instance = SELECTORS[license_class]
     if not instance: # then instantiate it
