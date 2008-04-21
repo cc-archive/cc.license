@@ -66,6 +66,7 @@ def test_bysa_us():
 
     lic = selector.by_code('by-sa', jurisdiction='us', version='3.0')
     assert_true(lic.jurisdiction == 'http://creativecommons.org/international/us/')
+    # FIXME: Above should return an IJurisdiction
     # assert_true(lic.libre) # FIXME: Should this be here?
 
     # Now, test automatic version selection - but FIXME
