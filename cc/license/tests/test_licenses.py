@@ -24,9 +24,15 @@ def test_bysa_generic():
 
 def test_bysa_us():
     selector = test_find_standard_selector()
-    lic = selector.by_code('by-sa', jurisdiction='us')
+    lic = selector.by_code('by-sa', jurisdiction='us', version='1.0')
+    assert lic is None
+
+    lic = selector.by_code('by-sa', jurisdiction='us', version='3.0')
     assert_true(lic.jurisdiction == 'http://creativecommons.org/international/us/')
     # assert_true(lic.libre) # FIXME: Should this be here?
+
+    # Now, test automatic version selection - but FIXME
+    # do that later.
 
 
 def test_find_sampling_licenses():
