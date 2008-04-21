@@ -4,15 +4,17 @@ def test_find_sampling_selector():
     from zope.interface import implementedBy
     import cc.license
 
-    sampling_selector = cc.license.get_selector('recombo')()
+    sampling_selector = cc.license.get_selector('recombo')
     return sampling_selector
 
 def test_find_standard_selector():
     from zope.interface import implementedBy
     import cc.license
 
-    standard_selector = cc.license.get_selector('standard')()
+    standard_selector = cc.license.get_selector('standard')
     return standard_selector
+
+
 
 # FIXME: add test that selectors are singletons
 
@@ -47,7 +49,7 @@ def test_find_pd():
     from zope.interface import implementedBy
     import cc.license
 
-    pd_selector = cc.license.get_selector('publicdomain')()
+    pd_selector = cc.license.get_selector('publicdomain')
     pd = pd_selector.by_code('publicdomain')
     return pd
 

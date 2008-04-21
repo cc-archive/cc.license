@@ -22,7 +22,9 @@ def test_get_selector():
         s = cc.license.get_selector(selector_id)
         print selector_id, 'baby'
         nose.tools.assert_true(
-            interfaces.ILicenseSelector in implementedBy(s))
+            interfaces.ILicenseSelector in implementedBy(s.__class__))
+        s2 = cc.license.get_selector(selector_id)
+        nose.tools.assert_true(s2 is s) # singletons, in a way
     
 def test_get_selector_key_error():
     """get_selector() should raise a KeyError if supplied with an invalid
