@@ -54,7 +54,7 @@ def relevant_rdf():
     ret.update(glob.glob(os.path.join(cc.license.rdf_helper.LIC_RDF_PATH , '*by*.rdf')))
     ret.update(glob.glob(os.path.join(cc.license.rdf_helper.LIC_RDF_PATH , '*nc*.rdf')))
     ret.update(glob.glob(os.path.join(cc.license.rdf_helper.LIC_RDF_PATH , '*nd*.rdf')))
-    ret.update(glob.glob(os.path.join(cc.license.rdf_helper.LIC_RDF_PATH , '*sa*.rdf')))
+    ret.update(glob.glob(os.path.join(cc.license.rdf_helper.LIC_RDF_PATH , '*sa*.rdf'))) # FIXME: "sa"mpling ! )-:
     return ret
 
 class Selector(object):
