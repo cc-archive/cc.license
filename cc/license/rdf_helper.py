@@ -10,6 +10,9 @@ LIC_RDF_PATH ='./license.rdf/license_rdf/'
 class RdfHelperException(Exception):
     pass
 
+class NoValuesFoundException(RdfHelperException):
+    pass
+
 def die_unless(cause, message):
     if cause:
         pass
@@ -41,13 +44,13 @@ default_flag_value = object()
 def query_to_single_value(model, subject, predicate, object, default = default_flag_value):
     with_lang = query_to_language_value_dict(model, subject, predicate, object)
     if len(with_lang) > 1:
-        raise AssertionError, "Somehow I found too many values."
+        raise RdfHelperException, "Somehow I found too many values."
     if len(with_lang) == 1:
         return with_lang.values()[0]
     else: # Nothing to 
         if default is default_flag_value:
             # Then no default was specified
-            raise AssertionError, "No values found."
+            raise NoValuesFoundException, "No values found."
         else:
             return default
 
