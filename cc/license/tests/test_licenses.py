@@ -39,6 +39,17 @@ def test_bysa_10_up_the_supercede_chain():
     # FIXME: Later, check that they "is" each other?
     # We don't need that necessarily.
 
+def test_all_bysa_10_the_same():
+    selector = test_find_standard_selector()
+    lic1 = selector.by_code('by-sa')
+    lic2 = selector.by_code('by-sa')
+    assert (lic1 == lic2)
+
+def test_bysa_10_has_superceded():
+    selector = test_find_standard_selector()
+    lic = selector.by_code('by-sa')
+    assert lic.superseded
+
 def test_bysa_generic():
     selector = test_find_standard_selector()
     lic = selector.by_code('by-sa')
