@@ -32,6 +32,8 @@ def test_bysa_10_up_the_supersede_chain():
         # Check that every bump upwards in the chain is really the same license
         assert started_with.license_code == highest_by_crawl.license_code
 
+    assert highest_by_crawl.version >= "3.0"
+
     # Finally, check for equality
     assert highest_by_crawl == highest_lic
     assert highest_by_crawl.current_version == highest_by_crawl
