@@ -46,6 +46,7 @@ def test_all_bysa_10_the_same():
     lic1 = selector.by_code('by-sa')
     lic2 = selector.by_code('by-sa')
     assert (lic1 == lic2)
+    assert (lic1 is lic2) # For "efficiency", why not?
 
 def test_bysa_10_has_superseded():
     selector = test_find_standard_selector()
