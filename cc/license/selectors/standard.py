@@ -87,11 +87,12 @@ class Selector(object):
     zope.interface.implements(ILicenseSelector)
     id = "Selector for sampling licenses"
     def __init__(self):
+        self._licenses = {}
         files = relevant_rdf()
         self.model = cc.license.rdf_helper.init_model(*files)
         self.jurisdictions = None # FIXME
         self.versions = None # FIXME
-    def by_uri(self, uri):
+    def _by_uri(self, uri):
         # Check that the model knows about this license (e.g., it has a creator)
         try:
             assert (query_to_single_value(self.model,
@@ -100,6 +101,10 @@ class Selector(object):
         except cc.license.rdf_helper.NoValuesFoundException:
             return None
         return StandardLicense(self.model, uri)
+    def by_uri(self, uri):
+        if uri not in self._licenses:
+            self._licenses[uri] = self._by_uri(uri)
+        return self._licenses[uri]
     def by_code(self, license_code, jurisdiction = None, version = None):
         base = 'http://creativecommons.org/licenses/'
         base = urlparse.urljoin(base, license_code + '/')
