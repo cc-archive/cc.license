@@ -14,10 +14,6 @@ def test_find_standard_selector():
     standard_selector = cc.license.get_selector('standard')
     return standard_selector
 
-
-
-# FIXME: add test that selectors are singletons
-
 def test_bysa_generic():
     selector = test_find_standard_selector()
     lic = selector.by_code('by-sa')
