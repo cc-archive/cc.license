@@ -14,6 +14,31 @@ def test_find_standard_selector():
     standard_selector = cc.license.get_selector('standard')
     return standard_selector
 
+def test_bysa_10_up_the_supercede_chain():
+    selector = test_find_standard_selector()
+    lic = selector.by_code('by-sa', version='1.0')
+    assert lic.superceded # 1.0 we know is old
+
+    highest_lic = lic.current_version
+    assert lic.version != highest_lic.version # We know 1.0 is not the latest
+
+    highest_by_crawl = lic # to start with
+    while highest_by_crawl.superseded:
+        started_with = highest_by_crawl
+        print 'Started with', started_with.version
+        highest_by_crawl = highest_by_crawl.superceded
+        print 'Moved on to', highest_by_crawl.version
+
+        # Check that every bump upwards in the chain is really the same license
+        assert started_with.license_code == highest_by_crawl.license_code
+
+    # Finally, check for equality
+    assert highest_by_crawl == highest_lic
+    assert highest_by_crawl.current_version == highest_by_crawl
+
+    # FIXME: Later, check that they "is" each other?
+    # We don't need that necessarily.
+
 def test_bysa_generic():
     selector = test_find_standard_selector()
     lic = selector.by_code('by-sa')
