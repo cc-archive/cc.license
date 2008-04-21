@@ -34,4 +34,5 @@ def list_formatters():
 def get_formatter(formatter_id):
     """Return the ILicenseFormatter with the specified id."""
 
+    # XXX cache me
     return FORMATTERS[formatter_id]

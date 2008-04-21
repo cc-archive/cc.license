@@ -36,6 +36,11 @@ class StandardLicense(object):
         self.current_version = 'Your mom'  # FIXME: This should be calculated
                                          # and passed in by the Selector,
                                         # I guess?
+
+        # XXX crawl up (er, down?) isReplacedBy chain to find the current
+        # XXX this should return the ILicense for the current version, so...
+        # XXX lazy?
+
         self.deprecated_date = query_to_single_value(model,
             RDF.Uri(uri),
             RDF.Uri(NS_CC + 'deprecatedOn'),
@@ -46,9 +51,11 @@ class StandardLicense(object):
         else:
             self.deprecated = True
         self.superseded = False # FIXME: Should be passed in by the Selector
+        # XXX (current_version != self)
+
         self.license_code = re.match(r'http://creativecommons.org/licenses/([^/]+)/.*',
-                uri).group(1) # FIXME: Hilariously lame regex
-        self.libre = False # FIXME: Pull out of RDF?
+                uri).group(1) # FIXME: Hilariously lame regex until ML and NY and AL talk
+        self.libre = False # FIXME: Pull out of freedomdefined.rdf
         self._names = cc.license.rdf_helper.query_to_language_value_dict(model,
              RDF.Uri(self.uri),
              RDF.Uri('http://purl.org/dc/elements/1.1/title'),
