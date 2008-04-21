@@ -14,10 +14,10 @@ def test_find_standard_selector():
     standard_selector = cc.license.get_selector('standard')
     return standard_selector
 
-def test_bysa_10_up_the_supercede_chain():
+def test_bysa_10_up_the_supersede_chain():
     selector = test_find_standard_selector()
     lic = selector.by_code('by-sa', version='1.0')
-    assert lic.superceded # 1.0 we know is old
+    assert lic.superseded # 1.0 we know is old
 
     highest_lic = lic.current_version
     assert lic.version != highest_lic.version # We know 1.0 is not the latest
@@ -26,7 +26,7 @@ def test_bysa_10_up_the_supercede_chain():
     while highest_by_crawl.superseded:
         started_with = highest_by_crawl
         print 'Started with', started_with.version
-        highest_by_crawl = highest_by_crawl.superceded
+        highest_by_crawl = highest_by_crawl.superseded
         print 'Moved on to', highest_by_crawl.version
 
         # Check that every bump upwards in the chain is really the same license
@@ -45,7 +45,7 @@ def test_all_bysa_10_the_same():
     lic2 = selector.by_code('by-sa')
     assert (lic1 == lic2)
 
-def test_bysa_10_has_superceded():
+def test_bysa_10_has_superseded():
     selector = test_find_standard_selector()
     lic = selector.by_code('by-sa')
     assert lic.superseded
