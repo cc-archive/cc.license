@@ -21,9 +21,9 @@ class StandardLicense(object):
 
         # Assert that the model knows something about this URI
         # every CC license has a creator of http://creativecommons.org/
-        assert query_to_single_value(model,
-            RDF.Uri(uri), RDF.Uri(NS_DC + 'creator'), None)) == \
-            'http://creativecommons.org/'
+        assert (query_to_single_value(model,
+            RDF.Uri(uri), RDF.Uri(NS_DC + 'creator'), None) \
+            == 'http://creativecommons.org/')
 
         self.version = query_to_single_value(model,
             RDF.Uri(uri),
