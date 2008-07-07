@@ -115,6 +115,6 @@ class Selector(object):
             base = urlparse.urljoin(base, jurisdiction + '/')
         return self.by_uri(base)
     def by_answers(self, answers_dict):
-        raise NotImplementedException
+        raise NotImplementedError
     def questions(self):
-        raise NotImplementedException
+        raise NotImplementedError
