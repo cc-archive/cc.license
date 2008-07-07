@@ -6,6 +6,10 @@ cc.license
 Installation
 ============
 
+The python-librdf Ubuntu package must be installed manually (NOT 
+python-rdflib, though having it shouldn't break anything), as it 
+is not available through PyPI.
+
 
 Developing
 ==========
