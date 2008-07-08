@@ -1,7 +1,7 @@
-import nose.tools
+
+import cc.license.jurisdiction
 
 def test_jurisdiction():
-    import cc.license.jurisdiction
     mx = cc.license.jurisdiction.Jurisdiction('mx')
     assert 'creativecommons.org.mx' in mx.local_url 
     assert mx.code == 'mx'
