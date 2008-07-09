@@ -2,12 +2,20 @@
 import cc.license
 import cc.license.jurisdiction
 
+# TODO: rename and organize more sensically
+
 def test_jurisdiction():
     mx = cc.license.jurisdiction.Jurisdiction('mx')
     assert 'creativecommons.org.mx' in mx.local_url 
     assert mx.code == 'mx'
     assert mx.launched
     assert mx.id.endswith('mx/')
+
+# TODO: additional tests exercising the output
+def test_jurisdictions():
+    jurisdictions = cc.license.jurisdictions()
+    for j in jurisdictions:
+        assert type(j) == cc.license.jurisdiction.Jurisdiction
 
 def test_jurisdiction_codes():
     codes = cc.license.jurisdiction_codes()
@@ -22,3 +30,10 @@ def test_jurisdiction_codes():
     for k in ('us', 'uk', 'fr', 'de', 'jp', 'ca'):
         print k 
         assert k in codes
+
+def test_locales():
+    locales = cc.license.locales()
+    for l in locales:
+        assert type(l) == unicode
+    for c in ('en', 'de', 'he', 'ja', 'fr'):
+        assert c in locales
