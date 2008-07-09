@@ -2,8 +2,8 @@
 import RDF # TODO: because of jurisdictions; should RDF only be in helper?
 import selectors
 import formatters
-import rdf_helper
-import jurisdiction
+from lib import rdf_helper
+from lib.classes import Jurisdiction
 
 SELECTORS = {
     'standard'     : [selectors.standard.Selector, None],
@@ -62,7 +62,7 @@ def jurisdiction_codes():
 def jurisdictions():
     """Returns sequence of all jurisdictions possible, 
        as Jurisdiction objects."""
-    return [jurisdiction.Jurisdiction(code) for code in jurisdiction_codes()]
+    return [Jurisdiction(code) for code in jurisdiction_codes()]
 
 def locales():
     """Returns a sequence of all locales possible.
