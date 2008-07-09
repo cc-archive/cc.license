@@ -2,10 +2,10 @@ import re
 import zope.interface
 import glob
 import os
-import cc.license
 import RDF
-from cc.license.interfaces import ILicenseSelector, ILicense
-from cc.license.rdf_helper import query_to_single_value, NS_DC, NS_DCQ, NS_CC
+from cc.license.lib.interfaces import ILicenseSelector, ILicense
+from cc.license.lib.rdf_helper import query_to_single_value, NS_DC, \
+                                      NS_DCQ, NS_CC
 import urlparse
 
 # Note: this could be lazy, but then errors would be detected really late

@@ -1,7 +1,6 @@
 import RDF
-from cc.license.interfaces import ILicenseSelector, ILicense
-import cc.license
-import cc.license.rdf_helper
+from cc.license.lib.interfaces import ILicenseSelector, ILicense
+from cc.license.lib import rdf_helper
 
 import zope.interface
 import glob
@@ -20,7 +19,7 @@ class PdLicense(object):
         self.superseded = False # I think
         self.license_code = 'publicdomain' # Based on assertion at top of init
         self.libre = True # Sure, I think?  Not in the RDF.
-        self._names = cc.license.rdf_helper.query_to_language_value_dict(model,
+        self._names = rdf_helper.query_to_language_value_dict(model,
              RDF.Uri(self.uri),
              RDF.Uri('http://purl.org/dc/elements/1.1/title'),
              None)
@@ -32,8 +31,8 @@ class Selector(object):
     zope.interface.implements(ILicenseSelector)
     id = "Selector for public domain 'license'"
     def __init__(self):
-        files = glob.glob(os.path.join(cc.license.rdf_helper.LIC_RDF_PATH ,'*publicdomain*'))
-        self.model = cc.license.rdf_helper.init_model(*files)
+        files = glob.glob(os.path.join(rdf_helper.LIC_RDF_PATH ,'*publicdomain*'))
+        self.model = rdf_helper.init_model(*files)
 
     def by_code(self, code):
         if code == 'publicdomain':
