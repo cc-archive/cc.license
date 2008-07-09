@@ -1,4 +1,4 @@
-from cc.license.interfaces import ILicenseFormatter
+from cc.license.lib.interfaces import ILicenseFormatter
 import zope.interface
 
 class Formatter(object):
