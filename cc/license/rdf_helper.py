@@ -20,19 +20,20 @@ def die_unless(cause, message):
     else:
         raise RdfHelperException, message
 
-def query_to_language_value_dict(model, subject, predicate, obj):
+# NOTE: 'object' shadows a global, but fixing it is nontrivial
+def query_to_language_value_dict(model, subject, predicate, object):
     """Given a model and a subject, predicate, object (one of which
        is None), generate a dictionary of language values.
        The dictionary is in the form {'en' : u'Germany'}.
        Query is implicitly generated from subject, predicate, object."""
     # Assume either s, p, or o is None
     # so that would be what we want back.
-    is_none = [thing for thing in ('subject', 'predicate', 'obj')
+    is_none = [thing for thing in ('subject', 'predicate', 'object')
                if (eval(thing) is None)]
     die_unless( len(is_none) == 1, "You gave me more than one None, " +
                                    "so I don't know what you want back")
 
-    query = RDF.Statement(subject, predicate, obj)
+    query = RDF.Statement(subject, predicate, object)
     results = list(model.find_statements(query))
 
     interesting_ones = [getattr(result, is_none[0]) for result in results]
@@ -47,11 +48,12 @@ def query_to_language_value_dict(model, subject, predicate, obj):
 
 default_flag_value = object() # TODO: ask asheesh why this is here
 
-def query_to_single_value(model, subject, predicate, obj, default = default_flag_value):
+# NOTE: 'object' shadows a global, but fixing it is nontrivial
+def query_to_single_value(model, subject, predicate, object, default = default_flag_value):
     """Much like query_to_language_value_dict, but only returns a single
        value. In fact, raises an exception if the query returns multiple
        values."""
-    with_lang = query_to_language_value_dict(model, subject, predicate, obj)
+    with_lang = query_to_language_value_dict(model, subject, predicate, object)
     if len(with_lang) > 1:
         raise RdfHelperException, "Somehow I found too many values."
     if len(with_lang) == 1:
@@ -76,7 +78,7 @@ type2converter = {
     'http://www.w3.org/2001/XMLSchema-datatypes#date': to_date,
 }
 
-def uri2lang_and_value(uri):
+def uri2lang_and_value(uri): # TODO: takes a RDF.Node, not RDF.Url
     if uri.type == 1: # Is there a list of these somewhere?
         # a URI
         return (None, str(uri.uri))
