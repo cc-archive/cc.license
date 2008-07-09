@@ -12,6 +12,7 @@ class RdfHelperException(Exception):
     pass
 
 class NoValuesFoundException(RdfHelperException):
+    """Raised when an RDF query returns no values."""
     pass
 
 def die_unless(cause, message):

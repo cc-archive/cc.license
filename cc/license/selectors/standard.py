@@ -85,7 +85,7 @@ def relevant_rdf():
 
 class Selector(object):
     zope.interface.implements(ILicenseSelector)
-    id = "Selector for sampling licenses"
+    id = "Selector for standard licenses"
     def __init__(self):
         self._licenses = {}
         files = relevant_rdf()
