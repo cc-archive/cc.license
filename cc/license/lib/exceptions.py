@@ -7,3 +7,7 @@ class RdfHelperError(Exception):
 class NoValuesFoundError(RdfHelperError):
     """Raised when an RDF query returns no values."""
     pass
+
+class CCLicenseError(Exception):
+    """Generic exception when misuse cc.license"""
+    pass

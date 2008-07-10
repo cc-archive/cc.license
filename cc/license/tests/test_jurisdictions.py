@@ -1,5 +1,7 @@
 
 import cc.license
+from cc.license.lib.exceptions import CCLicenseError
+import nose.tools
 
 # TODO: rename and organize more sensically
 
@@ -30,9 +32,26 @@ def test_jurisdiction_codes():
         print k 
         assert k in codes
 
+# XXX this test belongs elsewhere
 def test_locales():
     locales = cc.license.locales()
     for l in locales:
         assert type(l) == unicode
     for c in ('en', 'de', 'he', 'ja', 'fr'):
         assert c in locales
+
+def test_titles():
+    mx = cc.license.Jurisdiction('mx')
+    for t in ('fr', 'ja', 'de', 'en'):
+        title = mx.title(t)
+        assert type(title) == unicode
+        assert len(title) != 0
+
+def test_title_fails():
+    mx = cc.license.Jurisdiction('mx')
+    nose.tools.assert_raises(CCLicenseError,
+                             mx.title, 'roflcopter')
+
+def test_title_default():
+    mx = cc.license.Jurisdiction('mx')
+    assert mx.title() == mx.title('en')
