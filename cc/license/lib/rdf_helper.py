@@ -1,25 +1,20 @@
 import RDF
 import datetime
 
-NS_CC='http://creativecommons.org/ns#'
-NS_DC='http://purl.org/dc/elements/1.1/'
-NS_DCQ='http://purl.org/dc/terms/'
-JURI_RDF_PATH='./license.rdf/rdf/jurisdictions.rdf'
-LIC_RDF_PATH ='./license.rdf/license_rdf/'
+from cc.license.lib.exceptions import RdfHelperError, NoValuesFoundError
+
+NS_CC = 'http://creativecommons.org/ns#'
+NS_DC = 'http://purl.org/dc/elements/1.1/'
+NS_DCQ = 'http://purl.org/dc/terms/'
+JURI_RDF_PATH = './license.rdf/rdf/jurisdictions.rdf'
+LIC_RDF_PATH = './license.rdf/license_rdf/'
 # FIXME: Use package.requires for JURI_RDF_PATH
-
-class RdfHelperException(Exception):
-    pass
-
-class NoValuesFoundException(RdfHelperException):
-    """Raised when an RDF query returns no values."""
-    pass
 
 def die_unless(cause, message):
     if cause:
         pass
     else:
-        raise RdfHelperException, message
+        raise RdfHelperError, message
 
 # NOTE: 'object' shadows a global, but fixing it is nontrivial
 def query_to_language_value_dict(model, subject, predicate, object):
@@ -56,13 +51,13 @@ def query_to_single_value(model, subject, predicate, object, default = default_f
        values."""
     with_lang = query_to_language_value_dict(model, subject, predicate, object)
     if len(with_lang) > 1:
-        raise RdfHelperException, "Somehow I found too many values."
+        raise RdfHelperError, "Somehow I found too many values."
     if len(with_lang) == 1:
         return with_lang.values()[0]
     else: # Nothing to 
         if default is default_flag_value:
             # Then no default was specified
-            raise NoValuesFoundException, "No values found."
+            raise NoValuesFoundError, "No values found."
         else:
             return default
 
