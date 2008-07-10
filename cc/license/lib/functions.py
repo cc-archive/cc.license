@@ -2,32 +2,12 @@
 import RDF
 import rdf_helper
 from classes import Jurisdiction
-from cc.license import selectors, formatters
-
-SELECTORS = {
-    'standard'     : [selectors.standard.Selector, None],
-    'recombo'      : [selectors.sampling.Selector, None],
-    'publicdomain' : [selectors.publicdomain.Selector, None],
-    }
-
+from cc.license import formatters
 
 FORMATTERS = {
     'html+rdfa'    : formatters.rdfa.Formatter,
 }
 
-def list_selectors():
-    """Return a list of available selector IDs."""
-
-    return SELECTORS.keys()
-
-def get_selector(license_class=''):
-    """Return an ILicenseSelector instance for a specific class."""
-
-    klass, instance = SELECTORS[license_class]
-    if not instance: # then instantiate it
-        SELECTORS[license_class][1] = klass()
-    # No matter what, return the instance in the dictionary
-    return SELECTORS[license_class][1]
 
 def list_formatters():
     """Return a list of available formatter IDs."""
