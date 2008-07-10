@@ -4,14 +4,17 @@ class IJurisdiction(Interface):
     """Jurisdiction metadata."""
 
     code = Attribute(u"The short code for this jurisdiction.")
+
     id = Attribute(u"String URL of the jurisdiction ID, like "
                    "http://creativecommons.org/international/us")
-    local_url = Attribute(u"The URL of the local jurisdiction site, like http://creativecommons.org.mx/.")
+    local_url = Attribute(u"The URL of the local jurisdiction site, "
+                           "like http://creativecommons.org.mx/.")
     launched = Attribute(u"Boolean attribute; True if this jurisdiction has "
                          "launched")
-    # FIXME: Expose dc:title for the jurisdiction? How to deal with
-    # the language issue?  (This is probably the same as for ILicense,
-    # actually, and both seem to be dc:title.)
+
+    def title(language='en'):
+        """Return the human-readable title of this jurisdiction.  It is 
+           a method so a language parameter can be passed in."""
 
 class ILicense(Interface):
     """License metadata for a specific license."""
@@ -19,7 +22,9 @@ class ILicense(Interface):
     license_class = Attribute(u"The license class this license belongs to.")
 
     version = Attribute(u"The number version for the license.")
+
     jurisdiction = Attribute(u"The jurisdiction for the license.")
+
     uri = Attribute(u"The fully qualified URI of the license.")
 
     current_version = Attribute(u"The ILicense of the current version of "
@@ -28,11 +33,14 @@ class ILicense(Interface):
                            "deprecated")
     superseded = Attribute(u"Boolean attribute; True if this license has "
                            "been replaced with a newer version.")
+
     license_code = Attribute(u"The short alpha code for this license.")
+
     libre = Attribute(u"Returns True if this is a 'Libre' license.")
-    def name(language='en'):
-        '''Return the human-readable name of this license.  It is a method so
-        a language parameter can be passed in.'''
+
+    def title(language='en'):
+        """Return the human-readable title of this license.  It is a method 
+           so a language parameter can be passed in."""
 
 
 class ILicenseSelector(Interface):
