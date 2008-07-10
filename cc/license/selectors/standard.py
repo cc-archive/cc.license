@@ -86,9 +86,11 @@ def relevant_rdf():
     ret.update(glob.glob(os.path.join(rdf_helper.LIC_RDF_PATH , '*sa*.rdf'))) # FIXME: "sa"mpling ! )-:
     return ret
 
+# TODO: pull id and title from license.rdf
 class Selector(object):
     zope.interface.implements(ILicenseSelector)
-    id = "Selector for standard licenses"
+    id = 'standard'
+    title = 'Creative Commons'
     def __init__(self):
         self._licenses = {}
         files = relevant_rdf()

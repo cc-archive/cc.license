@@ -47,9 +47,11 @@ class SamplingLicense(object):
     def name(self, language = 'en'):
         return self._names[language]
 
+# TODO: pull id and title from license.rdf
 class Selector(object):
     zope.interface.implements(ILicenseSelector)
-    id = "Selector for sampling licenses"
+    id = 'recombo'
+    title = 'Sampling'
     def __init__(self):
         files = glob.glob(os.path.join(rdf_helper.LIC_RDF_PATH ,'*sampling*'))
         self.model = rdf_helper.init_model(*files)

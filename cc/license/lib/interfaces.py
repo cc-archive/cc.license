@@ -39,6 +39,7 @@ class ILicenseSelector(Interface):
     """License selection for a particular class of license."""
 
     id = Attribute(u"The unique identifier for this selector.")
+    title = Attribute(u"The title, as a more descriptive identifier.")
 
     def by_code(license_code, jurisdiction=None, version=None):
         """Return the ILicense object cooresponding to the license code (eg,

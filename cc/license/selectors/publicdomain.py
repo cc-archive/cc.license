@@ -27,9 +27,11 @@ class PdLicense(object):
         return self._names[language]
         
 
+# TODO: pull id and title from license.rdf
 class Selector(object):
     zope.interface.implements(ILicenseSelector)
-    id = "Selector for public domain 'license'"
+    id = 'publicdomain'
+    title = 'Public Domain'
     def __init__(self):
         files = glob.glob(os.path.join(rdf_helper.LIC_RDF_PATH ,'*publicdomain*'))
         self.model = rdf_helper.init_model(*files)
