@@ -6,6 +6,7 @@ import RDF
 from cc.license.lib.interfaces import ILicenseSelector, ILicense
 from cc.license.lib.rdf_helper import query_to_single_value, NS_DC, \
                                       NS_DCQ, NS_CC
+from cc.license.lib import rdf_helper
 import urlparse
 
 # Note: this could be lazy, but then errors would be detected really late
@@ -39,7 +40,7 @@ class SamplingLicense(object):
         self.license_code = re.match(r'http://creativecommons.org/licenses/([^/]+)/.*',
                 uri).group(1) # FIXME: Hilariously lame regex
         self.libre = False # FIXME: Pull out of RDF?
-        self._names = cc.license.rdf_helper.query_to_language_value_dict(model,
+        self._names = rdf_helper.query_to_language_value_dict(model,
              RDF.Uri(self.uri),
              RDF.Uri('http://purl.org/dc/elements/1.1/title'),
              None)
@@ -50,8 +51,8 @@ class Selector(object):
     zope.interface.implements(ILicenseSelector)
     id = "Selector for sampling licenses"
     def __init__(self):
-        files = glob.glob(os.path.join(cc.license.rdf_helper.LIC_RDF_PATH ,'*sampling*'))
-        self.model = cc.license.rdf_helper.init_model(*files)
+        files = glob.glob(os.path.join(rdf_helper.LIC_RDF_PATH ,'*sampling*'))
+        self.model = rdf_helper.init_model(*files)
         self.jurisdictions = None # FIXME
         self.versions = None # FIXME
     def by_uri(self, uri):

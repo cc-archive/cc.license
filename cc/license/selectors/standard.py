@@ -3,9 +3,11 @@ import zope.interface
 import glob
 import os
 import RDF
+import cc.license
 from cc.license.lib.interfaces import ILicenseSelector, ILicense
 from cc.license.lib.rdf_helper import query_to_single_value, NS_DC, \
                                       NS_DCQ, NS_CC
+from cc.license.lib import rdf_helper
 import urlparse
 
 ## FIXME: One day make this not copy-pasta from sampling
@@ -58,7 +60,7 @@ class StandardLicense(object):
         self.license_code = re.match(r'http://creativecommons.org/licenses/([^/]+)/.*',
                 uri).group(1) # FIXME: Hilariously lame regex until ML and NY and AL talk
         self.libre = False # FIXME: Pull out of freedomdefined.rdf
-        self._names = cc.license.rdf_helper.query_to_language_value_dict(model,
+        self._names = rdf_helper.query_to_language_value_dict(model,
              RDF.Uri(self.uri),
              RDF.Uri('http://purl.org/dc/elements/1.1/title'),
              None)
@@ -77,10 +79,10 @@ class StandardLicense(object):
 
 def relevant_rdf():
     ret = set()
-    ret.update(glob.glob(os.path.join(cc.license.rdf_helper.LIC_RDF_PATH , '*by*.rdf')))
-    ret.update(glob.glob(os.path.join(cc.license.rdf_helper.LIC_RDF_PATH , '*nc*.rdf')))
-    ret.update(glob.glob(os.path.join(cc.license.rdf_helper.LIC_RDF_PATH , '*nd*.rdf')))
-    ret.update(glob.glob(os.path.join(cc.license.rdf_helper.LIC_RDF_PATH , '*sa*.rdf'))) # FIXME: "sa"mpling ! )-:
+    ret.update(glob.glob(os.path.join(rdf_helper.LIC_RDF_PATH , '*by*.rdf')))
+    ret.update(glob.glob(os.path.join(rdf_helper.LIC_RDF_PATH , '*nc*.rdf')))
+    ret.update(glob.glob(os.path.join(rdf_helper.LIC_RDF_PATH , '*nd*.rdf')))
+    ret.update(glob.glob(os.path.join(rdf_helper.LIC_RDF_PATH , '*sa*.rdf'))) # FIXME: "sa"mpling ! )-:
     return ret
 
 class Selector(object):
@@ -89,7 +91,7 @@ class Selector(object):
     def __init__(self):
         self._licenses = {}
         files = relevant_rdf()
-        self.model = cc.license.rdf_helper.init_model(*files)
+        self.model = rdf_helper.init_model(*files)
         self.jurisdictions = None # FIXME
         self.versions = None # FIXME
     def _by_uri(self, uri):
@@ -98,7 +100,7 @@ class Selector(object):
             assert (query_to_single_value(self.model,
                 RDF.Uri(uri), RDF.Uri(NS_DC + 'creator'), None) \
                 == 'http://creativecommons.org')
-        except cc.license.rdf_helper.NoValuesFoundException:
+        except rdf_helper.NoValuesFoundException:
             return None
         return StandardLicense(self.model, uri)
     def by_uri(self, uri):
