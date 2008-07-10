@@ -2,6 +2,7 @@
 import nose.tools
 from zope.interface import implementedBy
 import cc.license
+from cc.license.lib.interfaces import ILicenseFormatter
 
 def test_list_formatters():
     """Test that we can get a list of formatter strings."""
@@ -15,7 +16,7 @@ def test_get_formatter():
     for formatter_id in cc.license.list_formatters():
         s = cc.license.get_formatter(formatter_id)
         print formatter_id, 'baby'
-        assert cc.license.interfaces.ILicenseFormatter in implementedBy(s)
+        assert ILicenseFormatter in implementedBy(s)
     
 def test_get_formatter_key_error():
     """get_formatter() should raise a KeyError if supplied with an invalid
