@@ -2,23 +2,6 @@
 import RDF
 import rdf_helper
 from classes import Jurisdiction
-from cc.license import formatters
-
-FORMATTERS = {
-    'html+rdfa'    : formatters.rdfa.Formatter,
-}
-
-
-def list_formatters():
-    """Return a list of available formatter IDs."""
-
-    return FORMATTERS.keys()
-
-def get_formatter(formatter_id):
-    """Return the ILicenseFormatter with the specified id."""
-
-    # XXX cache me
-    return FORMATTERS[formatter_id]
 
 
 def jurisdiction_codes():

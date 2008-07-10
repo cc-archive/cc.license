@@ -2,6 +2,7 @@ import RDF
 import zope.interface
 import interfaces 
 import rdf_helper
+from cc.license.lib.exceptions import NoValuesFoundError
 
 class Jurisdiction(object):
     zope.interface.implements(interfaces.IJurisdiction)
@@ -19,12 +20,12 @@ class Jurisdiction(object):
         try:
             self.local_url = rdf_helper.query_to_single_value(model,
                 id_uri, RDF.Uri(rdf_helper.NS_CC + 'jurisdictionSite'), None)
-        except rdf_helper.NoValuesFoundException:
+        except NoValuesFoundError:
             self.local_url = None
         try: 
             self.launched = rdf_helper.query_to_single_value(model,
                 id_uri, RDF.Uri(rdf_helper.NS_CC + 'launched'), None)
-        except rdf_helper.NoValuesFoundException:
+        except NoValuesFoundError:
             self.launched = None
 
 class License(object):

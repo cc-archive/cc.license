@@ -7,6 +7,7 @@ import cc.license
 from cc.license.lib.interfaces import ILicenseSelector, ILicense
 from cc.license.lib.rdf_helper import query_to_single_value, NS_DC, \
                                       NS_DCQ, NS_CC
+from cc.license.lib.exceptions import NoValuesFoundError
 from cc.license.lib import rdf_helper
 import urlparse
 
@@ -50,7 +51,7 @@ class StandardLicense(object):
             RDF.Uri(NS_DCQ + 'isReplacedBy'),
             None, default = None)
         if replaced_by:
-            selector = cc.license.get_selector('standard')
+            selector = cc.license.selectors.choose('standard')
             self.superseded = selector.by_uri(replaced_by)
         else:
             self.superseded = None
@@ -100,7 +101,7 @@ class Selector(object):
             assert (query_to_single_value(self.model,
                 RDF.Uri(uri), RDF.Uri(NS_DC + 'creator'), None) \
                 == 'http://creativecommons.org')
-        except rdf_helper.NoValuesFoundException:
+        except NoValuesFoundError:
             return None
         return StandardLicense(self.model, uri)
     def by_uri(self, uri):

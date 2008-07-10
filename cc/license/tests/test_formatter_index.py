@@ -6,20 +6,22 @@ from cc.license.lib.interfaces import ILicenseFormatter
 
 def test_list_formatters():
     """Test that we can get a list of formatter strings."""
-    formatters = cc.license.list_formatters()
+    formatters = cc.license.formatters.list()
     assert type(formatters) == list
     for f in formatters:
         assert type(f) == str
 
 def test_get_formatter():
-    """get_formatter() must return a valid IFormatter for each formatter."""
-    for formatter_id in cc.license.list_formatters():
-        s = cc.license.get_formatter(formatter_id)
+    """formatters.choose() must return a valid IFormatter for each formatter."""
+    for formatter_id in cc.license.formatters.list():
+        f = cc.license.formatters.choose(formatter_id)
         print formatter_id, 'baby'
-        assert ILicenseFormatter in implementedBy(s)
+        assert ILicenseFormatter in implementedBy(f.__class__)
+        f2 = cc.license.formatters.choose(formatter_id)
+        assert f2 is f # singletons
     
 def test_get_formatter_key_error():
-    """get_formatter() should raise a KeyError if supplied with an invalid
+    """formatters.choose() should raise a KeyError if supplied with an invalid
     formatter id."""
     nose.tools.assert_raises(KeyError,
-                             cc.license.get_formatter, 'roflcopter')
+                             cc.license.formatters.choose, 'roflcopter')

@@ -5,7 +5,7 @@ import cc.license
 class TestStandard:
 
     def setUp(self):
-        self.selector = cc.license.get_selector('standard')
+        self.selector = cc.license.selectors.choose('standard')
 
     def test_bysa_10_up_the_supersede_chain(self):
         lic = self.selector.by_code('by-sa', version='1.0')
@@ -63,7 +63,7 @@ class TestStandard:
 class TestSampling:
 
     def setUp(self):
-        self.selector = cc.license.get_selector('recombo')
+        self.selector = cc.license.selectors.choose('recombo')
 
     def test_find_sampling_licenses(self):
         lic = self.selector.by_code('sampling')
@@ -75,7 +75,7 @@ class TestSampling:
 class TestPublicDomain:
 
     def setUp(self):
-        self.selector = cc.license.get_selector('publicdomain')
+        self.selector = cc.license.selectors.choose('publicdomain')
 
     def test_publicdomain(self):
         pd = self.selector.by_code('publicdomain')
