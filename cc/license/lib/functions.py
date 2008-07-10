@@ -1,9 +1,8 @@
 
-import RDF # TODO: because of jurisdictions; should RDF only be in helper?
-import selectors
-import formatters
-from lib import rdf_helper
-from lib.classes import Jurisdiction, License
+import RDF
+import rdf_helper
+from classes import Jurisdiction
+from cc.license import selectors, formatters
 
 SELECTORS = {
     'standard'     : [selectors.standard.Selector, None],
