@@ -2,6 +2,8 @@ import standard
 import sampling
 import publicdomain
 
+from cc.license.lib.exceptions import CCLicenseError
+
 # TODO: build list from selectors.rdf
 SELECTORS = { # class goes in the 1st spot, singleton in the 2nd
     'standard'     : [standard.Selector, None],
@@ -14,7 +16,10 @@ SELECTORS = { # class goes in the 1st spot, singleton in the 2nd
 def choose(license_class='standard'):
     """Return an instance of ILicenseSelector for a specific license
        class id. The default license class id is 'standard'"""
-    lclass, instance = SELECTORS[license_class]
+    try:
+        lclass, instance = SELECTORS[license_class]
+    except KeyError:
+        raise CCLicenseError, "License class %s does not exist" % license_class
 
     if instance is None:
         SELECTORS[license_class][1] = lclass()

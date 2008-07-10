@@ -1,8 +1,10 @@
 
 import nose.tools
 from zope.interface import implementedBy
+
 import cc.license
 from cc.license.lib.interfaces import ILicenseFormatter
+from cc.license.lib.exceptions import CCLicenseError
 
 def test_list_formatters():
     """Test that we can get a list of formatter strings."""
@@ -21,7 +23,7 @@ def test_get_formatter():
         assert f2 is f # singletons
     
 def test_get_formatter_key_error():
-    """formatters.choose() should raise a KeyError if supplied with an invalid
-    formatter id."""
-    nose.tools.assert_raises(KeyError,
+    """formatters.choose() should raise a CCLicenseError if supplied 
+       with an invalid formatter id."""
+    nose.tools.assert_raises(CCLicenseError,
                              cc.license.formatters.choose, 'roflcopter')

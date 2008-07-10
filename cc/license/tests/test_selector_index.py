@@ -1,8 +1,10 @@
 
 import nose.tools
 from zope.interface import implementedBy
+
 import cc.license
 from cc.license.lib.interfaces import ILicenseSelector
+from cc.license.lib.exceptions import CCLicenseError
 
 def test_list_selectors():
     """Test that we can get a list of selector strings."""
@@ -21,7 +23,7 @@ def test_get_selector():
         assert s2 is s # singletons, in a way
     
 def test_get_selector_key_error():
-    """selectors.choose() should raise a KeyError if supplied with an invalid
-    selector id."""
-    nose.tools.assert_raises(KeyError,
+    """selectors.choose() should raise a CCLicenseError if supplied 
+       with an invalid selector id."""
+    nose.tools.assert_raises(CCLicenseError,
                              cc.license.selectors.choose, 'roflcopter')
