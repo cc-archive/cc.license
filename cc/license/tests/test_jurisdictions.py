@@ -1,16 +1,9 @@
+"""Tests for Jurisdiction class and other functionality related
+   to jurisdictions."""
 
 import cc.license
 from cc.license.lib.exceptions import CCLicenseError
 import nose.tools
-
-# TODO: rename and organize more sensically
-
-def test_jurisdiction():
-    mx = cc.license.Jurisdiction('mx')
-    assert 'creativecommons.org.mx' in mx.local_url 
-    assert mx.code == 'mx'
-    assert mx.launched
-    assert mx.id.endswith('mx/')
 
 # TODO: additional tests exercising the output
 def test_jurisdictions():
@@ -32,26 +25,27 @@ def test_jurisdiction_codes():
         print k 
         assert k in codes
 
-# XXX this test belongs elsewhere
-def test_locales():
-    locales = cc.license.locales()
-    for l in locales:
-        assert type(l) == unicode
-    for c in ('en', 'de', 'he', 'ja', 'fr'):
-        assert c in locales
+class TestJurisdictions:
 
-def test_titles():
-    mx = cc.license.Jurisdiction('mx')
-    for t in ('fr', 'ja', 'de', 'en'):
-        title = mx.title(t)
-        assert type(title) == unicode
-        assert len(title) != 0
+    def __init__(self):
+        self.langs = ('fr', 'ja', 'de', 'en')
+        self.mx = cc.license.Jurisdiction('mx')
 
-def test_title_fails():
-    mx = cc.license.Jurisdiction('mx')
-    nose.tools.assert_raises(CCLicenseError,
-                             mx.title, 'roflcopter')
+    def test_jurisdiction(self):
+        assert 'creativecommons.org.mx' in self.mx.local_url
+        assert self.mx.code == 'mx'
+        assert self.mx.launched
+        assert self.mx.id.endswith('mx/')
 
-def test_title_default():
-    mx = cc.license.Jurisdiction('mx')
-    assert mx.title() == mx.title('en')
+    def test_titles(self):
+        for t in self.langs:
+            title = self.mx.title(t)
+            assert type(title) == unicode
+            assert len(title) != 0
+
+    def test_title_fails(self):
+        nose.tools.assert_raises(CCLicenseError,
+                                 self.mx.title, 'roflcopter')
+
+    def test_title_default(self):
+        assert self.mx.title() == self.mx.title('en')
