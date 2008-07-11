@@ -56,8 +56,11 @@ class Jurisdiction(object):
     def title(self, language='en'):
         try:
             return self._langs[language]
-        except KeyError:
-            raise CCLicenseError, "Language %s does not exist for jurisdiction %s" % (language, self.code)
+        except KeyError, e:
+            import sys
+            tb = sys.exc_info()[2]
+            msg = "Language %s does not exist for jurisdiction %s"
+            raise CCLicenseError, msg % (language, self.code), tb
 
 class License(object):
     """Base class for ILicense implementation modeling a specific license."""
