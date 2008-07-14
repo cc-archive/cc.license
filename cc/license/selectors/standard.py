@@ -85,7 +85,7 @@ def relevant_rdf():
     ret.update(glob.glob(os.path.join(rdf_helper.LIC_RDF_PATH , '*nd*.rdf')))
     ret.update([ l for l in glob.glob(os.path.join(rdf_helper.LIC_RDF_PATH,
                                       '*sa*.rdf'))
-                       if l.find('sampling') != -1 )
+                       if l.find('sampling') != -1 ])
                        # hack to remove sampling licenses
     return ret
 
