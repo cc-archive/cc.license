@@ -65,3 +65,11 @@ class Jurisdiction(object):
 class License(object):
     """Base class for ILicense implementation modeling a specific license."""
     zope.interface.implements(interfaces.ILicense)
+
+    # XXX where does license_class information come from?
+
+    def __init__(self, model, uri):
+        pass
+
+    def name(self, language='en'):
+        return self._names[language]
