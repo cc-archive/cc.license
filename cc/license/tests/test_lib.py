@@ -35,3 +35,9 @@ class TestUriDict:
     def test_malformed_uri(self):
         for m in self.malformed:
             nose.tools.assert_raises(CCLicenseError, lib.uri2dict, m)
+
+    def test_dict2uri_nonetype(self):
+        d = dict(code='by', version='3.0', jurisdiction=None)
+        assert lib.dict2uri(d) == 'http://creativecommons.org/licenses/by/3.0/'
+        e = dict(code='by') # for now, default version is 1.0
+        assert lib.dict2uri(e) == 'http://creativecommons.org/licenses/by/1.0/'

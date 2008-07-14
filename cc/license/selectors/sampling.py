@@ -3,6 +3,7 @@ import zope.interface
 import glob
 import os
 import RDF
+import cc.license
 from cc.license.lib.interfaces import ILicenseSelector, ILicense
 from cc.license.lib.rdf_helper import query_to_single_value, NS_DC, \
                                       NS_DCQ, NS_CC
@@ -52,24 +53,25 @@ class Selector(object):
     zope.interface.implements(ILicenseSelector)
     id = 'recombo'
     title = 'Sampling'
+
     def __init__(self):
         files = glob.glob(os.path.join(rdf_helper.LIC_RDF_PATH ,'*sampling*'))
         self.model = rdf_helper.init_model(*files)
         self.jurisdictions = None # FIXME
         self.versions = None # FIXME
+
     def by_uri(self, uri):
         return SamplingLicense(self.model, uri)
+
     def by_code(self, license_code, jurisdiction = None, version = None):
-        base = 'http://creativecommons.org/licenses/'
-        base = urlparse.urljoin(base, license_code + '/')
-        if not version:
-            version = '1.0'
-        base = urlparse.urljoin(base, version + '/')
-        if jurisdiction:
-            base = urlparse.urljoin(base, jurisdiction + '/')
-        return self.by_uri(base)
+        uri = cc.license.lib.dict2uri(dict(jurisdiction=jurisdiction,
+                                           version=version,
+                                           code=license_code))
+        return self.by_uri(uri)
+
     def by_answers(self, answers_dict):
         raise NotImplementedError
+
     def questions(self):
         raise NotImplementedError
             
