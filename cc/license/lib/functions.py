@@ -4,6 +4,8 @@ import RDF
 import rdf_helper
 from classes import Jurisdiction
 
+from cc.license.lib.exceptions import CCLicenseError
+
 
 def jurisdiction_codes():
     """Returns sequence of all jurisdiction codes possible. Jurisdiction
@@ -50,9 +52,31 @@ def locales():
     return [ s['lang'].literal_value['string'] for s in solns ]
 
 def uri2dict(uri):
-    pass
+    """Take a license uri and convert it into a dictionary of values."""
+    base = 'http://creativecommons.org/licenses/'
+
+    # minor error checking
+    if not uri.startswith(base) or not uri.endswith('/'):
+        raise CCLicenseError, "Malformed Creative Commons URI"
+
+    license_info = {}
+    raw_info = uri.lstrip(base)
+    raw_info = raw_info.rstrip('/')
+
+    info_list = raw_info.split('/') 
+
+    if len(info_list) not in (2,3):
+        raise CCLicenseError, "Malformed Creative Commons URI"
+
+    retval = dict( code=info_list[0], version=info_list[1] )
+    if len(info_list) == 3:
+        retval['jurisdiction'] = info_list[2]
+
+    # XXX perform any validation on the dict produced?
+    return retval
 
 def dict2uri(license_info):
+    """Take a dictionary of license values and convert it into a uri."""
     base = 'http://creativecommons.org/licenses/'
 
     license_code = license_info['code'] # code should always exist
