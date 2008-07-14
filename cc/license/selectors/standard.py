@@ -83,7 +83,10 @@ def relevant_rdf():
     ret.update(glob.glob(os.path.join(rdf_helper.LIC_RDF_PATH , '*by*.rdf')))
     ret.update(glob.glob(os.path.join(rdf_helper.LIC_RDF_PATH , '*nc*.rdf')))
     ret.update(glob.glob(os.path.join(rdf_helper.LIC_RDF_PATH , '*nd*.rdf')))
-    ret.update(glob.glob(os.path.join(rdf_helper.LIC_RDF_PATH , '*sa*.rdf'))) # FIXME: "sa"mpling ! )-:
+    ret.update([ l for l in glob.glob(os.path.join(rdf_helper.LIC_RDF_PATH,
+                                      '*sa*.rdf'))
+                       if l.find('sampling') != -1 )
+                       # hack to remove sampling licenses
     return ret
 
 # TODO: pull id and title from license.rdf
@@ -91,12 +94,14 @@ class Selector(object):
     zope.interface.implements(ILicenseSelector)
     id = 'standard'
     title = 'Creative Commons'
+
     def __init__(self):
         self._licenses = {}
         files = relevant_rdf()
         self.model = rdf_helper.init_model(*files)
         self.jurisdictions = None # FIXME
         self.versions = None # FIXME
+
     def _by_uri(self, uri):
         # Check that the model knows about this license (e.g., it has a creator)
         try:
@@ -106,11 +111,13 @@ class Selector(object):
         except NoValuesFoundError:
             return None
         return StandardLicense(self.model, uri)
+
     def by_uri(self, uri):
         if uri not in self._licenses:
             self._licenses[uri] = self._by_uri(uri)
         return self._licenses[uri]
-    def by_code(self, license_code, jurisdiction = None, version = None):
+
+    def by_code(self, license_code, jurisdiction=None, version=None):
         base = 'http://creativecommons.org/licenses/'
         base = urlparse.urljoin(base, license_code + '/')
         if not version:
@@ -119,7 +126,9 @@ class Selector(object):
         if jurisdiction:
             base = urlparse.urljoin(base, jurisdiction + '/')
         return self.by_uri(base)
+
     def by_answers(self, answers_dict):
         raise NotImplementedError
+
     def questions(self):
         raise NotImplementedError
