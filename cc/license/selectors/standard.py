@@ -9,7 +9,6 @@ from cc.license.lib.rdf_helper import query_to_single_value, NS_DC, \
                                       NS_DCQ, NS_CC
 from cc.license.lib.exceptions import NoValuesFoundError
 from cc.license.lib import rdf_helper
-import urlparse
 
 ## FIXME: One day make this not copy-pasta from sampling
 
@@ -118,14 +117,10 @@ class Selector(object):
         return self._licenses[uri]
 
     def by_code(self, license_code, jurisdiction=None, version=None):
-        base = 'http://creativecommons.org/licenses/'
-        base = urlparse.urljoin(base, license_code + '/')
-        if not version:
-            version = '1.0' # FIXME: Should be latest_version
-        base = urlparse.urljoin(base, version + '/')
-        if jurisdiction:
-            base = urlparse.urljoin(base, jurisdiction + '/')
-        return self.by_uri(base)
+        uri = cc.license.lib.dict2uri(dict(jurisdiction=jurisdiction,
+                                           version=version,
+                                           code=license_code))
+        return self.by_uri(uri)
 
     def by_answers(self, answers_dict):
         raise NotImplementedError

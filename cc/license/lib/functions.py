@@ -1,4 +1,5 @@
 
+import urlparse
 import RDF
 import rdf_helper
 from classes import Jurisdiction
@@ -47,3 +48,32 @@ def locales():
         # XXX maybe this model should be cached somewhere?
     solns = list(query.execute(model))
     return [ s['lang'].literal_value['string'] for s in solns ]
+
+def uri2dict(uri):
+    pass
+
+def dict2uri(license_info):
+    base = 'http://creativecommons.org/licenses/'
+
+    license_code = license_info['code'] # code should always exist
+
+    version = None
+    try:
+        version = license_info['version']
+    except KeyError:
+        pass # Don't get pissed at me Asheesh, I know what I'm doing.
+    if not version:
+        version = '1.0' # FIXME: Should be latest_version
+
+    if license_info.has_key('jurisdiction'):
+        jurisdiction = license_info['jurisdiction']
+    else:
+        jurisdiction = None
+
+    base = urlparse.urljoin(base, license_code + '/')
+    base = urlparse.urljoin(base, version + '/')
+
+    if jurisdiction:
+        base = urlparse.urljoin(base, jurisdiction + '/')
+
+    return base
