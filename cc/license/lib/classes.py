@@ -49,7 +49,7 @@ class License(object):
     def __init__(self, model, uri, license_class):
         self.uri = uri
         self.model = model # hang on to the model for lazy queries later
-        self.license_class = license_class # defined by Selector
+        self._lclass = license_class # defined by Selector
 
         # make sure the license actually exists
         qstring = """
@@ -69,8 +69,7 @@ class License(object):
             self._titles = rdf_helper.get_titles(self.model, self.uri)
         return self._titles[language]
 
-    # TODO: implement!
     # TODO: write tests!
     @property
     def license_class(self):
-        return self.license_class
+        return self._lclass
