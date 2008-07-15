@@ -45,7 +45,7 @@ class TestStandard:
 
     def test_bysa_generic(self):
         lic = self.selector.by_code('by-sa')
-        assert lic.jurisdiction == 'Your mother has no jurisdiction'
+        assert lic.jurisdiction == '' # generic jurisdiction is empty string
         # assert_true(lic.libre) # FIXME: Should this be here?
 
     def test_bysa_us(self):

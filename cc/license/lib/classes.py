@@ -47,7 +47,7 @@ class License(object):
     # XXX where does license_class information come from?
 
     def __init__(self, model, uri, license_class):
-        self.uri = uri
+        self._uri = uri
         self.model = model # hang on to the model for lazy queries later
         self._lclass = license_class # defined by Selector
 
@@ -73,3 +73,51 @@ class License(object):
     @property
     def license_class(self):
         return self._lclass
+
+    # TODO: implement!
+    # TODO: write tests!
+    @property
+    def version(self):
+        return ''
+
+    # TODO: implement!
+    # TODO: write tests!
+    @property
+    def jurisdiction(self): # XXX nonexistent jurisdiction returns '' or None?
+        return ''
+
+    # TODO: write tests!
+    @property
+    def uri(self):
+        return self._uri
+
+    # TODO: implement!
+    # TODO: write tests!
+    @property
+    def current_version(self):
+        return ''
+
+    # TODO: implement!
+    # TODO: write tests!
+    @property
+    def deprecated(self):
+        return False
+
+    # TODO: implement!
+    # TODO: write tests!
+    @property
+    def superseded(self):
+        return False
+
+    # TODO: implement!
+    # TODO: write tests!
+    @property
+    def license_code(self):
+        return ''
+
+    # TODO: implement!
+    # TODO: write tests!
+    @property
+    def libre(self):
+        return False
+
