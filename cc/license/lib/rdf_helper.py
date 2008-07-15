@@ -113,3 +113,29 @@ def init_model(*filenames):
         parser.parse_into_model(model, filename_uri)
     return model
 
+# TODO: write tests for this refactored method
+def get_titles(model, uri):
+    """Given a URI for an RDF resource, return a dictionary of
+       corresponding to its dc:title properties. The indices will
+       be locale codes, and the values will be titles."""
+    qstring = """
+                     PREFIX cc: <http://creativecommons.org/ns#>
+                     PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+                     PREFIX dc: <http://purl.org/dc/elements/1.1/>
+                     PREFIX int: <http://creativecommons.org/international/">
+
+                     SELECT ?title
+                     WHERE
+                      {
+                         <%s> dc:title ?title .
+                      }
+                  """
+    # get the data back
+    query = RDF.Query(qstring % uri, query_language='sparql')
+    solns = list(query.execute(model))
+    # parse the data
+    _titles = {}
+    for s in solns:
+        tmp = s['title'].literal_value
+        _titles[ tmp['language'] ] = tmp['string']
+    return _titles
