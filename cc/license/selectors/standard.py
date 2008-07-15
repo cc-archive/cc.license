@@ -42,7 +42,7 @@ class Selector(object):
                 == 'http://creativecommons.org')
         except NoValuesFoundError:
             return None
-        return License(self.model, uri)
+        return License(self.model, uri, self.id)
 
     def by_uri(self, uri):
         if uri not in self._licenses:

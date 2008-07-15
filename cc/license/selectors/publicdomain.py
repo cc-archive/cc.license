@@ -21,4 +21,4 @@ class Selector(object):
             return self.by_uri('http://creativecommons.org/licenses/publicdomain/')
     
     def by_uri(self, uri):
-        return License(self.model, uri)
+        return License(self.model, uri, self.id)

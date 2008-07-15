@@ -22,7 +22,7 @@ class Selector(object):
         self.versions = None # FIXME
 
     def by_uri(self, uri):
-        return License(self.model, uri)
+        return License(self.model, uri, self.id)
 
     def by_code(self, license_code, jurisdiction=None, version=None):
         uri = cc.license.lib.dict2uri(dict(jurisdiction=jurisdiction,

@@ -46,40 +46,31 @@ class License(object):
 
     # XXX where does license_class information come from?
 
-    def __init__(self, model, uri):
+    def __init__(self, model, uri, license_class):
         self.uri = uri
+        self.model = model # hang on to the model for lazy queries later
+        self.license_class = license_class # defined by Selector
+
+        # make sure the license actually exists
         qstring = """
                   PREFIX cc: <http://creativecommons.org/ns#>
-                  PREFIX dcq: <http://purl.org/dc/terms/>               
                   PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
                 
-                  SELECT ?deprecatedDate ?version ?replacement ?jurisdiction
-                  WHERE {
-                         <%s> rdf:type cc:License .
-                         <%s> dcq:hasVersion ?version .
-                         OPTIONAL { <%s> cc:deprecatedOn ?deprecatedDate }
-                         OPTIONAL { <%s> dcq:isReplacedBy ?replacement }
-                         OPTIONAL { <%s> cc:jurisdiction ?jurisdiction }
-                        }"""
-        qstring = qstring % ((uri,) * 5) # XXX there's got to be a better way
-        query = RDF.Query(qstring, query_language='sparql')
-        solns = list(query.execute(model))
-        if len(solns) != 1:
+                  ASK { <%s> rdf:type cc:License . }"""
+        query = RDF.Query(qstring % self.uri, query_language='sparql')
+        uri_exists = query.execute(model).get_boolean()
+        if not uri_exists:
             raise CCLicenseError, \
-                  "Got %d solutions for <%s> (expecting 1)" % (len(solns), uri)
+                  "License <%s> does not exist in model given." % self.uri
 
-        soln = solns[0]
-        # start populating properties
-        # TODO: tests for exercising EACH of these properties
-        self.jurisdiction = str(soln['jurisdiction'].uri)
-            # TODO: jurisdiction object instead of string?
-        self.version = soln['version'].literal_value['string']
-        self.deprecated = soln['deprecatedDate'] is not None
-        self.superseded = soln['replacement'] is not None
-
-        # TODO: license_class, libre, current_version, license_code
-
-        self._titles = rdf_helper.get_titles(model, uri)
-
+    # TODO: write tests!
     def title(self, language='en'):
+        if self._titles is None:
+            self._titles = rdf_helper.get_titles(self.model, self.uri)
         return self._titles[language]
+
+    # TODO: implement!
+    # TODO: write tests!
+    @property
+    def license_class(self):
+        return self.license_class
