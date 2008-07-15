@@ -69,7 +69,6 @@ class License(object):
             self._titles = rdf_helper.get_titles(self.model, self.uri)
         return self._titles[language]
 
-    # TODO: write tests!
     @property
     def license_class(self):
         return self._lclass

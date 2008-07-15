@@ -2,6 +2,20 @@
 from zope.interface import implementedBy
 import cc.license
 
+class TestAll:
+
+    def test_license_class(self):
+        stdsel = cc.license.selectors.choose('standard')
+        stdlic = stdsel.by_code('by')
+        assert stdsel.id == stdlic.license_class
+        smpsel = cc.license.selectors.choose('recombo')
+        smplic = smpsel.by_code('sampling')
+        assert smpsel.id == smplic.license_class
+        pdsel = cc.license.selectors.choose('publicdomain')
+        pdlic = pdsel.by_code('publicdomain')
+        assert pdsel.id == pdlic.license_class
+        
+
 class TestStandard:
 
     def setUp(self):
