@@ -116,7 +116,6 @@ class License(object):
         else:
             return str(solns[0]['jurisdiction'].uri)
 
-    # TODO: write tests!
     @property
     def uri(self):
         return self._uri
