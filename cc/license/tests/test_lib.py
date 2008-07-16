@@ -1,6 +1,7 @@
 """Unit tests and functional tests exercising cc.license.lib"""
 
 import nose.tools
+import cc.license
 import cc.license.lib as lib
 from cc.license.lib.exceptions import CCLicenseError
 
@@ -54,3 +55,13 @@ class TestFunctions:
     def test_code_from_uri(self):
         for uri, code in self.pairs:
             assert lib.code_from_uri(uri) == code
+
+    def test_current_version(self):
+        for j in ('us', 'de', 'jp', 'uk', 'es'):
+            assert type(lib.current_version('by', jurisdiction=j)) == str
+        assert lib.current_version('by', jurisdiction='us') == '3.0'
+        assert lib.current_version('by-sa', jurisdiction='mx') == '2.5'
+        assert lib.current_version('by-nc', jurisdiction='uk') == '2.0'
+
+    def test_current_version_fails(self):
+        assert lib.current_version('by-nc-nd', jurisdiction='jo') is None

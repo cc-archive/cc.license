@@ -160,3 +160,8 @@ def get_descriptions(model, uri):
             _descriptions[ tmp['language'] ] = tmp['string']
         return _descriptions
 
+# XXX is this a good idea?
+import glob
+import os
+EVERYTHING = init_model(*glob.glob(os.path.join(LIC_RDF_PATH, '*.rdf')))
+

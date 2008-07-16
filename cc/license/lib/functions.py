@@ -1,4 +1,5 @@
 
+from distutils.version import StrictVersion
 import urlparse
 import RDF
 import rdf_helper
@@ -62,18 +63,21 @@ def uri2dict(uri):
 
     # minor error checking
     if not uri.startswith(base) or not uri.endswith('/'):
-        raise CCLicenseError, "Malformed Creative Commons URI"
+        raise CCLicenseError, "Malformed Creative Commons URI: <%s>" % uri
 
     license_info = {}
-    raw_info = uri.lstrip(base).rstrip('/')
+    raw_info = uri[len(base):]
+    raw_info = raw_info.rstrip('/')
 
     info_list = raw_info.split('/') 
 
-    if len(info_list) not in (2,3):
-        raise CCLicenseError, "Malformed Creative Commons URI"
+    if len(info_list) not in (1,2,3):
+        raise CCLicenseError, "Malformed Creative Commons URI: <%s>" % uri
 
-    retval = dict( code=info_list[0], version=info_list[1] )
-    if len(info_list) == 3:
+    retval = dict( code=info_list[0] )
+    if len(info_list) > 1:
+        retval['version'] = info_list[1]
+    if len(info_list) > 2:
         retval['jurisdiction'] = info_list[2]
 
     # XXX perform any validation on the dict produced?
@@ -105,3 +109,37 @@ def dict2uri(license_info):
         base = urlparse.urljoin(base, jurisdiction + '/')
 
     return base
+
+def current_version(code, jurisdiction=None):
+    """Given a license code and optional jurisdiction, determine what
+       the current (latest) license version is. Returns a just the version
+       number, as a string. 'jurisdiction' should be a short code and
+       not a jurisdiction URI."""
+    query_string = """
+        PREFIX cc: <http://creativecommons.org/ns#>
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+        SELECT ?license
+        WHERE
+         {
+            ?license rdf:type cc:License .
+         }
+                  """
+    query = RDF.Query(query_string, query_language='sparql')
+    solns = list(query.execute(rdf_helper.EVERYTHING))
+    license_uris = [ str(s['license'].uri) for s in solns ] # XXX CACHE ME
+    license_dicts = [ uri2dict(uri) for uri in license_uris ]
+    # filter on code
+    filtered_dicts = [ d for d in license_dicts if d['code'] == code ]
+    # filter on jurisdiction
+    if jurisdiction is None:
+        filtered_dicts = [ d for d in filtered_dicts
+                           if not d.has_key('jurisdiction') ]
+    else:
+        filtered_dicts = [ d for d in filtered_dicts
+                           if d.has_key('jurisdiction') and
+                              d['jurisdiction'] == jurisdiction ]
+    if len(filtered_dicts) == 0:
+        return None # didn't find any matching that code and jurisdiction
+    versions = [ StrictVersion(d['version']) for d in filtered_dicts ]
+    return str(max(versions))
