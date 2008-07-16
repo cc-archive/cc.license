@@ -119,17 +119,18 @@ class License(object):
         if len(solns) == 0:
             return '' # XXX return what if nonexistent?
         else:
-            return str(solns[0]['jurisdiction'].uri)
+            return cc.license.Jurisdiction(str(solns[0]['jurisdiction'].uri))
 
     @property
     def uri(self):
         return self._uri
 
-    # TODO: implement!
-    # TODO: write tests!
     @property
     def current_version(self):
-        return ''
+        j = None
+        if self.jurisdiction != '':
+            j = cc.license.jurisdictions.uri2code(self.jurisdiction.id)
+        return cc.license.lib.current_version(self.license_code, j)
 
     @property
     def deprecated(self):

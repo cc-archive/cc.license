@@ -67,6 +67,12 @@ class TestAll:
         lic2 = self.stdsel.by_code('by', version='3.0')
         assert not lic2.superseded
 
+    def test_current_version(self):
+        lic = self.stdsel.by_code('by')
+        assert lic.current_version == lic.version
+        lic2 = self.stdsel.by_code('by', version='1.0')
+        assert lic2.current_version == '3.0'
+
 class TestStandard:
 
     def setUp(self):
@@ -88,8 +94,7 @@ class TestStandard:
         assert lic is None
 
         lic = self.selector.by_code('by-sa', jurisdiction='us', version='3.0')
-        assert lic.jurisdiction == 'http://creativecommons.org/international/us/'
-        # FIXME: Above should return an IJurisdiction
+        assert lic.jurisdiction.code == 'us'
         # assert_true(lic.libre) # FIXME: Should this be here?
 
         # Now, test automatic version selection - but FIXME
