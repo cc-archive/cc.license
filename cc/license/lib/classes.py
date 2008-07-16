@@ -55,6 +55,10 @@ class License(object):
         self._titles = None
         self._descriptions = None
         self._superseded_by = None
+        self._version = None
+        self._jurisdiction = None
+        self._deprecated = None
+        self._superseded = None
 
         # make sure the license actually exists
         qstring = """
@@ -87,39 +91,19 @@ class License(object):
         return self._lclass
 
     # XXX use distutils.version.StrictVersion to ease comparison?
+    # XXX return what if nonexistent?
     @property
     def version(self):
-        qstring = """
-                  PREFIX dcq: <http://purl.org/dc/terms/>
+        if self._version is None:
+            self._version = rdf_helper.get_version(self._model, self.uri)
+        return self._version
 
-                  SELECT ?version
-                  WHERE {
-                         <%s> dcq:hasVersion ?version .
-                        }
-                  """
-        query = RDF.Query(qstring % self.uri, query_language='sparql')
-        solns = list(query.execute(self._model))
-        if len(solns) == 0:
-            return '' # XXX return what if nonexistent?
-        else:
-            return solns[0]['version'].literal_value['string']
-
+    # XXX return what if nonexistent?
     @property
     def jurisdiction(self):
-        qstring = """
-                  PREFIX cc: <http://creativecommons.org/ns#>
-
-                  SELECT ?jurisdiction
-                  WHERE {
-                         <%s> cc:jurisdiction ?jurisdiction .
-                        }
-                  """
-        query = RDF.Query(qstring % self.uri, query_language='sparql')
-        solns = list(query.execute(self._model))
-        if len(solns) == 0:
-            return '' # XXX return what if nonexistent?
-        else:
-            return cc.license.Jurisdiction(str(solns[0]['jurisdiction'].uri))
+        if self._jurisdiction is None:
+            self._jurisdiction = rdf_helper.get_jurisdiction(self._model, self.uri)
+        return self._jurisdiction
 
     @property
     def uri(self):
@@ -134,32 +118,17 @@ class License(object):
 
     @property
     def deprecated(self):
-        qstring = """
-                  PREFIX cc: <http://creativecommons.org/ns#>
-                  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-                
-                  ASK { <%s> cc:deprecatedOn ?date . }"""
-        query = RDF.Query(qstring % self.uri, query_language='sparql')
-        self._deprecated = query.execute(self._model).get_boolean()
+        if self._deprecated is None:
+            self._deprecated = rdf_helper.get_deprecated(self._model, self.uri)
         return self._deprecated
 
     @property
     def superseded(self):
-        qstring = """
-                  PREFIX dcq: <http://purl.org/dc/terms/>
-
-                  SELECT ?replacement
-                  WHERE {
-                         <%s> dcq:isReplacedBy ?replacement .
-                        }
-                  """
-        query = RDF.Query(qstring % self.uri, query_language='sparql')
-        solns = list(query.execute(self._model))
-        if len(solns) == 0:
-            return False
-        else:
-            self._superseded_by = str(solns[0]['replacement'].uri)
-            return True
+        if self._superseded is None:
+            self._superseded, self._superseded_by = \
+                            rdf_helper.get_superseded(self._model, self.uri)
+            # just in case superseded_by is needed down the line
+        return self._superseded
 
     @property
     def license_code(self):

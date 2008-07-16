@@ -1,6 +1,7 @@
 import RDF
 import datetime
 
+import cc.license
 from cc.license.lib.exceptions import RdfHelperError, NoValuesFoundError
 
 NS_CC = 'http://creativecommons.org/ns#'
@@ -113,7 +114,8 @@ def init_model(*filenames):
         parser.parse_into_model(model, filename_uri)
     return model
 
-# TODO: write tests for this refactored method
+# XXX all get_* helpers below are not directly tested
+
 def get_titles(model, uri):
     """Given a URI for an RDF resource, return a dictionary of
        corresponding to its dc:title properties. The indices will
@@ -137,7 +139,6 @@ def get_titles(model, uri):
         _titles[ tmp['language'] ] = tmp['string']
     return _titles
 
-# TODO: write tests
 def get_descriptions(model, uri):
     qstring = """
               PREFIX dc: <http://purl.org/dc/elements/1.1/>
@@ -159,6 +160,65 @@ def get_descriptions(model, uri):
             tmp = s['desc'].literal_value
             _descriptions[ tmp['language'] ] = tmp['string']
         return _descriptions
+
+def get_version(model, uri):
+    qstring = """
+              PREFIX dcq: <http://purl.org/dc/terms/>
+
+              SELECT ?version
+              WHERE {
+                     <%s> dcq:hasVersion ?version .
+                    }
+              """
+    query = RDF.Query(qstring % uri, query_language='sparql')
+    solns = list(query.execute(model))
+    if len(solns) == 0:
+        return ''
+    else:
+        return solns[0]['version'].literal_value['string']
+
+def get_jurisdiction(model, uri):
+    qstring = """
+              PREFIX cc: <http://creativecommons.org/ns#>
+
+              SELECT ?jurisdiction
+              WHERE {
+                     <%s> cc:jurisdiction ?jurisdiction .
+              }
+              """
+    query = RDF.Query(qstring % uri, query_language='sparql')
+    solns = list(query.execute(model))
+    if len(solns) == 0:
+        return ''
+    else:
+        return cc.license.Jurisdiction(str(solns[0]['jurisdiction'].uri))
+
+def get_deprecated(model, uri):
+    qstring = """
+              PREFIX cc: <http://creativecommons.org/ns#>
+              PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+                
+              ASK { <%s> cc:deprecatedOn ?date . }"""
+    query = RDF.Query(qstring % uri, query_language='sparql')
+    return query.execute(model).get_boolean()
+
+def get_superseded(model, uri):
+    """Watch out: returns a tuple and not just a value."""
+    qstring = """
+              PREFIX dcq: <http://purl.org/dc/terms/>
+
+              SELECT ?replacement
+              WHERE {
+                     <%s> dcq:isReplacedBy ?replacement .
+                    }
+              """
+    query = RDF.Query(qstring % uri, query_language='sparql')
+    solns = list(query.execute(model))
+    if len(solns) == 0:
+        return (False, None)
+    else:
+        superseded_by = str(solns[0]['replacement'].uri)
+        return (True, superseded_by)
 
 # XXX is this a good idea?
 import glob
