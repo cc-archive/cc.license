@@ -4,16 +4,23 @@ import cc.license
 
 class TestAll:
 
+    def __init__(self):
+        self.stdsel = cc.license.selectors.choose('standard')
+        self.smpsel = cc.license.selectors.choose('recombo')
+        self.pdsel = cc.license.selectors.choose('publicdomain')
+
     def test_license_class(self):
-        stdsel = cc.license.selectors.choose('standard')
-        stdlic = stdsel.by_code('by')
-        assert stdsel.id == stdlic.license_class
-        smpsel = cc.license.selectors.choose('recombo')
-        smplic = smpsel.by_code('sampling')
-        assert smpsel.id == smplic.license_class
-        pdsel = cc.license.selectors.choose('publicdomain')
-        pdlic = pdsel.by_code('publicdomain')
-        assert pdsel.id == pdlic.license_class
+        stdlic = self.stdsel.by_code('by')
+        assert self.stdsel.id == stdlic.license_class
+        smplic = self.smpsel.by_code('sampling')
+        assert self.smpsel.id == smplic.license_class
+        pdlic = self.pdsel.by_code('publicdomain')
+        assert self.pdsel.id == pdlic.license_class
+
+    def test_version(self):
+        uri = 'http://creativecommons.org/licenses/by-sa/1.0/'
+        lic = self.stdsel.by_uri(uri)
+        assert lic.version == u'1.0'
         
 
 class TestStandard:
