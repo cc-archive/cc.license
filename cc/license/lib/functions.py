@@ -8,28 +8,6 @@ from classes import Jurisdiction
 from cc.license.lib.exceptions import CCLicenseError
 
 
-def jurisdiction_codes():
-    """Returns sequence of all jurisdiction codes possible. Jurisdiction
-       codes are strings that yield a Jurisdiction object when passed
-       to cc.license.jurisdiction.Jurisdiction"""
-    model = rdf_helper.init_model(rdf_helper.JURI_RDF_PATH)
-    cc_jurisdiction_url = RDF.Uri('http://creativecommons.org/ns#Jurisdiction')
-    # grab the url strings from the RDF Nodes
-    urls = [ rdf_helper.uri2value(j.subject) 
-             for j in 
-             list(model.find_statements(
-                           RDF.Statement(None, None, cc_jurisdiction_url)))
-           ]
-    # strip the jurisdiction code from the url
-    blen = len('http://creativecommons.org/international/')
-    codes = [ url[blen:-1] for url in urls ]
-    return codes # XXX: cache this somewhere?
-
-def jurisdictions():
-    """Returns sequence of all jurisdictions possible, 
-       as Jurisdiction objects."""
-    return [Jurisdiction(code) for code in jurisdiction_codes()]
-
 def locales():
     """Returns a sequence of all locales possible.
        A locale is a string that represents the language of a jurisdiction.

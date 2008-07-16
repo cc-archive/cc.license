@@ -5,21 +5,23 @@ import rdf_helper
 
 import cc.license
 from cc.license.lib.exceptions import NoValuesFoundError, CCLicenseError
+from cc.license.jurisdictions import uri2code
 
 # define model out here in the name of efficiency
 # XXX but in the long run this is likely a poor choice
 juri_model = rdf_helper.init_model(rdf_helper.JURI_RDF_PATH)
 
-# TODO: make it accept either a valid URI or short code!
 class Jurisdiction(object):
     zope.interface.implements(interfaces.IJurisdiction)
-    def __init__(self, short_name):
-        """Creates an object representing a jurisdiction.
-           short_name is a (usually) two-letter code representing
-           the same jurisdiction; for a complete list, see
-           cc.license.jurisdiction_codes()"""
-        self.code = short_name
-        self.id = 'http://creativecommons.org/international/%s/' % short_name
+    def __init__(self, uri):
+        """Creates an object representing a jurisdiction, given
+           a valid jurisdiction URI. For a complete list, see
+           cc.license.jurisdictions.list_uris()"""
+        if not uri.startswith('http://creativecommons.org/international/') \
+           or not uri.endswith('/'):
+            raise CCLicenseError, "Malformed jurisdiction URI: <%s>" % uri
+        self.code = uri2code(uri)
+        self.id = uri
         self._titles = rdf_helper.get_titles(juri_model, self.id)
         id_uri = RDF.Uri(self.id)
         try:
