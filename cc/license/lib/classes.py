@@ -44,8 +44,6 @@ class License(object):
     """Base class for ILicense implementation modeling a specific license."""
     zope.interface.implements(interfaces.ILicense)
 
-    # XXX where does license_class information come from?
-
     def __init__(self, model, uri, license_class):
         self._uri = uri
         self._model = model # hang on to the model for lazy queries later
@@ -83,6 +81,7 @@ class License(object):
     def license_class(self):
         return self._lclass
 
+    # XXX use distutils.version.StrictVersion to ease comparison?
     @property
     def version(self):
         qstring = """
@@ -128,11 +127,16 @@ class License(object):
     def current_version(self):
         return ''
 
-    # TODO: implement!
-    # TODO: write tests!
     @property
     def deprecated(self):
-        return False
+        qstring = """
+                  PREFIX cc: <http://creativecommons.org/ns#>
+                  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+                
+                  ASK { <%s> cc:deprecatedOn ?date . }"""
+        query = RDF.Query(qstring % self.uri, query_language='sparql')
+        self._deprecated = query.execute(self._model).get_boolean()
+        return self._deprecated
 
     # TODO: implement!
     # TODO: write tests!

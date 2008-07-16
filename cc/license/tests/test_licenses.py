@@ -40,6 +40,12 @@ class TestAll:
         lic2 = self.stdsel.by_code('by-sa')
         assert lic2.description() == ''
 
+    def test_deprecated(self):
+        lic = self.stdsel.by_code('by')
+        assert not lic.deprecated
+        lic2 = self.smpsel.by_code('sampling')
+        assert lic2.deprecated
+
 class TestStandard:
 
     def setUp(self):
