@@ -60,6 +60,12 @@ class TestAll:
             lic = self.stdsel.by_code(c)
             assert lic.license_code == c
 
+    def test_superseded(self):
+        lic = self.stdsel.by_code('by')
+        assert lic.superseded
+        lic2 = self.stdsel.by_code('by', version='3.0')
+        assert not lic2.superseded
+
 class TestStandard:
 
     def setUp(self):

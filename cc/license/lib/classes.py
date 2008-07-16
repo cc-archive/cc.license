@@ -52,6 +52,7 @@ class License(object):
         self._lclass = license_class # defined by Selector
         self._titles = None
         self._descriptions = None
+        self._superseded_by = None
 
         # make sure the license actually exists
         qstring = """
@@ -139,11 +140,23 @@ class License(object):
         self._deprecated = query.execute(self._model).get_boolean()
         return self._deprecated
 
-    # TODO: implement!
-    # TODO: write tests!
     @property
     def superseded(self):
-        return False
+        qstring = """
+                  PREFIX dcq: <http://purl.org/dc/terms/>
+
+                  SELECT ?replacement
+                  WHERE {
+                         <%s> dcq:isReplacedBy ?replacement .
+                        }
+                  """
+        query = RDF.Query(qstring % self.uri, query_language='sparql')
+        solns = list(query.execute(self._model))
+        if len(solns) == 0:
+            return False
+        else:
+            self._superseded_by = str(solns[0]['replacement'].uri)
+            return True
 
     @property
     def license_code(self):
