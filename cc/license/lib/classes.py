@@ -65,7 +65,6 @@ class License(object):
             raise CCLicenseError, \
                   "License <%s> does not exist in model given." % self.uri
 
-    # TODO: write tests!
     def title(self, language='en'):
         if self._titles is None:
             self._titles = rdf_helper.get_titles(self._model, self.uri)

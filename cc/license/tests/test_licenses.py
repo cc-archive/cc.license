@@ -24,6 +24,13 @@ class TestAll:
 
     # TODO: write test_jurisdiction
 
+    def test_title(self):
+        lic = self.stdsel.by_code('by')
+        assert lic.title() == lic.title('en')
+        assert lic.title('en') == u'Attribution'
+        assert lic.title('es') == u'Reconocimiento'
+        assert lic.title('de') == u'Namensnennung'
+
     def test_description(self):
         # has a description
         lic = self.stdsel.by_code('by')
