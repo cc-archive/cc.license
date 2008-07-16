@@ -92,11 +92,22 @@ class License(object):
         else:
             return solns[0]['version'].literal_value['string']
 
-    # TODO: implement!
-    # TODO: write tests!
     @property
-    def jurisdiction(self): # XXX nonexistent jurisdiction returns '' or None?
-        return ''
+    def jurisdiction(self):
+        qstring = """
+                  PREFIX cc: <http://creativecommons.org/ns#>
+
+                  SELECT ?jurisdiction
+                  WHERE {
+                         <%s> cc:jurisdiction ?jurisdiction .
+                        }
+                  """
+        query = RDF.Query(qstring % self.uri, query_language='sparql')
+        solns = list(query.execute(self._model))
+        if len(solns) == 0:
+            return '' # XXX return what if nonexistent?
+        else:
+            return str(solns[0]['jurisdiction'].uri)
 
     # TODO: write tests!
     @property

@@ -21,6 +21,8 @@ class TestAll:
         uri = 'http://creativecommons.org/licenses/by-sa/1.0/'
         lic = self.stdsel.by_uri(uri)
         assert lic.version == u'1.0'
+
+    # TODO: write test_jurisdiction
         
 
 class TestStandard:
