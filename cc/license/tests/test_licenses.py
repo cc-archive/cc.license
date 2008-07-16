@@ -1,5 +1,4 @@
 
-from zope.interface import implementedBy
 import cc.license
 
 class TestAll:
