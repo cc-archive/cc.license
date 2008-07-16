@@ -42,6 +42,10 @@ class ILicense(Interface):
         """Return the human-readable title of this license.  It is a method 
            so a language parameter can be passed in."""
 
+    def description(language='en'):
+        """Return a human-readable description of the license, if one
+           exists. It is a method so a language parameter can be passed in."""
+
 
 class ILicenseSelector(Interface):
     """License selection for a particular class of license."""

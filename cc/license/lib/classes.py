@@ -51,6 +51,7 @@ class License(object):
         self._model = model # hang on to the model for lazy queries later
         self._lclass = license_class # defined by Selector
         self._titles = None
+        self._descriptions = None
 
         # make sure the license actually exists
         qstring = """
@@ -70,6 +71,15 @@ class License(object):
             self._titles = rdf_helper.get_titles(self._model, self.uri)
         return self._titles[language]
 
+    def description(self, language='en'):
+        if self._descriptions is None:
+            self._descriptions = rdf_helper.get_descriptions(
+                                           self._model, self.uri)
+        if self._descriptions == '':
+            return ''
+        else:
+            return self._descriptions[language]
+
     @property
     def license_class(self):
         return self._lclass
@@ -77,7 +87,6 @@ class License(object):
     @property
     def version(self):
         qstring = """
-                  PREFIX cc: <http://creativecommons.org/ns#>
                   PREFIX dcq: <http://purl.org/dc/terms/>
 
                   SELECT ?version

@@ -119,10 +119,7 @@ def get_titles(model, uri):
        corresponding to its dc:title properties. The indices will
        be locale codes, and the values will be titles."""
     qstring = """
-                     PREFIX cc: <http://creativecommons.org/ns#>
-                     PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
                      PREFIX dc: <http://purl.org/dc/elements/1.1/>
-                     PREFIX int: <http://creativecommons.org/international/">
 
                      SELECT ?title
                      WHERE
@@ -139,3 +136,27 @@ def get_titles(model, uri):
         tmp = s['title'].literal_value
         _titles[ tmp['language'] ] = tmp['string']
     return _titles
+
+# TODO: write tests
+def get_descriptions(model, uri):
+    qstring = """
+              PREFIX dc: <http://purl.org/dc/elements/1.1/>
+
+              SELECT ?desc
+              WHERE {
+                     <%s> dc:description ?desc .
+                    }
+              """
+    # get the data back
+    query = RDF.Query(qstring % uri, query_language='sparql')
+    solns = list(query.execute(model))
+    # parse the data
+    if len(solns) == 0:
+        return ''
+    else:
+        _descriptions = {}
+        for s in solns:
+            tmp = s['desc'].literal_value
+            _descriptions[ tmp['language'] ] = tmp['string']
+        return _descriptions
+

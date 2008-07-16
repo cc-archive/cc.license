@@ -23,7 +23,15 @@ class TestAll:
         assert lic.version == u'1.0'
 
     # TODO: write test_jurisdiction
-        
+
+    def test_description(self):
+        # has a description
+        lic = self.stdsel.by_code('by')
+        assert lic.description() == u'You must attribute the\nwork in the manner specified by the author or licensor.'
+        assert lic.description('es') == u'El licenciador permite copiar, distribuir y comunicar p\xfablicamente la obra. A cambio, hay que reconocer y citar al autor original.'
+        # doesn't have a description
+        lic2 = self.stdsel.by_code('by-sa')
+        assert lic2.description() == ''
 
 class TestStandard:
 
