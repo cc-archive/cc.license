@@ -50,6 +50,7 @@ class License(object):
         self._uri = uri
         self._model = model # hang on to the model for lazy queries later
         self._lclass = license_class # defined by Selector
+        self._titles = None
 
         # make sure the license actually exists
         qstring = """
