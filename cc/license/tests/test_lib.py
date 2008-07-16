@@ -41,3 +41,16 @@ class TestUriDict:
         assert lib.dict2uri(d) == 'http://creativecommons.org/licenses/by/3.0/'
         e = dict(code='by') # for now, default version is 1.0
         assert lib.dict2uri(e) == 'http://creativecommons.org/licenses/by/1.0/'
+
+class TestFunctions:
+
+    def __init__(self):
+        self.pairs = (
+         ('http://creativecommons.org/licenses/by-nc/2.0/tw/', 'by-nc'),
+         ('http://creativecommons.org/licenses/by/3.0/', 'by'),
+         ('http://creativecommons.org/licenses/by-sa/2.5/mx/', 'by-sa'),
+                    )
+
+    def test_code_from_uri(self):
+        for uri, code in self.pairs:
+            assert lib.code_from_uri(uri) == code

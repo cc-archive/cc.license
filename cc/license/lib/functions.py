@@ -51,6 +51,11 @@ def locales():
     solns = list(query.execute(model))
     return [ s['lang'].literal_value['string'] for s in solns ]
 
+def code_from_uri(uri):
+    """Given a URI representing a CC license, parse out the license_code."""
+    base = 'http://creativecommons.org/licenses/'
+    return uri.lstrip(base).split('/')[0]
+
 def uri2dict(uri):
     """Take a license uri and convert it into a dictionary of values."""
     base = 'http://creativecommons.org/licenses/'
@@ -60,8 +65,7 @@ def uri2dict(uri):
         raise CCLicenseError, "Malformed Creative Commons URI"
 
     license_info = {}
-    raw_info = uri.lstrip(base)
-    raw_info = raw_info.rstrip('/')
+    raw_info = uri.lstrip(base).rstrip('/')
 
     info_list = raw_info.split('/') 
 

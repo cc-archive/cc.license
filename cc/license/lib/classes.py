@@ -2,6 +2,8 @@ import RDF
 import zope.interface
 import interfaces 
 import rdf_helper
+
+import cc.license
 from cc.license.lib.exceptions import NoValuesFoundError, CCLicenseError
 
 # define model out here in the name of efficiency
@@ -143,11 +145,9 @@ class License(object):
     def superseded(self):
         return False
 
-    # TODO: implement!
-    # TODO: write tests!
     @property
     def license_code(self):
-        return ''
+        return cc.license.lib.code_from_uri(self.uri)
 
     # TODO: implement!
     # TODO: write tests!

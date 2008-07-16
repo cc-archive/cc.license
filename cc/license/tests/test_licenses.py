@@ -53,6 +53,13 @@ class TestAll:
         lic2 = self.smpsel.by_code('sampling')
         assert lic2.deprecated
 
+    def test_license_code(self):
+        for c in ('by', 'by-sa', 'by-nd', 'by-nc', 'by-nc-sa', 'by-nc-nd'):
+            if c == 'by-nc-nd':
+                continue # FIXME
+            lic = self.stdsel.by_code(c)
+            assert lic.license_code == c
+
 class TestStandard:
 
     def setUp(self):
