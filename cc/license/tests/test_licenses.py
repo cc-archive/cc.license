@@ -21,9 +21,11 @@ class TestAll:
         uri = 'http://creativecommons.org/licenses/by-sa/1.0/'
         lic = self.stdsel.by_uri(uri)
         assert lic.version == u'1.0'
+        lic2 = self.stdsel.by_code('by')
+        assert lic2.version == u'3.0'
 
     def test_uri(self):
-        uri = 'http://creativecommons.org/licenses/by-sa/1.0/'
+        uri = 'http://creativecommons.org/licenses/by-sa/3.0/'
         lic = self.stdsel.by_uri(uri)
         assert lic.uri == uri
         lic2 = self.stdsel.by_code('by-sa')
@@ -61,7 +63,7 @@ class TestAll:
             assert lic.license_code == c
 
     def test_superseded(self):
-        lic = self.stdsel.by_code('by')
+        lic = self.stdsel.by_code('by', version='1.0')
         assert lic.superseded
         lic2 = self.stdsel.by_code('by', version='3.0')
         assert not lic2.superseded

@@ -89,18 +89,18 @@ def dict2uri(license_info):
 
     license_code = license_info['code'] # code should always exist
 
+    if license_info.has_key('jurisdiction'):
+        jurisdiction = license_info['jurisdiction']
+    else:
+        jurisdiction = None
+
     version = None
     try:
         version = license_info['version']
     except KeyError:
         pass # Don't get pissed at me Asheesh, I know what I'm doing.
     if not version:
-        version = '1.0' # FIXME: Should be latest_version
-
-    if license_info.has_key('jurisdiction'):
-        jurisdiction = license_info['jurisdiction']
-    else:
-        jurisdiction = None
+        version = current_version(license_code, jurisdiction)
 
     base = urlparse.urljoin(base, license_code + '/')
     base = urlparse.urljoin(base, version + '/')
