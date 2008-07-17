@@ -21,6 +21,7 @@ setup(name='cc.license',
         'zope.interface',
         'nose',
       ],
+      setup_requires=['setuptools-git',],
       entry_points="""
       # -*- Entry points: -*-
       """,
