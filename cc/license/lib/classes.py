@@ -145,8 +145,39 @@ class Question(object):
     zope.interface.implements(interfaces.IQuestion)
 
     def __init__(self, root, lclass, id):
+        """Given an etree root object, a license class string, and a question
+           identifier string, populate this Question object with all
+           relevant data found in the etree."""
         self._id = id
 
+        _flag = False # for error checking
+        # xml:lang namespace
+        xlang = '{http://www.w3.org/XML/1998/namespace}lang'
+
+        for child in root.getchildren():
+            if child.get('id') != lclass:
+                continue
+            for field in child.findall('field'):
+                if field.get('id') != self.id:
+                    continue
+                _flag = True # throw error if we don't find our lclass and id
+                self._labels = {}
+                self._descs = {}
+                self._enums = {}
+                for l in field.findall('label'):
+                    self._labels[l.get(xlang)] = l.text
+                for d in field.findall('description'):
+                    self._descs[d.get(xlang)] = d.text
+                for e in field.findall('enum'):
+                    eid = e.get('id')
+                    elabels = {}
+                    for l in e.findall('label'):
+                        elabels[l.get(xlang)] = l.text
+                    self._enums[eid] = elabels
+
+        if not _flag:
+            raise CCLicenseError, "Question identifier %s not found" % self.id
+            
     @property
     def id(self):
         return self._id
