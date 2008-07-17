@@ -140,3 +140,22 @@ class License(object):
     def libre(self):
         return False
 
+
+class Question(object):
+    zope.interface.implements(interfaces.IQuestion)
+
+    def __init__(self, root, lclass, id):
+        self._id = id
+
+    @property
+    def id(self):
+        return self._id
+
+    def label(self, language='en'):
+        pass
+
+    def description(self, language='en'):
+        pass
+
+    def answers(language='en'):
+        pass

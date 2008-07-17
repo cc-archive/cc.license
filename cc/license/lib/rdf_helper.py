@@ -225,3 +225,12 @@ import glob
 import os
 EVERYTHING = init_model(*glob.glob(os.path.join(LIC_RDF_PATH, '*.rdf')))
 
+#####################
+## Questions stuff ##
+#####################
+
+# The below code will change form eventually, but for now here it is.
+from lxml import etree
+QUESTION_XML_PATH = './license.rdf/xml/questions.xml'
+
+questions_root = etree.parse(QUESTION_XML_PATH).getroot()

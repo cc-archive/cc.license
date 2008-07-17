@@ -55,26 +55,25 @@ class ILicenseSelector(Interface):
 
     def by_code(license_code, jurisdiction=None, version=None):
         """Return the ILicense object cooresponding to the license code (eg,
-        "by-sa") and optional jurisdiction and version.  If
-        jurisdiction is None, an Unported license is returned.  If
-        version is None, the latest available version is returned.  If
-        a license can not be found in this selector, return None."""
+           "by-sa") and optional jurisdiction and version.  If
+           jurisdiction is None, an Unported license is returned.  If
+           version is None, the latest available version is returned.  If
+           a license can not be found in this selector, return None."""
 
     def by_uri(uri):
         """Process a URI and return the appropriate ILicense object.
-        If unable to produce a License from the URI, return None."""
+           If unable to produce a License from the URI, return None."""
 
     def by_answers(answers_dict):
         """Issue a license based on a dict of answers; return 
-        an ILicense object.
+           an ILicense object.
 
-        Question and answer information exists in questions.xml;
-        there is a jurisdiction "question" which should go away.
-        """
+           Question and answer information exists in questions.xml;
+           there is a jurisdiction "question" which should go away."""
 
     def questions():
-        """Return a String(?) containing the XML describing the questions
-        for this license class."""
+        """Return a list of IQuestions representing all questions for
+           this license class."""
 
     jurisdictions = Attribute(u"A sequence of IJurisdiction objects.")
     versions = Attribute(u"A sequence of available versions for this class.")
@@ -87,5 +86,28 @@ class ILicenseFormatter(Interface):
 
     def format(license, work_dict={}, locale='en'):
         """Return a string serialization for the license, optionally 
-        incorporating the work metadata and locale."""
+           incorporating the work metadata and locale."""
 
+
+# TODO: what to do with the 'jurisdiction' question, 
+#                                per LicenseSelector.by_answers
+class IQuestion(Interface):
+    """Encapsulate a question to be asked by LicenseSelector."""
+
+    id = Attribute(u"Unique identifier for this question.")
+
+    def label(language='en'):
+        """One-line representation of the actual question, in
+           a given language. Default language is English."""
+
+    def description(language='en'):
+        """Description of the question, in a given language.
+           Default language is English."""
+
+    def answers(language='en'):
+        """A list of 2-tuples of possible answers. First element is
+           the answer to this question, in a given language (Default
+           language is English. Second element is language-independent
+           identifier of the question answer.
+
+           But why are there no descriptions of the answers?"""
