@@ -183,10 +183,17 @@ class Question(object):
         return self._id
 
     def label(self, language='en'):
-        pass
+        if language == '':
+            language = 'en' # why not?
+        return self._labels[language]
 
     def description(self, language='en'):
-        pass
+        if language == '':
+            language = 'en' # why not?
+        return self._descs[language]
 
-    def answers(language='en'):
-        pass
+    def answers(self, language='en'):
+        if language == '':
+            language = 'en' # why not?
+        return [ ( self._enums[k][language], k ) 
+                 for k in self._enums.keys() ]
