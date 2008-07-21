@@ -33,14 +33,38 @@ def test_get_selector_key_error():
     nose.tools.assert_raises(CCLicenseError,
                              cc.license.selectors.choose, 'roflcopter')
 
-def test_questions():
-    sel = cc.license.selectors.choose('standard')
-    assert type(sel.questions()) == list
-    assert len(sel.questions()) != 0
-    for q in sel.questions():
-        assert type(q) == cc.license.Question
+class TestQuestions:
 
-def test_pd_questions():
-    sel = cc.license.selectors.choose('publicdomain')
-    assert type(sel.questions()) == list
-    assert len(sel.questions()) == 0
+    def __init__(self):
+        self.std = cc.license.selectors.choose('standard')
+        self.pd = cc.license.selectors.choose('publicdomain')
+
+    def test_standard_questions(self):
+        questions = self.std.questions()
+        assert type(questions) == list
+        assert len(questions) != 0
+        for q in questions:
+            assert type(q) == cc.license.Question
+
+    def test_publicdomain_questions(self):
+        questions = self.pd.questions()
+        assert type(questions) == list
+        assert len(questions) == 0
+
+class TestAnswers:
+
+    def __init__(self):
+        self.std = cc.license.selectors.choose('standard')
+
+    # XXX no test yet
+    def test_standard_use_case(self):
+        questions = self.std.questions()
+        answers = {}
+
+    # XXX no test yet
+    def test_standard_by(self):
+        answers = {'commercial':'y', 'derivatives':'y'}
+        #lic = self.std.by_answers(answers)
+
+    def test_not_implemented(self):
+        nose.tools.assert_raises(NotImplementedError, self.std.by_answers, {})
