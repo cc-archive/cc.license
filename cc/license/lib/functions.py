@@ -104,7 +104,7 @@ def current_version(code, jurisdiction=None):
          }
                   """
     query = RDF.Query(query_string, query_language='sparql')
-    solns = list(query.execute(rdf_helper.EVERYTHING))
+    solns = list(query.execute(rdf_helper.ALL_MODEL))
     license_uris = [ str(s['license'].uri) for s in solns ] # XXX CACHE ME
     license_dicts = [ uri2dict(uri) for uri in license_uris ]
     # filter on code

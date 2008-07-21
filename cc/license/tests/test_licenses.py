@@ -1,5 +1,7 @@
 
+import nose.tools
 import cc.license
+from cc.license.lib.exceptions import CCLicenseError
 
 class TestAll:
 
@@ -90,8 +92,9 @@ class TestStandard:
         # assert_true(lic.libre) # FIXME: Should this be here?
 
     def test_bysa_us(self):
-        lic = self.selector.by_code('by-sa', jurisdiction='us', version='1.0')
-        assert lic is None
+        # nonexistent license raises an error
+        nose.tools.assert_raises(CCLicenseError, self.selector.by_code,
+                    'by-sa', jurisdiction='us', version='1.0')
 
         lic = self.selector.by_code('by-sa', jurisdiction='us', version='3.0')
         assert lic.jurisdiction.code == 'us'

@@ -51,7 +51,15 @@ class ILicenseSelector(Interface):
     """License selection for a particular class of license."""
 
     id = Attribute(u"The unique identifier for this selector.")
-    title = Attribute(u"The title, as a more descriptive identifier.")
+
+    uri = Attribute(u"The URI representing this selector.")
+
+    jurisdictions = Attribute(u"A sequence of IJurisdiction objects.")
+
+    versions = Attribute(u"A sequence of available versions for this class.")
+
+    def title(language='en'):
+       """The title, as a more descriptive identifier."""
 
     def by_code(license_code, jurisdiction=None, version=None):
         """Return the ILicense object cooresponding to the license code (eg,
@@ -74,9 +82,6 @@ class ILicenseSelector(Interface):
     def questions():
         """Return a list of IQuestions representing all questions for
            this license class."""
-
-    jurisdictions = Attribute(u"A sequence of IJurisdiction objects.")
-    versions = Attribute(u"A sequence of available versions for this class.")
 
 
 class ILicenseFormatter(Interface):

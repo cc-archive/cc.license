@@ -1,6 +1,7 @@
 import RDF
 import datetime
 
+import classes
 import cc.license
 from cc.license.lib.exceptions import RdfHelperError, NoValuesFoundError
 
@@ -8,6 +9,8 @@ NS_CC = 'http://creativecommons.org/ns#'
 NS_DC = 'http://purl.org/dc/elements/1.1/'
 NS_DCQ = 'http://purl.org/dc/terms/'
 JURI_RDF_PATH = './license.rdf/rdf/jurisdictions.rdf'
+INDEX_RDF_PATH = './license.rdf/rdf/index.rdf'
+SEL_RDF_PATH = './license.rdf/rdf/selectors.rdf'
 LIC_RDF_PATH = './license.rdf/license_rdf/'
 # FIXME: Use package.requires for JURI_RDF_PATH
 
@@ -220,10 +223,31 @@ def get_superseded(model, uri):
         superseded_by = str(solns[0]['replacement'].uri)
         return (True, superseded_by)
 
+def get_selectors():
+    qstring = """
+              PREFIX cc: <http://creativecommons.org/ns#>
+              PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+              SELECT ?uri ?lcode
+              WHERE {
+                     ?uri rdf:type cc:LicenseSelector .
+                     ?uri cc:licenseCode ?lcode .
+                    }
+              """
+    query = RDF.Query(qstring, query_language='sparql')
+    solns = list(query.execute(SEL_MODEL))
+    retval = {}
+    for s in solns:
+        lcode = s['lcode'].literal_value['string']
+        uri = str(s['uri'].uri)
+        retval[lcode] = classes.LicenseSelector(uri, license_code=lcode)
+    return retval
+
+
 # XXX is this a good idea?
-import glob
-import os
-EVERYTHING = init_model(*glob.glob(os.path.join(LIC_RDF_PATH, '*.rdf')))
+ALL_MODEL = init_model(INDEX_RDF_PATH)
+JURI_MODEL = init_model(JURI_RDF_PATH)
+SEL_MODEL = init_model(SEL_RDF_PATH)
 
 #####################
 ## Questions stuff ##

@@ -7,10 +7,6 @@ import cc.license
 from cc.license.lib.exceptions import NoValuesFoundError, CCLicenseError
 from cc.license.jurisdictions import uri2code
 
-# define model out here in the name of efficiency
-# XXX but in the long run this is likely a poor choice
-juri_model = rdf_helper.init_model(rdf_helper.JURI_RDF_PATH)
-
 class Jurisdiction(object):
     zope.interface.implements(interfaces.IJurisdiction)
     def __init__(self, uri):
@@ -22,16 +18,18 @@ class Jurisdiction(object):
             raise CCLicenseError, "Malformed jurisdiction URI: <%s>" % uri
         self.code = uri2code(uri)
         self.id = uri
-        self._titles = rdf_helper.get_titles(juri_model, self.id)
+        self._titles = rdf_helper.get_titles(rdf_helper.JURI_MODEL, self.id)
         id_uri = RDF.Uri(self.id)
         try:
-            self.local_url = rdf_helper.query_to_single_value(juri_model,
-                id_uri, RDF.Uri(rdf_helper.NS_CC + 'jurisdictionSite'), None)
+            self.local_url = rdf_helper.query_to_single_value(
+                rdf_helper.JURI_MODEL, id_uri, 
+                RDF.Uri(rdf_helper.NS_CC + 'jurisdictionSite'), None)
         except NoValuesFoundError:
             self.local_url = None
         try: 
-            self.launched = rdf_helper.query_to_single_value(juri_model,
-                id_uri, RDF.Uri(rdf_helper.NS_CC + 'launched'), None)
+            self.launched = rdf_helper.query_to_single_value(
+                rdf_helper.JURI_MODEL, id_uri,
+                RDF.Uri(rdf_helper.NS_CC + 'launched'), None)
         except NoValuesFoundError:
             self.launched = None
 
@@ -197,3 +195,52 @@ class Question(object):
             language = 'en' # why not?
         return [ ( self._enums[k][language], k ) 
                  for k in self._enums.keys() ]
+
+
+class LicenseSelector:
+    zope.interface.implements(interfaces.ILicenseSelector)
+
+    def __init__(self, uri, license_code):
+        """Generates a LicenseSelector instance from a given URI.
+           First it parses the RDF to get all information in there.
+           Then it has to go to questions.xml to get the rest.
+           In the questions.xml is soon to be deprecated, with all
+           that information moving to RDF."""
+        self._uri = uri
+        self._id = license_code
+        self._titles = rdf_helper.get_titles(rdf_helper.SEL_MODEL, self.uri)
+        self._model = rdf_helper.ALL_MODEL # room for optimization...
+        self._licenses = {}
+
+    @property
+    def uri(self):
+        return self._uri
+
+    @property
+    def id(self):
+        return self._id
+
+    def title(self, language='en'):
+        return self._titles[language]
+
+    def by_uri(self, uri):
+        if uri not in self._licenses:
+            self._licenses[uri] = License(self._model, uri, self.id)
+        return self._licenses[uri]
+
+    def by_code(self, license_code, jurisdiction=None, version=None):
+        # HACK: publicdomain is special
+        if self.id == 'publicdomain':
+            uri = 'http://creativecommons.org/licenses/publicdomain/'
+        else:
+            uri = cc.license.lib.dict2uri(dict(jurisdiction=jurisdiction,
+                                               version=version,
+                                               code=license_code))
+        return self.by_uri(uri)
+
+    def by_answers(self, answers_dict):
+        raise NotImplementedError
+
+    def questions(self):
+        raise NotImplementedError
+

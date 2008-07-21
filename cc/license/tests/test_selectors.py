@@ -11,7 +11,7 @@ def test_list_selectors():
     selectors = cc.license.selectors.list()
     assert type(selectors) == list
     for s in selectors:
-        assert type(s) == str
+        assert type(s) == unicode
 
 def test_get_selector():
     """selectors.choose() must return a valid ISelector for each selector."""
