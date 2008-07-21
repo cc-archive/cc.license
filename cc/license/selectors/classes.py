@@ -2,7 +2,7 @@
 import zope.interface
 import cc.license
 from cc.license.lib import interfaces, rdf_helper
-from cc.license.lib.classes import License
+from cc.license.lib.classes import License, Question
 
 # MAJOR TEMPORARY HACK
 # So hopefully at some point soon in the future, each License described
@@ -50,6 +50,18 @@ class LicenseSelector:
                       # plenty of room for optimization...
         self._licenses = {}
 
+        # TODO: refactor this somewhere?
+        # populate questions from questions.xml
+        self._questions = []
+        for child in rdf_helper.questions_root.getchildren():
+            if child.get('id') != self.id:
+                continue
+            for field in child.findall('field'):
+                fid = field.get('id')
+                self._questions.append( 
+                     Question(rdf_helper.questions_root,
+                                         self.id, fid))
+
     @property
     def id(self):
         return self._id
@@ -88,5 +100,4 @@ class LicenseSelector:
         raise NotImplementedError
 
     def questions(self):
-        raise NotImplementedError
-
+        return self._questions

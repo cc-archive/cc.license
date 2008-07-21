@@ -32,3 +32,15 @@ def test_get_selector_key_error():
        with an invalid selector id."""
     nose.tools.assert_raises(CCLicenseError,
                              cc.license.selectors.choose, 'roflcopter')
+
+def test_questions():
+    sel = cc.license.selectors.choose('standard')
+    assert type(sel.questions()) == list
+    assert len(sel.questions()) != 0
+    for q in sel.questions():
+        assert type(q) == cc.license.Question
+
+def test_pd_questions():
+    sel = cc.license.selectors.choose('publicdomain')
+    assert type(sel.questions()) == list
+    assert len(sel.questions()) == 0
