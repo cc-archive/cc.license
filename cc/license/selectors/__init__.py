@@ -1,6 +1,3 @@
-import standard
-import sampling
-import publicdomain
 
 from cc.license.lib import rdf_helper
 from cc.license.lib.exceptions import CCLicenseError
