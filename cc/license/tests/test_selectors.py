@@ -17,10 +17,15 @@ def test_get_selector():
     """selectors.choose() must return a valid ISelector for each selector."""
     for selector_id in cc.license.selectors.list():
         s = cc.license.selectors.choose(selector_id)
-        print selector_id, 'baby'
         assert ILicenseSelector in implementedBy(s.__class__)
         s2 = cc.license.selectors.choose(selector_id)
         assert s2 is s # singletons, in a way
+
+def test_id_and_uri():
+    for sid in cc.license.selectors.list():
+        s = cc.license.selectors.choose(sid)
+        assert s.id == sid
+        assert 'http://creativecommons.org/license' in s.uri
     
 def test_get_selector_key_error():
     """selectors.choose() should raise a CCLicenseError if supplied 
