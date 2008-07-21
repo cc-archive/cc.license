@@ -66,4 +66,4 @@ class TestFunctions:
         assert lib.current_version('by-nc', jurisdiction='uk') == '2.0'
 
     def test_current_version_fails(self):
-        assert lib.current_version('by-nc-nd', jurisdiction='jo') is None
+        assert lib.current_version('by-nc-nd', jurisdiction='jo') == ''

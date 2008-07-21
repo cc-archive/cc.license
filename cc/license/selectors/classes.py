@@ -4,6 +4,36 @@ import cc.license
 from cc.license.lib import interfaces, rdf_helper
 from cc.license.lib.classes import License
 
+# MAJOR TEMPORARY HACK
+# So hopefully at some point soon in the future, each License described
+# in the RDF files will have a property, something like cc:licenseCode
+# (see selectors.rdf), which will say which LicenseSelector that particular
+# License is associted with. Until then, we enumerate here.
+# OPEN QUESTION: what about all the weird licenses that aren't below?
+valid_codes = {
+               'standard' : [
+                             'by-nc-nd',
+                             'by-nc-sa',
+                             'by-nc',
+                             'by-nd',
+                             'by-sa',
+                             'by',
+                            ],
+               'recombo' : [
+                            'sampling+',
+                            'sampling',
+                           ],
+               'publicdomain' : [
+                                 'publicdomain',
+                                ],
+              }
+
+def validate(selector_id, license_code):
+    for code in valid_codes[selector_id]:
+        if code == license_code:
+            return True
+    return False
+
 class LicenseSelector:
     zope.interface.implements(interfaces.ILicenseSelector)
 
@@ -21,12 +51,20 @@ class LicenseSelector:
         self._licenses = {}
 
     @property
+    def id(self):
+        return self._id
+
+    @property
     def uri(self):
         return self._uri
 
     @property
-    def id(self):
-        return self._id
+    def jurisdictions(self):
+        raise NotImplementedError
+
+    @property
+    def versions(self):
+        raise NotImplementedError
 
     def title(self, language='en'):
         return self._titles[language]
@@ -37,13 +75,13 @@ class LicenseSelector:
         return self._licenses[uri]
 
     def by_code(self, license_code, jurisdiction=None, version=None):
-        # HACK: publicdomain is special
-        if self.id == 'publicdomain':
-            uri = 'http://creativecommons.org/licenses/publicdomain/'
-        else:
-            uri = cc.license.lib.dict2uri(dict(jurisdiction=jurisdiction,
-                                               version=version,
-                                               code=license_code))
+        if not validate(self.id, license_code):
+            raise CCLicenseError, \
+                  "License code %s is invalid for selector %s" % \
+                  (license_code, self.id)
+        uri = cc.license.lib.dict2uri(dict(jurisdiction=jurisdiction,
+                                           version=version,
+                                           code=license_code))
         return self.by_uri(uri)
 
     def by_answers(self, answers_dict):

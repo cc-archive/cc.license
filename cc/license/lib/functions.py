@@ -80,11 +80,20 @@ def dict2uri(license_info):
     if not version:
         version = current_version(license_code, jurisdiction)
 
-    base = urlparse.urljoin(base, license_code + '/')
-    base = urlparse.urljoin(base, version + '/')
+    # apparently urlparse.urljoin is retarded, or handles /'s differently
+    # than i expect; if string is empty, concatenating yields a single '/'
+    # which brings the URI up a level.
+    base = urlparse.urljoin(base, license_code)
+    if not base.endswith('/'):
+        base += '/'
+    base = urlparse.urljoin(base, version)
+    if not base.endswith('/'):
+        base += '/'
 
     if jurisdiction:
-        base = urlparse.urljoin(base, jurisdiction + '/')
+        base = urlparse.urljoin(base, jurisdiction)
+        if not base.endswith('/'):
+            base += '/'
 
     return base
 
@@ -118,6 +127,12 @@ def current_version(code, jurisdiction=None):
                            if d.has_key('jurisdiction') and
                               d['jurisdiction'] == jurisdiction ]
     if len(filtered_dicts) == 0:
-        return None # didn't find any matching that code and jurisdiction
+        return '' # didn't find any matching that code and jurisdiction
+    # more error checking; found error in publicdomain
+    for d in filtered_dicts:
+        try:
+            d['version']
+        except KeyError:
+            return ''
     versions = [ StrictVersion(d['version']) for d in filtered_dicts ]
     return str(max(versions))
