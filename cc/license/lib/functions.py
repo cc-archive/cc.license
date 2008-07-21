@@ -3,8 +3,8 @@ from distutils.version import StrictVersion
 import urlparse
 import RDF
 import rdf_helper
-from classes import Jurisdiction
 
+from cc.license.jurisdictions.classes import Jurisdiction
 from cc.license.lib.exceptions import CCLicenseError
 
 
