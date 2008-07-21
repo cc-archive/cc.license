@@ -1,8 +1,12 @@
 
 from cc.license.lib import rdf_helper
 from cc.license.lib.exceptions import CCLicenseError
+import classes
 
-SELECTORS = rdf_helper.get_selectors()
+SELECTORS = {}
+
+for uri, lcode in rdf_helper.get_selector_info():
+    SELECTORS[lcode] = classes.LicenseSelector(uri, lcode)
 
 def choose(license_class):
     """Return an instance of ILicenseSelector for a specific license

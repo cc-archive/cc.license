@@ -1,7 +1,6 @@
 import RDF
 import datetime
 
-import classes
 import cc.license
 from cc.license.lib.exceptions import RdfHelperError, NoValuesFoundError
 
@@ -223,7 +222,9 @@ def get_superseded(model, uri):
         superseded_by = str(solns[0]['replacement'].uri)
         return (True, superseded_by)
 
-def get_selectors():
+def get_selector_info():
+    """Returns a list of two-tuples holding LicenseSelector information.
+       First element is URI, second element is license code (short code)."""
     qstring = """
               PREFIX cc: <http://creativecommons.org/ns#>
               PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -236,11 +237,11 @@ def get_selectors():
               """
     query = RDF.Query(qstring, query_language='sparql')
     solns = list(query.execute(SEL_MODEL))
-    retval = {}
+    retval = []
     for s in solns:
         lcode = s['lcode'].literal_value['string']
         uri = str(s['uri'].uri)
-        retval[lcode] = classes.LicenseSelector(uri, license_code=lcode)
+        retval.append((uri, lcode))
     return retval
 
 
