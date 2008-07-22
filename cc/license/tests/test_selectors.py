@@ -57,9 +57,9 @@ class TestAnswersStandard:
         self.sel = cc.license.selectors.choose('standard')
 
     # XXX no test yet
-    #def test_use_case(self):
-    #    questions = self.sel.questions()
-    #    answers = {}
+    def test_standard_use_case(self):
+        questions = self.sel.questions()
+        answers = {}
 
     # XXX no test yet
     #def test_by(self):
@@ -112,4 +112,3 @@ class TestAnswersPublicdomain:
         assert lic.title() == 'Public Domain'
         lic2 = self.sel.by_code('publicdomain')
         assert lic == lic2
-
