@@ -124,7 +124,23 @@ class LicenseSelector:
         return self.by_code(license_code, jurisdiction=jurisdiction)
 
     def _by_answers_standard(self, answers_dict):
-        raise NotImplementedError
+        pieces = ['by']
+        # error checking
+        for s in ('commercial', 'derivatives'):
+            if s not in answers_dict.keys():
+                raise CCLicenseError, "Invalid question answered."
+        for id, values in ( ('commercial', ['y', 'n']),
+                            ('derivatives', ['y', 'sa', 'n']) ):
+            if answers_dict[id] not in values:
+                raise CCLicenseError, "Invalid answer given."
+        # create license code
+        if answers_dict['commercial'] == 'n':
+            pieces.append('nc')
+        if answers_dict['derivatives'] == 'n':
+            pieces.append('nd')
+        if answers_dict['derivatives'] == 'sa':
+            pieces.append('sa')
+        return '-'.join(pieces)
 
     def _by_answers_recombo(self, answers_dict):
         if 'sampling' not in answers_dict.keys():

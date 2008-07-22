@@ -57,17 +57,35 @@ class TestAnswersStandard:
     def __init__(self):
         self.sel = cc.license.selectors.choose('standard')
 
-    # XXX no test yet
-    def test_standard_use_case(self):
-        questions = self.sel.questions()
-        answers = {}
+    def test_empty_answers(self):
+        nose.tools.assert_raises(CCLicenseError, self.sel.by_answers, {})
 
-    # XXX no test yet
-    #def test_by(self):
-    #    answers = {'commercial':'y', 'derivatives':'y'}
+    def test_nonsense_answers(self):
+        nose.tools.assert_raises(CCLicenseError, self.sel.by_answers,
+                                 {'commercial':'foo', 'derivatives':'bar'})
 
-    def test_not_implemented(self):
-        nose.tools.assert_raises(NotImplementedError, self.sel.by_answers, {})
+    def test_extra_answers(self):
+        lic = self.sel.by_answers({'commercial':'y',
+                                   'derivatives':'y',
+                                   'foo':'bar',
+                                   'lolcats':'roflcopter'})
+        assert type(lic) == cc.license.License
+        assert lic.title() == 'Attribution'
+        lic2 = self.sel.by_code('by')
+        assert lic == lic2
+
+    def test_all(self):
+        known_bad = []
+        bad_jurisdictions = ['ec', 'no', # licenses don't exist
+                             'fi', # weird ordering exception
+                            ]
+        for answer_dict in all_possible_answers(self.sel.questions()):
+            if answer_dict in known_bad or \
+               answer_dict['jurisdiction'] in bad_jurisdictions:
+                continue
+            print answer_dict
+            lic = self.sel.by_answers(answer_dict)
+            assert type(lic) == cc.license.License
 
 
 class TestAnswersSampling:
@@ -83,7 +101,9 @@ class TestAnswersSampling:
                                  {'sampling':'roflcopter'})
 
     def test_extra_answers(self):
-        lic = self.sel.by_answers({'sampling':'sampling'})
+        lic = self.sel.by_answers({'sampling':'sampling',
+                                   'foo':'bar',
+                                   'lolcats':'roflcopter'})
         assert type(lic) == cc.license.License
         assert lic.title() == 'Sampling'
         lic2 = self.sel.by_code('sampling')
