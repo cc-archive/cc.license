@@ -91,3 +91,14 @@ class TestFunctions:
         assert std.questions() != 0
         self.apl(std.questions())
         assert std.questions() != 0
+
+    def test_dict2uri_empty_values(self):
+        dicts = [
+                 dict(jurisdiction=None, version='', code='sampling+'),
+                 dict(jurisdiction=None, version=None, code='sampling+'),
+                 dict(jurisdiction='', version='', code='sampling+'),
+                 dict(jurisdiction='', version=None, code='sampling+')
+                ]
+        for d in dicts:
+            assert cc.license.lib.dict2uri(d) == \
+                   'http://creativecommons.org/licenses/sampling+/1.0/'

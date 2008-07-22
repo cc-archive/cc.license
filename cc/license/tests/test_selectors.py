@@ -5,6 +5,7 @@ from zope.interface import implementedBy
 import cc.license
 from cc.license.lib.interfaces import ILicenseSelector
 from cc.license.lib.exceptions import CCLicenseError
+from cc.license.lib import all_possible_answers
 
 def test_list_selectors():
     """Test that we can get a list of selector strings."""
@@ -89,10 +90,12 @@ class TestAnswersSampling:
         assert lic == lic2
 
     def test_all(self):
-        questions = dict([ (q.id, map( lambda x: x[0], q.answers()))
-                           for q in self.sel.questions() ])
-        if 'jurisdiction' in questions.keys():
-            del questions['jurisdiction']
+        known_bad = [dict(jurisdiction='br', sampling='ncsamplingplus')]
+        for answer_dict in all_possible_answers(self.sel.questions()):
+            if answer_dict in known_bad:
+                continue
+            lic = self.sel.by_answers(answer_dict)
+            assert type(lic) == cc.license.License
 
 class TestAnswersPublicdomain:
 

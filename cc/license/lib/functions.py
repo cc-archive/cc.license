@@ -72,6 +72,9 @@ def dict2uri(license_info):
     else:
         jurisdiction = None
 
+    if jurisdiction == '':
+        jurisdiction = None
+
     version = None
     try:
         version = license_info['version']
