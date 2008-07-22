@@ -107,6 +107,9 @@ class LicenseSelector:
     ## I believe it should be in the equivalent of questions.xml.
     ## Until then, each class gets its own hard-coded handler.
 
+    # TODO: refactor error-checking code into validation method that
+    # checks the answers_dict against questions()
+
     # default behavior is to ignore extra answers
     def by_answers(self, answers_dict):
         license_code = {'standard' : self._by_answers_standard,
@@ -118,14 +121,23 @@ class LicenseSelector:
             jurisdiction = answers_dict['jurisdiction']
         except KeyError:
             jurisdiction = None
-
         return self.by_code(license_code, jurisdiction=jurisdiction)
 
     def _by_answers_standard(self, answers_dict):
         raise NotImplementedError
 
     def _by_answers_recombo(self, answers_dict):
-        raise NotImplementedError
+        if 'sampling' not in answers_dict.keys():
+            raise CCLicenseError, "Invalid question answered."
+        a = answers_dict['sampling']
+        try:
+            return {
+                    'sampling' : 'sampling',
+                    'samplingplus' : 'sampling+',
+                    'ncsamplingplus' : 'nc-sampling+',
+                   }[a]
+        except KeyError:
+            raise CCLicenseError, "Invalid answer given."
 
     def _by_answers_publicdomain(self, answers_dict):
         return 'publicdomain'

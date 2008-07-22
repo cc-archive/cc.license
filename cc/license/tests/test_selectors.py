@@ -68,11 +68,31 @@ class TestAnswersStandard:
     def test_not_implemented(self):
         nose.tools.assert_raises(NotImplementedError, self.sel.by_answers, {})
 
+
 class TestAnswersSampling:
 
     def __init__(self):
         self.sel = cc.license.selectors.choose('recombo')
 
+    def test_no_answers(self):
+        nose.tools.assert_raises(CCLicenseError, self.sel.by_answers, {})
+
+    def test_invalid_answers(self):
+        nose.tools.assert_raises(CCLicenseError, self.sel.by_answers,
+                                 {'sampling':'roflcopter'})
+
+    def test_extra_answers(self):
+        lic = self.sel.by_answers({'sampling':'sampling'})
+        assert type(lic) == cc.license.License
+        assert lic.title() == 'Sampling'
+        lic2 = self.sel.by_code('sampling')
+        assert lic == lic2
+
+    def test_all(self):
+        questions = dict([ (q.id, map( lambda x: x[0], q.answers()))
+                           for q in self.sel.questions() ])
+        if 'jurisdiction' in questions.keys():
+            del questions['jurisdiction']
 
 class TestAnswersPublicdomain:
 
