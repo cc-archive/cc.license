@@ -20,6 +20,7 @@ valid_codes = {
                              'by',
                             ],
                'recombo' : [
+                            'nc-sampling+',
                             'sampling+',
                             'sampling',
                            ],
@@ -96,8 +97,26 @@ class LicenseSelector:
                                            code=license_code))
         return self.by_uri(uri)
 
-    def by_answers(self, answers_dict):
-        raise NotImplementedError
-
     def questions(self):
         return self._questions
+
+    ## FIXME: Yet Another Hack
+    ## Unsure where the answers-into-license-code data and logic ought to go.
+    ## In the old api, it's an XSLT document, which feels wrong.
+    ## I believe it should be in the equivalent of questions.xml.
+    ## Until then, each class gets its own hard-coded handler.
+
+    def by_answers(self, answers_dict):
+        {'standard' : self._by_answers_standard,
+         'recombo' : self._by_answers_recombo,
+         'publicdomain' : self._by_answers_publicdomain,
+        }[self.id](answers_dict)
+
+    def _by_answers_standard(self, answers_dict):
+        raise NotImplementedError
+
+    def _by_answers_recombo(self, answers_dict):
+        raise NotImplementedError
+
+    def _by_answers_publicdomain(self, answers_dict):
+        raise NotImplementedError
