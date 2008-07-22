@@ -53,6 +53,7 @@ class TestFunctions:
          ('http://creativecommons.org/licenses/by/3.0/', 'by'),
          ('http://creativecommons.org/licenses/by-sa/2.5/mx/', 'by-sa'),
                     )
+        self.apl = cc.license.lib.all_possible_answers # aliasing for brevity
 
     def test_code_from_uri(self):
         for uri, code in self.pairs:
@@ -67,3 +68,26 @@ class TestFunctions:
 
     def test_current_version_fails(self):
         assert lib.current_version('by-nc-nd', jurisdiction='jo') == ''
+
+    def test_all_possible_answers(self):
+        sels = [ cc.license.selectors.choose(s)
+                 for s in ('standard', 'recombo', 'publicdomain') ]
+        for sel in sels:
+            all_answers = self.apl(sel.questions())
+            for adict in all_answers:
+                for k in [q.id for q in sel.questions()]:
+                    assert k in adict
+                for q in sel.questions():
+                    assert adict[q.id] in \
+                           [ a[1] for a in q.answers() ]
+
+    def test_all_possible_answers_publicdomain(self):
+        pd = cc.license.selectors.choose('publicdomain')
+        assert len(self.apl(pd.questions())) == 1
+
+    def test_apl_doesnt_empty_questions(self):
+        """apl should not clobber questions list (previous bug)"""
+        std = cc.license.selectors.choose('standard')
+        assert std.questions() != 0
+        self.apl(std.questions())
+        assert std.questions() != 0

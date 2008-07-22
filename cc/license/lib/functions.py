@@ -136,3 +136,26 @@ def current_version(code, jurisdiction=None):
             return ''
     versions = [ StrictVersion(d['version']) for d in filtered_dicts ]
     return str(max(versions))
+
+def all_possible_answers(list_of_questions):
+    """Given a sequence of IQuestions, return a list of answer dictionaries.
+       These are meant to be used with LicenseSelector.by_answers. This
+       function will generate a set of answer dictionaries that embody
+       every possible permutation of the answers to the questions given."""
+    questions = list(list_of_questions) # copy
+    answer_dict_list = []
+    answer_dict_list.append({}) # seed
+
+    def recursive_build_answers(adl, qs):
+        if len(qs) == 0:
+            return adl
+        q = qs.pop()
+        new_adl = []
+        for adict in adl:
+            for tag, answer in q.answers():
+                aclone = adict.copy()
+                aclone[q.id] = answer
+                new_adl.append(aclone)
+        return recursive_build_answers(new_adl, qs)
+
+    return recursive_build_answers(answer_dict_list, questions)
