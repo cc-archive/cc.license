@@ -51,20 +51,45 @@ class TestQuestions:
         assert type(questions) == list
         assert len(questions) == 0
 
-class TestAnswers:
+class TestAnswersStandard:
 
     def __init__(self):
-        self.std = cc.license.selectors.choose('standard')
+        self.sel = cc.license.selectors.choose('standard')
 
     # XXX no test yet
-    def test_standard_use_case(self):
-        questions = self.std.questions()
-        answers = {}
+    #def test_use_case(self):
+    #    questions = self.sel.questions()
+    #    answers = {}
 
     # XXX no test yet
-    def test_standard_by(self):
-        answers = {'commercial':'y', 'derivatives':'y'}
-        #lic = self.std.by_answers(answers)
+    #def test_by(self):
+    #    answers = {'commercial':'y', 'derivatives':'y'}
 
     def test_not_implemented(self):
-        nose.tools.assert_raises(NotImplementedError, self.std.by_answers, {})
+        nose.tools.assert_raises(NotImplementedError, self.sel.by_answers, {})
+
+class TestAnswersSampling:
+
+    def __init__(self):
+        self.sel = cc.license.selectors.choose('recombo')
+
+
+class TestAnswersPublicdomain:
+
+    def __init__(self):
+        self.sel = cc.license.selectors.choose('publicdomain')
+
+    def test_no_answers(self):
+        lic = self.sel.by_answers({})
+        assert type(lic) == cc.license.License
+        assert lic.title() == 'Public Domain'
+        lic2 = self.sel.by_code('publicdomain')
+        assert lic == lic2
+
+    def test_extra_answers(self):
+        lic = self.sel.by_answers({'foo':'bar', 'rofl':'lolcats'})
+        assert type(lic) == cc.license.License
+        assert lic.title() == 'Public Domain'
+        lic2 = self.sel.by_code('publicdomain')
+        assert lic == lic2
+

@@ -3,6 +3,7 @@ import zope.interface
 import cc.license
 from cc.license.lib import interfaces, rdf_helper
 from cc.license.lib.classes import License, Question
+from cc.license.lib.exceptions import CCLicenseError
 
 # MAJOR TEMPORARY HACK
 # So hopefully at some point soon in the future, each License described
@@ -106,11 +107,19 @@ class LicenseSelector:
     ## I believe it should be in the equivalent of questions.xml.
     ## Until then, each class gets its own hard-coded handler.
 
+    # default behavior is to ignore extra answers
     def by_answers(self, answers_dict):
-        {'standard' : self._by_answers_standard,
-         'recombo' : self._by_answers_recombo,
-         'publicdomain' : self._by_answers_publicdomain,
-        }[self.id](answers_dict)
+        license_code = {'standard' : self._by_answers_standard,
+                        'recombo' : self._by_answers_recombo,
+                        'publicdomain' : self._by_answers_publicdomain,
+                       }[self.id](answers_dict)
+        # get jurisdiction separately
+        try:
+            jurisdiction = answers_dict['jurisdiction']
+        except KeyError:
+            jurisdiction = None
+
+        return self.by_code(license_code, jurisdiction=jurisdiction)
 
     def _by_answers_standard(self, answers_dict):
         raise NotImplementedError
@@ -119,4 +128,4 @@ class LicenseSelector:
         raise NotImplementedError
 
     def _by_answers_publicdomain(self, answers_dict):
-        raise NotImplementedError
+        return 'publicdomain'
