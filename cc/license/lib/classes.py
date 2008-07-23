@@ -72,7 +72,7 @@ class License(object):
 
     @property
     def uri(self):
-        return self._uri
+        return str(self._uri) # str, not unicode
 
     @property
     def current_version(self):
