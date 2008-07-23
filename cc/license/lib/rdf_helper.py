@@ -204,6 +204,32 @@ def get_deprecated(model, uri):
     query = RDF.Query(qstring % uri, query_language='sparql')
     return query.execute(model).get_boolean()
 
+def get_permits(model, uri):
+    qstring = """
+              PREFIX cc: <http://creativecommons.org/ns#>
+
+              SELECT ?permission
+              WHERE {
+                     <%s> cc:permits ?permission .
+              }
+              """
+    query = RDF.Query(qstring % uri, query_language='sparql')
+    solns = list(query.execute(model))
+    return tuple( str(p['permission'].uri) for p in solns )
+
+def get_requires(model, uri):
+    qstring = """
+              PREFIX cc: <http://creativecommons.org/ns#>
+
+              SELECT ?requirement
+              WHERE {
+                     <%s> cc:requires ?requirement .
+              }
+              """
+    query = RDF.Query(qstring % uri, query_language='sparql')
+    solns = list(query.execute(model))
+    return tuple( str(p['requirement'].uri) for p in solns )
+
 def get_superseded(model, uri):
     """Watch out: returns a tuple and not just a value."""
     qstring = """

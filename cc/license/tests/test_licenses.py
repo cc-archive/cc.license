@@ -75,6 +75,17 @@ class TestAll:
         lic2 = self.stdsel.by_code('by', version='1.0')
         assert lic2.current_version == '3.0'
 
+    def test_permits(self):
+        lic = self.stdsel.by_code('by')
+        for p in lic.permits:
+            assert p.startswith('http://creativecommons.org/ns#')
+
+    def test_requires(self):
+        lic = self.stdsel.by_code('by')
+        for r in lic.requires:
+            assert r.startswith('http://creativecommons.org/ns#')
+
+
 class TestStandard:
 
     def setUp(self):

@@ -22,6 +22,8 @@ class License(object):
         self._jurisdiction = None
         self._deprecated = None
         self._superseded = None
+        self._permits = None
+        self._requires = None
 
         # make sure the license actually exists
         qstring = """
@@ -103,6 +105,18 @@ class License(object):
     def libre(self):
         return False
 
+    @property
+    def permits(self):
+        if self._permits is None:
+            self._permits = rdf_helper.get_permits(self._model, self.uri)
+        return self._permits
+
+    @property
+    def requires(self):
+        if self._requires is None:
+            self._requires = rdf_helper.get_requires(self._model, self.uri)
+        return self._requires
+
 
 class Question(object):
     zope.interface.implements(interfaces.IQuestion)
@@ -160,4 +174,3 @@ class Question(object):
             language = 'en' # why not?
         return [ ( self._enums[k][language], k ) 
                  for k in self._enums.keys() ]
-
