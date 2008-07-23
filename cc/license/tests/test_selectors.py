@@ -34,6 +34,36 @@ def test_get_selector_key_error():
     nose.tools.assert_raises(CCLicenseError,
                              cc.license.selectors.choose, 'roflcopter')
 
+class TestIssuers:
+
+    def __init__(self):
+        self.std = cc.license.selectors.choose('standard')
+        self.uris = (
+                     'http://creativecommons.org/licenses/by/3.0/us/',
+                     'http://creativecommons.org/licenses/by-nc-nd/2.1/jp/',
+                     'http://creativecommons.org/licenses/by-nc-sa/2.5/mx/',
+                     'http://creativecommons.org/licenses/by-sa/2.0/de/',
+                    )
+        self.bad_uris = (
+                         'http://creativecommons.com/licenses/by/3.0/us/',
+                         'http://creativemonkeys.org/licenses/by/3.0/us/',
+                         'jdsalfkjalskdjfa;lskdjfalsdjf;laskdf',
+                         'roflcopter thundercats',
+                         'http://',
+                         '',
+                        )
+
+    def test_by_uri(self):
+        for u in self.uris:
+            lic = self.std.by_uri(u)
+            assert type(lic) == cc.license.License
+
+    def test_by_uri_fails(self):
+        for b in self.bad_uris:
+            nose.tools.assert_raises(CCLicenseError, self.std.by_uri, b)
+
+    # TODO: test by_code
+
 class TestQuestions:
 
     def __init__(self):

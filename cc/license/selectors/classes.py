@@ -84,6 +84,9 @@ class LicenseSelector:
         return self._titles[language]
 
     def by_uri(self, uri):
+        # error checking
+        if not uri.startswith('http://creativecommons.org/licenses/'):
+            raise CCLicenseError, "Invalid license URI."
         if uri not in self._licenses:
             self._licenses[uri] = License(self._model, uri, self.id)
         return self._licenses[uri]
@@ -123,6 +126,7 @@ class LicenseSelector:
             jurisdiction = None
         return self.by_code(license_code, jurisdiction=jurisdiction)
 
+    # TODO: get to the bottom of finland license weirdness
     def _by_answers_standard(self, answers_dict):
         pieces = ['by']
         # error checking
