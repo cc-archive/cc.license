@@ -77,7 +77,7 @@ class License(object):
     @property
     def current_version(self):
         j = None
-        if self.jurisdiction != '':
+        if self.jurisdiction != cc.license.jurisdictions.by_code(''):
             j = cc.license.jurisdictions.uri2code(self.jurisdiction.id)
         return cc.license.lib.current_version(self.license_code, j)
 

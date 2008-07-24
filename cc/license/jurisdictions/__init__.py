@@ -18,6 +18,7 @@ def list_uris():
              list_t(model.find_statements(
                            RDF.Statement(None, None, cc_jurisdiction_url)))
            ]
+    uris.append('') # default jurisdiction
     return uris # XXX CACHE ME
 
 # is this a useful / desirable function to have?
@@ -29,6 +30,8 @@ def list():
              for uri in list_uris() ] # XXX CACHE ME
 
 def by_code(code):
+    if code == '':
+        return cc.license.Jurisdiction('')
     uri = 'http://creativecommons.org/international/%s/' % code
     return cc.license.Jurisdiction(uri)
 

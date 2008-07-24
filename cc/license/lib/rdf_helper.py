@@ -191,7 +191,7 @@ def get_jurisdiction(model, uri):
     query = RDF.Query(qstring % uri, query_language='sparql')
     solns = list(query.execute(model))
     if len(solns) == 0:
-        return ''
+        return cc.license.Jurisdiction('') # empty string makes 'Unported'
     else:
         return cc.license.Jurisdiction(str(solns[0]['jurisdiction'].uri))
 

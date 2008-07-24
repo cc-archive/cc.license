@@ -16,6 +16,9 @@ def test_jurisdiction_codes():
     # scotland is in there, and it's the only one that isn't 2 letters
     assert 'scotland' in codes
     codes.remove('scotland')
+    # excepting the empty string (default jurisdiction) of course
+    assert '' in codes
+    codes.remove('')
     # they are all strings of length 2
     for c in codes:
         assert type(c) == str
@@ -35,6 +38,26 @@ def test_code_constructor():
         j = cc.license.jurisdictions.by_code(k)
         assert type(j) == cc.license.Jurisdiction
 
+def test_unported():
+    j = cc.license.jurisdictions.by_code('')
+    assert j == cc.license.Jurisdiction('')
+    assert j.title() == 'Unported'
+
+def test_equality():
+    codes = ('', 'jp', 'us')
+    one, two, three = ( cc.license.jurisdictions.by_code(c) for c in codes )
+    four, five, six = ( cc.license.jurisdictions.by_code(c) for c in codes )
+    assert one == one
+    assert not (one != one)
+    assert one == four
+    assert not (one != four)
+    assert one != two
+    assert two == five
+    assert three != four
+    assert three == six
+    assert not (two == three)
+    assert not (five == six)
+
 class TestJurisdictions:
 
     def __init__(self):
@@ -47,6 +70,13 @@ class TestJurisdictions:
         assert self.mx.code == 'mx'
         assert self.mx.launched
         assert self.mx.id.endswith('mx/')
+
+    def test_unported(self):
+        j = cc.license.Jurisdiction('')
+        assert j.code == ''
+        assert j.id == ''
+        assert j.local_url == '' #XXX check me!
+        assert j.launched
 
     def test_titles(self):
         for t in self.langs:

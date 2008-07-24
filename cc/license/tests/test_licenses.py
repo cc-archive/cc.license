@@ -32,7 +32,13 @@ class TestAll:
         lic2 = self.stdsel.by_code('by-sa')
         assert lic2.uri == uri
 
-    # TODO: write test_jurisdiction
+    def test_jurisdiction(self):
+        lic = self.stdsel.by_code('by-sa')
+        assert lic.jurisdiction.title() == 'Unported'
+        assert lic.jurisdiction == cc.license.jurisdictions.by_code('')
+        lic2 = self.stdsel.by_code('by-nc', jurisdiction='jp')
+        assert lic2.jurisdiction.title() == 'Japan'
+        assert lic2.jurisdiction == cc.license.jurisdictions.by_code('jp')
 
     def test_title(self):
         lic = self.stdsel.by_code('by')
@@ -99,7 +105,7 @@ class TestStandard:
 
     def test_bysa_generic(self):
         lic = self.selector.by_code('by-sa')
-        assert lic.jurisdiction == '' # generic jurisdiction is empty string
+        assert lic.jurisdiction.title() == 'Unported'
         # assert_true(lic.libre) # FIXME: Should this be here?
 
     def test_bysa_us(self):

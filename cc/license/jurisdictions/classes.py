@@ -12,6 +12,13 @@ class Jurisdiction(object):
         """Creates an object representing a jurisdiction, given
            a valid jurisdiction URI. For a complete list, see
            cc.license.jurisdictions.list_uris()"""
+        if uri == '': # handle default jurisdiction case
+            self.code = ''
+            self.id = ''
+            self._titles = {'en':'Unported'} # FIXME
+            self.local_url = ''
+            self.launched = True
+            return
         if not uri.startswith('http://creativecommons.org/international/') \
            or not uri.endswith('/'):
             raise CCLicenseError, "Malformed jurisdiction URI: <%s>" % uri
@@ -31,6 +38,18 @@ class Jurisdiction(object):
                 RDF.Uri(rdf_helper.NS_CC + 'launched'), None)
         except NoValuesFoundError:
             self.launched = None
+
+    def __eq__(self, other):
+        if type(other) != type(self):
+            return False
+        return self.id == other.id and \
+               self.code == other.code and \
+               self.local_url == other.local_url and \
+               self.title() == other.title() and \
+               self.launched == other.launched
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
 
     def title(self, language='en'):
         try:
