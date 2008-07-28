@@ -67,6 +67,9 @@ def dict2uri(license_info):
 
     license_code = license_info['code'] # code should always exist
 
+    if license_code == 'publicdomain': # one URI for publicdomain
+        return 'http://creativecommons.org/licenses/publicdomain/'
+
     if license_info.has_key('jurisdiction'):
         jurisdiction = license_info['jurisdiction']
     else:
