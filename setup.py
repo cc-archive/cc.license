@@ -20,6 +20,7 @@ setup(name='cc.license',
         'setuptools',
         'zope.interface',
         'nose',
+        'Genshi',
       ],
       setup_requires=['setuptools-git',],
       entry_points="""
