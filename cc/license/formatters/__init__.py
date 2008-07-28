@@ -1,22 +1,20 @@
-import rdfa
 
+import classes
 from cc.license.lib.exceptions import CCLicenseError
 
+HTML =  classes.HTMLFormatter() 
+# aliasing per nathany's "design by wishful thinking"
+
 FORMATTERS = {
-    'html+rdfa' : [rdfa.Formatter, None],
+    'html+rdfa' : HTML,
     }
 
 def choose(formatter_id):
     """Return instance of ILicenseFormatter with the specified ID."""
-    try:
-        fclass, instance = FORMATTERS[formatter_id]
-    except KeyError:
+    if formatter_id not in FORMATTERS.keys():
         raise CCLicenseError, "Formatter %s does not exist" % formatter_id
 
-    if instance is None:
-        FORMATTERS[formatter_id][1] = fclass()
-    # return the instance no matter what
-    return FORMATTERS[formatter_id][1]
+    return FORMATTERS[formatter_id]
 
 def list():
     """Return a list of available formatter IDs."""
