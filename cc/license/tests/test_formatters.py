@@ -27,3 +27,9 @@ def test_get_formatter_key_error():
        with an invalid formatter id."""
     nose.tools.assert_raises(CCLicenseError,
                              cc.license.formatters.choose, 'roflcopter')
+
+def test_basic_format():
+    lic = cc.license.selectors.choose('standard').by_code('by')
+    output = cc.license.formatters.HTML.format(lic, locale='en')
+    assert '<html>' in output
+    # TODO: test the output more!

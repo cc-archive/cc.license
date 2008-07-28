@@ -93,7 +93,7 @@ class ILicenseFormatter(Interface):
 
     id = Attribute(u"The unique identifier for this formatter.")
 
-    def format(license, work_dict={}, locale='en'):
+    def format(license, work_graph, locale='en'):
         """Return a string serialization for the license, optionally 
            incorporating the work metadata and locale."""
 
