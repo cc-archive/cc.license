@@ -1,10 +1,8 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '0.1'
-
 setup(name='cc.license',
-      version=version,
+      version='0.01',
       description="License selection based on ccREL-based metadata.",
       classifiers=[],
       keywords='',
@@ -14,6 +12,11 @@ setup(name='cc.license',
       license='MIT',
       packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
       include_package_data=True,
+      #package_data={'cc.license': ['*.xml', '*.txt']}, # doesn't work
+      data_files=[('cc/license/rdf', ['license.rdf/rdf/index.rdf',
+                                      'license.rdf/rdf/selectors.rdf',
+                                      'license.rdf/rdf/jurisdictions.rdf']),
+                  ('cc/license/xml', ['license.rdf/xml/questions.xml'])],
       zip_safe=False,
       test_suite='nose.collector',
       install_requires=[
