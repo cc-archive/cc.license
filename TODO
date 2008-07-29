@@ -1,1 +1,4 @@
 * replace "superseded" with "replacedBy" for RDF<->Python consistency
+
+* Expose 'image uri' attribute from a License
+** Make formatters use the exposed 'image uri' attribute
