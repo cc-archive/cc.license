@@ -1,10 +1,14 @@
 
 import nose.tools
 from zope.interface import implementedBy
+import os
 
 import cc.license
 from cc.license.lib.interfaces import ILicenseFormatter
 from cc.license.lib.exceptions import CCLicenseError
+from cc.license.tests import relax_validate, RELAX_PATH
+
+RELAX_HTML = os.path.join(RELAX_PATH, 'html_rdfa.relax.xml')
 
 def test_list_formatters():
     """Test that we can get a list of formatter strings."""
@@ -31,5 +35,4 @@ def test_get_formatter_key_error():
 def test_basic_format():
     lic = cc.license.selectors.choose('standard').by_code('by')
     output = cc.license.formatters.HTML.format(lic, locale='en')
-    assert '<html>' in output
-    # TODO: test the output more!
+    relax_validate(RELAX_HTML, output)

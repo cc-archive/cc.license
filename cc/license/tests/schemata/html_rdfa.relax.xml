@@ -1,0 +1,61 @@
+<grammar xmlns="http://relaxng.org/ns/structure/1.0">
+  <start>
+    <element name="html">
+      <interleave>
+        <interleave>
+          <oneOrMore>
+            <element name="a">
+              <group>
+                <group>
+                  <attribute name="rel">
+                    <text/>
+                  </attribute>
+                  <attribute name="href">
+                    <text/>
+                  </attribute>
+                </group>
+                <interleave>
+                  <optional>
+                    <element name="img">
+                      <group>
+                        <attribute name="style">
+                          <text/>
+                        </attribute>
+                        <attribute name="alt">
+                          <text/>
+                        </attribute>
+                        <attribute name="src">
+                          <text/>
+                        </attribute>
+                      </group>
+                    </element>
+                  </optional>
+                  <text/>
+                </interleave>
+              </group>
+            </element>
+          </oneOrMore>
+          <element name="br">
+            <empty/>
+          </element>
+          <interleave>
+            <optional>
+              <element name="span">
+                <group>
+                  <attribute name="href">
+                    <text/>
+                  </attribute>
+                  <attribute name="rel">
+                    <text/>
+                  </attribute>
+                </group>
+                <text/>
+              </element>
+            </optional>
+          </interleave>
+        </interleave>
+        <text/>
+      </interleave>
+    </element>
+  </start>
+</grammar>

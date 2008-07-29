@@ -21,4 +21,4 @@ class HTMLFormatter(object):
         """Return an HTML + RDFa string serialization for the license,
             optionally incorporating the work metadata and locale."""
         stream = self.tmpl.generate(license=license, locale=locale)
-        return stream.render('html')
+        return stream.render('xhtml')
