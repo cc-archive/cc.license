@@ -14,8 +14,9 @@ if os.path.exists('./license.rdf'):
     RDF_PATH = './license.rdf/rdf'
     XML_PATH = './license.rdf/xml'
 else:
-    RDF_PATH = './cc/license/rdf'
-    XML_PATH = './cc/license/xml'
+    BASE_PATH = os.path.dirname(__file__)
+    RDF_PATH = os.path.join(BASE_PATH, os.pardir, 'rdf')
+    XML_PATH = os.path.join(BASE_PATH, os.pardir, 'xml')
     assert os.path.exists(RDF_PATH)
     assert os.path.exists(XML_PATH)
 
