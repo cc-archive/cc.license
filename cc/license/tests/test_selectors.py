@@ -175,3 +175,24 @@ class TestPublicApi:
     def test_functions(self):
         for f in ('choose', 'list'):
             assert f in self.dir
+
+
+class TestCustomization:
+
+    def __init__(self):
+        self.sels = []
+        for s in cc.license.selectors.list():
+            self.sels.append(cc.license.selectors.choose(s))
+
+    def test_repr(self):
+        for ls in self.sels:
+            r = repr(ls)
+            assert ls.id in r
+            assert 'LicenseSelector' in r
+            assert r.startswith('<')
+            assert r.endswith('>')
+
+    def test_str(self):
+        for ls in self.sels:
+            s = str(ls)
+            assert ls.title() in s

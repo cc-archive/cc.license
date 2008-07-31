@@ -64,6 +64,12 @@ class LicenseSelector:
                      Question(rdf_helper.questions_root,
                                          self.id, fid))
 
+    def __repr__(self):
+        return "<LicenseSelector id='%s'>" % self.id
+
+    def __str__(self):
+        return "%s Selector" % self.title()
+
     @property
     def id(self):
         return self._id
