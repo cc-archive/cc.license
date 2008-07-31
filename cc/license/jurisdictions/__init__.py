@@ -6,6 +6,10 @@ from cc.license._lib import rdf_helper
 # because of the unfortunate global-shadowing
 list_t = list
 
+__all__ = ['list_uris', 'list_codes', 'list',
+           'by_code', 'uri2code', # functions
+          ]
+
 def list_uris():
     """Returns sequence of all jurisdiction codes possible. Jurisdiction
        codes are strings that yield a Jurisdiction object when passed

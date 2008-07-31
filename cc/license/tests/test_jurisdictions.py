@@ -94,3 +94,13 @@ class TestJurisdictions:
     def test_constructor_fails(self):
         nose.tools.assert_raises(CCLicenseError,
                              cc.license.Jurisdiction, 'lollerskates')
+
+
+class TestPublicApi:
+
+    def __init__(self):
+        self.dir = dir(cc.license.jurisdictions)
+
+    def test_functions(self):
+        for f in ('list_uris', 'list_codes', 'list', 'by_code', 'uri2code'):
+            assert f in self.dir
