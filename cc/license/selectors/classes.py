@@ -68,7 +68,7 @@ class LicenseSelector:
         return "<LicenseSelector id='%s'>" % self.id
 
     def __str__(self):
-        return "%s Selector" % self.title()
+        return "(%s Selector)" % self.title()
 
     @property
     def id(self):
