@@ -10,9 +10,21 @@ def test_locales():
     for c in ('en', 'de', 'he', 'ja', 'fr'):
         assert c in locales
 
-def test_cc_license_classes():
-    cc_dir = dir(cc.license)
-    assert 'Jurisdiction' in cc_dir
-    assert 'License' in cc_dir
-    assert 'Question' in cc_dir
-    assert 'LicenseSelector' in cc_dir
+class TestPublicApi:
+
+    def __init__(self):
+        self.cc_dir = dir(cc.license)
+
+    def test_classes(self):
+        for c in ('Jurisdiction', 'License', 'Question', 'LicenseSelector'):
+            assert c in self.cc_dir
+
+    def test_modules(self):
+        for m in ('selectors', 'formatters', 'jurisdictions'):
+            assert m in self.cc_dir
+
+    def test_functions(self):
+        assert 'locales' in self.cc_dir
+
+    def test_exceptions(self):
+        assert 'CCLicenseError' in self.cc_dir
