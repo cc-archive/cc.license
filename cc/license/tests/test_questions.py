@@ -60,3 +60,21 @@ class TestSampling:
 
 class TestPublicDomain:
     pass
+
+class TestCustomization:
+
+    def __init__(self):
+        sel = cc.license.selectors.choose('standard')
+        self.questions = sel.questions()
+
+    def test_repr(self):
+        for q in self.questions:
+            r = repr(q)
+            assert q.id in r
+            assert r.startswith('<')
+            assert r.endswith('>')
+
+    def test_str(self):
+        for q in self.questions:
+            s = str(q)
+            assert q.label() in s

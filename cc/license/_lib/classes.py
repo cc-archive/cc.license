@@ -161,6 +161,12 @@ class Question(object):
 
         if not _flag:
             raise CCLicenseError, "Question identifier %s not found" % self.id
+
+    def __repr__(self):
+        return "<Question object id='%s'>" % self.id
+
+    def __str__(self):
+        return "Question: %s" % self.label()
             
     @property
     def id(self):
