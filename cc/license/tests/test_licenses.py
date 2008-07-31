@@ -140,3 +140,32 @@ class TestPublicDomain:
 
     def test_title_default(self):
         assert self.lic.title() == self.lic.title('en')
+
+class TestCustomization:
+
+    def __init__(self):
+        std = cc.license.selectors.choose('standard')
+        smp = cc.license.selectors.choose('recombo')
+        pd = cc.license.selectors.choose('publicdomain')
+        lics = []
+        lics.append(std.by_code('by'))
+        lics.append(std.by_code('by-nc-nd'))
+        lics.append(std.by_code('by-sa', jurisdiction='jp'))
+        lics.append(smp.by_code('sampling'))
+        lics.append(smp.by_code('nc-sampling+', jurisdiction='tw'))
+        lics.append(pd.by_code('publicdomain'))
+        self.licenses = lics
+
+    def test_repr(self):
+        for l in self.licenses:
+            r = repr(l)
+            assert l.uri in r
+            assert r.startswith('<')
+            assert r.endswith('>')
+
+    def test_str(self):
+        for l in self.licenses:
+            s = str(l)
+            assert l.title() in s
+            assert l.version in s
+            assert l.jurisdiction.title() in s
