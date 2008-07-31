@@ -2,8 +2,8 @@ import zope.interface
 import RDF
 
 import cc.license
-from cc.license.lib.exceptions import NoValuesFoundError, CCLicenseError
-from cc.license.lib import interfaces, rdf_helper
+from cc.license._lib.exceptions import NoValuesFoundError, CCLicenseError
+from cc.license._lib import interfaces, rdf_helper
 
 class Jurisdiction(object):
     zope.interface.implements(interfaces.IJurisdiction)

@@ -1,6 +1,6 @@
 
-from cc.license.lib import rdf_helper
-from cc.license.lib.exceptions import CCLicenseError
+from cc.license._lib import rdf_helper
+from cc.license._lib.exceptions import CCLicenseError
 import classes
 
 SELECTORS = {}

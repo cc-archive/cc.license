@@ -4,7 +4,7 @@ import interfaces
 import rdf_helper
 
 import cc.license
-from cc.license.lib.exceptions import NoValuesFoundError, CCLicenseError
+from cc.license._lib.exceptions import NoValuesFoundError, CCLicenseError
 from cc.license.jurisdictions import uri2code
 
 class License(object):
@@ -79,7 +79,7 @@ class License(object):
         j = None
         if self.jurisdiction != cc.license.jurisdictions.by_code(''):
             j = cc.license.jurisdictions.uri2code(self.jurisdiction.id)
-        return cc.license.lib.current_version(self.license_code, j)
+        return cc.license._lib.current_version(self.license_code, j)
 
     @property
     def deprecated(self):
@@ -97,7 +97,7 @@ class License(object):
 
     @property
     def license_code(self):
-        return cc.license.lib.code_from_uri(self.uri)
+        return cc.license._lib.code_from_uri(self.uri)
 
     # TODO: implement!
     # TODO: write tests!

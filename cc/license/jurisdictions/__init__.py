@@ -1,7 +1,7 @@
 
 import RDF
 import cc.license
-from cc.license.lib import rdf_helper
+from cc.license._lib import rdf_helper
 
 # because of the unfortunate global-shadowing
 list_t = list

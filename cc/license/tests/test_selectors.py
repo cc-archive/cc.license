@@ -3,9 +3,9 @@ import nose.tools
 from zope.interface import implementedBy
 
 import cc.license
-from cc.license.lib.interfaces import ILicenseSelector
-from cc.license.lib.exceptions import CCLicenseError
-from cc.license.lib import all_possible_answers
+from cc.license import CCLicenseError
+from cc.license._lib.interfaces import ILicenseSelector
+from cc.license._lib import all_possible_answers
 
 def test_list_selectors():
     """Test that we can get a list of selector strings."""

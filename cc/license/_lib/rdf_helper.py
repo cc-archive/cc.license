@@ -3,7 +3,7 @@ import datetime
 import os
 
 import cc.license
-from cc.license.lib.exceptions import RdfHelperError, NoValuesFoundError
+from cc.license._lib.exceptions import RdfHelperError, NoValuesFoundError
 
 # TODO: replace these with RDF.NS objects instead
 NS_CC = 'http://creativecommons.org/ns#'

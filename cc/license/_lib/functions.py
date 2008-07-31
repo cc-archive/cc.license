@@ -5,7 +5,7 @@ import RDF
 import rdf_helper
 
 from cc.license.jurisdictions.classes import Jurisdiction
-from cc.license.lib.exceptions import CCLicenseError
+from cc.license._lib.exceptions import CCLicenseError
 
 
 def locales():

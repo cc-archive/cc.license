@@ -4,8 +4,8 @@ from zope.interface import implementedBy
 import os
 
 import cc.license
-from cc.license.lib.interfaces import ILicenseFormatter
-from cc.license.lib.exceptions import CCLicenseError
+from cc.license import CCLicenseError
+from cc.license._lib.interfaces import ILicenseFormatter
 from cc.license.tests import relax_validate, RELAX_PATH
 
 RELAX_HTML = os.path.join(RELAX_PATH, 'html_rdfa.relax.xml')

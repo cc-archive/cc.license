@@ -2,7 +2,7 @@
    to jurisdictions."""
 
 import cc.license
-from cc.license.lib.exceptions import CCLicenseError
+from cc.license import CCLicenseError
 import nose.tools
 
 # TODO: additional tests exercising the output

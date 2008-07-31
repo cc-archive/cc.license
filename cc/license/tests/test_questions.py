@@ -1,8 +1,8 @@
 
 import nose.tools
 import cc.license
-from cc.license.lib.rdf_helper import questions_root as root
-from cc.license.lib.exceptions import CCLicenseError
+from cc.license import CCLicenseError
+from cc.license._lib.rdf_helper import questions_root as root
 
 class TestStandard:
 

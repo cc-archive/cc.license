@@ -1,6 +1,6 @@
 
 import classes
-from cc.license.lib.exceptions import CCLicenseError
+from cc.license._lib.exceptions import CCLicenseError
 
 HTML =  classes.HTMLFormatter() 
 # aliasing per nathany's "design by wishful thinking"

@@ -1,9 +1,9 @@
 
 import zope.interface
 import cc.license
-from cc.license.lib import interfaces, rdf_helper
-from cc.license.lib.classes import License, Question
-from cc.license.lib.exceptions import CCLicenseError
+from cc.license._lib import interfaces, rdf_helper
+from cc.license._lib.classes import License, Question
+from cc.license._lib.exceptions import CCLicenseError
 
 # MAJOR TEMPORARY HACK
 # So hopefully at some point soon in the future, each License described
@@ -96,9 +96,9 @@ class LicenseSelector:
             raise CCLicenseError, \
                   "License code %s is invalid for selector %s" % \
                   (license_code, self.id)
-        uri = cc.license.lib.dict2uri(dict(jurisdiction=jurisdiction,
-                                           version=version,
-                                           code=license_code))
+        uri = cc.license._lib.dict2uri(dict(jurisdiction=jurisdiction,
+                                            version=version,
+                                            code=license_code))
         return self.by_uri(uri)
 
     def questions(self):

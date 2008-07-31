@@ -2,8 +2,8 @@
 
 import nose.tools
 import cc.license
-import cc.license.lib as lib
-from cc.license.lib.exceptions import CCLicenseError
+from cc.license import CCLicenseError
+import cc.license._lib as lib
 
 class TestUriDict:
 
@@ -53,7 +53,7 @@ class TestFunctions:
          ('http://creativecommons.org/licenses/by/3.0/', 'by'),
          ('http://creativecommons.org/licenses/by-sa/2.5/mx/', 'by-sa'),
                     )
-        self.apl = cc.license.lib.all_possible_answers # aliasing for brevity
+        self.apl = lib.all_possible_answers # aliasing for brevity
 
     def test_code_from_uri(self):
         for uri, code in self.pairs:
@@ -100,5 +100,5 @@ class TestFunctions:
                  dict(jurisdiction='', version=None, code='sampling+')
                 ]
         for d in dicts:
-            assert cc.license.lib.dict2uri(d) == \
+            assert lib.dict2uri(d) == \
                    'http://creativecommons.org/licenses/sampling+/1.0/'

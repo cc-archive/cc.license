@@ -1,6 +1,6 @@
 
 import os
-from cc.license.lib.interfaces import ILicenseFormatter
+from cc.license._lib.interfaces import ILicenseFormatter
 import zope.interface
 from genshi.template import TemplateLoader
 
