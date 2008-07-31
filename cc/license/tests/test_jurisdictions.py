@@ -104,3 +104,36 @@ class TestPublicApi:
     def test_functions(self):
         for f in ('list_uris', 'list_codes', 'list', 'by_code', 'uri2code'):
             assert f in self.dir
+
+
+class TestCustomization:
+
+    def __init__(self):
+        self.jurisdictions = []
+        for code in ('mx', 'jp', 'tw', 'de', 'us', 'uk'):
+            self.jurisdictions.append(cc.license.jurisdictions.by_code(code))
+        self.unported = cc.license.jurisdictions.by_code('')
+
+    def test_repr(self):
+        for j in self.jurisdictions:
+            r = repr(j)
+            assert j.id in r
+            assert j.title() in r
+            assert r.startswith('<')
+            assert r.endswith('>')
+
+    def test_repr_unported(self):
+        r = repr(self.unported)
+        assert self.unported.title() in r
+        assert r.startswith('<')
+        assert r.endswith('>')
+
+    def test_str(self):
+        for j in self.jurisdictions:
+            s = str(j)
+            assert j.title() in s
+            assert j.code in s
+
+    def test_str_unported(self):
+        s = str(self.unported)
+        assert self.unported.title() in s

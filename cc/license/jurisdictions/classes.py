@@ -51,6 +51,18 @@ class Jurisdiction(object):
     def __ne__(self, other):
         return not self.__eq__(other)
 
+    def __repr__(self):
+        if self.id == '':
+            return "<Jurisdiction object (%s)>" % (self.title())
+        else:
+            return "<Jurisdiction object '%s' (%s)>" % (self.id, self.title())
+
+    def __str__(self):
+        if self.id == '':
+            return self.title() + " (No jurisdiction)"
+        else:
+            return "%s (%s)" % (self.title(), self.code)
+
     def title(self, language='en'):
         try:
             return self._titles[language]
