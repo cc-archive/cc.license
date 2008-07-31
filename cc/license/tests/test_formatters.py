@@ -36,3 +36,15 @@ def test_basic_format():
     lic = cc.license.selectors.choose('standard').by_code('by')
     output = cc.license.formatters.HTML.format(lic, locale='en')
     relax_validate(RELAX_HTML, output)
+
+class TestPublicApi:
+
+    def __init__(self):
+        self.dir = dir(cc.license.formatters)
+
+    def test_aliased_formatters(self):
+        assert 'HTML' in self.dir
+
+    def test_functions(self):
+        for f in ('choose', 'list'):
+            assert f in self.dir

@@ -2,6 +2,10 @@
 import classes
 from cc.license._lib.exceptions import CCLicenseError
 
+__all__ = ['HTML', # aliased formatters
+           'choose', 'list', # functions
+          ]
+
 HTML =  classes.HTMLFormatter() 
 # aliasing per nathany's "design by wishful thinking"
 
