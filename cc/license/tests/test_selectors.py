@@ -165,3 +165,13 @@ class TestAnswersPublicdomain:
         assert lic.title() == 'Public Domain'
         lic2 = self.sel.by_code('publicdomain')
         assert lic == lic2
+
+
+class TestPublicApi:
+
+    def __init__(self):
+        self.dir = dir(cc.license.selectors)
+
+    def test_functions(self):
+        for f in ('choose', 'list'):
+            assert f in self.dir

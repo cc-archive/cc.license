@@ -5,6 +5,9 @@ import classes
 
 SELECTORS = {}
 
+__all__ = ['choose', 'list', # functions
+          ]
+
 for uri, lcode in rdf_helper.get_selector_info():
     SELECTORS[lcode] = classes.LicenseSelector(uri, lcode)
 
