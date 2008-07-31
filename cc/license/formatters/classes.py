@@ -13,8 +13,18 @@ class HTMLFormatter(object):
                           auto_reload=False)
         self.tmpl = self.loader.load('html_rdfa.xml')
 
+    def __repr__(self):
+        return "<LicenseFormatter object '%s'>" % self.id
+
+    def __str__(self):
+        return '(%s)' % self.title
+
     @property
     def id(self):
+        return 'html+rdfa'
+
+    @property
+    def title(self):
         return "HTML + RDFa formatter"
 
     def format(self, license, work_graph=None, locale='en'):

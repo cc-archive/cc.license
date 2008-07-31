@@ -10,7 +10,7 @@ HTML =  classes.HTMLFormatter()
 # aliasing per nathany's "design by wishful thinking"
 
 FORMATTERS = {
-    'html+rdfa' : HTML,
+    HTML.id : HTML,
     }
 
 def choose(formatter_id):

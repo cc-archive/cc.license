@@ -37,6 +37,7 @@ def test_basic_format():
     output = cc.license.formatters.HTML.format(lic, locale='en')
     relax_validate(RELAX_HTML, output)
 
+
 class TestPublicApi:
 
     def __init__(self):
@@ -48,3 +49,23 @@ class TestPublicApi:
     def test_functions(self):
         for f in ('choose', 'list'):
             assert f in self.dir
+
+
+class TestCustomization:
+
+    def __init__(self):
+        self.formatters = []
+        for s in cc.license.formatters.list():
+            self.formatters.append(cc.license.formatters.choose(s))
+
+    def test_repr(self):
+        for f in self.formatters:
+            r = repr(f)
+            assert f.id in r
+            assert r.startswith('<')
+            assert r.endswith('>')
+
+    def test_str(self):
+        for f in self.formatters:
+            s = str(f)
+            assert f.title in s
