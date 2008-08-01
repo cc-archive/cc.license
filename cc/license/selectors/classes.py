@@ -78,14 +78,6 @@ class LicenseSelector:
     def uri(self):
         return self._uri
 
-    @property
-    def jurisdictions(self):
-        raise NotImplementedError
-
-    @property
-    def versions(self):
-        raise NotImplementedError
-
     def title(self, language='en'):
         return self._titles[language]
 

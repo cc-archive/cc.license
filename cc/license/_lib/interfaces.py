@@ -58,9 +58,11 @@ class ILicenseSelector(Interface):
 
     uri = Attribute(u"The URI representing this selector.")
 
-    jurisdictions = Attribute(u"A sequence of IJurisdiction objects.")
-
-    versions = Attribute(u"A sequence of available versions for this class.")
+    # On second inspection, these attributes are probably not useful 
+    # implementing them shouldn't be hard if it's later decided that
+    # they are in fact useful.
+    #jurisdictions = Attribute(u"A sequence of IJurisdiction objects.")
+    #versions = Attribute(u"A sequence of available versions for this class.")
 
     def title(language='en'):
        """The title, as a more descriptive identifier."""
