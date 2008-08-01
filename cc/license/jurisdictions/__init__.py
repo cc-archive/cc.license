@@ -22,12 +22,11 @@ def list_uris():
     return list_t(_CACHE['uri'])
 
 def _list_uris():
-    model = rdf_helper.init_model(rdf_helper.JURI_RDF_PATH)
     cc_jurisdiction_url = RDF.Uri('http://creativecommons.org/ns#Jurisdiction')
     # grab the url strings from the RDF Nodes
     uris = [ rdf_helper.uri2value(j.subject)
              for j in
-             list_t(model.find_statements(
+             list_t(rdf_helper.JURI_MODEL.find_statements(
                            RDF.Statement(None, None, cc_jurisdiction_url)))
            ]
     uris.append('') # default jurisdiction

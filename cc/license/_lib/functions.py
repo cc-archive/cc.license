@@ -25,9 +25,7 @@ def locales():
          }
                   """
     query = RDF.Query(query_string, query_language='sparql')
-    model = rdf_helper.init_model(rdf_helper.JURI_RDF_PATH)
-        # XXX maybe this model should be cached somewhere?
-    solns = list(query.execute(model))
+    solns = list(query.execute(rdf_helper.JURI_MODEL))
     return [ s['lang'].literal_value['string'] for s in solns ]
 
 def code_from_uri(uri):

@@ -32,7 +32,7 @@ class License(object):
                 
                   ASK { <%s> rdf:type cc:License . }"""
         query = RDF.Query(qstring % self.uri, query_language='sparql')
-        uri_exists = query.execute(model).get_boolean()
+        uri_exists = query.execute(self._model).get_boolean()
         if not uri_exists:
             raise CCLicenseError, \
                   "License <%s> does not exist in model given." % self.uri

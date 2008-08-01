@@ -19,3 +19,19 @@ try:
     del RDF # we really don't need it imported
 except ImportError:
     raise CCLicenseError, "Redland RDF library (librdf) not installed"
+
+
+########################
+## Cleanup for librdf ##
+########################
+
+import atexit
+
+def _rdf_cleanup():
+    del _lib.rdf_helper.ALL_MODEL
+    del _lib.rdf_helper.JURI_MODEL
+    del _lib.rdf_helper.SEL_MODEL
+    del selectors.SELECTORS
+
+atexit.register(_rdf_cleanup)
+
