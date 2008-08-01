@@ -58,6 +58,18 @@ def test_equality():
     assert not (two == three)
     assert not (five == six)
 
+def test_uri2code():
+    for c in ('us', 'uk', 'fr', 'de', 'jp', 'ca'):
+        j = cc.license.jurisdictions.by_code(c)
+        assert cc.license.jurisdictions.uri2code(j.id) == c
+
+def test_uri2code_trivial():
+    assert cc.license.jurisdictions.uri2code('') == ''
+
+def test_uri2code_fails():
+    nose.tools.assert_raises(CCLicenseError, cc.license.jurisdictions.uri2code,
+                             'roflcopter')
+
 class TestJurisdictions:
 
     def __init__(self):

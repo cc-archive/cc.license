@@ -41,5 +41,10 @@ def by_code(code):
 
 def uri2code(uri):
     """Given a jurisdiction URI, parse out the jurisdiction short code."""
-    blen = len('http://creativecommons.org/international/')
+    if uri == '':
+        return '' # trivial case
+    base = 'http://creativecommons.org/international/' 
+    if not uri.startswith(base):
+        raise cc.license.CCLicenseError, "Malformed jurisdiction URI"
+    blen = len(base)
     return uri[blen:-1]
