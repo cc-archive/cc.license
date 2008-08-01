@@ -124,7 +124,7 @@ class LicenseSelector:
             jurisdiction = None
         return self.by_code(license_code, jurisdiction=jurisdiction)
 
-    # TODO: get to the bottom of finland license weirdness
+    # TODO: handle 1.0 license weirdness (out-of-order license code)
     def _by_answers_standard(self, answers_dict):
         pieces = ['by']
         # error checking

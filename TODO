@@ -1,30 +1,31 @@
-# An amalgamation of random TODO comments littered throughout cc.license
 
-* replace "superseded" with "replacedBy" for RDF<->Python consistency
-
-* Expose 'image uri' attribute from a License
+== Critical ==
+* Get License image uri in the RDF
+** Expose 'image uri' attribute from a License
 ** Make formatters use the exposed 'image uri' attribute
-
-* Get to the bottom of finland license weirdness (see selectors/classes.py)
 
 * Associate short codes with Licenses in the RDF
 
 * Associate LicenseSelectors with Licenses in the RDF
 
-(probably as a consequence of implementing the above)
+
+== Important ==
+* Handle 1.0 license weirdness, out-of-order license code (selectors/classes.py)
+
 * Add functionality to generate a license from a short code
   without having to first create a LicenseSelector
 
-* Get image uri information for Licenses in the RDF
+* Clean up the answers-to-license-code hack
 
-* Integrate questions.xml into RDF
-** Map answers to licenses, somehow
+* Implement License.libre (True if 'by', 'by-sa', 'publicdomain')
 
-* Implement LicenseSelector.jurisdictions and LicenseSelector.versions
-  (This almost certainly relies upon the RDF updates described above)
+* Internationalizing HTML+RDFa formatter (license text)
+
+
+== Minor ==
+* replace "superseded" with "replacedBy" for RDF<->Python consistency
+** Which should it be, and what needs to be replaced where?
 
 * (possibly) Use distutils.version.StrictVersion for versioning (in License)
-
-* Figure out what License.libre should return
 
 * Cache all RDF models and use the same reference each time
