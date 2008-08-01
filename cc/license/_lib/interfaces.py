@@ -100,8 +100,6 @@ class ILicenseFormatter(Interface):
            incorporating the work metadata and locale."""
 
 
-# TODO: what to do with the 'jurisdiction' question, 
-#                                per LicenseSelector.by_answers
 class IQuestion(Interface):
     """Encapsulate a question to be asked by LicenseSelector."""
 
