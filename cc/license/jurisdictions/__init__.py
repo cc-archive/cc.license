@@ -10,10 +10,18 @@ __all__ = ['list_uris', 'list_codes', 'list',
            'by_code', 'uri2code', # functions
           ]
 
+# caches
+_CACHE = {}
+
 def list_uris():
     """Returns sequence of all jurisdiction codes possible. Jurisdiction
        codes are strings that yield a Jurisdiction object when passed
        to cc.license.jurisdiction.Jurisdiction"""
+    if not _CACHE.has_key('uri'):
+        _CACHE['uri'] = _list_uris()
+    return list_t(_CACHE['uri'])
+
+def _list_uris():
     model = rdf_helper.init_model(rdf_helper.JURI_RDF_PATH)
     cc_jurisdiction_url = RDF.Uri('http://creativecommons.org/ns#Jurisdiction')
     # grab the url strings from the RDF Nodes
@@ -23,15 +31,25 @@ def list_uris():
                            RDF.Statement(None, None, cc_jurisdiction_url)))
            ]
     uris.append('') # default jurisdiction
-    return uris # XXX CACHE ME
+    return uris
 
 # is this a useful / desirable function to have?
 def list_codes():
-    return [ uri2code(uri) for uri in list_uris() ] # XXX CACHE ME
+    if not _CACHE.has_key('code'):
+        _CACHE['code'] = _list_codes()
+    return list_t(_CACHE['code'])
+
+def _list_codes():
+    return [ uri2code(uri) for uri in list_uris() ]
 
 def list():
+    if not _CACHE.has_key('juri'):
+        _CACHE['juri'] = _list()
+    return list_t(_CACHE['juri'])
+
+def _list():
     return [ cc.license.Jurisdiction(uri) 
-             for uri in list_uris() ] # XXX CACHE ME
+             for uri in list_uris() ]
 
 def by_code(code):
     if code == '':

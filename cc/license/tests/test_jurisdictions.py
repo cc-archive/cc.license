@@ -31,6 +31,7 @@ def test_jurisdiction_codes():
 def test_commutativity():
     codes = cc.license.jurisdictions.list_codes()
     for uri in cc.license.jurisdictions.list_uris():
+        print cc.license.jurisdictions.uri2code(uri)
         assert cc.license.jurisdictions.uri2code(uri) in codes
 
 def test_code_constructor():
@@ -69,6 +70,14 @@ def test_uri2code_trivial():
 def test_uri2code_fails():
     nose.tools.assert_raises(CCLicenseError, cc.license.jurisdictions.uri2code,
                              'roflcopter')
+
+def test_cache():
+    tmp = cc.license.jurisdictions.list()
+    assert tmp is not cc.license.jurisdictions.list()
+    tmp = cc.license.jurisdictions.list_codes()
+    assert tmp is not cc.license.jurisdictions.list_codes()
+    tmp = cc.license.jurisdictions.list_uris()
+    assert tmp is not cc.license.jurisdictions.list_uris()
 
 class TestJurisdictions:
 
