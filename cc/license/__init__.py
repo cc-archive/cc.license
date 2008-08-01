@@ -16,5 +16,6 @@ __all__ = ['selectors', 'formatters', 'jurisdictions', # modules
 # fail with a useful error message if librdf not installed
 try:
     import RDF
+    del RDF # we really don't need it imported
 except ImportError:
     raise CCLicenseError, "Redland RDF library (librdf) not installed"
