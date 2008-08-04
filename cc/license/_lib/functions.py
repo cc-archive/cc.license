@@ -31,7 +31,9 @@ def locales():
 def code_from_uri(uri):
     """Given a URI representing a CC license, parse out the license_code."""
     base = 'http://creativecommons.org/licenses/'
-    return uri.lstrip(base).split('/')[0]
+    if not uri.startswith(base):
+        raise CCLicenseError, "Invalid License URI"
+    return uri[len(base):].split('/')[0]
 
 def uri2dict(uri):
     """Take a license uri and convert it into a dictionary of values."""

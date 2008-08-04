@@ -59,6 +59,10 @@ class TestFunctions:
         for uri, code in self.pairs:
             assert lib.code_from_uri(uri) == code
 
+    def test_code_from_uri_fails(self):
+        nose.tools.assert_raises(CCLicenseError, lib.code_from_uri,
+                                 'roflcopter')
+
     def test_current_version(self):
         for j in ('us', 'de', 'jp', 'uk', 'es'):
             assert type(lib.current_version('by', jurisdiction=j)) == str
