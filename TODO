@@ -4,10 +4,6 @@
 ** Expose 'image uri' attribute from a License
 ** Make formatters use the exposed 'image uri' attribute
 
-* Associate short codes with Licenses in the RDF
-
-* Associate LicenseSelectors with Licenses in the RDF
-
 
 == Important ==
 * Handle 1.0 license weirdness, out-of-order license code (selectors/classes.py)
