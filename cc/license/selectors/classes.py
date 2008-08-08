@@ -46,11 +46,11 @@ class LicenseSelector:
            In the questions.xml will be deprecated later, with all
            that information moving to RDF."""
         self._uri = uri
-        self._titles = rdf_helper.get_titles(rdf_helper.SEL_MODEL, self.uri)
         self._model = rdf_helper.ALL_MODEL
                       # plenty of room for optimization...
         self._licenses = {}
         self._id = None
+        self._titles = None
 
         # TODO: refactor this somewhere?
         # populate questions from questions.xml
@@ -81,6 +81,8 @@ class LicenseSelector:
         return self._uri
 
     def title(self, language='en'):
+        if self._titles is None:
+            self._titles = rdf_helper.get_titles(rdf_helper.SEL_MODEL, self.uri)
         return self._titles[language]
 
     def by_uri(self, uri):
