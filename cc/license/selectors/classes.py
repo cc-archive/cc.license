@@ -102,7 +102,7 @@ class LicenseSelector:
     def questions(self):
         return self._questions
 
-    ## FIXME: Yet Another Hack
+    ## Yet Another Hack
     ## Unsure where the answers-into-license-code data and logic ought to go.
     ## In the old api, it's an XSLT document, which feels wrong.
     ## I believe it should be in the equivalent of questions.xml.
