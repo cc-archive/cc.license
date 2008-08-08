@@ -261,27 +261,33 @@ def get_superseded(model, uri):
         superseded_by = str(solns[0]['replacement'].uri)
         return (True, superseded_by)
 
-def get_selector_info():
-    """Returns a list of two-tuples holding LicenseSelector information.
-       First element is URI, second element is license code (short code)."""
+def get_selector_uris():
+    """Returns a list of LicenseSelector URIs."""
     qstring = """
               PREFIX cc: <http://creativecommons.org/ns#>
               PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
-              SELECT ?uri ?lcode
+              SELECT ?uri
               WHERE {
                      ?uri rdf:type cc:LicenseSelector .
-                     ?uri cc:licenseCode ?lcode .
                     }
               """
     query = RDF.Query(qstring, query_language='sparql')
     solns = list(query.execute(SEL_MODEL))
-    retval = []
-    for s in solns:
-        lcode = s['lcode'].literal_value['string']
-        uri = str(s['uri'].uri)
-        retval.append((uri, lcode))
-    return retval
+    return [ str(s['uri'].uri) for s in solns ]
+
+def get_selector_id(uri):
+    qstring = """
+              PREFIX cc: <http://creativecommons.org/ns#>
+
+              SELECT ?lcode
+              WHERE {
+                     <%s> cc:licenseCode ?lcode .
+                    }
+              """
+    query = RDF.Query(qstring % uri, query_language='sparql')
+    solns = list(query.execute(SEL_MODEL))
+    return str(solns[0]['lcode'].literal_value['string'])
 
 def get_license_code(model, uri):
     qstring = """
