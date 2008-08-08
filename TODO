@@ -13,8 +13,6 @@
 
 * Clean up the answers-to-license-code hack
 
-* Implement License.libre (True if 'by', 'by-sa', 'publicdomain')
-
 * Internationalizing HTML+RDFa formatter (license text)
 
 

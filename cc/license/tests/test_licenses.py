@@ -91,6 +91,17 @@ class TestAll:
         for r in lic.requires:
             assert r.startswith('http://creativecommons.org/ns#')
 
+    def test_libre(self):
+        free = [self.stdsel.by_code('by'), self.stdsel.by_code('by-sa'),
+                self.pdsel.by_code('publicdomain')]
+        unfree = [ self.stdsel.by_code(c) for c in ('by-nc', 'by-nc-sa') ]
+        for c in ('sampling', 'nc-sampling+', 'sampling+'):
+            unfree.append(self.smpsel.by_code(c))
+        for f in free:
+            assert f.libre
+        for u in unfree:
+            assert not u.libre
+
 
 class TestStandard:
 

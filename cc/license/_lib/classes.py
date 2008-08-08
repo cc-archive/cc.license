@@ -109,10 +109,10 @@ class License(object):
             self._code = rdf_helper.get_license_code(self._model, self.uri)
         return self._code
 
-    # TODO: implement!
-    # TODO: write tests!
     @property
     def libre(self):
+        if self.license_code in ('by', 'by-sa', 'publicdomain'):
+            return True
         return False
 
     @property
