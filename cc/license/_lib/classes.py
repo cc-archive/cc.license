@@ -38,7 +38,7 @@ class License(object):
                   "License <%s> does not exist in model given." % self.uri
 
     def __repr__(self):
-        return "<Jurisdiction object '%s'>" % self.uri
+        return "<License object '%s'>" % self.uri
 
     def __str__(self):
         return "%s %s %s" % (self.title(),
