@@ -104,7 +104,7 @@ class LicenseSelector:
         return self.by_uri(uri)
 
     def questions(self):
-        return self._questions
+        return list(self._questions)
 
     ## Yet Another Hack
     ## Unsure where the answers-into-license-code data and logic ought to go.
