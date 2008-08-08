@@ -5,37 +5,6 @@ from cc.license._lib import interfaces, rdf_helper
 from cc.license._lib.classes import License, Question
 from cc.license._lib.exceptions import CCLicenseError
 
-# MAJOR TEMPORARY HACK
-# So hopefully at some point soon in the future, each License described
-# in the RDF files will have a property, something like cc:licenseCode
-# (see selectors.rdf), which will say which LicenseSelector that particular
-# License is associted with. Until then, we enumerate here.
-# OPEN QUESTION: what about all the weird licenses that aren't below?
-valid_codes = {
-               'standard' : [
-                             'by-nc-nd',
-                             'by-nc-sa',
-                             'by-nc',
-                             'by-nd',
-                             'by-sa',
-                             'by',
-                            ],
-               'recombo' : [
-                            'nc-sampling+',
-                            'sampling+',
-                            'sampling',
-                           ],
-               'publicdomain' : [
-                                 'publicdomain',
-                                ],
-              }
-
-def validate(selector_id, license_code):
-    for code in valid_codes[selector_id]:
-        if code == license_code:
-            return True
-    return False
-
 class LicenseSelector:
     zope.interface.implements(interfaces.ILicenseSelector)
 
@@ -87,20 +56,20 @@ class LicenseSelector:
 
     def by_uri(self, uri):
         # error checking
-        if not uri.startswith('http://creativecommons.org/licenses/'):
+        if not rdf_helper.selector_has_license(self._model, self.uri, uri):
             raise CCLicenseError, "Invalid license URI."
         if uri not in self._licenses:
             self._licenses[uri] = License(self._model, uri)
         return self._licenses[uri]
 
     def by_code(self, license_code, jurisdiction=None, version=None):
-        if not validate(self.id, license_code):
-            raise CCLicenseError, \
-                  "License code %s is invalid for selector %s" % \
-                  (license_code, self.id)
         uri = cc.license._lib.dict2uri(dict(jurisdiction=jurisdiction,
                                             version=version,
                                             code=license_code))
+        if not rdf_helper.selector_has_license(self._model, self.uri, uri):
+            raise CCLicenseError, \
+                  "License code '%s' is invalid for selector %s" % \
+                  (license_code, self.id)
         return self.by_uri(uri)
 
     def questions(self):

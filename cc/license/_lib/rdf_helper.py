@@ -289,6 +289,22 @@ def get_selector_id(uri):
     solns = list(query.execute(SEL_MODEL))
     return str(solns[0]['lcode'].literal_value['string'])
 
+def get_license_uris(model, selector_uri):
+    qstring = """
+              PREFIX cc: <http://creativecommons.org/ns#>
+              PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+              SELECT ?luri
+              WHERE {
+                     ?luri rdf:type cc:License .
+                     ?luri cc:licenseClass <%s> .
+                    }
+              """
+    query = RDF.Query(qstring % selector_uri, query_language='sparql')
+    solns = list(query.execute(model))
+    return tuple( str(s['luri'].uri) for s in solns )
+
+
 def get_license_code(model, uri):
     qstring = """
               PREFIX dc: <http://purl.org/dc/elements/1.1/>
@@ -314,6 +330,20 @@ def get_license_class(model, uri):
     query = RDF.Query(qstring % uri, query_language='sparql')
     solns = list(query.execute(model))
     return str(solns[0]['lclassuri'].uri)
+
+def selector_has_license(model, selector_uri, license_uri):
+    qstring = """
+              PREFIX cc: <http://creativecommons.org/ns#>
+
+              ASK { <%s> cc:licenseClass <%s> . }"""
+    # can't interpolate empty strings
+    if selector_uri == '':
+        selector_uri =  'NONE'
+    if license_uri == '':
+        license_uri = 'NONE'
+    query = RDF.Query(qstring % (license_uri, selector_uri),
+                      query_language='sparql')
+    return query.execute(model).get_boolean()
 
 
 # XXX is this a good idea?
