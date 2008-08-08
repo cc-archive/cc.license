@@ -11,10 +11,10 @@ class License(object):
     """Base class for ILicense implementation modeling a specific license."""
     zope.interface.implements(interfaces.ILicense)
 
-    def __init__(self, model, uri, license_class):
+    def __init__(self, model, uri):
         self._uri = uri
         self._model = model # hang on to the model for lazy queries later
-        self._lclass = license_class # defined by Selector
+        self._lclass = None
         self._titles = None
         self._descriptions = None
         self._superseded_by = None
@@ -61,6 +61,12 @@ class License(object):
 
     @property
     def license_class(self):
+        if self._lclass is None:
+            lclass_uri = rdf_helper.get_license_class(self._model, self.uri)
+            # XXX this feels hackish
+            for value in cc.license.selectors.SELECTORS.values():
+                if value.uri == lclass_uri:
+                    self._lclass = value.id
         return self._lclass
 
     # XXX use distutils.version.StrictVersion to ease comparison?

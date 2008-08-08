@@ -302,6 +302,19 @@ def get_license_code(model, uri):
     solns = list(query.execute(model))
     return str(solns[0]['code'].literal_value['string'])
 
+def get_license_class(model, uri):
+    qstring = """
+              PREFIX cc: <http://creativecommons.org/ns#>
+
+              SELECT ?lclassuri
+              WHERE {
+                     <%s> cc:licenseClass ?lclassuri .
+              }
+              """
+    query = RDF.Query(qstring % uri, query_language='sparql')
+    solns = list(query.execute(model))
+    return str(solns[0]['lclassuri'].uri)
+
 
 # XXX is this a good idea?
 ALL_MODEL = init_model(INDEX_RDF_PATH)

@@ -90,7 +90,7 @@ class LicenseSelector:
         if not uri.startswith('http://creativecommons.org/licenses/'):
             raise CCLicenseError, "Invalid license URI."
         if uri not in self._licenses:
-            self._licenses[uri] = License(self._model, uri, self.id)
+            self._licenses[uri] = License(self._model, uri)
         return self._licenses[uri]
 
     def by_code(self, license_code, jurisdiction=None, version=None):
