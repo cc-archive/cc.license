@@ -140,12 +140,14 @@ class TestCustomization:
             r = repr(j)
             assert j.id in r
             assert j.title() in r
+            assert 'Jurisdiction' in r
             assert r.startswith('<')
             assert r.endswith('>')
 
     def test_repr_unported(self):
         r = repr(self.unported)
         assert self.unported.title() in r
+        assert 'Jurisdiction' in r
         assert r.startswith('<')
         assert r.endswith('>')
 

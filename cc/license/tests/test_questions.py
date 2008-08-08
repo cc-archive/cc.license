@@ -71,6 +71,7 @@ class TestCustomization:
         for q in self.questions:
             r = repr(q)
             assert q.id in r
+            assert 'Question' in r
             assert r.startswith('<')
             assert r.endswith('>')
 

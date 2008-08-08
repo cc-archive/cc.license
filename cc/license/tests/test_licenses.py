@@ -160,6 +160,7 @@ class TestCustomization:
         for l in self.licenses:
             r = repr(l)
             assert l.uri in r
+            assert 'License' in r
             assert r.startswith('<')
             assert r.endswith('>')
 
