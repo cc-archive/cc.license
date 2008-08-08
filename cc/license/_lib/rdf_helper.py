@@ -283,6 +283,19 @@ def get_selector_info():
         retval.append((uri, lcode))
     return retval
 
+def get_license_code(model, uri):
+    qstring = """
+              PREFIX dc: <http://purl.org/dc/elements/1.1/>
+
+              SELECT ?code
+              WHERE {
+                     <%s> dc:identifier ?code .
+              }
+              """
+    query = RDF.Query(qstring % uri, query_language='sparql')
+    solns = list(query.execute(model))
+    return str(solns[0]['code'].literal_value['string'])
+
 
 # XXX is this a good idea?
 ALL_MODEL = init_model(INDEX_RDF_PATH)

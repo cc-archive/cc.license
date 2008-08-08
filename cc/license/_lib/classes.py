@@ -24,6 +24,7 @@ class License(object):
         self._superseded = None
         self._permits = None
         self._requires = None
+        self._code = None
 
         # make sure the license actually exists
         qstring = """
@@ -104,7 +105,9 @@ class License(object):
 
     @property
     def license_code(self):
-        return cc.license._lib.code_from_uri(self.uri)
+        if self._code is None:
+            self._code = rdf_helper.get_license_code(self._model, self.uri)
+        return self._code
 
     # TODO: implement!
     # TODO: write tests!

@@ -63,11 +63,11 @@ class TestAll:
         assert lic2.deprecated
 
     def test_license_code(self):
-        for c in ('by', 'by-sa', 'by-nd', 'by-nc', 'by-nc-sa', 'by-nc-nd'):
-            if c == 'by-nc-nd':
-                continue # FIXME
+        # TODO make this iterate over all licenses
+        for c in ('by', 'by-sa', 'by-nd', 'by-nc', 'by-nc-sa'):
             lic = self.stdsel.by_code(c)
             assert lic.license_code == c
+            assert lic.license_code in repr(lic)
 
     def test_superseded(self):
         lic = self.stdsel.by_code('by', version='1.0')
