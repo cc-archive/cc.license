@@ -91,6 +91,11 @@ class TestAll:
         for r in lic.requires:
             assert r.startswith('http://creativecommons.org/ns#')
 
+    def test_prohibits(self):
+        lic = self.stdsel.by_code('by')
+        for p in lic.prohibits:
+            assert p.startswith('http://creativecommons.org/ns#')
+
     def test_libre(self):
         free = [self.stdsel.by_code('by'), self.stdsel.by_code('by-sa'),
                 self.pdsel.by_code('publicdomain')]

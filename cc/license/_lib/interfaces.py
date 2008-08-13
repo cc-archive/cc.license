@@ -42,6 +42,8 @@ class ILicense(Interface):
 
     requires = Attribute(u"Sequence of URIs corresponding to requirements.")
 
+    prohibits = Attribute(u"Sequence of URIs corresponding to prohibitions.")
+
     def title(language='en'):
         """Return the human-readable title of this license.  It is a method 
            so a language parameter can be passed in."""

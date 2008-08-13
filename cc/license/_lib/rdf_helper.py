@@ -243,6 +243,19 @@ def get_requires(model, uri):
     solns = list(query.execute(model))
     return tuple( str(p['requirement'].uri) for p in solns )
 
+def get_prohibits(model, uri):
+    qstring = """
+              PREFIX cc: <http://creativecommons.org/ns#>
+
+              SELECT ?prohibition
+              WHERE {
+                     <%s> cc:prohibits ?prohibition .
+              }
+              """
+    query = RDF.Query(qstring % uri, query_language='sparql')
+    solns = list(query.execute(model))
+    return tuple( str(p['prohibition'].uri) for p in solns )
+
 def get_superseded(model, uri):
     """Watch out: returns a tuple and not just a value."""
     qstring = """

@@ -24,6 +24,7 @@ class License(object):
         self._superseded = None
         self._permits = None
         self._requires = None
+        self._prohibits = None
         self._code = None
 
         # make sure the license actually exists
@@ -132,6 +133,12 @@ class License(object):
         if self._requires is None:
             self._requires = rdf_helper.get_requires(self._model, self.uri)
         return self._requires
+
+    @property
+    def prohibits(self):
+        if self._prohibits is None:
+            self._prohibits = rdf_helper.get_prohibits(self._model, self.uri)
+        return self._prohibits
 
 
 class Question(object):
