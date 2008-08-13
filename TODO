@@ -1,8 +1,7 @@
 
 == Critical ==
-* Get License image uri in the RDF
-** Expose 'image uri' attribute from a License
-** Make formatters use the exposed 'image uri' attribute
+* Expose 'image uri' attribute from a License
+* Make formatters use the exposed 'image uri' attribute
 
 
 == Important ==
