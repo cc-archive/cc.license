@@ -1,6 +1,6 @@
 [submodule "bootstrap"]
 	path = bootstrap
-	url = git@code.creativecommons.org:bootstrap
+	url = git://code.creativecommons.org/bootstrap.git
 [submodule "license.rdf"]
 	path = license.rdf
-	url = git@code.creativecommons.org:license.rdf
+	url = git://code.creativecommons.org/license.rdf.git
