@@ -6,7 +6,7 @@ import rdf_helper
 
 from cc.license.jurisdictions.classes import Jurisdiction
 from cc.license._lib.exceptions import CCLicenseError
-
+import cc.license
 
 def locales():
     """Returns a sequence of all locales possible.
@@ -27,6 +27,17 @@ def locales():
     query = RDF.Query(query_string, query_language='sparql')
     solns = list(query.execute(rdf_helper.JURI_MODEL))
     return [ s['lang'].literal_value['string'] for s in solns ]
+
+def by_code(code):
+    """A LicenseSelector-less means of picking a License from a code."""
+    pass
+
+def by_uri(uri):
+    """A LicenseSelector-less means of picking a License from a URI."""
+    for key, selector in cc.license.selectors.SELECTORS.items():
+        if selector.has_license(uri):
+            return selector.by_uri(uri)
+    raise CCLicenseError, "License for URI doesn't exist"
 
 def code_from_uri(uri):
     """Given a URI representing a CC license, parse out the license_code."""

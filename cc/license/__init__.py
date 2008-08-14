@@ -4,12 +4,12 @@ import jurisdictions
 from _lib.classes import License, Question
 from jurisdictions.classes import Jurisdiction
 from selectors.classes import LicenseSelector
-from _lib.functions import locales
+from _lib.functions import locales, by_code, by_uri
 from _lib.exceptions import CCLicenseError
 
 __all__ = ['selectors', 'formatters', 'jurisdictions', # modules
            'License', 'Question', 'Jurisdiction', 'LicenseSelector', # classes
-           'locales', # functions
+           'locales', 'by_code', 'by_uri', # functions
            'CCLicenseError', # exceptions
           ]
 

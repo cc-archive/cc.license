@@ -76,6 +76,7 @@ class LicenseSelector:
         return list(self._questions)
 
     def has_license(self, license_uri):
+        # TODO: implement some form of caching
         return rdf_helper.selector_has_license(
                           self._model, self.uri, license_uri)
 

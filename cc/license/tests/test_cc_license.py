@@ -2,6 +2,7 @@
    This file is a catch-all for tests with no place else to go."""
 
 import cc.license
+import nose.tools
 
 def test_locales():
     locales = cc.license.locales()
@@ -9,6 +10,15 @@ def test_locales():
         assert type(l) == unicode
     for c in ('en', 'de', 'he', 'ja', 'fr'):
         assert c in locales
+
+def test_by_uri():
+    uri = 'http://creativecommons.org/licenses/by/3.0/'
+    lic = cc.license.selectors.choose('standard').by_uri(uri)
+    assert lic == cc.license.by_uri(uri)
+
+def test_by_uri_fails():
+    nose.tools.assert_raises(cc.license.CCLicenseError,
+                             cc.license.by_uri, 'roflcopter')
 
 class TestPublicApi:
 
@@ -24,7 +34,8 @@ class TestPublicApi:
             assert m in self.cc_dir
 
     def test_functions(self):
-        assert 'locales' in self.cc_dir
+        for f in ('locales', 'by_code', 'by_uri'):
+            assert f in self.cc_dir
 
     def test_exceptions(self):
         assert 'CCLicenseError' in self.cc_dir
