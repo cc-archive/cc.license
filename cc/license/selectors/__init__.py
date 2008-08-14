@@ -11,6 +11,7 @@ __all__ = ['choose', 'list', # functions
 for uri in rdf_helper.get_selector_uris():
     sel = classes.LicenseSelector(uri)
     SELECTORS[sel.id] = sel
+    del sel # cleanup reference
 
 def choose(license_class):
     """Return an instance of ILicenseSelector for a specific license
