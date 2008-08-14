@@ -24,9 +24,12 @@ setup(name='cc.license',
         'zope.interface',
         'nose',
         'Genshi',
+        'pylons', # XXX why does nose throw a RuntimeWarning without this?
       ],
       setup_requires=['setuptools-git',],
       entry_points="""
       # -*- Entry points: -*-
+      [nose.plugins]
+      pylons = pylons.test:PylonsPlugin 
       """,
       )
