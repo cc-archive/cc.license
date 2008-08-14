@@ -7,9 +7,6 @@
 == Important ==
 * Handle 1.0 license weirdness, out-of-order license code (selectors/classes.py)
 
-* Add functionality to generate a license from a short code
-  without having to first create a LicenseSelector
-
 * Clean up the answers-to-license-code hack
 
 * Internationalizing HTML+RDFa formatter (license text)
