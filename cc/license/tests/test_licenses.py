@@ -107,6 +107,17 @@ class TestAll:
         for u in unfree:
             assert not u.libre
 
+    def test_has_license(self):
+        std = 'http://creativecommons.org/licenses/by/3.0/'
+        smp = 'http://creativecommons.org/licenses/sampling+/1.0/'
+        pd = 'http://creativecommons.org/licenses/publicdomain/'
+        assert self.stdsel.has_license(std)
+        assert not self.stdsel.has_license(pd)
+        assert self.smpsel.has_license(smp)
+        assert not self.smpsel.has_license(std)
+        assert self.pdsel.has_license(pd)
+        assert not self.pdsel.has_license(smp)
+
 
 class TestStandard:
 

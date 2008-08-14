@@ -91,6 +91,10 @@ class ILicenseSelector(Interface):
         """Return a list of IQuestions representing all questions for
            this license class."""
 
+    def has_license(license_uri):
+        """Boolean that tells if this LicenseSelector knows about the 
+           license given by license_uri."""
+
 
 class ILicenseFormatter(Interface):
     """Support for formatting metadata for an issued license for output."""

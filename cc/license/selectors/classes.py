@@ -75,6 +75,10 @@ class LicenseSelector:
     def questions(self):
         return list(self._questions)
 
+    def has_license(self, license_uri):
+        return rdf_helper.selector_has_license(
+                          self._model, self.uri, license_uri)
+
     ## Yet Another Hack
     ## Unsure where the answers-into-license-code data and logic ought to go.
     ## In the old api, it's an XSLT document, which feels wrong.
