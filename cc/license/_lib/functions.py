@@ -30,7 +30,12 @@ def locales():
 
 def by_code(code):
     """A LicenseSelector-less means of picking a License from a code."""
-    pass
+    for key, selector in cc.license.selectors.SELECTORS.items():
+        try:
+            return selector.by_code(code)
+        except cc.license.CCLicenseError:
+            pass
+    raise cc.license.CCLicenseError, "License for code doesn't exist"
 
 def by_uri(uri):
     """A LicenseSelector-less means of picking a License from a URI."""

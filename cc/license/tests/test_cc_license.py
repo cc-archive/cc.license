@@ -20,6 +20,16 @@ def test_by_uri_fails():
     nose.tools.assert_raises(cc.license.CCLicenseError,
                              cc.license.by_uri, 'roflcopter')
 
+def test_by_code():
+    lic = cc.license.selectors.choose('standard').by_code('by')
+    assert lic == cc.license.by_code('by')
+    lic2 = cc.license.selectors.choose('recombo').by_code('sampling')
+    assert lic2 == cc.license.by_code('sampling')
+
+def test_by_code_fails():
+    nose.tools.assert_raises(cc.license.CCLicenseError,
+                             cc.license.by_code, 'lollerskates')
+
 class TestPublicApi:
 
     def __init__(self):
