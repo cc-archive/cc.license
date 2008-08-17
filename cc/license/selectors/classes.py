@@ -58,7 +58,7 @@ class LicenseSelector:
         # error checking
         if not rdf_helper.selector_has_license(self._model, self.uri, uri):
             raise CCLicenseError, "Invalid license URI."
-        if uri not in self._licenses:
+        if uri not in self._licenses or self._licenses[uri] is None:
             self._licenses[uri] = License(self._model, uri)
         return self._licenses[uri]
 
@@ -66,7 +66,7 @@ class LicenseSelector:
         uri = cc.license._lib.dict2uri(dict(jurisdiction=jurisdiction,
                                             version=version,
                                             code=license_code))
-        if not rdf_helper.selector_has_license(self._model, self.uri, uri):
+        if not self.has_license(uri):
             raise CCLicenseError, \
                   "License code '%s' is invalid for selector %s" % \
                   (license_code, self.id)
@@ -76,9 +76,15 @@ class LicenseSelector:
         return list(self._questions)
 
     def has_license(self, license_uri):
-        # TODO: implement some form of caching
-        return rdf_helper.selector_has_license(
-                          self._model, self.uri, license_uri)
+        if license_uri in self._licenses.keys():
+            return True
+        else:
+            if not rdf_helper.selector_has_license(
+                       self._model, self.uri, license_uri):
+                return False
+            else:
+                self._licenses[license_uri] = None
+                return True
 
     ## Yet Another Hack
     ## Unsure where the answers-into-license-code data and logic ought to go.

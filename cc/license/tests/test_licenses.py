@@ -32,6 +32,16 @@ class TestAll:
         lic2 = self.stdsel.by_code('by-sa')
         assert lic2.uri == uri
 
+    def test_uri_multiple(self):
+        uri = 'http://creativecommons.org/licenses/by-nc-nd/3.0/'
+        lic = self.stdsel.by_uri(uri)
+        assert lic.uri == uri
+        lic2 = self.stdsel.by_uri(uri)
+        assert lic == lic2
+        assert lic2.uri == uri
+        assert lic2 == self.stdsel.by_uri(uri)
+        assert lic2 == self.stdsel.by_uri(uri)
+
     def test_jurisdiction(self):
         lic = self.stdsel.by_code('by-sa')
         assert lic.jurisdiction.title() == 'Unported'

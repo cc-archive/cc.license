@@ -34,6 +34,30 @@ def test_get_selector_key_error():
     nose.tools.assert_raises(CCLicenseError,
                              cc.license.selectors.choose, 'roflcopter')
 
+def test_has_license():
+    std = cc.license.selectors.choose('standard')
+    has = 'http://creativecommons.org/licenses/by/3.0/'
+    hasnt = 'roflcopter'
+    assert std.has_license(has)
+    assert not std.has_license(hasnt)
+    # multiple times, to check caching
+    assert std.has_license(has)
+    assert not std.has_license(hasnt)
+    assert std.has_license(has)
+    assert not std.has_license(hasnt)
+
+def test_functional_one():
+    std = cc.license.selectors.choose('standard')
+    uri = 'http://creativecommons.org/licenses/by-nc/3.0/'
+    assert std.has_license(uri)
+    by_nc = std.by_uri(uri)
+    assert std.has_license(uri)
+    assert by_nc == std.by_uri(uri)
+    # double-check
+    assert type(std.by_uri(uri)) == cc.license.License
+    assert std.has_license(uri)
+
+
 class TestIssuers:
 
     def __init__(self):
