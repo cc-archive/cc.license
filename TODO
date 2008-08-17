@@ -1,7 +1,6 @@
 
 == Critical ==
-* Make formatters use the exposed 'image uri' attribute
-
+None
 
 == Important ==
 * Handle 1.0 license weirdness, out-of-order license code (selectors/classes.py)
