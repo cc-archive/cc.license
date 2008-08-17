@@ -344,6 +344,20 @@ def get_license_class(model, uri):
     solns = list(query.execute(model))
     return str(solns[0]['lclassuri'].uri)
 
+def get_logos(model, uri):
+    qstring = """
+              PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+
+              SELECT ?img
+              WHERE {
+                     <%s> foaf:logo ?img .
+              }
+              """
+    query = RDF.Query(qstring % uri, query_language='sparql')
+    solns = list(query.execute(model))
+    return tuple( str(s['img'].uri) for s in solns )
+
+
 def selector_has_license(model, selector_uri, license_uri):
     qstring = """
               PREFIX cc: <http://creativecommons.org/ns#>

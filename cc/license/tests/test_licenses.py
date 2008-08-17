@@ -107,6 +107,17 @@ class TestAll:
         for u in unfree:
             assert not u.libre
 
+    def test_logo(self):
+        base = 'http://i.creativecommons.org/l/'
+        by = self.stdsel.by_code('by')
+        assert type(by.logo) is str
+        assert by.logo.startswith(base)
+        smp = self.smpsel.by_code('sampling+')
+        assert type(smp.logo) is str
+        assert smp.logo.startswith(base)
+        by_jp = self.stdsel.by_code('by', jurisdiction='jp')
+        assert 'jp' in by_jp.logo
+
     def test_has_license(self):
         std = 'http://creativecommons.org/licenses/by/3.0/'
         smp = 'http://creativecommons.org/licenses/sampling+/1.0/'

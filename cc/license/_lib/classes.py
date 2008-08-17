@@ -26,6 +26,7 @@ class License(object):
         self._requires = None
         self._prohibits = None
         self._code = None
+        self._logos = None
 
         # make sure the license actually exists
         qstring = """
@@ -139,6 +140,12 @@ class License(object):
         if self._prohibits is None:
             self._prohibits = rdf_helper.get_prohibits(self._model, self.uri)
         return self._prohibits
+
+    @property
+    def logo(self):
+        if self._logos is None:
+            self._logos = rdf_helper.get_logos(self._model, self.uri)
+        return max(self._logos)
 
 
 class Question(object):

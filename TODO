@@ -1,6 +1,5 @@
 
 == Critical ==
-* Expose 'image uri' attribute from a License
 * Make formatters use the exposed 'image uri' attribute
 
 
