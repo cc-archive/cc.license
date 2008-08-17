@@ -26,6 +26,22 @@ def test_by_code():
     lic2 = cc.license.selectors.choose('recombo').by_code('sampling')
     assert lic2 == cc.license.by_code('sampling')
 
+def test_by_code_jurisdiction():
+    lic = cc.license.selectors.choose('standard').by_code('by',
+                                                          jurisdiction='jp')
+    assert lic == cc.license.by_code('by', jurisdiction='jp')
+
+def test_by_code_version():
+    lic = cc.license.selectors.choose('standard').by_code('by',
+                                                          version='2.0')
+    assert lic == cc.license.by_code('by', version='2.0')
+    
+def test_by_code_all():
+    lic = cc.license.selectors.choose('standard').by_code('by-nc',
+                                                          jurisdiction='jp',
+                                                          version='2.0')
+    assert lic == cc.license.by_code('by-nc', jurisdiction='jp', version='2.0')
+
 def test_by_code_fails():
     nose.tools.assert_raises(cc.license.CCLicenseError,
                              cc.license.by_code, 'lollerskates')
