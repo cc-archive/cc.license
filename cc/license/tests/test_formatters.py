@@ -32,11 +32,19 @@ def test_get_formatter_key_error():
     nose.tools.assert_raises(CCLicenseError,
                              cc.license.formatters.choose, 'roflcopter')
 
-def test_basic_format():
-    lic = cc.license.selectors.choose('standard').by_code('by')
-    output = cc.license.formatters.HTML.format(lic, locale='en')
+class TestHTMLFormatter:
+
+    def __init__(self):
+        self.lic = cc.license.by_code('by')
+        self.html = cc.license.formatters.HTML
+
     # XXX not wrapped in <html> tags
-    relax_validate(RELAX_HTML, '<html>' + output + '</html>')
+    def _validate(self, output):
+        relax_validate(RELAX_HTML, '<html>' + output + '</html>')
+
+    def test_basic_format(self):
+        output = self.html.format(self.lic, locale='en')
+        self._validate(output)
 
 
 class TestPublicApi:
