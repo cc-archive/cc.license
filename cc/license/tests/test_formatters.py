@@ -35,7 +35,8 @@ def test_get_formatter_key_error():
 def test_basic_format():
     lic = cc.license.selectors.choose('standard').by_code('by')
     output = cc.license.formatters.HTML.format(lic, locale='en')
-    relax_validate(RELAX_HTML, output)
+    # XXX not wrapped in <html> tags
+    relax_validate(RELAX_HTML, '<html>' + output + '</html>')
 
 
 class TestPublicApi:
