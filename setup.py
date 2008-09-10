@@ -25,6 +25,8 @@ setup(name='cc.license',
         'nose',
         'Genshi',
         'pylons', # XXX why does nose throw a RuntimeWarning without this?
+        #'Babel',
+        'FormEncode', # not sure why this is throwing a RuntimeWarning either
       ],
       setup_requires=['setuptools-git',],
       entry_points="""
