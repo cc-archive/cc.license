@@ -1,9 +1,11 @@
 
 import classes
+import filters
 from cc.license._lib.exceptions import CCLicenseError
 
 __all__ = ['HTML', # aliased formatters
            'choose', 'list', # functions
+           'filters', # modules
           ]
 
 HTML =  classes.HTMLFormatter() 
