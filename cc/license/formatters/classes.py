@@ -1,3 +1,30 @@
+"""
+Formatters take a License instance and a dictionary of work metadata about
+the licensed work. The keys of this work_dict are as follows:
+
+ - format
+   The format of the work, values can be one of:
+     - Audio (Sound)
+     - Video (MovingImage)
+     - Image (StillImage)
+     - Text (Text)
+     - Interactive (InteractiveResource)
+
+ - worktitle
+   Title of work
+
+ - attribution_name
+   Attribute work to name
+
+ - attribution_url
+   Attribute work to URL
+
+ - source_work
+   Source work URL
+
+ - more_permissions_url
+   More permissions URL
+"""
 
 import os
 from cc.license._lib.interfaces import ILicenseFormatter
@@ -27,7 +54,7 @@ class HTMLFormatter(object):
     def title(self):
         return "HTML + RDFa formatter"
 
-    def format(self, license, work_graph=None, locale='en'):
+    def format(self, license, work_dict=None, locale='en'):
         """Return an HTML + RDFa string serialization for the license,
             optionally incorporating the work metadata and locale."""
         stream = self.tmpl.generate(license=license, locale=locale)
