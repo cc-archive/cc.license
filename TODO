@@ -9,6 +9,8 @@ None
 
 * Internationalizing HTML+RDFa formatter (license text)
 
+* For formatter testing, test RDFa parsing directly
+
 
 == Minor ==
 * replace "superseded" with "replacedBy" for RDF<->Python consistency
