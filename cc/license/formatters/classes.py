@@ -28,6 +28,7 @@ the licensed work. The keys of this work_dict are as follows:
 
 import os
 from cc.license._lib.interfaces import ILicenseFormatter
+from cc.license._lib.exceptions import CCLicenseError
 import zope.interface
 from genshi.template import TemplateLoader
 from filters import Source, Permissions
@@ -41,7 +42,7 @@ class HTMLFormatter(object):
     zope.interface.implements(ILicenseFormatter)
 
     def __init__(self):
-        self.tmpl = LOADER.load('html_rdfa.xml')
+        pass
 
     def __repr__(self):
         return "<LicenseFormatter object '%s'>" % self.id
@@ -60,6 +61,28 @@ class HTMLFormatter(object):
     def format(self, license, work_dict={}, locale='en'):
         """Return an HTML + RDFa string serialization for the license,
             optionally incorporating the work metadata and locale."""
-        stream = self.tmpl.generate(license=license, locale=locale) | \
-                      Source(work_dict) | Permissions(work_dict)
+        format = None
+        dctype = None
+        if work_dict.has_key('format'):
+            chosen_tmpl = 'work.xml'
+            format = work_dict['format'].lower()
+            try:
+                dctype = {
+                          'audio' : 'Sound',
+                          'video' : 'MovingImage',
+                          'image' : 'StillImage',
+                          'text' : 'Text',
+                          'interactive' : 'InteractiveResource',
+                         }[format]
+            except KeyError:
+                raise CCLicenseError, \
+                      "Format type %(format)s unknown" % work_dict
+        else:
+            chosen_tmpl = 'default.xml'
+        self.tmpl = LOADER.load(chosen_tmpl)
+        stream = self.tmpl.generate(license=license, 
+                                    locale=locale,
+                                    format=format,
+                                    dctype=dctype)
+        stream = stream | Source(work_dict) | Permissions(work_dict)
         return stream.render('xhtml')

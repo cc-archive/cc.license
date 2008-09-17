@@ -42,9 +42,21 @@ class TestHTMLFormatter:
     def _validate(self, output):
         relax_validate(RELAX_HTML, '<html>' + output + '</html>')
 
-    def test_basic_format(self):
+    def test_basic(self):
         output = self.html.format(self.lic, locale='en')
         self._validate(output)
+
+    def test_work_format(self):
+        for format in ('Audio', 'Video', 'Image', 'Text', 'Interactive'):
+            work_dict = {'format':format}
+            output = self.html.format(self.lic, work_dict=work_dict)
+            self._validate(output)
+
+    def test_work_format_fails(self):
+        work_dict = {'format':'roflcopter'}
+        nose.tools.assert_raises(CCLicenseError,
+                                 self.html.format,
+                                 self.lic, work_dict)
 
 
 class TestPublicApi:
