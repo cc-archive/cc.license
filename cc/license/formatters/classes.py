@@ -75,6 +75,7 @@ class HTMLFormatter(object):
                           'interactive' : 'InteractiveResource',
                          }[format]
             except KeyError:
+                # TODO: render the default
                 raise CCLicenseError, \
                       "Format type %(format)s unknown" % work_dict
         else:
