@@ -1,0 +1,6 @@
+<html xmlns:py="http://genshi.edgewall.org/"
+      py:strip="True">
+<a rel="license" href="${license.uri}"><img alt="Creative Commons License" style="border-width:0" src="${license.logo}"/></a>
+<br/>
+This <span xmlns:dc="http://purl.org/dc/elements/1.1/" href="http://purl.org/dc/dcmitype/${dctype}" rel="dc:type">${worktitle}</span> is licensed under a <a rel="license" href="${license.uri}">Creative Commons ${license.title(locale)} ${license.version} ${license.jurisdiction.title(locale)} License</a>.
+</html>
