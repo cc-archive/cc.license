@@ -61,19 +61,37 @@ class HTMLFormatter(object):
     def format(self, license, work_dict={}, locale='en'):
         """Return an HTML + RDFa string serialization for the license,
             optionally incorporating the work metadata and locale."""
+        w = work_dict # alias work_dict for brevity
+
+        # FOUR CASES!
+        case = 0
+        if w.has_key('format') or w.has_key('worktitle'):
+            case += 1
+        if w.has_key('attribution_name') or w.has_key('attribution_url'):
+            case += 2
+
+        # switch statement
+
+        # fill out work_dict with defaults
+        for attr in ('more_permissions_url', 'worktitle', 'attribution_name',
+                     'attribution_url', 'source_work', 'format'):
+            if not w.has_key(attr):
+                w[attr] = None
+
         format = None
         dctype = None
-        if work_dict.has_key('format'):
+        if w['format'] is not None:
             chosen_tmpl = 'work.xml'
             format = work_dict['format'].lower()
             try:
-                dctype = {
-                          'audio' : 'Sound',
-                          'video' : 'MovingImage',
-                          'image' : 'StillImage',
-                          'text' : 'Text',
-                          'interactive' : 'InteractiveResource',
-                         }[format]
+                dctype_chooser = {
+                                  None : None,
+                                  'audio' : 'Sound',
+                                  'video' : 'MovingImage',
+                                  'image' : 'StillImage',
+                                  'text' : 'Text',
+                                  'interactive' : 'InteractiveResource',
+                                 }[format]
             except KeyError:
                 # TODO: render the default
                 raise CCLicenseError, \
