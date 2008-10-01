@@ -27,6 +27,7 @@ setup(name='cc.license',
         'pylons', # XXX why does nose throw a RuntimeWarning without this?
         #'Babel',
         'FormEncode', # not sure why this is throwing a RuntimeWarning either
+        'rdfadict',
       ],
       setup_requires=['setuptools-git',],
       entry_points="""
