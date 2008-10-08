@@ -72,6 +72,31 @@ class TestPublicApi:
             assert f in self.dir
 
 
+class TestFilters:
+
+    def __init__(self):
+        self.lic = cc.license.by_code('by')
+        self.html = cc.license.formatters.HTML
+        self.src_str = 'rel="dc:source"'
+        self.perm_str = 'rel="cc:morePermissions"'
+
+    def test_permissions_presence(self):
+        s = self.html.format(self.lic, {'more_permissions_url':'ASDFASDF'})
+        assert self.perm_str in s
+
+    def test_permissions_absence(self):
+        s = self.html.format(self.lic)
+        assert self.perm_str not in s
+
+    def test_source_presence(self):
+        s = self.html.format(self.lic, {'source_work':'ASDFASDF'})
+        assert self.src_str in s
+
+    def test_source_absence(self):
+        s = self.html.format(self.lic)
+        assert self.src_str not in s
+
+
 class TestCustomization:
 
     def __init__(self):

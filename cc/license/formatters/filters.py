@@ -3,11 +3,12 @@ import classes
 
 class Source:
 
-    def __init__(self, work_dict):
+    def __init__(self, work_dict=None):
         if work_dict is None:
             work_dict = {}
         self.id = 'source_work'
-        if work_dict.has_key(self.id):
+        if work_dict.has_key(self.id) and \
+           work_dict[self.id] != '' and work_dict[self.id] is not None:
             self.has_source = True
             self.source = work_dict[self.id]
             # only load template if we need to
@@ -26,11 +27,12 @@ class Source:
 
 class Permissions:
 
-    def __init__(self, work_dict):
+    def __init__(self, work_dict=None):
         if work_dict is None:
             work_dict = {}
         self.id = 'more_permissions_url'
-        if work_dict.has_key(self.id):
+        if work_dict.has_key(self.id) and \
+           work_dict[self.id] != '' and work_dict[self.id] is not None:
             self.has_permissions = True
             self.source = work_dict[self.id]
             # only load template if we need to
