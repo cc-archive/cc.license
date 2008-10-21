@@ -84,16 +84,16 @@ class HTMLFormatter(object):
             chosen_tmpl = 'work.xml'
             format = work_dict['format'].lower()
             try:
-                dctype_chooser = {
-                                  None : None,
-                                  'audio' : 'Sound',
-                                  'video' : 'MovingImage',
-                                  'image' : 'StillImage',
-                                  'text' : 'Text',
-                                  'interactive' : 'InteractiveResource',
-                                 }[format]
+                dctype = {
+                          None : None,
+                          'audio' : 'Sound',
+                          'video' : 'MovingImage',
+                          'image' : 'StillImage',
+                          'text' : 'Text',
+                          'interactive' : 'InteractiveResource',
+                         }[format]
             except KeyError:
-                chosen_tmpl = 'work.xml'
+                chosen_tmpl = 'default.xml'
         else:
             chosen_tmpl = 'default.xml'
         self.tmpl = LOADER.load(chosen_tmpl)
