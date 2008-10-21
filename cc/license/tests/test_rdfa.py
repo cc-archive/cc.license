@@ -8,7 +8,7 @@ class TestHtmlFormatter:
 
     def __init__(self):
         self.parser = rdfadict.RdfaParser()
-        self.base = 'FOOBAR'
+        self.base = 'http://www.example.com/'
         self.lic = cc.license.by_code('by')
         self.fmtr = cc.license.formatters.HTML
         # define namespaces
