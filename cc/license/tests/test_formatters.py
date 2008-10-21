@@ -52,11 +52,10 @@ class TestHTMLFormatter:
             output = self.html.format(self.lic, work_dict=work_dict)
             self._validate(output)
 
-    def test_work_format_fails(self):
+    def test_invalid_work_format(self):
         work_dict = {'format':'roflcopter'}
-        nose.tools.assert_raises(CCLicenseError,
-                                 self.html.format,
-                                 self.lic, work_dict)
+        output = self.html.format(self.lic, work_dict=work_dict)
+        self._validate(output)
 
 
 class TestPublicApi:
