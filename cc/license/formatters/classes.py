@@ -94,12 +94,15 @@ class HTMLFormatter(object):
                          }[format]
             except KeyError:
                 chosen_tmpl = 'default.xml'
+        elif w['worktitle'] is not None:
+            chosen_tmpl = 'worktitle.xml'
         else:
             chosen_tmpl = 'default.xml'
         self.tmpl = LOADER.load(chosen_tmpl)
         stream = self.tmpl.generate(license=license, 
                                     locale=locale,
                                     format=format,
-                                    dctype=dctype)
+                                    dctype=dctype,
+                                    worktitle=w['worktitle'])
         stream = stream | Source(work_dict) | Permissions(work_dict)
         return stream.render('xhtml')

@@ -24,8 +24,23 @@ class TestHtmlFormatter:
         trips = self.parse(r)
         assert self.lic.uri in trips[self.base][str(self.w3.license)]
 
-    def test_work_format(self):
+    def test_workformat(self):
         r = self.fmtr.format(self.lic, {'format':'Text'})
         trips = self.parse(r)
         assert self.lic.uri in trips[self.base][str(self.w3.license)] # basic
         assert str(self.dc_type.Text) in trips[self.base][str(self.dc.type)]
+
+    def test_worktitle(self):
+        r = self.fmtr.format(self.lic, {'worktitle':'TITLE'})
+        trips = self.parse(r)
+        print trips
+        assert 'TITLE' in trips[self.base][str(self.dc['title'])]
+
+    #def test_workformat_worktitle(self):
+    #    r = self.fmtr.format(self.lic, {'format':'Image',
+    #                                    'worktitle':'TITLE'})
+    #    trips = self.parse(r)
+    #    print trips
+    #    assert str(self.dc_type.StillImage) in \
+    #           trips[self.base][str(self.dc.type)]
+    #    assert 'TITLE' in trips[self.base][str(self.dc['title'])]
