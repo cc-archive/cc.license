@@ -36,11 +36,11 @@ class TestHtmlFormatter:
         print trips
         assert 'TITLE' in trips[self.base][str(self.dc['title'])]
 
-    #def test_workformat_worktitle(self):
-    #    r = self.fmtr.format(self.lic, {'format':'Image',
-    #                                    'worktitle':'TITLE'})
-    #    trips = self.parse(r)
-    #    print trips
-    #    assert str(self.dc_type.StillImage) in \
-    #           trips[self.base][str(self.dc.type)]
-    #    assert 'TITLE' in trips[self.base][str(self.dc['title'])]
+    def test_workformat_worktitle(self):
+        r = self.fmtr.format(self.lic, {'format':'Image',
+                                        'worktitle':'TITLE'})
+        trips = self.parse(r)
+        print trips
+        assert str(self.dc_type.StillImage) in \
+               trips[self.base][str(self.dc.type)]
+        assert 'TITLE' in trips[self.base][str(self.dc['title'])]

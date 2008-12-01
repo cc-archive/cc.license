@@ -78,8 +78,10 @@ class HTMLFormatter(object):
             if not w.has_key(attr):
                 w[attr] = None
 
+        chosen_tmpl = None
         format = None
         dctype = None
+
         if w['format'] is not None:
             chosen_tmpl = 'work.xml'
             format = work_dict['format'].lower()
@@ -94,10 +96,14 @@ class HTMLFormatter(object):
                          }[format]
             except KeyError:
                 chosen_tmpl = 'default.xml'
-        elif w['worktitle'] is not None:
+
+        if w['worktitle'] is not None:
             chosen_tmpl = 'worktitle.xml'
-        else:
+        
+        # default
+        if chosen_tmpl is None:
             chosen_tmpl = 'default.xml'
+
         self.tmpl = LOADER.load(chosen_tmpl)
         stream = self.tmpl.generate(license=license, 
                                     locale=locale,
