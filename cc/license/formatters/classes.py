@@ -83,8 +83,8 @@ class HTMLFormatter(object):
         dctype = None
 
         if w['format'] is not None:
-            chosen_tmpl = 'work.xml'
             format = work_dict['format'].lower()
+            chosen_tmpl = 'work_%s.xml' % format
             try:
                 dctype = {
                           None : None,
@@ -107,7 +107,6 @@ class HTMLFormatter(object):
         self.tmpl = LOADER.load(chosen_tmpl)
         stream = self.tmpl.generate(license=license, 
                                     locale=locale,
-                                    format=format,
                                     dctype=dctype,
                                     worktitle=w['worktitle'])
         stream = stream | Source(work_dict) | Permissions(work_dict)
