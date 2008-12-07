@@ -81,6 +81,7 @@ class HTMLFormatter(object):
         chosen_tmpl = None
         format = None
         dctype = None
+        kwargs = dict(w) # copy it over
 
         if w['format'] is not None:
             format = work_dict['format'].lower()
@@ -99,15 +100,22 @@ class HTMLFormatter(object):
 
         if w['worktitle'] is not None:
             chosen_tmpl = 'worktitle.xml'
+
+        if w['attribution_name'] is not None: # try it out
+            chosen_tmpl = 'title_attribution.xml'
+
+        # pack kwargs
+        kwargs['license'] = license
+        kwargs['locale'] = locale
+        kwargs['dctype'] = dctype
+        if w.has_key('worktitle'): # superfluous, for now
+            kwargs['worktitle'] = w['worktitle']
         
         # default
         if chosen_tmpl is None:
             chosen_tmpl = 'default.xml'
 
         self.tmpl = LOADER.load(chosen_tmpl)
-        stream = self.tmpl.generate(license=license, 
-                                    locale=locale,
-                                    dctype=dctype,
-                                    worktitle=w['worktitle'])
+        stream = self.tmpl.generate(**kwargs)
         stream = stream | Source(work_dict) | Permissions(work_dict)
         return stream.render('xhtml')
