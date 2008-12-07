@@ -73,6 +73,7 @@ class HTMLFormatter(object):
         # switch statement
 
         # fill out work_dict with defaults
+        # TODO: get rid of this one day
         for attr in ('more_permissions_url', 'worktitle', 'attribution_name',
                      'attribution_url', 'source_work', 'format'):
             if not w.has_key(attr):
