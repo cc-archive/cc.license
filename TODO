@@ -19,5 +19,6 @@ None
 * Cache all RDF models and use the same reference each time
 
 * Standardize return value strings: all unicode or all str, not mixed
+** Decide whether unicode or str
 
 * Replace all unnamed string interpolation with named ones
