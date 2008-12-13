@@ -12,6 +12,7 @@ class License(object):
     zope.interface.implements(interfaces.ILicense)
 
     def __init__(self, model, uri):
+        # XXX do this as a dict later?
         self._uri = uri
         self._model = model # hang on to the model for lazy queries later
         self._lclass = None
@@ -38,14 +39,18 @@ class License(object):
         uri_exists = query.execute(self._model).get_boolean()
         if not uri_exists:
             raise CCLicenseError, \
-                  "License <%s> does not exist in model given." % self.uri
+                  "License <%(uri)s> does not exist in model given." % {
+                              'uri': self.uri }
 
     def __repr__(self):
-        return "<License object '%s'>" % self.uri
+        return "<License object '%(uri)s'>" % {'uri': self.uri}
 
     def __str__(self):
-        return "%s %s %s" % (self.title(),
-                             self.version, self.jurisdiction.title())
+        return "%(title)s %(version)s %(jurisdiction)s" % {
+                             'title': self.title(),
+                             'version': self.version,
+                             'jurisdiction': self.jurisdiction.title()
+                                                          }
 
     def title(self, language='en'):
         if self._titles is None:
@@ -183,13 +188,14 @@ class Question(object):
                     self._enums[eid] = elabels
 
         if not _flag:
-            raise CCLicenseError, "Question identifier %s not found" % self.id
+            raise CCLicenseError, "Question identifier %(id)s not found" % \
+                    {'id': self.id}
 
     def __repr__(self):
-        return "<Question object id='%s'>" % self.id
+        return "<Question object id='%(id)s'>" % {'id': self.id}
 
     def __str__(self):
-        return "Question: %s" % self.label()
+        return "Question: %(label)s" % {'label': self.label()}
             
     @property
     def id(self):
