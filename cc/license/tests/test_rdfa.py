@@ -20,6 +20,7 @@ class TestHtmlFormatter:
         self.dc = rdflib.Namespace('http://purl.org/dc/elements/1.1/')
         self.dc_type = rdflib.Namespace('http://purl.org/dc/dcmitype/')
         self.w3 = rdflib.Namespace('http://www.w3.org/1999/xhtml/vocab#')
+        self.b = rdflib.Namespace(self.base)
 
     def parse(self, rdfa_string):
         return self.parser.parse_string(rdfa_string, self.base)
@@ -74,9 +75,12 @@ class TestHtmlFormatter:
         r = self.fmtr.format(self.lic, {'source_work': 'SOURCE_WORK',
                                   'more_permissions_url': 'MORE_PERMISSIONS'})
         trips = self.parse(r)
+        print trips
         assert self.lic.uri in trips[self.base][str(self.w3.license)]
-        #assert 'SOURCE_WORK' in trips[self.base][str(self.cc.morePermissions)]
-        #assert 'MORE_PERMISSIONS' in trips[self.base][str(self.dc.source)]
+        assert str(self.b.SOURCE_WORK) in \
+               trips[self.base][str(self.dc.source)]
+        assert str(self.b.MORE_PERMISSIONS) in \
+               trips[self.base][str(self.cc.morePermissions)]
 
     # Three properties (twenty possible combinations; zero under test)
 
