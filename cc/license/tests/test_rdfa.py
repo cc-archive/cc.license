@@ -70,10 +70,18 @@ class TestHtmlFormatter:
         assert str(self.dc_type.MovingImage) in \
                trips[self.base][str(self.dc.type)]
 
-     # Three properties (twenty possible combinations; zero under test)
+    def test_source_more(self):
+        r = self.fmtr.format(self.lic, {'source_work': 'SOURCE_WORK',
+                                  'more_permissions_url': 'MORE_PERMISSIONS'})
+        trips = self.parse(r)
+        assert self.lic.uri in trips[self.base][str(self.w3.license)]
+        #assert 'SOURCE_WORK' in trips[self.base][str(self.cc.morePermissions)]
+        #assert 'MORE_PERMISSIONS' in trips[self.base][str(self.dc.source)]
 
-     # Four properties (fifteen possible combinations; zero under test)
+    # Three properties (twenty possible combinations; zero under test)
 
-     # Five properties (six possible combinations; zero under test)
+    # Four properties (fifteen possible combinations; zero under test)
 
-     # Siz properties (one possible combination; zero under test)
+    # Five properties (six possible combinations; zero under test)
+
+    # Six properties (one possible combination; zero under test)
