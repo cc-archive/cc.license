@@ -105,6 +105,9 @@ class HTMLFormatter(object):
         if w['attribution_name'] is not None: # try it out
             chosen_tmpl = 'title_attribution.xml'
 
+        if w['attribution_url'] is not None:
+            chosen_tmpl = 'title_attribution.xml'
+
         # pack kwargs
         kwargs['license'] = license
         kwargs['locale'] = locale
