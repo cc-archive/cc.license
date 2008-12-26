@@ -51,6 +51,25 @@ class TestHtmlFormatter:
         trips = self.parse(r)
         assert 'ATTR_NAME' in trips[self.base][str(self.cc.attributionName)]
 
+    #def test_attrurl(self):
+    #    r = self.fmtr.format(self.lic, {'attribution_url':'ATTR_URL'})
+    #    trips = self.parse(r)
+    #    assert 'ATTR_URL' in trips[self.base][str(self.cc.attributionURL)]
+    #    # when alone, URL is also attributionName
+    #    assert 'ATTR_URL' in trips[self.base][str(self.cc.attributionName)]
+
+    def test_sourcework(self):
+        r = self.fmtr.format(self.lic, {'source_work':'SOURCE_WORK'})
+        trips = self.parse(r)
+        assert str(self.b.SOURCE_WORK) in trips[self.base][str(self.dc.source)]
+
+    def test_morepermissions(self):
+        r = self.fmtr.format(self.lic, {'more_permissions_url':
+                                        'MORE_PERMISSIONS'})
+        trips = self.parse(r)
+        assert str(self.b.MORE_PERMISSIONS) in \
+               trips[self.base][str(self.cc.morePermissions)]
+
     # Two properties (fifteen possible combinations; two under test)
 
     def test_workformat_worktitle(self):
