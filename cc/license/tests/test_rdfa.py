@@ -25,81 +25,70 @@ class TestHtmlFormatter:
     def parse(self, rdfa_string):
         return self.parser.parse_string(rdfa_string, self.base)
 
+    def parse_trips(self, work_dict={}):
+        r = self.fmtr.format(self.lic, work_dict)
+        trips = self.parse(r)
+        return trips[self.base]
+
     # Zero properties (one possible combination; all under test)
 
     def test_basic(self):
-        r = self.fmtr.format(self.lic)
-        trips = self.parse(r)
-        assert self.lic.uri in trips[self.base][str(self.w3.license)]
+        tb = self.parse_trips()
+        assert self.lic.uri in tb[str(self.w3.license)]
 
     # One property (six possible combinations; three under test)
 
     def test_workformat(self):
-        r = self.fmtr.format(self.lic, {'format':'Text'})
-        trips = self.parse(r)
-        assert self.lic.uri in trips[self.base][str(self.w3.license)] # basic
-        assert str(self.dc_type.Text) in trips[self.base][str(self.dc.type)]
+        tb = self.parse_trips({'format':'Text'})
+        assert self.lic.uri in tb[str(self.w3.license)] # basic
+        assert str(self.dc_type.Text) in tb[str(self.dc.type)]
 
     def test_worktitle(self):
-        r = self.fmtr.format(self.lic, {'worktitle':'TITLE'})
-        trips = self.parse(r)
-        print trips
-        assert 'TITLE' in trips[self.base][str(self.dc['title'])]
+        tb = self.parse_trips({'worktitle':'TITLE'})
+        assert 'TITLE' in tb[str(self.dc['title'])]
 
     def test_attrname(self):
-        r = self.fmtr.format(self.lic, {'attribution_name':'ATTR_NAME'})
-        trips = self.parse(r)
-        assert 'ATTR_NAME' in trips[self.base][str(self.cc.attributionName)]
+        tb = self.parse_trips({'attribution_name':'ATTR_NAME'})
+        assert 'ATTR_NAME' in tb[str(self.cc.attributionName)]
 
     #def test_attrurl(self):
     #    r = self.fmtr.format(self.lic, {'attribution_url':'ATTR_URL'})
     #    trips = self.parse(r)
-    #    assert 'ATTR_URL' in trips[self.base][str(self.cc.attributionURL)]
+    #    assert 'ATTR_URL' in tb[str(self.cc.attributionURL)]
     #    # when alone, URL is also attributionName
-    #    assert 'ATTR_URL' in trips[self.base][str(self.cc.attributionName)]
+    #    assert 'ATTR_URL' in tb[str(self.cc.attributionName)]
 
     def test_sourcework(self):
-        r = self.fmtr.format(self.lic, {'source_work':'SOURCE_WORK'})
-        trips = self.parse(r)
-        assert str(self.b.SOURCE_WORK) in trips[self.base][str(self.dc.source)]
+        tb = self.parse_trips({'source_work':'SOURCE_WORK'})
+        assert str(self.b.SOURCE_WORK) in tb[str(self.dc.source)]
 
     def test_morepermissions(self):
-        r = self.fmtr.format(self.lic, {'more_permissions_url':
-                                        'MORE_PERMISSIONS'})
-        trips = self.parse(r)
-        assert str(self.b.MORE_PERMISSIONS) in \
-               trips[self.base][str(self.cc.morePermissions)]
+        tb = self.parse_trips({'more_permissions_url':'MORE_PERMISSIONS'})
+        assert str(self.b.MORE_PERMISSIONS) in tb[str(self.cc.morePermissions)]
 
     # Two properties (fifteen possible combinations; two under test)
 
     def test_workformat_worktitle(self):
-        r = self.fmtr.format(self.lic, {'format':'Image',
-                                        'worktitle':'TITLE'})
-        trips = self.parse(r)
-        print trips
-        assert str(self.dc_type.StillImage) in \
-               trips[self.base][str(self.dc.type)]
-        assert 'TITLE' in trips[self.base][str(self.dc['title'])]
+        tb = self.parse_trips({'format':'Image',
+                               'worktitle':'TITLE'})
+        assert str(self.dc_type.StillImage) in tb[str(self.dc.type)]
+        assert 'TITLE' in tb[str(self.dc['title'])]
 
     def test_attrname_format(self):
-        r = self.fmtr.format(self.lic, {'format':'Video',
-                                        'attribution_name':'ATTR_NAME'})
-        trips = self.parse(r)
-        assert self.lic.uri in trips[self.base][str(self.w3.license)]
-        assert 'ATTR_NAME' in trips[self.base][str(self.cc.attributionName)]
+        tb = self.parse_trips({'format':'Video',
+                               'attribution_name':'ATTR_NAME'})
+        assert self.lic.uri in tb[str(self.w3.license)]
+        assert 'ATTR_NAME' in tb[str(self.cc.attributionName)]
         assert str(self.dc_type.MovingImage) in \
-               trips[self.base][str(self.dc.type)]
+               tb[str(self.dc.type)]
 
     def test_source_more(self):
-        r = self.fmtr.format(self.lic, {'source_work': 'SOURCE_WORK',
-                                  'more_permissions_url': 'MORE_PERMISSIONS'})
-        trips = self.parse(r)
-        print trips
-        assert self.lic.uri in trips[self.base][str(self.w3.license)]
-        assert str(self.b.SOURCE_WORK) in \
-               trips[self.base][str(self.dc.source)]
+        tb = self.parse_trips({'source_work': 'SOURCE_WORK',
+                               'more_permissions_url': 'MORE_PERMISSIONS'})
+        assert self.lic.uri in tb[str(self.w3.license)]
+        assert str(self.b.SOURCE_WORK) in tb[str(self.dc.source)]
         assert str(self.b.MORE_PERMISSIONS) in \
-               trips[self.base][str(self.cc.morePermissions)]
+               tb[str(self.cc.morePermissions)]
 
     # Three properties (twenty possible combinations; zero under test)
 
