@@ -84,6 +84,15 @@ class HTMLFormatter(object):
         dctype = None
         kwargs = dict(w) # copy it over
 
+        if case == 0: # CASE 1
+            pass
+        elif case == 1: # CASE 2
+            pass
+        elif case == 2: # CASE 3
+            pass
+        elif case == 3: # CASE 4
+            pass
+
         if w['format'] is not None:
             format = work_dict['format'].lower()
             chosen_tmpl = 'work_%s.xml' % format
