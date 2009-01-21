@@ -62,8 +62,12 @@ class HTMLFormatter(object):
     def _template_type(self, w):
         """Takes a work_dict and returns an Enum corresponding to the type."""
         type = self.tmpltypes.default
-        if w.has_key('format') or w.has_key('worktitle'):
+        if w.has_key('worktitle'):
             type = self.tmpltypes.desc
+        if w.has_key('format'): # we might need to ignore format
+            dctype = self._translate_dctype(w['format'].lower())
+            if dctype is not None:
+                type = self.tmpltypes.desc
         if w.has_key('attribution_name') or w.has_key('attribution_url'):
             if type == self.tmpltypes.default:
                 type = self.tmpltypes.attr
@@ -72,14 +76,17 @@ class HTMLFormatter(object):
         return type
 
     def _translate_dctype(self, format):
-        return { # let it throw a KeyError
-                 None : None,
-                 'audio' : 'Sound',
-                 'video' : 'MovingImage',
-                 'image' : 'StillImage',
-                 'text' : 'Text',
-                 'interactive' : 'InteractiveResource',
-               }[format]
+        try:
+            return {
+                     None : None,
+                     'audio' : 'Sound',
+                     'video' : 'MovingImage',
+                     'image' : 'StillImage',
+                     'text' : 'Text',
+                     'interactive' : 'InteractiveResource',
+                   }[format]
+        except KeyError: # if we dont understand it, pretend its not there
+            return None
 
     def format(self, license, work_dict={}, locale='en'):
         """Return an HTML + RDFa string serialization for the license,

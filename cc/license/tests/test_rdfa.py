@@ -40,6 +40,7 @@ class TestHtmlFormatter:
 
     def test_workformat(self):
         tb = self.parse_trips({'format':'Text'})
+        print tb
         assert self.lic.uri in tb[str(self.w3.license)] # basic
         assert str(self.dc_type.Text) in tb[str(self.dc.type)]
 
