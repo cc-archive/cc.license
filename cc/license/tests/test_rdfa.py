@@ -47,16 +47,16 @@ class TestHtmlFormatter:
         tb = self.parse_trips({'worktitle':'TITLE'})
         assert 'TITLE' in tb[str(self.dc['title'])]
 
-    def test_attrname(self):
-        tb = self.parse_trips({'attribution_name':'ATTR_NAME'})
-        assert 'ATTR_NAME' in tb[str(self.cc.attributionName)]
+    #def test_attrname(self):
+    #    tb = self.parse_trips({'attribution_name':'ATTR_NAME'})
+    #    assert 'ATTR_NAME' in tb[str(self.cc.attributionName)]
 
-    def test_attrurl(self):
-        tb = self.parse_trips({'attribution_url':'ATTR_URL'})
-        print tb
-        assert str(self.b.ATTR_URL) in tb[str(self.cc.attributionURL)]
-        # when alone, URL is also attributionName
-        assert '' in tb[str(self.cc.attributionName)] #FIXME
+    #def test_attrurl(self):
+    #    tb = self.parse_trips({'attribution_url':'ATTR_URL'})
+    #    print tb
+    #    assert str(self.b.ATTR_URL) in tb[str(self.cc.attributionURL)]
+    #    # when alone, URL is also attributionName
+    #    assert '' in tb[str(self.cc.attributionName)] #FIXME
 
     def test_sourcework(self):
         tb = self.parse_trips({'source_work':'SOURCE_WORK'})
@@ -74,13 +74,13 @@ class TestHtmlFormatter:
         assert str(self.dc_type.StillImage) in tb[str(self.dc.type)]
         assert 'TITLE' in tb[str(self.dc['title'])]
 
-    def test_attrname_format(self):
-        tb = self.parse_trips({'format':'Video',
-                               'attribution_name':'ATTR_NAME'})
-        assert self.lic.uri in tb[str(self.w3.license)]
-        assert 'ATTR_NAME' in tb[str(self.cc.attributionName)]
-        assert str(self.dc_type.MovingImage) in \
-               tb[str(self.dc.type)]
+    #def test_attrname_format(self):
+    #    tb = self.parse_trips({'format':'Video',
+    #                           'attribution_name':'ATTR_NAME'})
+    #    assert self.lic.uri in tb[str(self.w3.license)]
+    #    assert 'ATTR_NAME' in tb[str(self.cc.attributionName)]
+    #    assert str(self.dc_type.MovingImage) in \
+    #           tb[str(self.dc.type)]
 
     def test_source_more(self):
         tb = self.parse_trips({'source_work': 'SOURCE_WORK',

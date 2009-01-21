@@ -54,8 +54,8 @@ class TestHTMLFormatter:
 
     def test_invalid_work_format(self):
         work_dict = {'format':'roflcopter'}
-        output = self.html.format(self.lic, work_dict=work_dict)
-        self._validate(output)
+        nose.tools.assert_raises(KeyError, self.html.format,
+                                 self.lic, work_dict=work_dict)
 
 
 class TestPublicApi:

@@ -32,6 +32,7 @@ from cc.license._lib.exceptions import CCLicenseError
 import zope.interface
 from genshi.template import TemplateLoader
 from filters import Source, Permissions
+from enum import Enum
 
 # template loader, which is reused in a few places
 LOADER = TemplateLoader(
@@ -42,7 +43,7 @@ class HTMLFormatter(object):
     zope.interface.implements(ILicenseFormatter)
 
     def __init__(self):
-        pass
+        self.tmpltypes = Enum('default', 'desc', 'attr', 'desc_attr')
 
     def __repr__(self):
         return "<LicenseFormatter object '%s'>" % self.id
@@ -58,77 +59,74 @@ class HTMLFormatter(object):
     def title(self):
         return "HTML + RDFa formatter"
 
+    def _template_type(self, w):
+        """Takes a work_dict and returns an Enum corresponding to the type."""
+        type = self.tmpltypes.default
+        if w.has_key('format') or w.has_key('worktitle'):
+            type = self.tmpltypes.desc
+        if w.has_key('attribution_name') or w.has_key('attribution_url'):
+            if type == self.tmpltypes.default:
+                type = self.tmpltypes.attr
+            else: # was already self.tmpltypes.desc
+                type = self.tmpltypes.desc_attr
+        return type
+
+    def _translate_dctype(self, format):
+        return { # let it throw a KeyError
+                 None : None,
+                 'audio' : 'Sound',
+                 'video' : 'MovingImage',
+                 'image' : 'StillImage',
+                 'text' : 'Text',
+                 'interactive' : 'InteractiveResource',
+               }[format]
+
     def format(self, license, work_dict={}, locale='en'):
         """Return an HTML + RDFa string serialization for the license,
             optionally incorporating the work metadata and locale."""
         w = work_dict # alias work_dict for brevity
 
-        # FOUR CASES!
-        case = 0
-        if w.has_key('format') or w.has_key('worktitle'):
-            case += 1
-        if w.has_key('attribution_name') or w.has_key('attribution_url'):
-            case += 2
-
-        # switch statement
-
-        # fill out work_dict with defaults
-        # TODO: get rid of this one day
-        for attr in ('more_permissions_url', 'worktitle', 'attribution_name',
-                     'attribution_url', 'source_work', 'format'):
-            if not w.has_key(attr):
-                w[attr] = None
+        tmpl_type = self._template_type(w) # decide which templates to use
 
         chosen_tmpl = None
-        format = None
-        dctype = None
-        kwargs = dict(w) # copy it over
+        kwargs = {}
 
-        if case == 0: # CASE 1
-            pass
-        elif case == 1: # CASE 2
-            pass
-        elif case == 2: # CASE 3
-            pass
-        elif case == 3: # CASE 4
-            pass
-
-        if w['format'] is not None:
-            format = work_dict['format'].lower()
-            chosen_tmpl = 'work_%s.xml' % format
-            try:
-                dctype = {
-                          None : None,
-                          'audio' : 'Sound',
-                          'video' : 'MovingImage',
-                          'image' : 'StillImage',
-                          'text' : 'Text',
-                          'interactive' : 'InteractiveResource',
-                         }[format]
-            except KeyError:
-                chosen_tmpl = 'default.xml'
-
-        if w['worktitle'] is not None:
-            chosen_tmpl = 'worktitle.xml'
-
-        if w['attribution_name'] is not None: # try it out
-            chosen_tmpl = 'title_attribution.xml'
-
-        if w['attribution_url'] is not None:
-            chosen_tmpl = 'title_attribution.xml'
-
-        # pack kwargs
+        # general kwarg packing
         kwargs['license'] = license
         kwargs['locale'] = locale
+
+        # dctype and format, if they exist
+        format = None
+        dctype = None
+        if w.has_key('format'):
+            format = w['format'].lower()
+            dctype = self._translate_dctype(format)
         kwargs['dctype'] = dctype
-        if w.has_key('worktitle'): # superfluous, for now
-            kwargs['worktitle'] = w['worktitle']
-        
-        # default
-        if chosen_tmpl is None:
+
+        # general recipe:
+        #  - pick a template
+        #  - pack a set of kwargs
+        #  - profit!
+        if tmpl_type == self.tmpltypes.default:
             chosen_tmpl = 'default.xml'
+
+        elif tmpl_type == self.tmpltypes.desc:
+            if w.has_key('worktitle'):
+                kwargs['worktitle'] = w['worktitle']
+                chosen_tmpl = 'worktitle.xml'
+            else: # must just have format
+                chosen_tmpl = 'work_%s.xml' % format # XXX does not scrub input
+                if w.has_key('worktitle'):
+                    kwargs['worktitle'] = w['worktitle']
+
+        elif tmpl_type == self.tmpltypes.attr:
+            chosen_tmpl = 'title_attribution.xml'
+
+        elif tmpl_type == self.tmpltypes.desc_attr:
+            pass
 
         self.tmpl = LOADER.load(chosen_tmpl)
         stream = self.tmpl.generate(**kwargs)
+            # XXX worry about filter logic later
         stream = stream | Source(work_dict) | Permissions(work_dict)
         return stream.render('xhtml')
