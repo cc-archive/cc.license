@@ -30,6 +30,13 @@ class TestHtmlFormatter:
         trips = self.parse(r)
         return trips[self.base]
 
+    # Miscellaneous tests
+    def test_failing_workformat_with_worktitle(self):
+        """Edge case: unknown formats should be ignored"""
+        tb = self.parse_trips({'format':'Roflcopter',
+                               'worktitle':'TITLE'})
+        assert 'TITLE' in tb[str(self.dc['title'])]
+
     # Zero properties (one possible combination; all under test)
 
     def test_basic(self):
