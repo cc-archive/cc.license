@@ -90,6 +90,12 @@ class TestHtmlFormatter:
     #    assert str(self.dc_type.MovingImage) in \
     #           tb[str(self.dc.type)]
 
+    def test_attrname_attrurl(self):
+        tb = self.parse_trips({'attribution_url':'ATTR_URL',
+                               'attribution_name':'ATTR_NAME'})
+        assert 'ATTR_NAME' in tb[str(self.cc.attributionName)]
+        assert str(self.b.ATTR_URL) in tb[str(self.cc.attributionURL)]
+
     def test_source_more(self):
         tb = self.parse_trips({'source_work': 'SOURCE_WORK',
                                'more_permissions_url': 'MORE_PERMISSIONS'})
