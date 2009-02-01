@@ -55,9 +55,9 @@ class TestHtmlFormatter:
         tb = self.parse_trips({'worktitle':'TITLE'})
         assert 'TITLE' in tb[str(self.dc['title'])]
 
-    #def test_attrname(self):
-    #    tb = self.parse_trips({'attribution_name':'ATTR_NAME'})
-    #    assert 'ATTR_NAME' in tb[str(self.cc.attributionName)]
+    def test_attrname(self):
+        tb = self.parse_trips({'attribution_name':'ATTR_NAME'})
+        assert 'ATTR_NAME' in tb[str(self.cc.attributionName)]
 
     def test_attrurl(self):
         tb = self.parse_trips({'attribution_url':'ATTR_URL'})

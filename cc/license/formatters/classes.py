@@ -112,15 +112,16 @@ class HTMLFormatter(object):
                     kwargs['worktitle'] = w['worktitle']
 
         elif tmpl_type == self.tmpltypes.attr:
-            if w.has_key('attribution_url'):
-                chosen_tmpl = 'attr_anchor.xml'
-                kwargs['attribution_url'] = w['attribution_url']
-                if w.has_key('attribution_name'):
-                    kwargs['attribution_name'] = w['attribution_name']
-                else:
-                    kwargs['attribution_name'] = w['attribution_url']
+            chosen_tmpl = 'attr_anchor.xml'
+            kwargs['attrs'] = {}
             if w.has_key('attribution_name'):
-                pass # Not implemented yet
+                kwargs['attribution_name'] = w['attribution_name']
+            else:
+                kwargs['attribution_name'] = w['attribution_url']
+            if w.has_key('attribution_url'):
+                kwargs['attribution_url'] = w['attribution_url']
+                kwargs['attrs']['href'] = w['attribution_url']
+                kwargs['attrs']['rel'] = 'cc:attributionURL'
 
         elif tmpl_type == self.tmpltypes.desc_attr:
             pass
