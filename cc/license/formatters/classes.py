@@ -2,28 +2,13 @@
 Formatters take a License instance and a dictionary of work metadata about
 the licensed work. The keys of this work_dict are as follows:
 
- - format
-   The format of the work, values can be one of:
-     - Audio (Sound)
-     - Video (MovingImage)
-     - Image (StillImage)
-     - Text (Text)
-     - Interactive (InteractiveResource)
-
+ - format (Audio:Sound, Video:MovingImage, Image:StillImage,
+           Text:Text, Interactive:InteractiveResource)
  - worktitle
-   Title of work
-
  - attribution_name
-   Attribute work to name
-
  - attribution_url
-   Attribute work to URL
-
  - source_work
-   Source work URL
-
  - more_permissions_url
-   More permissions URL
 """
 
 import os
