@@ -73,10 +73,10 @@ class HTMLFormatter(object):
         except KeyError: # if we dont understand it, pretend its not there
             return None
 
-    def format(self, license, work_dict={}, locale='en'):
+    def format(self, license, work_dict=None, locale='en'):
         """Return an HTML + RDFa string serialization for the license,
             optionally incorporating the work metadata and locale."""
-        w = work_dict # alias work_dict for brevity
+        w = work_dict = work_dict or {} # alias work_dict for brevity
 
         tmpl_type = self._template_type(w) # decide which templates to use
 
