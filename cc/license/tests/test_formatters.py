@@ -3,6 +3,8 @@ import nose.tools
 from zope.interface import implementedBy
 import os
 
+import rdfadict
+
 import cc.license
 from cc.license import CCLicenseError
 from cc.license._lib.interfaces import ILicenseFormatter
@@ -21,7 +23,6 @@ def test_get_formatter():
     """formatters.choose() must return a valid IFormatter for each formatter."""
     for formatter_id in cc.license.formatters.list():
         f = cc.license.formatters.choose(formatter_id)
-        print formatter_id, 'baby'
         assert ILicenseFormatter in implementedBy(f.__class__)
         f2 = cc.license.formatters.choose(formatter_id)
         assert f2 is f # singletons
@@ -75,25 +76,41 @@ class TestFilters:
 
     def __init__(self):
         self.lic = cc.license.by_code('by')
-        self.html = cc.license.formatters.HTML
-        self.src_str = 'rel="dc:source"'
-        self.perm_str = 'rel="cc:morePermissions"'
+        self.parser = rdfadict.RdfaParser()
+
+    def _get_triples(self, work_dict):
+        formatted_html = cc.license.formatters.HTML.format(self.lic, work_dict)
+
+        return self.parser.parse_string(
+            formatted_html, "http://example.org/testing")
 
     def test_permissions_presence(self):
-        s = self.html.format(self.lic, {'more_permissions_url':'ASDFASDF'})
-        assert self.perm_str in s
+        triples = self._get_triples({'more_permissions_url':'ASDFASDF'})
+
+        result = triples["http://example.org/testing"].get(
+            "http://creativecommons.org/ns#morePermissions")
+        assert result == ["http://example.org/ASDFASDF"]
 
     def test_permissions_absence(self):
-        s = self.html.format(self.lic)
-        assert self.perm_str not in s
+        triples = self._get_triples({})
+
+        result = triples["http://example.org/testing"].get(
+            "http://creativecommons.org/ns#morePermissions")
+        assert result != ["http://example.org/ASDFASDF"]
 
     def test_source_presence(self):
-        s = self.html.format(self.lic, {'source_work':'ASDFASDF'})
-        assert self.src_str in s
+        triples = self._get_triples({'source_work':'ASDFASDF'})
+
+        result = triples["http://example.org/testing"].get(
+            "http://purl.org/dc/elements/1.1/source")
+        assert result == ["http://example.org/ASDFASDF"]
 
     def test_source_absence(self):
-        s = self.html.format(self.lic)
-        assert self.src_str not in s
+        triples = self._get_triples({})
+
+        result = triples["http://example.org/testing"].get(
+            "http://purl.org/dc/elements/1.1/source")
+        assert result != ["http://example.org/ASDFASDF"]
 
 
 class TestCustomization:
