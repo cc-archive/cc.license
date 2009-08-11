@@ -150,7 +150,9 @@ class License(object):
     def logo(self):
         if self._logos is None:
             self._logos = rdf_helper.get_logos(self._model, self.uri)
-        return max(self._logos)
+
+        if self._logos:
+            return max(self._logos)
 
 
 class Question(object):
