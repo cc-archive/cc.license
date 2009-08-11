@@ -25,13 +25,11 @@ def test_jurisdiction_codes():
         assert len(c) == 2
     # test a few big jurisdictions
     for k in ('us', 'uk', 'fr', 'de', 'jp', 'ca'):
-        print k 
         assert k in codes
 
 def test_commutativity():
     codes = cc.license.jurisdictions.list_codes()
     for uri in cc.license.jurisdictions.list_uris():
-        print cc.license.jurisdictions.uri2code(uri)
         assert cc.license.jurisdictions.uri2code(uri) in codes
 
 def test_code_constructor():

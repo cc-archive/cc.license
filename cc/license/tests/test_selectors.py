@@ -137,7 +137,6 @@ class TestAnswersStandard:
             if answer_dict in known_bad or \
                answer_dict['jurisdiction'] in bad_jurisdictions:
                 continue
-            print answer_dict
             lic = self.sel.by_answers(answer_dict)
             assert type(lic) == cc.license.License
 

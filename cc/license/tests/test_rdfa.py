@@ -47,7 +47,6 @@ class TestHtmlFormatter:
 
     def test_workformat(self):
         tb = self.parse_trips({'format':'Text'})
-        print tb
         assert self.lic.uri in tb[str(self.w3.license)] # basic
         assert str(self.dc_type.Text) in tb[str(self.dc.type)]
 
@@ -61,7 +60,6 @@ class TestHtmlFormatter:
 
     def test_attrurl(self):
         tb = self.parse_trips({'attribution_url':'ATTR_URL'})
-        print tb
         assert str(self.b.ATTR_URL) in tb[str(self.cc.attributionURL)]
         # when alone, URL is also attributionName
         assert 'ATTR_URL' in tb[str(self.cc.attributionName)]
