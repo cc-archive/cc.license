@@ -24,6 +24,7 @@ setup(name='cc.license',
         'zope.interface',
         'nose',
         'Genshi',
+        'lxml',
         'pylons', # XXX why does nose throw a RuntimeWarning without this?
         #'Babel',
         'FormEncode', # not sure why this is throwing a RuntimeWarning either
