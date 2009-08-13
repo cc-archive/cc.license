@@ -11,14 +11,9 @@ the licensed work. The keys of this work_dict are as follows:
  - more_permissions_url
 """
 
-import copy
 import os
 from cc.license._lib.interfaces import ILicenseFormatter
-from cc.license._lib.exceptions import CCLicenseError
 import zope.interface
-from genshi.template import TemplateLoader
-from filters import Source, Permissions
-from enum import Enum
 
 from chameleon.zpt.template import PageTemplateFile
 
@@ -28,10 +23,6 @@ DEFAULT_HEADER_TEMPLATE = os.path.join(TEMPLATE_PATH, 'default_header.pt')
 ATTRIBUTION_HEADER_TEMPLATE = os.path.join(TEMPLATE_PATH,
                                            'attribution_header.pt')
 WORKTITLE_HEADER_TEMPLATE = os.path.join(TEMPLATE_PATH, 'worktitle_header.pt')
-
-LOADER = TemplateLoader(
-             os.path.join(os.path.dirname(__file__), 'templates'),
-             auto_reload=False)
 
 class HTMLFormatter(object):
     zope.interface.implements(ILicenseFormatter)
