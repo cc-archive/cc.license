@@ -23,7 +23,7 @@ from enum import Enum
 from chameleon.zpt.template import PageTemplateFile
 
 TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), 'templates')
-DEFAULT_TEMPLATE = os.path.join(TEMPLATE_PATH, 'default.pt')
+BASE_TEMPLATE = os.path.join(TEMPLATE_PATH, 'base.pt')
 DEFAULT_HEADER_TEMPLATE = os.path.join(TEMPLATE_PATH, 'default_header.pt')
 ATTRIBUTION_HEADER_TEMPLATE = os.path.join(TEMPLATE_PATH,
                                            'attribution_header.pt')
@@ -35,9 +35,6 @@ LOADER = TemplateLoader(
 
 class HTMLFormatter(object):
     zope.interface.implements(ILicenseFormatter)
-
-    def __init__(self):
-        self.tmpltypes = Enum('default', 'desc', 'attr', 'desc_attr')
 
     def __repr__(self):
         return "<LicenseFormatter object '%s'>" % self.id
@@ -52,22 +49,6 @@ class HTMLFormatter(object):
     @property
     def title(self):
         return "HTML + RDFa formatter"
-
-    def _template_type(self, w):
-        """Takes a work_dict and returns an Enum corresponding to the type."""
-        type = self.tmpltypes.default
-        if w.has_key('worktitle'):
-            type = self.tmpltypes.desc
-        if w.has_key('format'): # we might need to ignore format
-            dctype = self._translate_dctype(w['format'].lower())
-            if dctype is not None:
-                type = self.tmpltypes.desc
-        if w.has_key('attribution_name') or w.has_key('attribution_url'):
-            if type == self.tmpltypes.default:
-                type = self.tmpltypes.attr
-            else: # was already self.tmpltypes.desc
-                type = self.tmpltypes.desc_attr
-        return type
 
     def _translate_dctype(self, format):
         try:
@@ -99,8 +80,8 @@ class HTMLFormatter(object):
         if work_dict.get('format'):
             dctype = self._translate_dctype(work_dict['format'].lower())
 
-        t = PageTemplateFile(DEFAULT_TEMPLATE)
-        return t.render(
+        base_template = PageTemplateFile(BASE_TEMPLATE)
+        return base_template.render(
             main_text_type=main_text_type,
             dctype=dctype,
             this_license=license, locale=locale,
