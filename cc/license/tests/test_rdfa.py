@@ -43,12 +43,7 @@ class TestHtmlFormatter:
         tb = self.parse_trips()
         assert self.lic.uri in tb[str(self.w3.license)]
 
-    # One property (six possible combinations; all under test)
-
-    def test_workformat(self):
-        tb = self.parse_trips({'format':'Text'})
-        assert self.lic.uri in tb[str(self.w3.license)] # basic
-        assert str(self.dc_type.Text) in tb[str(self.dc.type)]
+    # One property (five possible combinations; all under test)
 
     def test_worktitle(self):
         tb = self.parse_trips({'worktitle':'TITLE'})

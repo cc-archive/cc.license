@@ -11,6 +11,7 @@ the licensed work. The keys of this work_dict are as follows:
  - more_permissions_url
 """
 
+import copy
 import os
 from cc.license._lib.interfaces import ILicenseFormatter
 from cc.license._lib.exceptions import CCLicenseError
@@ -19,7 +20,11 @@ from genshi.template import TemplateLoader
 from filters import Source, Permissions
 from enum import Enum
 
-# template loader, which is reused in a few places
+from chameleon.zpt.template import PageTemplateFile
+
+TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), 'templates')
+DEFAULT_TEMPLATE = os.path.join(TEMPLATE_PATH, 'default.pt')
+
 LOADER = TemplateLoader(
              os.path.join(os.path.dirname(__file__), 'templates'),
              auto_reload=False)
@@ -76,58 +81,29 @@ class HTMLFormatter(object):
     def format(self, license, work_dict=None, locale='en'):
         """Return an HTML + RDFa string serialization for the license,
             optionally incorporating the work metadata and locale."""
-        w = work_dict = work_dict or {} # alias work_dict for brevity
+        
+        work_dict = work_dict or {}
 
-        tmpl_type = self._template_type(w) # decide which templates to use
+        main_text_type = 'default'
+        if work_dict.get('attribution_url') \
+                or work_dict.get('attribution_name'):
+            main_text_type = 'attribution'
+        elif work_dict.get('worktitle'):
+            main_text_type = 'worktitle'
 
-        chosen_tmpl = None
-        kwargs = {}
-
-        # general kwarg packing
-        kwargs['license'] = license
-        kwargs['locale'] = locale
-
-        # dctype and format, if they exist
-        format = None
         dctype = None
-        if w.has_key('format'):
-            format = w['format'].lower()
-            dctype = self._translate_dctype(format)
-        kwargs['dctype'] = dctype
+        if work_dict.get('format'):
+            dctype = self._translate_dctype(work_dict['format'].lower())
 
-        # general recipe:
-        #  - pick a template
-        #  - pack a set of kwargs
-        #  - profit!
-        if tmpl_type == self.tmpltypes.default:
-            chosen_tmpl = 'default.xml'
-
-        elif tmpl_type == self.tmpltypes.desc:
-            if w.has_key('worktitle'):
-                kwargs['worktitle'] = w['worktitle']
-                chosen_tmpl = 'worktitle.xml'
-            else: # must just have format
-                chosen_tmpl = 'work_%s.xml' % format # XXX does not scrub input
-                if w.has_key('worktitle'):
-                    kwargs['worktitle'] = w['worktitle']
-
-        elif tmpl_type == self.tmpltypes.attr:
-            chosen_tmpl = 'attr_anchor.xml'
-            kwargs['attrs'] = {}
-            if w.has_key('attribution_name'):
-                kwargs['attribution_name'] = w['attribution_name']
-            else:
-                kwargs['attribution_name'] = w['attribution_url']
-            if w.has_key('attribution_url'):
-                kwargs['attribution_url'] = w['attribution_url']
-                kwargs['attrs']['href'] = w['attribution_url']
-                kwargs['attrs']['rel'] = 'cc:attributionURL'
-
-        elif tmpl_type == self.tmpltypes.desc_attr:
-            pass
-
-        self.tmpl = LOADER.load(chosen_tmpl)
-        stream = self.tmpl.generate(**kwargs)
-            # XXX worry about filter logic later
-        stream = stream | Source(work_dict) | Permissions(work_dict)
-        return stream.render('xhtml')
+        t = PageTemplateFile(DEFAULT_TEMPLATE)
+        return t.render(
+            main_text_type=main_text_type,
+            dctype=dctype,
+            this_license=license, locale=locale,
+            worktitle=work_dict.get('worktitle'),
+            attribution_name=(work_dict.get('attribution_name')
+                              or work_dict.get('attribution_url')),
+            attribution_url=(work_dict.get('attribution_url')
+                             or work_dict.get('attribution_name')),
+            source_work=work_dict.get('source_work'),
+            more_permissions_url=work_dict.get('more_permissions_url'))

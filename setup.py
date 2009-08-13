@@ -25,6 +25,7 @@ setup(name='cc.license',
         'nose',
         'Genshi',
         'lxml',
+        'chameleon.zpt',
         'pylons', # XXX why does nose throw a RuntimeWarning without this?
         #'Babel',
         'FormEncode', # not sure why this is throwing a RuntimeWarning either
