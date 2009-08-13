@@ -1,0 +1,18 @@
+<span metal:define-macro="header"
+      i18n:translate="">
+  This work by
+  <a xmlns:cc="http://creativecommons.org/ns#"
+     property="cc:attributionName" rel="cc:attributionURL"
+     tal:attributes="href attribution_url"
+     tal:content="attribution_name">
+    ${attribution_name}</a>
+  is licensed under a
+  <a rel="license" tal:attributes="href this_license.uri">
+    Creative Commons
+    <span tal:replace="this_license.title(locale)">Title</span>
+    <span tal:replace="this_license.version">License Version</span>
+    <span tal:replace="this_license.jurisdiction.title(locale)">
+      License Jurisdiction</span>
+    License
+  </a>.
+</span>

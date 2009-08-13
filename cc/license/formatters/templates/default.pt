@@ -1,6 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:dc="http://purl.org/dc/elements/1.1/title"
       xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
       xmlns:i18n="http://xml.zope.org/namespaces/i18n">
   <a rel="license" tal:attributes="href this_license.uri">
     <img alt="Creative Commons License" style="border-width:0"
@@ -9,57 +10,11 @@
   <br/>
 
   <span tal:condition="main_text_type == 'default'"
-        i18n:translate="">
-    This work is licensed under a
-    <a rel="license" tal:attributes="href this_license.uri">
-      Creative Commons
-      <span tal:replace="this_license.title(locale)">Title</span>
-      <span tal:replace="this_license.version">License Version</span>
-      <span tal:replace="this_license.jurisdiction.title(locale)">
-        License Jurisdiction</span>
-      License
-    </a>.
-  </span>
-
+        metal:use-macro="default_header.macros['header']" />
   <span tal:condition="main_text_type == 'attribution'"
-        i18n:translate="">
-    This work by
-    <a xmlns:cc="http://creativecommons.org/ns#"
-       property="cc:attributionName" rel="cc:attributionURL"
-       tal:attributes="href attribution_url"
-       tal:content="attribution_name">
-      ${attribution_name}</a>
-    is licensed under a
-    <a rel="license" tal:attributes="href this_license.uri">
-      Creative Commons
-      <span tal:replace="this_license.title(locale)">Title</span>
-      <span tal:replace="this_license.version">License Version</span>
-      <span tal:replace="this_license.jurisdiction.title(locale)">
-        License Jurisdiction</span>
-      License
-    </a>.
-  </span>
-  
+        metal:use-macro="attribution_header.macros['header']" />
   <span tal:condition="main_text_type == 'worktitle'"
-        i18n:translate="">
-    <span tal:condition="dctype is not None"
-          xmlns:dc="http://purl.org/dc/elements/1.1/"
-          property="dc:title"
-          tal:attributes="href 'http://purl.org/dc/dcmitype/%s' % dctype"
-          tal:content="worktitle" rel="dc:type">${worktitle}</span>
-    <span tal:condition="dctype is None"
-          xmlns:dc="http://purl.org/dc/elements/1.1/"
-          tal:content="worktitle" property="dc:title">${worktitle}</span>
-    is licensed under a
-    <a rel="license" tal:attributes="href this_license.uri">
-      Creative Commons
-      <span tal:replace="this_license.title(locale)">Title</span>
-      <span tal:replace="this_license.version">License Version</span>
-      <span tal:replace="this_license.jurisdiction.title(locale)">
-        License Jurisdiction</span>
-      License
-    </a>.
-  </span>
+        metal:use-macro="worktitle_header.macros['header']" />
 
   <span tal:condition="source_work" i18n:translate="">
     Based on a work at

@@ -24,6 +24,10 @@ from chameleon.zpt.template import PageTemplateFile
 
 TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), 'templates')
 DEFAULT_TEMPLATE = os.path.join(TEMPLATE_PATH, 'default.pt')
+DEFAULT_HEADER_TEMPLATE = os.path.join(TEMPLATE_PATH, 'default_header.pt')
+ATTRIBUTION_HEADER_TEMPLATE = os.path.join(TEMPLATE_PATH,
+                                           'attribution_header.pt')
+WORKTITLE_HEADER_TEMPLATE = os.path.join(TEMPLATE_PATH, 'worktitle_header.pt')
 
 LOADER = TemplateLoader(
              os.path.join(os.path.dirname(__file__), 'templates'),
@@ -101,6 +105,9 @@ class HTMLFormatter(object):
             dctype=dctype,
             this_license=license, locale=locale,
             worktitle=work_dict.get('worktitle'),
+            default_header=PageTemplateFile(DEFAULT_HEADER_TEMPLATE),
+            attribution_header=PageTemplateFile(ATTRIBUTION_HEADER_TEMPLATE),
+            worktitle_header=PageTemplateFile(WORKTITLE_HEADER_TEMPLATE),
             attribution_name=(work_dict.get('attribution_name')
                               or work_dict.get('attribution_url')),
             attribution_url=(work_dict.get('attribution_url')
