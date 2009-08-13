@@ -1,3 +1,0 @@
-<html xmlns:py="http://genshi.edgewall.org/" py:strip="True">
-<br />Permissions beyond the scope of this license may be available at <a xmlns:cc="http://creativecommons.org/ns#" href="${permissions}" rel="cc:morePermissions">${permissions}</a>.
-</html>
