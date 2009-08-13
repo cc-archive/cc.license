@@ -12,10 +12,12 @@ the licensed work. The keys of this work_dict are as follows:
 """
 
 import os
-from cc.license._lib.interfaces import ILicenseFormatter
-import zope.interface
 
 from chameleon.zpt.template import PageTemplateFile
+import zope.interface
+
+from cc.license._lib.interfaces import ILicenseFormatter
+
 
 TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), 'templates')
 BASE_TEMPLATE = os.path.join(TEMPLATE_PATH, 'base.pt')
@@ -23,6 +25,7 @@ DEFAULT_HEADER_TEMPLATE = os.path.join(TEMPLATE_PATH, 'default_header.pt')
 ATTRIBUTION_HEADER_TEMPLATE = os.path.join(TEMPLATE_PATH,
                                            'attribution_header.pt')
 WORKTITLE_HEADER_TEMPLATE = os.path.join(TEMPLATE_PATH, 'worktitle_header.pt')
+
 
 class HTMLFormatter(object):
     zope.interface.implements(ILicenseFormatter)
