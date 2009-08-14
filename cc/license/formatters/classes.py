@@ -85,7 +85,6 @@ class HTMLFormatter(object):
             worktitle_header=PageTemplateFile(WORKTITLE_HEADER_TEMPLATE),
             attribution_name=(work_dict.get('attribution_name')
                               or work_dict.get('attribution_url')),
-            attribution_url=(work_dict.get('attribution_url')
-                             or work_dict.get('attribution_name')),
+            attribution_url=work_dict.get('attribution_url'),
             source_work=work_dict.get('source_work'),
             more_permissions_url=work_dict.get('more_permissions_url'))
