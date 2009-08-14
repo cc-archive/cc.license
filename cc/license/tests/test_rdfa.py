@@ -69,19 +69,11 @@ class TestHtmlFormatter:
 
     # Two properties (fifteen possible combinations; three under test)
 
-    def test_workformat_worktitle(self):
-        tb = self.parse_trips({'format':'Image',
-                               'worktitle':'TITLE'})
-        assert str(self.dc_type.StillImage) in tb[str(self.dc.type)]
+    def test_attrname_worktitle(self):
+        tb = self.parse_trips({'worktitle':'TITLE',
+                               'attribution_name':'ATTR_NAME'})
         assert 'TITLE' in tb[str(self.dc['title'])]
-
-    #def test_attrname_format(self):
-    #    tb = self.parse_trips({'format':'Video',
-    #                           'attribution_name':'ATTR_NAME'})
-    #    assert self.lic.uri in tb[str(self.w3.license)]
-    #    assert 'ATTR_NAME' in tb[str(self.cc.attributionName)]
-    #    assert str(self.dc_type.MovingImage) in \
-    #           tb[str(self.dc.type)]
+        assert 'ATTR_NAME' in tb[str(self.cc.attributionName)]
 
     def test_attrname_attrurl(self):
         tb = self.parse_trips({'attribution_url':'ATTR_URL',
