@@ -1,6 +1,12 @@
 <span metal:define-macro="header"
-      i18n:translate="">
-  This work by
+      i18n:translate=""
+      tal:omit-tag="">
+  This
+  <span xmlns:dc="http://purl.org/dc/elements/1.1/"
+        tal:attributes="href 'http://purl.org/dc/dcmitype/%s' % dctype"
+        tal:omit-tag="not dctype"
+        rel="dc:type">work</span>
+  by
   <a xmlns:cc="http://creativecommons.org/ns#"
      property="cc:attributionName" rel="cc:attributionURL"
      tal:attributes="href attribution_url"

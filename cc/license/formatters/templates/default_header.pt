@@ -1,6 +1,12 @@
 <span metal:define-macro="header"
-      i18n:translate="">
-  This work is licensed under a
+      i18n:translate=""
+      tal:omit-tag="">
+  This
+  <span xmlns:dc="http://purl.org/dc/elements/1.1/"
+        tal:attributes="href 'http://purl.org/dc/dcmitype/%s' % dctype"
+        tal:omit-tag="not dctype"
+        rel="dc:type">work</span>
+  is licensed under a
   <a rel="license" tal:attributes="href this_license.uri">
     Creative Commons
     <span tal:replace="this_license.title(locale)">Title</span>

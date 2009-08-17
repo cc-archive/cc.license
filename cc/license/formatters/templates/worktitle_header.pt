@@ -1,5 +1,6 @@
 <span metal:define-macro="header"
-      i18n:translate="">
+      i18n:translate=""
+      tal:omit-tag="">
   <span tal:condition="dctype is not None"
         xmlns:dc="http://purl.org/dc/elements/1.1/"
         property="dc:title"
