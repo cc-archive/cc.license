@@ -134,6 +134,14 @@ class TestHtmlFormatter:
         assert str(self.b.MORE_PERMISSIONS) in \
                tb[str(self.cc.morePermissions)]
 
+    def test_wf_wt_at(self):
+        tb = self.parse_trips({'format':'Image',
+                               'worktitle':'TITLE',
+                               'attribution_name':'ATTR_NAME'})
+        assert str(self.dc_type.StillImage) in tb[str(self.dc.type)]
+        assert 'TITLE' in tb[str(self.dc['title'])]
+        assert 'ATTR_NAME' in tb[str(self.cc.attributionName)]
+
     # Four properties (fifteen possible combinations; one under test)
 
     def test_an_au_src_mp(self):
