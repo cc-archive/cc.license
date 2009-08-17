@@ -107,7 +107,7 @@ def strip_xml(element):
         ## left of the .tail
         ####
         # any time there is presently whitespace
-        if LEFT_WHITE_SPACE_RE.match(orig_tail):
+        if orig_tail and LEFT_WHITE_SPACE_RE.match(orig_tail):
             elt.tail = ' ' + elt.tail
 
         ####
