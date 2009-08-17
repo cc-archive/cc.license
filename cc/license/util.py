@@ -1,6 +1,12 @@
 from lxml import etree
 import StringIO
 
+import re
+
+
+LEFT_WHITE_SPACE_RE = re.compile('^[ \n\t].*$')
+RIGHT_WHITE_SPACE_RE = re.compile('^.*[ \n\t]$')
+
 
 def strip_text(text):
     """
@@ -47,7 +53,7 @@ def strip_xml(element):
       >>> etree_mess = etree.parse(StringIO.StringIO(xml_mess))
       >>> cleaned_root_mess = strip_xml(etree_mess.getroot())
       >>> etree.tostring(cleaned_root_mess)
-      '<help>How did<person>I</person>get to be so<cleanliness xmlns:clean="http://example.org/howclean/#" clean:cleanliness="filthy">messy</cleanliness>?</help>'
+      '<help>How did <person>I</person> get to be so <cleanliness xmlns:clean="http://example.org/howclean/#" clean:cleanliness="filthy">messy</cleanliness>?</help>'
 
     Note that strip_xml operates on the mutability of the argument
     `element`, so the object returned is the same object that's passed
@@ -56,14 +62,68 @@ def strip_xml(element):
       >>> cleaned_root_mess is etree_mess.getroot()
       True
     """
-    def _recursive_strip(elt):
+    def _recursive_strip(elt, childpos, childrenlen):
+        orig_text = elt.text or ''
+        orig_tail = elt.tail or ''
+
+        children = list(elt)
+        new_childrenlen = len(children)
+
+        # We have to do a lot of stuff here to put whitespace in the
+        # right places and make it look pretty, as if a human wrote
+        # it.
+        split_orig_text = orig_text.splitlines()
+        orig_text_butt = None
+        if split_orig_text:
+            orig_text_butt = split_orig_text[-1]
+
+        split_orig_tail = orig_tail.splitlines()
+        orig_tail_butt = None
+        if split_orig_tail:
+            orig_tail_butt = split_orig_tail[-1]
+
         elt.text = strip_text(elt.text)
         elt.tail = strip_text(elt.tail)
 
-        for child in elt:
-            _recursive_strip(child)
+        ##########
+        #### whitespace re-appending
+        ##########
 
-    _recursive_strip(element)
+        ####
+        ## left of the .text
+        ####
+        # pretty much never
+
+        ####
+        ## right of the .text
+        ####
+        # if there are children and is presently whitespace
+        if orig_text_butt \
+                and new_childrenlen \
+                and RIGHT_WHITE_SPACE_RE.match(orig_text_butt):
+            elt.text = elt.text + ' '
+
+        ####
+        ## left of the .tail
+        ####
+        # any time there is presently whitespace
+        if LEFT_WHITE_SPACE_RE.match(orig_tail):
+            elt.tail = ' ' + elt.tail
+
+        ####
+        ## right of the .tail
+        ####
+        # if there is presently whitespace and not the last child
+        if orig_tail_butt \
+                and RIGHT_WHITE_SPACE_RE.match(orig_tail_butt) \
+                and childpos != childrenlen - 1:
+            elt.tail = elt.tail + ' '
+
+        for i in range(new_childrenlen):
+            child = children[i]
+            _recursive_strip(child, i, new_childrenlen)
+
+    _recursive_strip(element, 0, 1)
     return element
 
 
@@ -93,7 +153,7 @@ def stripped_inner_xml(xml_string):
       ... <div>
       ...    This is some <i><b>really</b>
       ... silly</i> text!</div>''')
-      u'This is some <i><b>really</b> silly</i>text!'
+      u'This is some <i><b>really</b> silly</i> text!'
     """
     et = etree.parse(StringIO.StringIO(xml_string))
     strip_xml(et.getroot())
