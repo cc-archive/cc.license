@@ -79,6 +79,12 @@ class TestHtmlFormatter:
         assert str(self.dc_type.StillImage) in tb[str(self.dc.type)]
         assert 'TITLE' in tb[str(self.dc['title'])]
 
+    def test_workformat_attrname(self):
+        tb = self.parse_trips({'format':'Image',
+                               'attribution_name':'ATTR_NAME'})
+        assert str(self.dc_type.StillImage) in tb[str(self.dc.type)]
+        assert 'ATTR_NAME' in tb[str(self.cc.attributionName)]
+
     def test_attrname_worktitle(self):
         tb = self.parse_trips({'worktitle':'TITLE',
                                'attribution_name':'ATTR_NAME'})
