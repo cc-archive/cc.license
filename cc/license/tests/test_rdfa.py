@@ -43,7 +43,11 @@ class TestHtmlFormatter:
         tb = self.parse_trips()
         assert self.lic.uri in tb[str(self.w3.license)]
 
-    # One property (five possible combinations; all under test)
+    # One property (six possible combinations; all under test)
+
+    def test_workformat(self):
+        tb = self.parse_trips({'format':'Text'})
+        assert str(self.dc_type.Text) in tb[str(self.dc.type)]
 
     def test_worktitle(self):
         tb = self.parse_trips({'worktitle':'TITLE'})
@@ -67,7 +71,13 @@ class TestHtmlFormatter:
         tb = self.parse_trips({'more_permissions_url':'MORE_PERMISSIONS'})
         assert str(self.b.MORE_PERMISSIONS) in tb[str(self.cc.morePermissions)]
 
-    # Two properties (ten possible combinations; four under test)
+    # Two properties (fifteen possible combinations; six under test)
+
+    def test_workformat_worktitle(self):
+        tb = self.parse_trips({'format':'Image',
+                               'worktitle':'TITLE'})
+        assert str(self.dc_type.StillImage) in tb[str(self.dc.type)]
+        assert 'TITLE' in tb[str(self.dc['title'])]
 
     def test_attrname_worktitle(self):
         tb = self.parse_trips({'worktitle':'TITLE',
@@ -97,7 +107,7 @@ class TestHtmlFormatter:
         assert str(self.b.MORE_PERMISSIONS) in \
                tb[str(self.cc.morePermissions)]
 
-    # Three properties (ten possible combinations; two under test)
+    # Three properties (twenty possible combinations; two under test)
 
     def test_an_au_src(self):
         tb = self.parse_trips({'attribution_url':'ATTR_URL',
@@ -118,7 +128,7 @@ class TestHtmlFormatter:
         assert str(self.b.MORE_PERMISSIONS) in \
                tb[str(self.cc.morePermissions)]
 
-    # Four properties (five possible combinations; one under test)
+    # Four properties (fifteen possible combinations; one under test)
 
     def test_an_au_src_mp(self):
         tb = self.parse_trips({'attribution_url':'ATTR_URL',
@@ -132,15 +142,19 @@ class TestHtmlFormatter:
         assert str(self.b.MORE_PERMISSIONS) in \
                tb[str(self.cc.morePermissions)]
 
-    # Five properties (one possible combination; one under test)
+    # Five properties (six possible combinations; zero under test)
 
-    def test_title_an_au_src_mp(self):
+    # Six properties (one possible combination; one under test)
+
+    def test_title_wf_an_au_src_mp(self):
         tb = self.parse_trips({'worktitle':'TITLE',
+                               'format':'Image',
                                'attribution_url':'ATTR_URL',
                                'attribution_name':'ATTR_NAME',
                                'source_work':'SOURCE_WORK',
                                'more_permissions_url':'MORE_PERMISSIONS'})
         assert 'TITLE' in tb[str(self.dc['title'])]
+        assert str(self.dc_type.StillImage) in tb[str(self.dc.type)]
         assert self.lic.uri in tb[str(self.w3.license)]
         assert 'ATTR_NAME' in tb[str(self.cc.attributionName)]
         assert str(self.b.ATTR_URL) in tb[str(self.cc.attributionURL)]
