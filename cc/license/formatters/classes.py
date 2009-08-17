@@ -22,9 +22,11 @@ from cc.license._lib.interfaces import ILicenseFormatter
 TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), 'templates')
 BASE_TEMPLATE = os.path.join(TEMPLATE_PATH, 'base.pt')
 DEFAULT_HEADER_TEMPLATE = os.path.join(TEMPLATE_PATH, 'default_header.pt')
-ATTRIBUTION_HEADER_TEMPLATE = os.path.join(TEMPLATE_PATH,
-                                           'attribution_header.pt')
+ATTRIBUTION_HEADER_TEMPLATE = os.path.join(
+    TEMPLATE_PATH, 'attribution_header.pt')
 WORKTITLE_HEADER_TEMPLATE = os.path.join(TEMPLATE_PATH, 'worktitle_header.pt')
+ATTRIBUTION_WORKTITLE_HEADER_TEMPLATE = os.path.join(
+    TEMPLATE_PATH, 'attribution_worktitle_header.pt')
 
 
 class HTMLFormatter(object):
@@ -64,7 +66,11 @@ class HTMLFormatter(object):
         work_dict = work_dict or {}
 
         main_text_type = 'default'
-        if work_dict.get('attribution_url') \
+        if (work_dict.get('attribution_url')
+                or work_dict.get('attribution_name')) \
+                and work_dict.get('worktitle'):
+            main_text_type = 'attribution_worktitle'
+        elif work_dict.get('attribution_url') \
                 or work_dict.get('attribution_name'):
             main_text_type = 'attribution'
         elif work_dict.get('worktitle'):
@@ -83,6 +89,8 @@ class HTMLFormatter(object):
             default_header=PageTemplateFile(DEFAULT_HEADER_TEMPLATE),
             attribution_header=PageTemplateFile(ATTRIBUTION_HEADER_TEMPLATE),
             worktitle_header=PageTemplateFile(WORKTITLE_HEADER_TEMPLATE),
+            attribution_worktitle_header=PageTemplateFile(
+                ATTRIBUTION_WORKTITLE_HEADER_TEMPLATE),
             attribution_name=(work_dict.get('attribution_name')
                               or work_dict.get('attribution_url')),
             attribution_url=work_dict.get('attribution_url'),

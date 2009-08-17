@@ -1,0 +1,27 @@
+<span metal:define-macro="header"
+      i18n:translate=""
+      tal:omit-tag="">
+  <span tal:condition="dctype is not None"
+        xmlns:dc="http://purl.org/dc/elements/1.1/"
+        property="dc:title"
+        tal:attributes="href 'http://purl.org/dc/dcmitype/%s' % dctype"
+        tal:content="worktitle" rel="dc:type">${worktitle}</span>
+  <span tal:condition="dctype is None"
+        xmlns:dc="http://purl.org/dc/elements/1.1/"
+        tal:content="worktitle" property="dc:title">${worktitle}</span>
+  by
+  <a xmlns:cc="http://creativecommons.org/ns#"
+     property="cc:attributionName" rel="cc:attributionURL"
+     tal:attributes="href attribution_url"
+     tal:content="attribution_name">
+    ${attribution_name}</a>
+  is licensed under a
+  <a rel="license" tal:attributes="href this_license.uri">
+    Creative Commons
+    <span tal:replace="this_license.title(locale)">Title</span>
+    <span tal:replace="this_license.version">License Version</span>
+    <span tal:replace="this_license.jurisdiction.title(locale)">
+      License Jurisdiction</span>
+    License
+  </a>.
+</span>

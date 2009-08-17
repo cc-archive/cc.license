@@ -18,6 +18,9 @@
   <span tal:condition="main_text_type == 'worktitle'"
         metal:use-macro="worktitle_header.macros['header']"
         tal:omit-tag="" />
+  <span tal:condition="main_text_type == 'attribution_worktitle'"
+        metal:use-macro="attribution_worktitle_header.macros['header']"
+        tal:omit-tag="" />
 
   <span tal:condition="source_work"
         i18n:translate=""
