@@ -17,7 +17,7 @@ from chameleon.zpt.template import PageTemplateFile
 import zope.interface
 
 from cc.license._lib.interfaces import ILicenseFormatter
-
+from cc.license import util
 
 TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), 'templates')
 BASE_TEMPLATE = os.path.join(TEMPLATE_PATH, 'base.pt')
@@ -81,7 +81,7 @@ class HTMLFormatter(object):
             dctype = self._translate_dctype(work_dict['format'].lower())
 
         base_template = PageTemplateFile(BASE_TEMPLATE)
-        return base_template.render(
+        rendered_template = base_template.render(
             main_text_type=main_text_type,
             dctype=dctype,
             this_license=license, locale=locale,
@@ -96,3 +96,4 @@ class HTMLFormatter(object):
             attribution_url=work_dict.get('attribution_url'),
             source_work=work_dict.get('source_work'),
             more_permissions_url=work_dict.get('more_permissions_url'))
+        return util.stripped_inner_xml(rendered_template)
