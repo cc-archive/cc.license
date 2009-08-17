@@ -4,8 +4,8 @@ import StringIO
 import re
 
 
-LEFT_WHITE_SPACE_RE = re.compile('^[ \n\t].*$')
-RIGHT_WHITE_SPACE_RE = re.compile('^.*[ \n\t]$')
+LEFT_WHITE_SPACE_RE = re.compile('\A[ \n\t].*\Z', re.DOTALL)
+RIGHT_WHITE_SPACE_RE = re.compile('\A.*[ \n\t]\Z', re.DOTALL)
 
 INNER_XML_RE = re.compile(u'\A[ \n\t]*<[^>]+?>(?P<body>.*)</[^>]+?>[ \n\t]*\Z')
 
@@ -71,21 +71,12 @@ def strip_xml(element):
         children = list(elt)
         new_childrenlen = len(children)
 
+        elt.text = strip_text(elt.text)
+        elt.tail = strip_text(elt.tail)
+
         # We have to do a lot of stuff here to put whitespace in the
         # right places and make it look pretty, as if a human wrote
         # it.
-        split_orig_text = orig_text.splitlines()
-        orig_text_butt = None
-        if split_orig_text:
-            orig_text_butt = split_orig_text[-1]
-
-        split_orig_tail = orig_tail.splitlines()
-        orig_tail_butt = None
-        if split_orig_tail:
-            orig_tail_butt = split_orig_tail[-1]
-
-        elt.text = strip_text(elt.text)
-        elt.tail = strip_text(elt.tail)
 
         ##########
         #### whitespace re-appending
@@ -100,24 +91,24 @@ def strip_xml(element):
         ## right of the .text
         ####
         # if there are children and is presently whitespace
-        if orig_text_butt \
+        if elt.text \
                 and new_childrenlen \
-                and RIGHT_WHITE_SPACE_RE.match(orig_text_butt):
+                and RIGHT_WHITE_SPACE_RE.match(orig_text):
             elt.text = elt.text + ' '
 
         ####
         ## left of the .tail
         ####
         # any time there is presently whitespace
-        if orig_tail and LEFT_WHITE_SPACE_RE.match(orig_tail):
+        if elt.tail and LEFT_WHITE_SPACE_RE.match(orig_tail):
             elt.tail = ' ' + elt.tail
 
         ####
         ## right of the .tail
         ####
         # if there is presently whitespace and not the last child
-        if orig_tail_butt \
-                and RIGHT_WHITE_SPACE_RE.match(orig_tail_butt) \
+        if elt.tail \
+                and RIGHT_WHITE_SPACE_RE.match(orig_tail) \
                 and childpos != childrenlen - 1:
             elt.tail = elt.tail + ' '
 
