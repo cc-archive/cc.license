@@ -7,6 +7,8 @@ import re
 LEFT_WHITE_SPACE_RE = re.compile('^[ \n\t].*$')
 RIGHT_WHITE_SPACE_RE = re.compile('^.*[ \n\t]$')
 
+INNER_XML_RE = re.compile(u'\A[ \n\t]*<[^>]+?>(?P<body>.*)</[^>]+?>[ \n\t]*\Z')
+
 
 def strip_text(text):
     """
@@ -127,18 +129,14 @@ def strip_xml(element):
     return element
 
 
-def inner_xml(elt):
+def inner_xml(xml_text):
     """
     Get the inner xml of an element.
 
-      >>> html_etree = etree.parse(
-      ...   StringIO.StringIO(
-      ...     '<div>This is some <i><b>really</b> silly</i> text!</div>'))
-      >>> inner_xml(html_etree.getroot())
+      >>> inner_xml('<div>This is some <i><b>really</b> silly</i> text!</div>')
       u'This is some <i><b>really</b> silly</i> text!'
     """
-    return (unicode(elt.text) or u'') \
-        + u''.join(etree.tostring(child) for child in elt)
+    return unicode(INNER_XML_RE.match(xml_text).groupdict()['body'])
 
 
 def stripped_inner_xml(xml_string):
@@ -157,4 +155,4 @@ def stripped_inner_xml(xml_string):
     """
     et = etree.parse(StringIO.StringIO(xml_string))
     strip_xml(et.getroot())
-    return inner_xml(et.getroot())
+    return inner_xml(etree.tostring(et))
