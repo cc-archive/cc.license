@@ -11,14 +11,18 @@
   <a xmlns:cc="http://creativecommons.org/ns#"
      property="cc:attributionName" rel="cc:attributionURL"
      tal:attributes="href attribution_url"
+     i18n:name="attribution_name"
      tal:content="attribution_name">
     ${attribution_name}</a>
   is licensed under a
   <a rel="license" tal:attributes="href this_license.uri">
     Creative Commons
-    <span tal:replace="this_license.title(locale)">Title</span>
-    <span tal:replace="this_license.version">License Version</span>
-    <span tal:replace="this_license.jurisdiction.title(locale)">
+    <span tal:replace="this_license.title(locale)"
+          i18n:name="license_title">Title</span>
+    <span tal:replace="this_license.version"
+          i18n:name="license_version">License Version</span>
+    <span tal:replace="this_license.jurisdiction.title(locale)"
+          i18n:name="license_jurisdiction">
       License Jurisdiction</span>
     License
   </a>.

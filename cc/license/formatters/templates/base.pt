@@ -29,18 +29,23 @@
     Based on a work at
     <a xmlns:dc="http://purl.org/dc/elements/1.1/"
        tal:attributes="href source_work" tal:content="source_work"
-       rel="dc:source">${source}</a>.
+       rel="dc:source"
+       i18n:name="source_work">${source}</a>.
   </span>
 
   <span tal:condition="more_permissions_url"
-        i18n:translate=""
         tal:omit-tag="">
     <br />
+  </span>
+  <span tal:condition="more_permissions_url"
+        i18n:translate=""
+        tal:omit-tag="">
     Permissions beyond the scope of this license may be available at
     <a xmlns:cc="http://creativecommons.org/ns#"
        tal:attributes="href more_permissions_url"
        tal:content="more_permissions_url"
-       rel="cc:morePermissions">
+       rel="cc:morePermissions"
+       i18n:name="permissions">
       ${permissions}</a>.
   </span>
 </html>
