@@ -1,5 +1,6 @@
 <span metal:define-macro="header"
       i18n:translate=""
+      i18n:domain="cc.license"
       tal:omit-tag="">
   This
   <span xmlns:dc="http://purl.org/dc/elements/1.1/"

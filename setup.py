@@ -30,6 +30,8 @@ setup(name='cc.license',
         #'Babel',
         'FormEncode', # not sure why this is throwing a RuntimeWarning either
         'rdfadict',
+        'zope.tal',
+        'zope.app.applicationcontrol',
         'enum',
       ],
       setup_requires=['setuptools-git',],

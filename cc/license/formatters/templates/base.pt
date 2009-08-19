@@ -2,7 +2,8 @@
       xmlns:dc="http://purl.org/dc/elements/1.1/title"
       xmlns:tal="http://xml.zope.org/namespaces/tal"
       xmlns:metal="http://xml.zope.org/namespaces/metal"
-      xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      i18n:domain="cc.license">
   <a rel="license" tal:attributes="href this_license.uri">
     <img alt="Creative Commons License" style="border-width:0"
          tal:attributes="src this_license.logo" i18n:attributes="alt" />
