@@ -12,7 +12,6 @@
   [a rel='license'
      href='<span tal:replace="this_license.uri"
                  i18n:name="license_uri" />']
-
     Creative Commons
     <span tal:replace="this_license.title(locale)"
           i18n:name="license_title">Title</span>
