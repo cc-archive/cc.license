@@ -30,6 +30,7 @@ setup(name='cc.license',
         #'Babel',
         'FormEncode', # not sure why this is throwing a RuntimeWarning either
         'rdfadict',
+        'python-gettext',
         'enum',
       ],
       setup_requires=['setuptools-git',],

@@ -14,7 +14,12 @@ the licensed work. The keys of this work_dict are as follows:
 import os
 
 from chameleon.zpt.template import PageTemplateFile
+from zope.i18n.translationdomain import TranslationDomain
+from zope.i18n.gettextmessagecatalog import GettextMessageCatalog
+from zope.i18n.interfaces import ITranslationDomain
+from zope.i18n.compile import compile_mo_file
 import zope.interface
+from zope import component
 
 from cc.license._lib.interfaces import ILicenseFormatter
 from cc.license import util
@@ -28,6 +33,10 @@ WORKTITLE_HEADER_TEMPLATE = os.path.join(TEMPLATE_PATH, 'worktitle_header.pt')
 ATTRIBUTION_WORKTITLE_HEADER_TEMPLATE = os.path.join(
     TEMPLATE_PATH, 'attribution_worktitle_header.pt')
 
+PARENT_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+I18N_PATH = os.path.join(PARENT_PATH, 'i18n')
+
+DOMAIN_SETUP = False
 
 class HTMLFormatter(object):
     zope.interface.implements(ILicenseFormatter)
@@ -59,10 +68,34 @@ class HTMLFormatter(object):
         except KeyError: # if we dont understand it, pretend its not there
             return None
 
-    def format(self, license, work_dict=None, locale='en'):
+    def setup_i18n(self):
+        global DOMAIN_SETUP
+        if DOMAIN_SETUP:
+            return
+
+        domain = TranslationDomain('cc.license')
+        for catalog in os.listdir(I18N_PATH):
+
+            catalog_path = os.path.join(I18N_PATH, catalog)
+
+            po_path = os.path.join(catalog_path, 'cc.license.po')
+            mo_path = os.path.join(catalog_path, 'cc.license.mo')
+            if not os.path.isdir(catalog_path) or not os.path.exists(po_path):
+                continue
+
+            compile_mo_file('cc.license', catalog_path)
+            
+            domain.addCatalog(GettextMessageCatalog(
+                    catalog, 'cc.license', mo_path))
+
+        component.provideUtility(domain, ITranslationDomain, name='cc.license')
+        DOMAIN_SETUP = True
+
+    def format(self, license, work_dict=None, locale='en', country='US'):
         """Return an HTML + RDFa string serialization for the license,
             optionally incorporating the work metadata and locale."""
-        
+        self.setup_i18n()
+
         work_dict = work_dict or {}
 
         main_text_type = 'default'
@@ -85,6 +118,7 @@ class HTMLFormatter(object):
             main_text_type=main_text_type,
             dctype=dctype,
             this_license=license, locale=locale,
+            target_language='%s_%s' % (locale, country),
             worktitle=work_dict.get('worktitle'),
             default_header=PageTemplateFile(DEFAULT_HEADER_TEMPLATE),
             attribution_header=PageTemplateFile(ATTRIBUTION_HEADER_TEMPLATE),
