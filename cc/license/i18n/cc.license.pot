@@ -1,0 +1,40 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Development/Unknown\n"
+"POT-Creation-Date: Tue Aug 25 17:18:10 2009\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Zope 3 Developers <zope3-dev@zope.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: zope/app/locales/extract.py\n"
+
+#: cc/license/formatters/templates/attribution_header.pt:27
+msgid "This work by ${attribution_name} is licensed under a [a rel='license' href='${license_uri}'] Creative Commons ${license_title} ${license_version} ${license_jurisdiction} License [/a]"
+msgstr ""
+
+#: cc/license/formatters/templates/attribution_worktitle_header.pt:31
+msgid "${worktitle} ${worktitle} by ${attribution_name} is licensed under a [a rel='license' href='${license_uri}'] Creative Commons ${license_title} ${license_version} ${license_jurisdiction} License [/a]"
+msgstr ""
+
+#: cc/license/formatters/templates/base.pt:39
+msgid "Based on a work at ${source_work}."
+msgstr ""
+
+#: cc/license/formatters/templates/base.pt:53
+msgid "Permissions beyond the scope of this license may be available at ${permissions}."
+msgstr ""
+
+#: cc/license/formatters/templates/base.pt:8
+msgid "Creative Commons License"
+msgstr ""
+
+#: cc/license/formatters/templates/default_header.pt:20
+msgid "This work is licensed under a [a rel='license' href='${license_uri}'] Creative Commons ${license_title} ${license_version} ${license_jurisdiction} License [/a]"
+msgstr ""
+
+#: cc/license/formatters/templates/worktitle_header.pt:25
+msgid "${worktitle} ${worktitle} is licensed under a [a rel='license' href='${license_uri}'] Creative Commons ${license_title} ${license_version} ${license_jurisdiction} License [/a]"
+msgstr ""
+

@@ -1,0 +1,42 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Development/Unknown\n"
+"POT-Creation-Date: Thu Aug 20 12:03:59 2009\n"
+"PO-Revision-Date: 2009-08-20 12:21-0500\n"
+"Last-Translator: Christopher Allan Webber <cwebber@dustycloud.org>\n"
+"Language-Team: English\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: zope/app/locales/extract.py\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: cc/license/formatters/templates/attribution_header.pt:27
+msgid "This work by ${attribution_name} is licensed under a \[a rel='license' href='${license_uri}'] Creative Commons ${license_title} ${license_version} ${license_jurisdiction} License \[/a]"
+msgstr ""
+
+#: cc/license/formatters/templates/attribution_worktitle_header.pt:31
+msgid "${worktitle} ${worktitle} by ${attribution_name} is licensed under a \[a rel='license' href='${license_uri}'] Creative Commons ${license_title} ${license_version} ${license_jurisdiction} License \[/a]"
+msgstr ""
+
+#: cc/license/formatters/templates/base.pt:30
+msgid "Based on a work at ${source_work}."
+msgstr ""
+
+#: cc/license/formatters/templates/base.pt:44
+msgid "Permissions beyond the scope of this license may be available at ${permissions}."
+msgstr ""
+
+#: cc/license/formatters/templates/base.pt:8
+msgid "Creative Commons License"
+msgstr "test test"
+
+#: cc/license/formatters/templates/default_header.pt:20
+msgid "default_header"
+#msgid "This work is licensed under a [a rel='license' href='${license_uri}'] Creative Commons ${license_title} ${license_version} ${license_jurisdiction} License [/a]"
+msgstr "This work is licensed under a <a rel=\"license\" href=\"${license_uri}\">Creative Commons ${license_title} ${license_version} ${license_jurisdiction} License</a>"
+
+#: cc/license/formatters/templates/worktitle_header.pt:25
+msgid "${worktitle} ${worktitle} is licensed under a \[a rel='license' href='${license_uri}'] Creative Commons ${license_title} ${license_version} ${license_jurisdiction} License [/a]"
+msgstr ""
+
