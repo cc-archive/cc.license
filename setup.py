@@ -32,6 +32,7 @@ setup(name='cc.license',
         'rdfadict',
         'python-gettext',
         'enum',
+        'zope.pagetemplate',
       ],
       setup_requires=['setuptools-git',],
       entry_points="""

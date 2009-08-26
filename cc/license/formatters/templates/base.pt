@@ -4,24 +4,33 @@
       xmlns:metal="http://xml.zope.org/namespaces/metal"
       xmlns:i18n="http://xml.zope.org/namespaces/i18n"
       i18n:domain="cc.license">
-  <a rel="license" tal:attributes="href this_license.uri">
+  <a rel="license" tal:attributes="href this_license/uri">
     <img alt="Creative Commons License" style="border-width:0"
-         tal:attributes="src this_license.logo" i18n:attributes="alt" />
+         tal:attributes="src this_license/logo" i18n:attributes="alt" />
   </a>
   <br/>
 
-  <span tal:condition="main_text_type == 'default'"
-        metal:use-macro="default_header.macros['header']"
-        tal:omit-tag="" />
-  <span tal:condition="main_text_type == 'attribution'"
-        metal:use-macro="attribution_header.macros['header']"
-        tal:omit-tag="" />
-  <span tal:condition="main_text_type == 'worktitle'"
-        metal:use-macro="worktitle_header.macros['header']"
-        tal:omit-tag="" />
-  <span tal:condition="main_text_type == 'attribution_worktitle'"
-        metal:use-macro="attribution_worktitle_header.macros['header']"
-        tal:omit-tag="" />
+  <span tal:condition="python: main_text_type == 'default'"
+        tal:omit-tag="">
+    <span metal:use-macro="default_header/macros/header"
+          tal:omit-tag="" />
+  </span>
+  <span tal:condition="python: main_text_type == 'attribution'"
+        tal:omit-tag="">
+    <span metal:use-macro="attribution_header/macros/header"
+          tal:omit-tag="" />
+  </span>
+  <span tal:condition="python: main_text_type == 'worktitle'"
+        tal:omit-tag="">
+    <span metal:use-macro="worktitle_header/macros/header"
+          tal:omit-tag="" />
+  </span>
+  
+  <span tal:condition="python: main_text_type == 'attribution_worktitle'"
+        tal:omit-tag="">
+    <span metal:use-macro="attribution_worktitle_header/macros/header"
+          tal:omit-tag="" />
+  </span>
 
   <span tal:condition="source_work"
         i18n:translate=""

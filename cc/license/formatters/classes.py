@@ -13,7 +13,7 @@ the licensed work. The keys of this work_dict are as follows:
 
 import os
 
-from chameleon.zpt.template import PageTemplateFile
+from zope.pagetemplate.pagetemplatefile import PageTemplateFile
 from zope.i18n.translationdomain import TranslationDomain
 from zope.i18n.gettextmessagecatalog import GettextMessageCatalog
 from zope.i18n.interfaces import ITranslationDomain
@@ -114,20 +114,22 @@ class HTMLFormatter(object):
             dctype = self._translate_dctype(work_dict['format'].lower())
 
         base_template = PageTemplateFile(BASE_TEMPLATE)
-        rendered_template = base_template.render(
-            main_text_type=main_text_type,
-            dctype=dctype,
-            this_license=license, locale=locale,
-            target_language='%s_%s' % (locale, country),
-            worktitle=work_dict.get('worktitle'),
-            default_header=PageTemplateFile(DEFAULT_HEADER_TEMPLATE),
-            attribution_header=PageTemplateFile(ATTRIBUTION_HEADER_TEMPLATE),
-            worktitle_header=PageTemplateFile(WORKTITLE_HEADER_TEMPLATE),
-            attribution_worktitle_header=PageTemplateFile(
-                ATTRIBUTION_WORKTITLE_HEADER_TEMPLATE),
-            attribution_name=(work_dict.get('attribution_name')
-                              or work_dict.get('attribution_url')),
-            attribution_url=work_dict.get('attribution_url'),
-            source_work=work_dict.get('source_work'),
-            more_permissions_url=work_dict.get('more_permissions_url'))
+        rendered_template = base_template.pt_render(
+            {"main_text_type": main_text_type,
+             "dctype": dctype,
+             "this_license": license, "locale": locale,
+             "target_language": '%s_%s' % (locale, country),
+             "worktitle": work_dict.get('worktitle'),
+             "default_header": PageTemplateFile(DEFAULT_HEADER_TEMPLATE),
+             "attribution_header": PageTemplateFile(
+                    ATTRIBUTION_HEADER_TEMPLATE),
+             "worktitle_header": PageTemplateFile(WORKTITLE_HEADER_TEMPLATE),
+             "attribution_worktitle_header": PageTemplateFile(
+                    ATTRIBUTION_WORKTITLE_HEADER_TEMPLATE),
+             "attribution_name": (work_dict.get('attribution_name')
+                                  or work_dict.get('attribution_url')),
+             "attribution_url": work_dict.get('attribution_url'),
+             "source_work": work_dict.get('source_work'),
+             "more_permissions_url": work_dict.get('more_permissions_url'),
+             "test_false": False})
         return util.stripped_inner_xml(rendered_template)
