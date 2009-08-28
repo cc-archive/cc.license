@@ -23,6 +23,8 @@ from zope import component
 
 from cc.license._lib.interfaces import ILicenseFormatter
 from cc.license import util
+from cc.license.formatters.pagetemplate import CCLPageTemplateFile
+
 
 TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), 'templates')
 BASE_TEMPLATE = os.path.join(TEMPLATE_PATH, 'base.pt')
@@ -113,19 +115,26 @@ class HTMLFormatter(object):
         if work_dict.get('format'):
             dctype = self._translate_dctype(work_dict['format'].lower())
 
-        base_template = PageTemplateFile(BASE_TEMPLATE)
+        base_template = CCLPageTemplateFile(
+            BASE_TEMPLATE,
+            target_language='%s_%s' % (locale, country))
         rendered_template = base_template.pt_render(
             {"main_text_type": main_text_type,
              "dctype": dctype,
              "this_license": license, "locale": locale,
-             "target_language": '%s_%s' % (locale, country),
              "worktitle": work_dict.get('worktitle'),
-             "default_header": PageTemplateFile(DEFAULT_HEADER_TEMPLATE),
-             "attribution_header": PageTemplateFile(
-                    ATTRIBUTION_HEADER_TEMPLATE),
-             "worktitle_header": PageTemplateFile(WORKTITLE_HEADER_TEMPLATE),
-             "attribution_worktitle_header": PageTemplateFile(
-                    ATTRIBUTION_WORKTITLE_HEADER_TEMPLATE),
+             "default_header": CCLPageTemplateFile(
+                    DEFAULT_HEADER_TEMPLATE,
+                    target_language='%s_%s' % (locale, country)),
+             "attribution_header": CCLPageTemplateFile(
+                    ATTRIBUTION_HEADER_TEMPLATE,
+                    target_language='%s_%s' % (locale, country)),
+             "worktitle_header": CCLPageTemplateFile(
+                    WORKTITLE_HEADER_TEMPLATE,
+                    target_language='%s_%s' % (locale, country)),
+             "attribution_worktitle_header": CCLPageTemplateFile(
+                    ATTRIBUTION_WORKTITLE_HEADER_TEMPLATE,
+                    target_language='%s_%s' % (locale, country)),
              "attribution_name": (work_dict.get('attribution_name')
                                   or work_dict.get('attribution_url')),
              "attribution_url": work_dict.get('attribution_url'),
