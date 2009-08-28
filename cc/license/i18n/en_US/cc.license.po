@@ -32,8 +32,8 @@ msgid "Creative Commons License"
 msgstr "test test"
 
 #: cc/license/formatters/templates/default_header.pt:20
-msgid "default_header"
-#msgid "This work is licensed under a [a rel='license' href='${license_uri}'] Creative Commons ${license_title} ${license_version} ${license_jurisdiction} License [/a]"
+#msgid "default_header"
+msgid "This work is licensed under a [a rel='license' href='${license_uri}'] Creative Commons ${license_title} ${license_version} ${license_jurisdiction} License [/a]"
 msgstr "This work is licensed under a <a rel=\"license\" href=\"${license_uri}\">Creative Commons ${license_title} ${license_version} ${license_jurisdiction} License</a>"
 
 #: cc/license/formatters/templates/worktitle_header.pt:25
