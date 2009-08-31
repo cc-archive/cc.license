@@ -1,20 +1,7 @@
-##############################################################################
-#
-# Copyright (c) 2003-2004 Zope Corporation and Contributors.
-# All Rights Reserved.
-#
-# This software is subject to the provisions of the Zope Public License,
-# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
-# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
-# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
-# FOR A PARTICULAR PURPOSE.
-#
-##############################################################################
 msgid ""
 msgstr ""
 "Project-Id-Version: Development/Unknown\n"
-"POT-Creation-Date: Mon Aug 31 15:09:13 2009\n"
+"POT-Creation-Date: Mon Aug 31 15:42:08 2009\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Zope 3 Developers <zope3-dev@zope.org>\n"
@@ -23,7 +10,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: zope/app/locales/extract.py\n"
 
-#: cc/license/formatters/templates/attribution_header.pt:27
+#: cc/license/formatters/templates/attribution_header.pt:28
+msgid "This [span xmlns:dc='http://purl.org/dc/elements/1.1/' href='${dctype_url}' rel='dc:type']work[/span] by ${attribution_name} is licensed under a [a rel='license' href='${license_uri}'] Creative Commons ${license_title} ${license_version} ${license_jurisdiction} License [/a]"
+msgstr ""
+
+#: cc/license/formatters/templates/attribution_header.pt:55
 msgid "This work by ${attribution_name} is licensed under a [a rel='license' href='${license_uri}'] Creative Commons ${license_title} ${license_version} ${license_jurisdiction} License [/a]"
 msgstr ""
 

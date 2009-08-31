@@ -11,9 +11,15 @@ msgstr ""
 "Generated-By: zope/app/locales/extract.py\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: cc/license/formatters/templates/attribution_header.pt:27
-msgid "This work by ${attribution_name} is licensed under a \[a rel='license' href='${license_uri}'] Creative Commons ${license_title} ${license_version} ${license_jurisdiction} License \[/a]"
+#: cc/license/formatters/templates/attribution_header.pt:28
+msgid "This [span xmlns:dc='http://purl.org/dc/elements/1.1/' href='${dctype_url}' rel='dc:type']work[/span] by ${attribution_name} is licensed under a [a rel='license' href='${license_uri}'] Creative Commons ${license_title} ${license_version} ${license_jurisdiction} License [/a]"
+msgstr "This <span xmlns:dc=\"http://purl.org/dc/elements/1.1/\" href=\"${dctype_url}\" rel=\"dc:type\">work</span> by ${attribution_name} is licensed under a <a rel=\"license\" href=\"${license_uri}\">Creative Commons ${license_title} ${license_version} ${license_jurisdiction} License</a>"
+
+#: cc/license/formatters/templates/attribution_header.pt:55
+msgid "This work by ${attribution_name} is licensed under a [a rel='license' href='${license_uri}'] Creative Commons ${license_title} ${license_version} ${license_jurisdiction} License [/a]"
 msgstr "This work by ${attribution_name} is licensed under a <a rel=\"license\" href=\"${license_uri}\">Creative Commons ${license_title} ${license_version} ${license_jurisdiction} License</a>"
+
+
 
 #: cc/license/formatters/templates/attribution_worktitle_header.pt:31
 msgid "${worktitle} ${worktitle} by ${attribution_name} is licensed under a \[a rel='license' href='${license_uri}'] Creative Commons ${license_title} ${license_version} ${license_jurisdiction} License \[/a]"
@@ -33,7 +39,7 @@ msgstr "test test"
 
 #: cc/license/formatters/templates/default_header.pt:21
 msgid "This [span xmlns:dc='http://purl.org/dc/elements/1.1/' href='${dctype_url}' rel='dc:type']work[/span] is licensed under a [a rel='license' href='${license_uri}'] Creative Commons ${license_title} ${license_version} ${license_jurisdiction} License [/a]"
-msgstr "This <span xmlns:dc=\"http://purl.org/dc/elements/1.1/\" href=\"${DYNAMIC_CONTENT}\" rel=\"dc:type\">work</span> is licensed under a <a rel=\"license\" href=\"${license_uri}\">Creative Commons ${license_title} ${license_version} ${license_jurisdiction} License</a>"
+msgstr "This <span xmlns:dc=\"http://purl.org/dc/elements/1.1/\" href=\"${dctype_url}\" rel=\"dc:type\">work</span> is licensed under a <a rel=\"license\" href=\"${license_uri}\">Creative Commons ${license_title} ${license_version} ${license_jurisdiction} License</a>"
 
 #: cc/license/formatters/templates/default_header.pt:41
 msgid "This work is licensed under a [a rel='license' href='${license_uri}'] Creative Commons ${license_title} ${license_version} ${license_jurisdiction} License [/a]"
