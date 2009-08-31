@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Development/Unknown\n"
-"POT-Creation-Date: Mon Aug 31 15:42:08 2009\n"
+"POT-Creation-Date: Mon Aug 31 16:02:00 2009\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Zope 3 Developers <zope3-dev@zope.org>\n"
@@ -18,8 +18,12 @@ msgstr ""
 msgid "This work by ${attribution_name} is licensed under a [a rel='license' href='${license_uri}'] Creative Commons ${license_title} ${license_version} ${license_jurisdiction} License [/a]"
 msgstr ""
 
-#: cc/license/formatters/templates/attribution_worktitle_header.pt:32
-msgid "${worktitle} ${worktitle} by ${attribution_name} is licensed under a [a rel='license' href='${license_uri}'] Creative Commons ${license_title} ${license_version} ${license_jurisdiction} License [/a]"
+#: cc/license/formatters/templates/attribution_worktitle_header.pt:30
+msgid "[span xmlns:dc='http://purl.org/dc/elements/1.1/' property='dc:title' href='${dctype_url}' rel='dc:type'> ${worktitle} [/span] by ${attribution_name} is licensed under a [a rel='license' href='${license_uri}'] Creative Commons ${license_title} ${license_version} ${license_jurisdiction} License [/a]"
+msgstr ""
+
+#: cc/license/formatters/templates/attribution_worktitle_header.pt:60
+msgid "${worktitle} by ${attribution_name} is licensed under a [a rel='license' href='${license_uri}'] Creative Commons ${license_title} ${license_version} ${license_jurisdiction} License [/a]"
 msgstr ""
 
 #: cc/license/formatters/templates/base.pt:39
@@ -42,7 +46,11 @@ msgstr ""
 msgid "This work is licensed under a [a rel='license' href='${license_uri}'] Creative Commons ${license_title} ${license_version} ${license_jurisdiction} License [/a]"
 msgstr ""
 
-#: cc/license/formatters/templates/worktitle_header.pt:25
-msgid "${worktitle} ${worktitle} is licensed under a [a rel='license' href='${license_uri}'] Creative Commons ${license_title} ${license_version} ${license_jurisdiction} License [/a]"
+#: cc/license/formatters/templates/worktitle_header.pt:23
+msgid "[span xmlns:dc='http://purl.org/dc/elements/1.1/' property='dc:title' href='${dctype_url}' rel='dc:type'> ${worktitle} [/span] is licensed under a [a rel='license' href='${license_uri}'] Creative Commons ${license_title} ${license_version} ${license_jurisdiction} License [/a]"
+msgstr ""
+
+#: cc/license/formatters/templates/worktitle_header.pt:46
+msgid "${worktitle} is licensed under a [a rel='license' href='${license_uri}'] Creative Commons ${license_title} ${license_version} ${license_jurisdiction} License [/a]"
 msgstr ""
 
