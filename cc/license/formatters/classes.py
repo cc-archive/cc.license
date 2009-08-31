@@ -115,26 +115,28 @@ class HTMLFormatter(object):
         if work_dict.get('format'):
             dctype = self._translate_dctype(work_dict['format'].lower())
 
+        target_language = '%s_%s' % (locale, country)
         base_template = CCLPageTemplateFile(
             BASE_TEMPLATE,
-            target_language='%s_%s' % (locale, country))
+            target_language=target_language)
         rendered_template = base_template.pt_render(
             {"main_text_type": main_text_type,
              "dctype": dctype,
+             "dctype_url": "http://purl.org/dc/dcmitype/%s" % dctype,
              "this_license": license, "locale": locale,
              "worktitle": work_dict.get('worktitle'),
              "default_header": CCLPageTemplateFile(
                     DEFAULT_HEADER_TEMPLATE,
-                    target_language='%s_%s' % (locale, country)),
+                    target_language=target_language),
              "attribution_header": CCLPageTemplateFile(
                     ATTRIBUTION_HEADER_TEMPLATE,
-                    target_language='%s_%s' % (locale, country)),
+                    target_language=target_language),
              "worktitle_header": CCLPageTemplateFile(
                     WORKTITLE_HEADER_TEMPLATE,
-                    target_language='%s_%s' % (locale, country)),
+                    target_language=target_language),
              "attribution_worktitle_header": CCLPageTemplateFile(
                     ATTRIBUTION_WORKTITLE_HEADER_TEMPLATE,
-                    target_language='%s_%s' % (locale, country)),
+                    target_language=target_language),
              "attribution_name": (work_dict.get('attribution_name')
                                   or work_dict.get('attribution_url')),
              "attribution_url": work_dict.get('attribution_url'),
