@@ -1,5 +1,6 @@
 <span metal:define-macro="header"
       i18n:translate=""
+      i18n:domain="cc.license"
       tal:omit-tag="">
   <span tal:condition="python: dctype is not None"
         xmlns:dc="http://purl.org/dc/elements/1.1/"
