@@ -23,21 +23,12 @@ setup(name='cc.license',
         'setuptools',
         'zope.interface',
         'nose',
-        'Genshi',
         'lxml',
-        'chameleon.zpt',
-        'pylons', # XXX why does nose throw a RuntimeWarning without this?
-        #'Babel',
-        'FormEncode', # not sure why this is throwing a RuntimeWarning either
         'rdfadict',
         'python-gettext',
         'enum',
+        'zope.i18n',
         'zope.pagetemplate',
       ],
       setup_requires=['setuptools-git',],
-      entry_points="""
-      # -*- Entry points: -*-
-      [nose.plugins]
-      pylons = pylons.test:PylonsPlugin 
-      """,
       )
