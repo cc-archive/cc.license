@@ -1,6 +1,7 @@
+import pkg_resources
+
 import RDF
 import datetime
-import os
 
 import cc.license
 from cc.license._lib.exceptions import RdfHelperError, NoValuesFoundError
@@ -10,20 +11,14 @@ NS_CC = 'http://creativecommons.org/ns#'
 NS_DC = 'http://purl.org/dc/elements/1.1/'
 NS_DCQ = 'http://purl.org/dc/terms/'
 
-if os.path.exists('./license.rdf'):
-    RDF_PATH = './license.rdf/rdf'
-    XML_PATH = './license.rdf/xml'
-else:
-    BASE_PATH = os.path.dirname(__file__)
-    RDF_PATH = os.path.join(BASE_PATH, os.pardir, 'rdf')
-    XML_PATH = os.path.join(BASE_PATH, os.pardir, 'xml')
-    assert os.path.exists(RDF_PATH)
-    assert os.path.exists(XML_PATH)
-
-JURI_RDF_PATH = os.path.join(RDF_PATH, 'jurisdictions.rdf')
-INDEX_RDF_PATH = os.path.join(RDF_PATH, 'index.rdf')
-SEL_RDF_PATH = os.path.join(RDF_PATH, 'selectors.rdf')
-LIC_RDF_PATH = os.path.join(RDF_PATH, 'license_rdf') # directory
+JURI_RDF_PATH = pkg_resources.resource_filename(
+    'cc.licenserdf', 'rdf/jurisdictions.rdf')
+INDEX_RDF_PATH = pkg_resources.resource_filename(
+    'cc.licenserdf', 'rdf/index.rdf')
+SEL_RDF_PATH = pkg_resources.resource_filename(
+    'cc.licenserdf', 'rdf/selectors.rdf')
+LIC_RDF_PATH = pkg_resources.resource_filename(
+    'cc.licenserdf', 'rdf/license_rdf') # directory
 # FIXME: Use package.requires for JURI_RDF_PATH
 
 def die_unless(cause, message):
@@ -107,7 +102,7 @@ def uri2value(uri):
     return uri2lang_and_value(uri)[1]
 
 def init_model(*filenames):
-    """Input: A list of on-disk paths (filenames) to start from.
+    """Input: An on-disk path (filenames) to start from.
        Output: A model with those suckers parsed."""
     for filename in filenames: # filenames, not URIs
         die_unless(':/' not in filename, "You passed in something that " +
@@ -384,6 +379,7 @@ SEL_MODEL = init_model(SEL_RDF_PATH)
 
 # The below code will change form eventually, but for now here it is.
 from lxml import etree
-QUESTION_XML_PATH = os.path.join(XML_PATH, 'questions.xml')
+QUESTION_XML_PATH = pkg_resources.resource_filename(
+    'cc.licenserdf', 'xml/questions.xml')
 
 questions_root = etree.parse(QUESTION_XML_PATH).getroot()
