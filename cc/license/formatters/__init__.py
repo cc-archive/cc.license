@@ -1,6 +1,5 @@
-
-import classes
-import filters
+from cc.license.formatters import classes
+from cc.license.formatters import filters
 from cc.license._lib.exceptions import CCLicenseError
 
 __all__ = ['HTML', # aliased formatters
