@@ -30,6 +30,14 @@ def locales():
 
 def by_code(code, jurisdiction=None, version=None):
     """A LicenseSelector-less means of picking a License from a code."""
+
+    # rdflib needs string objects, can't handle unicode :|
+    code = str(code)
+    if jurisdiction:
+        jurisdiction = str(jurisdiction)
+    if version:
+        version = str(version)
+
     for key, selector in cc.license.selectors.SELECTORS.items():
         try:
             return selector.by_code(code,
