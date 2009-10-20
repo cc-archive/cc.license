@@ -159,6 +159,10 @@ class License(object):
     @property
     def rdf(self):
         """
+        Gives text of the permission/requirements rdf data.
+
+        Probably shouldn't be used any more, but needed for deed
+        templates.
         """
         text = []
         text.append(
