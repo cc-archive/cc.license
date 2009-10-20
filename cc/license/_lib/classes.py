@@ -1,3 +1,4 @@
+import lxml
 import RDF
 import zope.interface
 import interfaces 
@@ -6,6 +7,7 @@ import rdf_helper
 import cc.license
 from cc.license._lib.exceptions import NoValuesFoundError, CCLicenseError
 from cc.license.jurisdictions import uri2code
+
 
 class License(object):
     """Base class for ILicense implementation modeling a specific license."""
@@ -153,6 +155,34 @@ class License(object):
 
         if self._logos:
             return max(self._logos)
+
+    @property
+    def rdf(self):
+        """
+        """
+        text = []
+        text.append(
+            '<rdf:RDF xmlns="http://creativecommons.org/ns#" '
+            'xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">')
+        text.append(
+            '  <License rdf:about="%s">' % self.uri)
+
+        permits = list(self.permits)
+        permits.sort()
+        for permission in permits:
+            text.append(
+                '    <permits rdf:resource="%s"/>' % permission)
+
+        requires = list(self.requires)
+        requires.sort()
+        for requirement in requires:
+            text.append(
+                '    <requires rdf:resource="%s"/>' % requirement)
+        
+        text.append('  </License>')
+        text.append('</rdf:RDF>')
+
+        return '\n'.join(text)
 
 
 class Question(object):

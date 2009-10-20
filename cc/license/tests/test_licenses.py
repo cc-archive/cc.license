@@ -139,6 +139,19 @@ class TestAll:
         assert self.pdsel.has_license(pd)
         assert not self.pdsel.has_license(smp)
 
+    def test_rdf(self):
+        by = self.stdsel.by_code('by')
+        expected = """<rdf:RDF xmlns="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <License rdf:about="http://creativecommons.org/licenses/by/3.0/">
+    <permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks"/>
+    <permits rdf:resource="http://creativecommons.org/ns#Distribution"/>
+    <permits rdf:resource="http://creativecommons.org/ns#Reproduction"/>
+    <requires rdf:resource="http://creativecommons.org/ns#Attribution"/>
+    <requires rdf:resource="http://creativecommons.org/ns#Notice"/>
+  </License>
+</rdf:RDF>"""
+        assert by.rdf == expected
+
 
 class TestStandard:
 
