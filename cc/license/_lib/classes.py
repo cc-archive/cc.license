@@ -1,14 +1,12 @@
 from distutils.version import StrictVersion
 
-import lxml
 import RDF
 import zope.interface
 import interfaces 
 import rdf_helper
 
 import cc.license
-from cc.license._lib.exceptions import NoValuesFoundError, CCLicenseError
-from cc.license.jurisdictions import uri2code
+from cc.license._lib.exceptions import CCLicenseError
 
 
 def _sort_licenses(x, y):
