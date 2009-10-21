@@ -2,6 +2,19 @@
 import nose.tools
 import cc.license
 from cc.license import CCLicenseError
+from cc.license._lib.classes import License, _sort_licenses
+
+
+def test_sort_licenses():
+    lic1 = cc.license.by_code('by', version='1.0')
+    lic2 = cc.license.by_code('by', version='2.0')
+    lic2_5 = cc.license.by_code('by', version='2.5')
+    lic3 = cc.license.by_code('by', version='3.0')
+
+    licenses = [lic2, lic1, lic3, lic2_5]
+    licenses.sort(_sort_licenses)
+    assert licenses == [lic1, lic2, lic2_5, lic3]
+
 
 class TestAll:
 
@@ -87,9 +100,11 @@ class TestAll:
 
     def test_current_version(self):
         lic = self.stdsel.by_code('by')
-        assert lic.current_version == lic.version
+        assert isinstance(lic.current_version, License)
+        assert lic.current_version.version == lic.version
         lic2 = self.stdsel.by_code('by', version='1.0')
-        assert lic2.current_version == '3.0'
+        assert isinstance(lic2.current_version, License)
+        assert lic2.current_version.version == '3.0'
 
     def test_permits(self):
         lic = self.stdsel.by_code('by')

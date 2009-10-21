@@ -1,3 +1,5 @@
+from distutils.version import StrictVersion
+
 import lxml
 import RDF
 import zope.interface
@@ -7,6 +9,18 @@ import rdf_helper
 import cc.license
 from cc.license._lib.exceptions import NoValuesFoundError, CCLicenseError
 from cc.license.jurisdictions import uri2code
+
+
+def _sort_licenses(x, y):
+    x_version = StrictVersion(x.version)
+    y_version = StrictVersion(y.version)
+
+    if x_version > y_version:
+        return 1
+    elif x_version == y_version:
+        return 0
+    else:
+        return -1
 
 
 class License(object):
@@ -99,10 +113,29 @@ class License(object):
 
     @property
     def current_version(self):
-        j = None
-        if self.jurisdiction != cc.license.jurisdictions.by_code(''):
-            j = cc.license.jurisdictions.uri2code(self.jurisdiction.id)
-        return cc.license._lib.current_version(self.license_code, j)
+        """
+        Get the current version of the license.
+        """
+        qstring = """
+                  PREFIX dc: <http://purl.org/dc/elements/1.1/>
+
+                  SELECT ?license
+                  WHERE {
+                    ?license dc:identifier '%s' }"""
+        query = RDF.Query(
+            qstring % self.license_code,
+            query_language='sparql')
+
+        license_results = [
+            cc.license.by_uri(str(result['license'].uri))
+            for result in query.execute(rdf_helper.ALL_MODEL)]
+
+        # only keep results with the same jurisdiction
+        license_results = filter(
+            lambda lic: lic.jurisdiction == self.jurisdiction, license_results)
+
+        license_results.sort(_sort_licenses)
+        return license_results[-1]
 
     @property
     def deprecated(self):
