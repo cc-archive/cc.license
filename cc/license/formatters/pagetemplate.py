@@ -56,5 +56,16 @@ class CCLContext(Context):
         Context.__init__(self, *args, **kwargs)
 
     def translate(self, msgid, domain=None, mapping=None, default=None):
-        return translate(msgid, domain, mapping,
-                         default=default, target_language=self.target_language)
+        translation = translate(
+            msgid, domain, mapping,
+            default=default, target_language=self.target_language)
+        if isinstance(translation, unicode):
+            return translation
+
+        try:
+            return translation.decode('utf-8')
+        except UnicodeError:
+            try:
+                return translation.decode('latin-1')
+            except UnicodeError:
+                return translation.decode('utf-8', 'ignore')
