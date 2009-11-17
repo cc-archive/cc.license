@@ -177,7 +177,7 @@ def current_version(code, jurisdiction=None):
     # filter on jurisdiction
     if jurisdiction is None:
         filtered_dicts = [ d for d in filtered_dicts
-                           if not d.has_key('jurisdiction') ]
+                           if not d.get('jurisdiction') ]
     else:
         filtered_dicts = [ d for d in filtered_dicts
                            if d.has_key('jurisdiction') and
