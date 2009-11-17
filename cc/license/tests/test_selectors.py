@@ -124,7 +124,7 @@ class TestAnswersStandard:
                                    'foo':'bar',
                                    'lolcats':'roflcopter'})
         assert type(lic) == cc.license.License
-        assert lic.title() == 'Attribution'
+        assert lic.title() == 'Attribution 3.0 Unported'
         lic2 = self.sel.by_code('by')
         assert lic == lic2
 
