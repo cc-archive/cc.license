@@ -209,7 +209,7 @@ class TestSampling:
 
     def test_title(self):
         lic = self.selector.by_code('sampling')
-        assert lic.title() == 'Sampling'
+        assert lic.title() == 'Sampling 1.0'
 
 class TestPublicDomain:
 
