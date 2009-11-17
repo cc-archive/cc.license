@@ -72,9 +72,9 @@ class TestAll:
     def test_title(self):
         lic = self.stdsel.by_code('by')
         assert lic.title() == lic.title('en')
-        assert lic.title('en') == u'Attribution'
-        assert lic.title('es') == u'Reconocimiento'
-        assert lic.title('de') == u'Namensnennung'
+        assert lic.title('en') == u'Attribution 3.0 Unported'
+        assert lic.title('es') == u'Reconocimiento 3.0 Unported'
+        assert lic.title('de') == u'Namensnennung 3.0 Unported'
 
     def test_description(self):
         # has a description
@@ -223,6 +223,7 @@ class TestPublicDomain:
     def test_title_default(self):
         assert self.lic.title() == self.lic.title('en')
 
+
 class TestCustomization:
 
     def __init__(self):
@@ -252,3 +253,4 @@ class TestCustomization:
             assert l.title() in s
             assert l.version in s
             assert l.jurisdiction.title() in s
+
