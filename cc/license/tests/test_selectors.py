@@ -158,7 +158,7 @@ class TestAnswersSampling:
                                    'foo':'bar',
                                    'lolcats':'roflcopter'})
         assert type(lic) == cc.license.License
-        assert lic.title() == 'Sampling'
+        assert lic.title() == 'Sampling 1.0'
         lic2 = self.sel.by_code('sampling')
         assert lic == lic2
 
