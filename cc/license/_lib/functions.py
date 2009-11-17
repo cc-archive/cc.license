@@ -62,16 +62,15 @@ def by_uri(uri):
 def code_from_uri(uri):
     """Given a URI representing a CC license, parse out the license_code."""
     if uri.startswith(LICENSES_BASE):
-        base = LICENSES_BASE
+        return uri[len(LICENSES_BASE):].split('/')[0]
     elif uri.startswith(CC0_BASE):
-        base = CC0_BASE
+        return 'CC0'
     else:
         raise CCLicenseError, "Invalid License URI"
-    return uri[len(base):].split('/')[0]
 
 def uri2dict(uri):
     """Take a license uri and convert it into a dictionary of values."""
-    if uri.startswith(LICENSES_BASE):
+    if uri.startswith(LICENSES_BASE) and uri.endswith('/'):
         base = LICENSES_BASE
 
         license_info = {}
@@ -92,7 +91,7 @@ def uri2dict(uri):
         # XXX perform any validation on the dict produced?
         return retval
 
-    elif uri.startswith(CC0_BASE):
+    elif uri.startswith(CC0_BASE) and uri.endswith('/'):
         base = CC0_BASE
 
         retval = {'code': 'CC0', 'jurisdiction': None}
