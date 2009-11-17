@@ -18,12 +18,13 @@ class TestUriDict:
         self.uris = ('http://creativecommons.org/licenses/by-nc/2.0/tw/',
                      'http://creativecommons.org/licenses/by/3.0/',
                      'http://creativecommons.org/licenses/by-sa/2.5/mx/',
-                    )
+                     'http://creativecommons.org/publicdomain/zero/1.0/')
         self.dicts = (
                    dict(code='by-nc', version='2.0', jurisdiction='tw'),
                    dict(code='by-sa', version='3.0'),
                    dict(code='by'),
-                     )
+                   dict(code='CC0', version='1.0'),
+                   dict(code='CC0'))
 
     def test_uri_commutativity(self):
         for uri in self.uris:
@@ -52,6 +53,8 @@ class TestFunctions:
          ('http://creativecommons.org/licenses/by-nc/2.0/tw/', 'by-nc'),
          ('http://creativecommons.org/licenses/by/3.0/', 'by'),
          ('http://creativecommons.org/licenses/by-sa/2.5/mx/', 'by-sa'),
+         ('http://creativecommons.org/publicdomain/zero/1.0/', 'CC0'),
+         
                     )
         self.apl = lib.all_possible_answers # aliasing for brevity
 
@@ -69,6 +72,7 @@ class TestFunctions:
         assert lib.current_version('by', jurisdiction='us') == '3.0'
         assert lib.current_version('by-sa', jurisdiction='mx') == '2.5'
         assert lib.current_version('by-nc', jurisdiction='uk') == '2.0'
+        assert lib.current_version('CC0') == '1.0'
 
     def test_current_version_fails(self):
         assert lib.current_version('by-nc-nd', jurisdiction='jo') == ''

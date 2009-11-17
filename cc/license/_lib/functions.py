@@ -8,6 +8,11 @@ from cc.license.jurisdictions.classes import Jurisdiction
 from cc.license._lib.exceptions import CCLicenseError
 import cc.license
 
+
+LICENSES_BASE = 'http://creativecommons.org/licenses/'
+CC0_BASE = 'http://creativecommons.org/publicdomain/zero/'
+
+
 def locales():
     """Returns a sequence of all locales possible.
        A locale is a string that represents the language of a jurisdiction.
@@ -56,78 +61,97 @@ def by_uri(uri):
 
 def code_from_uri(uri):
     """Given a URI representing a CC license, parse out the license_code."""
-    base = 'http://creativecommons.org/licenses/'
-    if not uri.startswith(base):
+    if uri.startswith(LICENSES_BASE):
+        base = LICENSES_BASE
+    elif uri.startswith(CC0_BASE):
+        base = CC0_BASE
+    else:
         raise CCLicenseError, "Invalid License URI"
     return uri[len(base):].split('/')[0]
 
 def uri2dict(uri):
     """Take a license uri and convert it into a dictionary of values."""
-    base = 'http://creativecommons.org/licenses/'
+    if uri.startswith(LICENSES_BASE):
+        base = LICENSES_BASE
 
-    # minor error checking
-    if not uri.startswith(base) or not uri.endswith('/'):
+        license_info = {}
+        raw_info = uri[len(base):]
+        raw_info = raw_info.rstrip('/')
+
+        info_list = raw_info.split('/') 
+
+        if len(info_list) not in (1,2,3):
+            raise CCLicenseError, "Malformed Creative Commons URI: <%s>" % uri
+
+        retval = dict( code=info_list[0] )
+        if len(info_list) > 1:
+            retval['version'] = info_list[1]
+        if len(info_list) > 2:
+            retval['jurisdiction'] = info_list[2]
+
+        # XXX perform any validation on the dict produced?
+        return retval
+
+    elif uri.startswith(CC0_BASE):
+        base = CC0_BASE
+
+        retval = {'code': 'CC0', 'jurisdiction': None}
+        retval['version'] = uri.rstrip('/').split('/')[-1]
+        return retval
+
+    else:
         raise CCLicenseError, "Malformed Creative Commons URI: <%s>" % uri
-
-    license_info = {}
-    raw_info = uri[len(base):]
-    raw_info = raw_info.rstrip('/')
-
-    info_list = raw_info.split('/') 
-
-    if len(info_list) not in (1,2,3):
-        raise CCLicenseError, "Malformed Creative Commons URI: <%s>" % uri
-
-    retval = dict( code=info_list[0] )
-    if len(info_list) > 1:
-        retval['version'] = info_list[1]
-    if len(info_list) > 2:
-        retval['jurisdiction'] = info_list[2]
-
-    # XXX perform any validation on the dict produced?
-    return retval
 
 def dict2uri(license_info):
     """Take a dictionary of license values and convert it into a uri."""
-    base = 'http://creativecommons.org/licenses/'
-
-    license_code = license_info['code'] # code should always exist
-
-    if license_code == 'publicdomain': # one URI for publicdomain
-        return 'http://creativecommons.org/licenses/publicdomain/'
-
-    if license_info.has_key('jurisdiction'):
-        jurisdiction = license_info['jurisdiction']
+    if license_info['code'] == 'CC0':
+        if license_info.get('version'):
+            version = license_info['version']
+        else:
+            version = current_version(
+                license_info['code'], license_info.get('jurisdiction'))
+            
+        return CC0_BASE + version + '/'
     else:
-        jurisdiction = None
+        base = LICENSES_BASE
 
-    if jurisdiction == '':
-        jurisdiction = None
+        license_code = license_info['code'] # code should always exist
 
-    version = None
-    try:
-        version = license_info['version']
-    except KeyError:
-        pass # Don't get pissed at me Asheesh, I know what I'm doing.
-    if not version:
-        version = current_version(license_code, jurisdiction)
+        if license_code == 'publicdomain': # one URI for publicdomain
+            return base + 'publicdomain/'
 
-    # apparently urlparse.urljoin is retarded, or handles /'s differently
-    # than i expect; if string is empty, concatenating yields a single '/'
-    # which brings the URI up a level.
-    base = urlparse.urljoin(base, license_code)
-    if not base.endswith('/'):
-        base += '/'
-    base = urlparse.urljoin(base, version)
-    if not base.endswith('/'):
-        base += '/'
+        if license_info.has_key('jurisdiction'):
+            jurisdiction = license_info['jurisdiction']
+        else:
+            jurisdiction = None
 
-    if jurisdiction:
-        base = urlparse.urljoin(base, jurisdiction)
+        if jurisdiction == '':
+            jurisdiction = None
+
+        version = None
+        try:
+            version = license_info['version']
+        except KeyError:
+            pass # Don't get pissed at me Asheesh, I know what I'm doing.
+        if not version:
+            version = current_version(license_code, jurisdiction)
+
+        # apparently urlparse.urljoin is retarded, or handles /'s differently
+        # than i expect; if string is empty, concatenating yields a single '/'
+        # which brings the URI up a level.
+        base = urlparse.urljoin(base, license_code)
+        if not base.endswith('/'):
+            base += '/'
+        base = urlparse.urljoin(base, version)
         if not base.endswith('/'):
             base += '/'
 
-    return base
+        if jurisdiction:
+            base = urlparse.urljoin(base, jurisdiction)
+            if not base.endswith('/'):
+                base += '/'
+
+        return base
 
 def current_version(code, jurisdiction=None):
     """Given a license code and optional jurisdiction, determine what

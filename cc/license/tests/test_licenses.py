@@ -22,6 +22,8 @@ class TestAll:
         self.stdsel = cc.license.selectors.choose('standard')
         self.smpsel = cc.license.selectors.choose('recombo')
         self.pdsel = cc.license.selectors.choose('publicdomain')
+        self.softwaresel = cc.license.selectors.choose('software')
+        self.cc0sel = cc.license.selectors.choose('CC0')
 
     def test_license_class(self):
         stdlic = self.stdsel.by_code('by')
@@ -30,6 +32,10 @@ class TestAll:
         assert self.smpsel.id == smplic.license_class
         pdlic = self.pdsel.by_code('publicdomain')
         assert self.pdsel.id == pdlic.license_class
+        cc0lic = self.cc0sel.by_code('CC0')
+        assert self.cc0sel.id == cc0lic.license_class
+        gpllic = self.softwaresel.by_code('GPL')
+        assert self.softwaresel.id == gpllic.license_class
 
     def test_version(self):
         uri = 'http://creativecommons.org/licenses/by-sa/1.0/'
