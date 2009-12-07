@@ -181,11 +181,17 @@ class License(object):
 
     @property
     def logo(self):
+        return self.logo_method()
+
+    def logo_method(self, size='88x31'):
         if self._logos is None:
             self._logos = rdf_helper.get_logos(self._model, self.uri)
 
         if self._logos:
-            return max(self._logos)
+            try:
+                return [logo for logo in self._logos if size in logo][0]
+            except IndexError:
+                return max(self._logos)
 
     @property
     def rdf(self):
