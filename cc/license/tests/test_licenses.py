@@ -149,6 +149,14 @@ class TestAll:
         by_jp = self.stdsel.by_code('by', jurisdiction='jp')
         assert 'jp' in by_jp.logo
 
+    def test_logo_method(self):
+        # Ensure that we get the default size for the cc-by license (88x31)
+        by = self.stdsel.by_code('by')
+        assert '88x31' in by.logo_method()
+        assert '88x31' in by.logo_method('88x31')
+        # Ensure that we can get the "slim" image version
+        assert '80x15' in by.logo_method('80x15')
+
     def test_has_license(self):
         std = 'http://creativecommons.org/licenses/by/3.0/'
         smp = 'http://creativecommons.org/licenses/sampling+/1.0/'
