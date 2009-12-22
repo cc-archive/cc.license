@@ -69,7 +69,7 @@ class License(object):
     def title(self, language='en'):
         if self._titles is None:
             self._titles = rdf_helper.get_titles(self._model, self.uri)
-        return self._titles[language]
+        return self._titles.get(language) or self._titles[None]
 
     def description(self, language='en'):
         if self._descriptions is None:
