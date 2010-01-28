@@ -1,0 +1,22 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:dc="http://purl.org/dc/elements/1.1/title"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      i18n:domain="cc.license"
+      tal:omit-tag="">
+<p xmlns:dct="http://purl.org/dc/terms/"
+   xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#">
+  <a rel="license" tal:attributes="href license/uri"
+     style="text-decoration:none;">
+    <img src="http://i.creativecommons.org/l/zero/1.0/88x31.png"
+         border="0" alt="CC0" />
+  </a>
+  <br/>
+  To the extent possible under law, 
+  <span rel="dct:publisher" 
+        resource="[_:publisher]">the person who associated CC0</span>
+  with this work has waived all copyright and related or neighboring
+  rights to this work.
+</p>
+</html>

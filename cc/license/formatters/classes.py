@@ -35,10 +35,16 @@ WORKTITLE_HEADER_TEMPLATE = os.path.join(TEMPLATE_PATH, 'worktitle_header.pt')
 ATTRIBUTION_WORKTITLE_HEADER_TEMPLATE = os.path.join(
     TEMPLATE_PATH, 'attribution_worktitle_header.pt')
 
+CC0_DEFAULT_TEMPLATE = os.path.join(TEMPLATE_PATH, 'cc0/default.pt')
+CC0_DEFAULT_ACTOR_TEMPLATE = os.path.join(TEMPLATE_PATH, 'cc0/default_actor.pt')
+CC0_WORK_TEMPLATE = os.path.join(TEMPLATE_PATH, 'cc0/work.pt')
+CC0_WORK_ACTOR_TEMPLATE = os.path.join(TEMPLATE_PATH, 'cc0/work_actor.pt')
+
 PARENT_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 I18N_PATH = os.path.join(PARENT_PATH, 'i18n')
 
 DOMAIN_SETUP = False
+
 
 class HTMLFormatter(object):
     zope.interface.implements(ILicenseFormatter)
@@ -144,3 +150,37 @@ class HTMLFormatter(object):
              "more_permissions_url": work_dict.get('more_permissions_url'),
              "test_false": False})
         return util.stripped_inner_xml(rendered_template)
+
+
+class CC0HTMLFormatter(HTMLFormatter):
+    def __repr__(self):
+        return "<CC0LicenseFormatter object '%s'>" % self.id
+
+    def format(self, license, work_dict=None, locale='en', country='US'):
+        self.setup_i18n()
+
+        work_title = work_dict.get('work_title', False)
+        actor_href = work_dict.get('actor_href', '').strip()
+        actor = work_dict.get('name', '').strip()
+        
+        if work_title:
+            if actor or actor_href:
+                template_path = CC0_WORK_ACTOR_TEMPLATE
+            else:
+                template_path = CC0_WORK_TEMPLATE
+        else:
+            if actor or actor_href:
+                template_path = CC0_DEFAULT_ACTOR_TEMPLATE
+            else:
+                template_path = CC0_DEFAULT_TEMPLATE
+
+        target_language = '%s_%s' % (locale, country)
+
+        base_template = CCLPageTemplateFile(
+            template_path,
+            target_language=target_language)
+        
+        rendered_template = base_template.pt_render(
+            {"license": license})
+
+        return rendered_template
