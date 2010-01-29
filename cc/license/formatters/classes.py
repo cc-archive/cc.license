@@ -181,6 +181,9 @@ class CC0HTMLFormatter(HTMLFormatter):
             target_language=target_language)
         
         rendered_template = base_template.pt_render(
-            {"license": license})
+            {"license": license,
+             "actor": form.get('actor'),
+             "actor_href": form.get('actor_href'),
+             "form": work_dict})
 
         return rendered_template
