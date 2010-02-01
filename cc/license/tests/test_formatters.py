@@ -59,6 +59,202 @@ class TestHTMLFormatter:
         self._validate(output)
 
 
+EXPECTED_CC0_PLAIN = """<p xmlns:dct="http://purl.org/dc/terms/" xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#">
+  <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/" style="text-decoration:none;">
+    <img src="http://i.creativecommons.org/l/zero/1.0/88x31.png" border="0" alt="CC0" />
+  </a>
+  <br />
+  To the extent possible under law,
+  <span rel="dct:publisher" resource="[_:publisher]">the person who associated CC0</span>
+  with this work has waived all copyright and related or neighboring
+  rights to this work.
+</p>"""
+
+EXPECTED_CC0_TITLE = """<p xmlns:dct="http://purl.org/dc/terms/" xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#">
+  <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/" style="text-decoration:none;">
+    <img src="http://i.creativecommons.org/l/zero/1.0/88x31.png" border="0" alt="CC0" />
+  </a>
+  <br />
+  To the extent possible under law,
+  <span rel="dct:publisher" resource="[_:publisher]">the person who associated CC0</span> with
+  Expected Title has waived all copyright and related or
+  neighboring rights
+  to <span property="dct:title">Expected Title</span>.
+</p>"""
+
+EXPECTED_CC0_ACTOR = """<p xmlns:dct="http://purl.org/dc/terms/" xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#">
+  <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/" style="text-decoration:none;">
+    <img src="http://i.creativecommons.org/l/zero/1.0/88x31.png" border="0" alt="CC0" />
+  </a>
+  <br />
+  To the extent possible under law, <a href="[_:publisher]" rel="dct:publisher"><span property="dct:title">Expected Name</span></a>
+  has waived all copyright and related or neighboring rights to
+  this work.
+</p>"""
+
+EXPECTED_CC0_ACTOR_TITLE = """<p xmlns:dct="http://purl.org/dc/terms/" xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#">
+  <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/" style="text-decoration:none;">
+    <img src="http://i.creativecommons.org/l/zero/1.0/88x31.png" border="0" alt="CC0" />
+  </a>
+  <br />
+  To the extent possible under law, <a href="[_:publisher]" rel="dct:publisher"><span property="dct:title">Expected Name</span></a>
+  has waived all copyright and related or neighboring rights to
+  <span property="dct:title">Expected Title</span>.
+</p>"""
+
+EXPECTED_CC0_LINK = """<p xmlns:dct="http://purl.org/dc/terms/" xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#">
+  <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/" style="text-decoration:none;">
+    <img src="http://i.creativecommons.org/l/zero/1.0/88x31.png" border="0" alt="CC0" />
+  </a>
+  <br />
+  To the extent possible under law, <a href="http://example.org/expected_url" rel="dct:publisher">http://example.org/expected_url</a>
+  has waived all copyright and related or neighboring rights to
+  this work.
+</p>"""
+
+EXPECTED_CC0_LINK_TITLE = """<p xmlns:dct="http://purl.org/dc/terms/" xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#">
+  <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/" style="text-decoration:none;">
+    <img src="http://i.creativecommons.org/l/zero/1.0/88x31.png" border="0" alt="CC0" />
+  </a>
+  <br />
+  To the extent possible under law, <a href="http://example.org/expected_url" rel="dct:publisher">http://example.org/expected_url</a>
+  has waived all copyright and related or neighboring rights to
+  <span property="dct:title">Expected Title</span>.
+</p>"""
+
+
+EXPECTED_CC0_ACTOR_AND_LINK = """<p xmlns:dct="http://purl.org/dc/terms/" xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#">
+  <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/" style="text-decoration:none;">
+    <img src="http://i.creativecommons.org/l/zero/1.0/88x31.png" border="0" alt="CC0" />
+  </a>
+  <br />
+  To the extent possible under law, <a href="http://example.org/expected_url" rel="dct:publisher"><span property="dct:title">Expected Name</span></a>
+  has waived all copyright and related or neighboring rights to
+  this work.
+</p>
+"""
+
+EXPECTED_CC0_ACTOR_AND_LINK_TITLE = """<p xmlns:dct="http://purl.org/dc/terms/" xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#">
+  <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/" style="text-decoration:none;">
+    <img src="http://i.creativecommons.org/l/zero/1.0/88x31.png" border="0" alt="CC0" />
+  </a>
+  <br />
+  To the extent possible under law, <a href="http://example.org/expected_url" rel="dct:publisher"><span property="dct:title">Expected Name</span></a>
+  has waived all copyright and related or neighboring rights to
+  <span property="dct:title">Expected Title</span>.
+</p>"""
+
+EXPECTED_CC0_COUNTRY = """<p xmlns:dct="http://purl.org/dc/terms/" xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#">
+  <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/" style="text-decoration:none;">
+    <img src="http://i.creativecommons.org/l/zero/1.0/88x31.png" border="0" alt="CC0" />
+  </a>
+  <br />
+  To the extent possible under law,
+  <span rel="dct:publisher" resource="[_:publisher]">the person who associated CC0</span>
+  with this work has waived all copyright and related or neighboring
+  rights to this work.
+This work is published from
+<span about="" property="vcard:Country" datatype="dct:ISO3166" content="AU">Australia</span>.
+</p>"""
+
+EXPECTED_CC0_COUNTRY_ACTOR_AND_LINK_TITLE = """<p xmlns:dct="http://purl.org/dc/terms/" xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#">
+  <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/" style="text-decoration:none;">
+    <img src="http://i.creativecommons.org/l/zero/1.0/88x31.png" border="0" alt="CC0" />
+  </a>
+  <br />
+  To the extent possible under law, <a href="http://example.org/expected_url" rel="dct:publisher"><span property="dct:title">Expected Name</span></a>
+  has waived all copyright and related or neighboring rights to
+  <span property="dct:title">Expected Title</span>.
+This work is published from
+<span about="http://example.org/expected_url" property="vcard:Country" datatype="dct:ISO3166" content="AU">Australia</span>.
+</p>"""
+
+class TestCC0Formatter:
+    def __init__(self):
+        self.license = cc.license.by_code('CC0')
+        self.html = cc.license.formatters.classes.CC0HTMLFormatter()
+
+    # XXX not wrapped in <html> tags
+    def _validate(self, output):
+        assert 0
+        relax_validate(RELAX_HTML, '<html>' + output + '</html>')
+
+    def test_plain(self):
+        output = self.html.format(self.license, locale='en')
+        assert output.strip() == EXPECTED_CC0_PLAIN
+
+    def test_title(self):
+        output = self.html.format(
+            self.license, locale='en',
+            work_dict={
+                'work_title': 'Expected Title'})
+        assert output.strip() == EXPECTED_CC0_TITLE
+
+    def test_actor(self):
+        output = self.html.format(
+            self.license, locale='en',
+            work_dict={
+                'actor': 'Expected Name'})
+        assert output.strip() == EXPECTED_CC0_ACTOR
+
+    def test_actor_title(self):
+        output = self.html.format(
+            self.license, locale='en',
+            work_dict={
+                'work_title': 'Expected Title',
+                'actor': 'Expected Name'})
+        assert output.strip() == EXPECTED_CC0_ACTOR_TITLE
+
+    def test_link(self):
+        output = self.html.format(
+            self.license, locale='en',
+            work_dict={
+                'actor_href': 'http://example.org/expected_url'})
+        assert output.strip() == EXPECTED_CC0_LINK
+
+    def test_link_title(self):
+        output = self.html.format(
+            self.license, locale='en',
+            work_dict={
+                'work_title': 'Expected Title',
+                'actor_href': 'http://example.org/expected_url'})
+        assert output.strip() == EXPECTED_CC0_LINK_TITLE
+
+    def test_actor_link(self):
+        output = self.html.format(
+            self.license, locale='en',
+            work_dict={
+                'actor': 'Expected Name',
+                'actor_href': 'http://example.org/expected_url'})
+        assert output.strip() == EXPECTED_CC0_ACTOR_AND_LINK
+
+    def test_actor_link_title(self):
+        output = self.html.format(
+            self.license, locale='en',
+            work_dict={
+                'work_title': 'Expected Title',
+                'actor': 'Expected Name',
+                'actor_href': 'http://example.org/expected_url'})
+        assert output.strip() == EXPECTED_CC0_ACTOR_AND_LINK_TITLE
+        
+    def test_country(self):
+        output = self.html.format(
+            self.license, locale='en',
+            work_dict={
+                'work_jurisdiction': 'AU'})
+        assert output.strip() == EXPECTED_CC0_COUNTRY
+
+    def test_country_actor_link_title(self):
+        output = self.html.format(
+            self.license, locale='en',
+            work_dict={
+                'work_title': 'Expected Title',
+                'actor': 'Expected Name',
+                'actor_href': 'http://example.org/expected_url',
+                'work_jurisdiction': 'AU'})
+        assert output.strip() == EXPECTED_CC0_COUNTRY_ACTOR_AND_LINK_TITLE
+
+
 class TestPublicApi:
 
     def __init__(self):
@@ -131,3 +327,9 @@ class TestCustomization:
         for f in self.formatters:
             s = str(f)
             assert f.title in s
+
+
+#####
+# CC0
+#####
+
