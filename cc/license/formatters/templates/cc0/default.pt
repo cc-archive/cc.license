@@ -27,7 +27,7 @@
 </p>
 <span tal:condition="python: work_jurisdiction not in ('', '-', None, False)"
       tal:omit-tag="">This work is published from
-<span tal:attributes="about publisher
+<span tal:attributes="about publisher;
                       content country"
       tal:content="country_name"></span>.</span>
 </html>

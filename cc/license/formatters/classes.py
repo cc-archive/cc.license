@@ -35,10 +35,7 @@ WORKTITLE_HEADER_TEMPLATE = os.path.join(TEMPLATE_PATH, 'worktitle_header.pt')
 ATTRIBUTION_WORKTITLE_HEADER_TEMPLATE = os.path.join(
     TEMPLATE_PATH, 'attribution_worktitle_header.pt')
 
-CC0_DEFAULT_TEMPLATE = os.path.join(TEMPLATE_PATH, 'cc0/default.pt')
-CC0_DEFAULT_ACTOR_TEMPLATE = os.path.join(TEMPLATE_PATH, 'cc0/default_actor.pt')
-CC0_WORK_TEMPLATE = os.path.join(TEMPLATE_PATH, 'cc0/work.pt')
-CC0_WORK_ACTOR_TEMPLATE = os.path.join(TEMPLATE_PATH, 'cc0/work_actor.pt')
+CC0_BASE_TEMPLATE = os.path.join(TEMPLATE_PATH, 'cc0/default.pt')
 
 PARENT_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 I18N_PATH = os.path.join(PARENT_PATH, 'i18n')
@@ -165,27 +162,18 @@ class CC0HTMLFormatter(HTMLFormatter):
         actor_href = work_dict.get('actor_href', '').strip()
         actor = work_dict.get('name', '').strip()
         
-        if work_title:
-            if actor or actor_href:
-                template_path = CC0_WORK_ACTOR_TEMPLATE
-            else:
-                template_path = CC0_WORK_TEMPLATE
-        else:
-            if actor or actor_href:
-                template_path = CC0_DEFAULT_ACTOR_TEMPLATE
-            else:
-                template_path = CC0_DEFAULT_TEMPLATE
-
         target_language = '%s_%s' % (locale, country)
 
         base_template = CCLPageTemplateFile(
-            template_path,
+            CC0_BASE_TEMPLATE,
             target_language=target_language)
         
         rendered_template = base_template.pt_render(
             {"license": license,
              "actor": work_dict.get('actor'),
              "actor_href": work_dict.get('actor_href'),
+             "work_jurisdiction": work_dict.get('work_jurisdiction'),
+             "publisher": work_dict.get('actor_href', "[_:publisher]"),
              "form": work_dict})
 
         return rendered_template
