@@ -159,6 +159,8 @@ class CC0HTMLFormatter(HTMLFormatter):
     def format(self, license, work_dict=None, locale='en', country='US'):
         self.setup_i18n()
 
+        work_dict = work_dict or {}
+
         work_title = work_dict.get('work_title', False)
         actor_href = work_dict.get('actor_href', '').strip()
         actor = work_dict.get('name', '').strip()
