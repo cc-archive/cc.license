@@ -35,7 +35,7 @@ WORKTITLE_HEADER_TEMPLATE = os.path.join(TEMPLATE_PATH, 'worktitle_header.pt')
 ATTRIBUTION_WORKTITLE_HEADER_TEMPLATE = os.path.join(
     TEMPLATE_PATH, 'attribution_worktitle_header.pt')
 
-CC0_BASE_TEMPLATE = os.path.join(TEMPLATE_PATH, 'cc0/default.pt')
+CC0_BASE_TEMPLATE = os.path.join(TEMPLATE_PATH, 'cc0.pt')
 
 PARENT_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 I18N_PATH = os.path.join(PARENT_PATH, 'i18n')
