@@ -186,4 +186,4 @@ class CC0HTMLFormatter(HTMLFormatter):
              "country_name": country_name,
              "form": work_dict})
 
-        return rendered_template
+        return util.remove_blank_lines(rendered_template)

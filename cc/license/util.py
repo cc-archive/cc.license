@@ -151,6 +151,15 @@ def stripped_inner_xml(xml_string):
     return inner_xml(etree.tostring(et))
 
 
+def remove_blank_lines(string):
+    new_lines = []
+    for line in string.splitlines():
+        if line.strip():
+            new_lines.append(line)
+
+    return '\n'.join(new_lines)
+
+
 def unicode_cleaner(string):
     if isinstance(string, unicode):
         return string
