@@ -60,7 +60,8 @@ class TestHTMLFormatter:
 
 
 EXPECTED_CC0_PLAIN = """<p xmlns:dct="http://purl.org/dc/terms/" xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#">
-  <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/" style="text-decoration:none;">
+  <a rel="license" style="text-decoration:none;"
+     href="http://creativecommons.org/publicdomain/zero/1.0/">
     <img src="http://i.creativecommons.org/l/zero/1.0/88x31.png" border="0" alt="CC0" />
   </a>
   <br />
@@ -71,7 +72,8 @@ EXPECTED_CC0_PLAIN = """<p xmlns:dct="http://purl.org/dc/terms/" xmlns:vcard="ht
 </p>"""
 
 EXPECTED_CC0_TITLE = """<p xmlns:dct="http://purl.org/dc/terms/" xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#">
-  <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/" style="text-decoration:none;">
+  <a rel="license" style="text-decoration:none;"
+     href="http://creativecommons.org/publicdomain/zero/1.0/">
     <img src="http://i.creativecommons.org/l/zero/1.0/88x31.png" border="0" alt="CC0" />
   </a>
   <br />
@@ -83,69 +85,82 @@ EXPECTED_CC0_TITLE = """<p xmlns:dct="http://purl.org/dc/terms/" xmlns:vcard="ht
 </p>"""
 
 EXPECTED_CC0_ACTOR = """<p xmlns:dct="http://purl.org/dc/terms/" xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#">
-  <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/" style="text-decoration:none;">
+  <a rel="license" style="text-decoration:none;"
+     href="http://creativecommons.org/publicdomain/zero/1.0/">
     <img src="http://i.creativecommons.org/l/zero/1.0/88x31.png" border="0" alt="CC0" />
   </a>
   <br />
-  To the extent possible under law, <a href="[_:publisher]" rel="dct:publisher"><span property="dct:title">Expected Name</span></a>
+  To the extent possible under law,
+  <a href="[_:publisher]" rel="dct:publisher"><span property="dct:title">Expected Name</span></a>
   has waived all copyright and related or neighboring rights to
   this work.
 </p>"""
 
 EXPECTED_CC0_ACTOR_TITLE = """<p xmlns:dct="http://purl.org/dc/terms/" xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#">
-  <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/" style="text-decoration:none;">
+  <a rel="license" style="text-decoration:none;"
+     href="http://creativecommons.org/publicdomain/zero/1.0/">
     <img src="http://i.creativecommons.org/l/zero/1.0/88x31.png" border="0" alt="CC0" />
   </a>
   <br />
-  To the extent possible under law, <a href="[_:publisher]" rel="dct:publisher"><span property="dct:title">Expected Name</span></a>
+  To the extent possible under law,
+  <a href="[_:publisher]" rel="dct:publisher"><span property="dct:title">Expected Name</span></a>
   has waived all copyright and related or neighboring rights to
   <span property="dct:title">Expected Title</span>.
 </p>"""
 
 EXPECTED_CC0_LINK = """<p xmlns:dct="http://purl.org/dc/terms/" xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#">
-  <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/" style="text-decoration:none;">
+  <a rel="license" style="text-decoration:none;"
+     href="http://creativecommons.org/publicdomain/zero/1.0/">
     <img src="http://i.creativecommons.org/l/zero/1.0/88x31.png" border="0" alt="CC0" />
   </a>
   <br />
-  To the extent possible under law, <a href="http://example.org/expected_url" rel="dct:publisher">http://example.org/expected_url</a>
+  To the extent possible under law,
+  <a href="http://example.org/expected_url" rel="dct:publisher">http://example.org/expected_url</a>
   has waived all copyright and related or neighboring rights to
   this work.
 </p>"""
 
 EXPECTED_CC0_LINK_TITLE = """<p xmlns:dct="http://purl.org/dc/terms/" xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#">
-  <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/" style="text-decoration:none;">
+  <a rel="license" style="text-decoration:none;"
+     href="http://creativecommons.org/publicdomain/zero/1.0/">
     <img src="http://i.creativecommons.org/l/zero/1.0/88x31.png" border="0" alt="CC0" />
   </a>
   <br />
-  To the extent possible under law, <a href="http://example.org/expected_url" rel="dct:publisher">http://example.org/expected_url</a>
+  To the extent possible under law,
+  <a href="http://example.org/expected_url" rel="dct:publisher">http://example.org/expected_url</a>
   has waived all copyright and related or neighboring rights to
   <span property="dct:title">Expected Title</span>.
 </p>"""
 
 
 EXPECTED_CC0_ACTOR_AND_LINK = """<p xmlns:dct="http://purl.org/dc/terms/" xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#">
-  <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/" style="text-decoration:none;">
+  <a rel="license" style="text-decoration:none;"
+     href="http://creativecommons.org/publicdomain/zero/1.0/">
     <img src="http://i.creativecommons.org/l/zero/1.0/88x31.png" border="0" alt="CC0" />
   </a>
   <br />
-  To the extent possible under law, <a href="http://example.org/expected_url" rel="dct:publisher"><span property="dct:title">Expected Name</span></a>
+  To the extent possible under law,
+  <a href="http://example.org/expected_url" rel="dct:publisher"><span property="dct:title">Expected Name</span></a>
   has waived all copyright and related or neighboring rights to
   this work.
 </p>
 """
 
 EXPECTED_CC0_ACTOR_AND_LINK_TITLE = """<p xmlns:dct="http://purl.org/dc/terms/" xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#">
-  <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/" style="text-decoration:none;">
+  <a rel="license" style="text-decoration:none;"
+     href="http://creativecommons.org/publicdomain/zero/1.0/">
     <img src="http://i.creativecommons.org/l/zero/1.0/88x31.png" border="0" alt="CC0" />
   </a>
   <br />
-  To the extent possible under law, <a href="http://example.org/expected_url" rel="dct:publisher"><span property="dct:title">Expected Name</span></a>
+  To the extent possible under law,
+  <a href="http://example.org/expected_url" rel="dct:publisher"><span property="dct:title">Expected Name</span></a>
   has waived all copyright and related or neighboring rights to
   <span property="dct:title">Expected Title</span>.
 </p>"""
 
 EXPECTED_CC0_COUNTRY = """<p xmlns:dct="http://purl.org/dc/terms/" xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#">
-  <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/" style="text-decoration:none;">
+  <a rel="license" style="text-decoration:none;"
+     href="http://creativecommons.org/publicdomain/zero/1.0/">
     <img src="http://i.creativecommons.org/l/zero/1.0/88x31.png" border="0" alt="CC0" />
   </a>
   <br />
@@ -158,11 +173,13 @@ This work is published from
 </p>"""
 
 EXPECTED_CC0_COUNTRY_ACTOR_AND_LINK_TITLE = """<p xmlns:dct="http://purl.org/dc/terms/" xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#">
-  <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/" style="text-decoration:none;">
+  <a rel="license" style="text-decoration:none;"
+     href="http://creativecommons.org/publicdomain/zero/1.0/">
     <img src="http://i.creativecommons.org/l/zero/1.0/88x31.png" border="0" alt="CC0" />
   </a>
   <br />
-  To the extent possible under law, <a href="http://example.org/expected_url" rel="dct:publisher"><span property="dct:title">Expected Name</span></a>
+  To the extent possible under law,
+  <a href="http://example.org/expected_url" rel="dct:publisher"><span property="dct:title">Expected Name</span></a>
   has waived all copyright and related or neighboring rights to
   <span property="dct:title">Expected Title</span>.
 This work is published from
