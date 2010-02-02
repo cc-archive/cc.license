@@ -18,6 +18,7 @@ from zope.i18n.translationdomain import TranslationDomain
 from zope.i18n.gettextmessagecatalog import GettextMessageCatalog
 from zope.i18n.interfaces import ITranslationDomain
 from zope.i18n.compile import compile_mo_file
+from zope.i18n import translate
 import zope.interface
 from zope import component
 
@@ -168,12 +169,21 @@ class CC0HTMLFormatter(HTMLFormatter):
             CC0_BASE_TEMPLATE,
             target_language=target_language)
         
+
+        work_jurisdiction = work_dict.get('work_jurisdiction')
+        country_name = None
+        if work_jurisdiction:
+            country_name = translate(
+                util.CODE_COUNTRY_MAP[work_jurisdiction],
+                target_language=target_language)
+
         rendered_template = base_template.pt_render(
             {"license": license,
-             "actor": work_dict.get('actor'),
+             "actor": actor,
              "actor_href": work_dict.get('actor_href'),
-             "work_jurisdiction": work_dict.get('work_jurisdiction'),
+             "work_jurisdiction": work_jurisdiction,
              "publisher": work_dict.get('actor_href', "[_:publisher]"),
+             "country_name": country_name,
              "form": work_dict})
 
         return rendered_template

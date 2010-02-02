@@ -1,7 +1,9 @@
+import csv
+import pkg_resources
+import re
+
 from lxml import etree
 import StringIO
-
-import re
 
 
 LEFT_WHITE_SPACE_RE = re.compile('\A[ \n\t].*\Z', re.DOTALL)
@@ -147,3 +149,27 @@ def stripped_inner_xml(xml_string):
     et = etree.parse(StringIO.StringIO(xml_string))
     strip_xml(et.getroot())
     return inner_xml(etree.tostring(et))
+
+
+def unicode_cleaner(string):
+    if isinstance(string, unicode):
+        return string
+
+    try:
+        return string.decode('utf-8')
+    except UnicodeError:
+        try:
+            return string.decode('latin-1')
+        except UnicodeError:
+            return string.decode('utf-8', 'ignore')
+
+
+###
+## ISO 3166 -- country names to country code utilities
+###
+
+CODE_COUNTRY_LIST = [
+    (unicode_cleaner(code), unicode_cleaner(country))
+    for code, country in csv.reader(
+        file(pkg_resources.resource_filename('cc.license', 'iso3166.csv')))]
+CODE_COUNTRY_MAP = dict(CODE_COUNTRY_LIST)
