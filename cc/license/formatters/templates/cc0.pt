@@ -7,13 +7,13 @@
       tal:omit-tag="">
 <p xmlns:dct="http://purl.org/dc/terms/"
    xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#">
-  <a rel="license" tal:attributes="href license/uri"
-     style="text-decoration:none;">
+  <a rel="license" style="text-decoration:none;"
+     tal:attributes="href license/uri">
     <img src="http://i.creativecommons.org/l/zero/1.0/88x31.png"
          border="0" alt="CC0" />
   </a>
   <br/>
-  To the extent possible under law, 
+  To the extent possible under law,
   <span tal:condition="python: actor and actor_href">
     <a tal:attributes="href actor_href" rel="dct:publisher"><span property="dct:title" tal:content="actor"></span></a></span>
   <span tal:condition="python: actor_href and not actor">
