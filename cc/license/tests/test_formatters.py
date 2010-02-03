@@ -211,7 +211,7 @@ class TestCC0Formatter:
         output = self.html.format(
             self.license, locale='en',
             work_dict={
-                'actor': 'Expected Name'})
+                'name': 'Expected Name'})
         assert output.strip() == EXPECTED_CC0_ACTOR
 
     def test_actor_title(self):
@@ -219,7 +219,7 @@ class TestCC0Formatter:
             self.license, locale='en',
             work_dict={
                 'work_title': 'Expected Title',
-                'actor': 'Expected Name'})
+                'name': 'Expected Name'})
         assert output.strip() == EXPECTED_CC0_ACTOR_TITLE
 
     def test_link(self):
@@ -241,7 +241,7 @@ class TestCC0Formatter:
         output = self.html.format(
             self.license, locale='en',
             work_dict={
-                'actor': 'Expected Name',
+                'name': 'Expected Name',
                 'actor_href': 'http://example.org/expected_url'})
         assert output.strip() == EXPECTED_CC0_ACTOR_AND_LINK
 
@@ -250,7 +250,7 @@ class TestCC0Formatter:
             self.license, locale='en',
             work_dict={
                 'work_title': 'Expected Title',
-                'actor': 'Expected Name',
+                'name': 'Expected Name',
                 'actor_href': 'http://example.org/expected_url'})
         assert output.strip() == EXPECTED_CC0_ACTOR_AND_LINK_TITLE
         
@@ -266,7 +266,7 @@ class TestCC0Formatter:
             self.license, locale='en',
             work_dict={
                 'work_title': 'Expected Title',
-                'actor': 'Expected Name',
+                'name': 'Expected Name',
                 'actor_href': 'http://example.org/expected_url',
                 'work_jurisdiction': 'AU'})
         assert output.strip() == EXPECTED_CC0_COUNTRY_ACTOR_AND_LINK_TITLE
