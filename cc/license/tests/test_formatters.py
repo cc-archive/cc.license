@@ -104,7 +104,8 @@ EXPECTED_CC0_ACTOR_TITLE = """<p xmlns:dct="http://purl.org/dc/terms/" xmlns:vca
   </a>
   <br />
   To the extent possible under law,
-  <a href="[_:publisher]" rel="dct:publisher"><span property="dct:title">Expected Name</span></a>
+  <a href="[_:publisher]" rel="dct:publisher">
+    <span property="dct:title">Expected Name</span></a>
   has waived all copyright and related or neighboring rights to
   <span property="dct:title">Expected Title</span>.
 </p>"""
