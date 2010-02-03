@@ -174,7 +174,8 @@ EXPECTED_CC0_COUNTRY = """<p xmlns:dct="http://purl.org/dc/terms/" xmlns:vcard="
   with this work has waived all copyright and related or neighboring
   rights to this work.
 This work is published from
-<span about="" property="vcard:Country" datatype="dct:ISO3166" content="AU">Australia</span>.
+<span property="vcard:Country" datatype="dct:ISO3166"
+      content="AU" about="">Australia</span>.
 </p>"""
 
 EXPECTED_CC0_COUNTRY_ACTOR_AND_LINK_TITLE = """<p xmlns:dct="http://purl.org/dc/terms/" xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#">
