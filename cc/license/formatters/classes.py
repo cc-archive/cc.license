@@ -184,6 +184,7 @@ class CC0HTMLFormatter(HTMLFormatter):
              "work_jurisdiction": work_jurisdiction,
              "publisher": work_dict.get('actor_href', "[_:publisher]"),
              "country_name": country_name,
+             "work_title": work_title,
              "form": work_dict})
 
         return util.remove_blank_lines(rendered_template)

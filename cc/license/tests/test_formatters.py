@@ -155,7 +155,9 @@ EXPECTED_CC0_ACTOR_AND_LINK_TITLE = """<p xmlns:dct="http://purl.org/dc/terms/" 
   </a>
   <br />
   To the extent possible under law,
-  <a href="http://example.org/expected_url" rel="dct:publisher"><span property="dct:title">Expected Name</span></a>
+  <a rel="dct:publisher"
+     href="http://example.org/expected_url">
+    <span property="dct:title">Expected Name</span></a>
   has waived all copyright and related or neighboring rights to
   <span property="dct:title">Expected Title</span>.
 </p>"""
@@ -181,7 +183,9 @@ EXPECTED_CC0_COUNTRY_ACTOR_AND_LINK_TITLE = """<p xmlns:dct="http://purl.org/dc/
   </a>
   <br />
   To the extent possible under law,
-  <a href="http://example.org/expected_url" rel="dct:publisher"><span property="dct:title">Expected Name</span></a>
+  <a rel="dct:publisher"
+     href="http://example.org/expected_url">
+    <span property="dct:title">Expected Name</span></a>
   has waived all copyright and related or neighboring rights to
   <span property="dct:title">Expected Title</span>.
 This work is published from
