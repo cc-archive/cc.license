@@ -18,8 +18,7 @@
     <a tal:attributes="href actor_href" rel="dct:publisher"><span property="dct:title" tal:content="actor"></span></a></span>
   <span tal:condition="python: actor_href and not actor">
     <a tal:attributes="href actor_href" rel="dct:publisher" tal:content="actor_href"></a></span>
-  <span tal:condition="python: actor and not actor_href">
-    <span rel="dct:publisher" tal:attributes="resource actor_href"><span property="dct:title" tal:content="actor"></span></span></span>
+  <a tal:condition="python: actor and not actor_href" href="[_:publisher]" rel="dct:publisher"><span property="dct:title" tal:content="actor"></span></a>
   <span tal:condition="python: not actor and not actor_href" rel="dct:publisher"
         resource="[_:publisher]">the person who associated CC0</span>
   with this work has waived all copyright and related or neighboring
