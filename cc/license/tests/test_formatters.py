@@ -117,7 +117,8 @@ EXPECTED_CC0_LINK = """<p xmlns:dct="http://purl.org/dc/terms/" xmlns:vcard="htt
   </a>
   <br />
   To the extent possible under law,
-  <a href="http://example.org/expected_url" rel="dct:publisher">http://example.org/expected_url</a>
+  <a rel="dct:publisher"
+     href="http://example.org/expected_url">http://example.org/expected_url</a>
   has waived all copyright and related or neighboring rights to
   this work.
 </p>"""
