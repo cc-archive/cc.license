@@ -180,9 +180,9 @@ class CC0HTMLFormatter(HTMLFormatter):
         rendered_template = base_template.pt_render(
             {"license": license,
              "actor": actor,
-             "actor_href": work_dict.get('actor_href'),
+             "actor_href": actor_href,
              "work_jurisdiction": work_jurisdiction,
-             "publisher": work_dict.get('actor_href') or "[_:publisher]",
+             "publisher": actor_href or "[_:publisher]",
              "country_name": country_name,
              "work_title": work_title,
              "form": work_dict})
