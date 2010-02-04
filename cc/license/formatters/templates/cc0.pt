@@ -15,11 +15,30 @@
   <br/>
   To the extent possible under law,
 
-<span tal:condition="actor" tal:omit-tag="">
-  <a tal:condition="actor_href" tal:attributes="href actor_href" rel="dct:publisher">
+<span tal:condition="python: not actor and not actor_href" tal:omit-tag="">
+  <span rel="dct:publisher" resource="[_:publisher]">the person who associated CC0</span>
+
+  <span tal:condition="work_title" tal:omit-tag="">
+  with
+  <span tal:content="work_title" tal:omit-tag="" />
+  has waived all copyright and related or neighboring rights to
+  <span property="dct:title" tal:content="work_title"></span>.
+  </span>
+
+  <span tal:condition="python: not work_title" tal:omit-tag="">
+  with this work has waived all copyright and related or neighboring
+  rights to this work.
+  </span>
+</span>
+
+<span tal:condition="python: actor or actor_href" tal:omit-tag="">
+  <a tal:condition="python: actor and actor_href" rel="dct:publisher"
+     tal:attributes="href actor_href">
     <span property="dct:title" tal:content="actor"></span></a>
-  <a tal:condition="python: not actor_href" href="[_:publisher]" rel="dct:publisher">
+  <a tal:condition="python: actor and not actor_href" href="[_:publisher]" rel="dct:publisher">
     <span property="dct:title" tal:content="actor"></span></a>
+  <a tal:condition="python: not actor and actor_href" rel="dct:publisher"
+     tal:attributes="href actor_href" tal:content="actor_href"></a>
 
   <span tal:condition="work_title" tal:omit-tag="">
   has waived all copyright and related or neighboring rights to
@@ -30,14 +49,6 @@
   has waived all copyright and related or neighboring rights to
   this work.
   </span>
-</span>
-
-<span tal:condition="python: not actor" tal:omit-tag="">
-  <a tal:condition="actor_href" tal:attributes="href actor_href" rel="dct:publisher" tal:content="actor_href"></a>
-  <span tal:condition="python: not actor_href" rel="dct:publisher"
-        resource="[_:publisher]">the person who associated CC0</span>
-  with this work has waived all copyright and related or neighboring
-  rights to this work.
 </span>
 
 <span tal:condition="python: work_jurisdiction not in ('', '-', None, False)"
