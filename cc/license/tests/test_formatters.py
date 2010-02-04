@@ -78,10 +78,11 @@ EXPECTED_CC0_TITLE = """<p xmlns:dct="http://purl.org/dc/terms/" xmlns:vcard="ht
   </a>
   <br />
   To the extent possible under law,
-  <span rel="dct:publisher" resource="[_:publisher]">the person who associated CC0</span> with
-  Expected Title has waived all copyright and related or
-  neighboring rights
-  to <span property="dct:title">Expected Title</span>.
+  <span rel="dct:publisher" resource="[_:publisher]">the person who associated CC0</span>
+  with
+  Expected Title
+  has waived all copyright and related or neighboring rights to
+  <span property="dct:title">Expected Title</span>.
 </p>"""
 
 EXPECTED_CC0_ACTOR = """<p xmlns:dct="http://purl.org/dc/terms/" xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#">
