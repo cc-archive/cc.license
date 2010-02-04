@@ -172,7 +172,7 @@ class CC0HTMLFormatter(HTMLFormatter):
 
         work_jurisdiction = work_dict.get('work_jurisdiction')
         country_name = None
-        if work_jurisdiction:
+        if work_jurisdiction not in ('', '-', None, False):
             country_name = translate(
                 util.CODE_COUNTRY_MAP[work_jurisdiction],
                 target_language=target_language)
