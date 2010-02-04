@@ -130,7 +130,8 @@ EXPECTED_CC0_LINK_TITLE = """<p xmlns:dct="http://purl.org/dc/terms/" xmlns:vcar
   </a>
   <br />
   To the extent possible under law,
-  <a href="http://example.org/expected_url" rel="dct:publisher">http://example.org/expected_url</a>
+  <a rel="dct:publisher"
+     href="http://example.org/expected_url">http://example.org/expected_url</a>
   has waived all copyright and related or neighboring rights to
   <span property="dct:title">Expected Title</span>.
 </p>"""
