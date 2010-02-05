@@ -26,7 +26,7 @@ def test_id_and_uri():
     for sid in cc.license.selectors.list():
         s = cc.license.selectors.choose(sid)
         assert s.id == sid
-        if s.id == 'CC0':
+        if s.id == 'zero':
             assert s.uri == 'http://creativecommons.org/choose/zero/'
         else:
             assert 'http://creativecommons.org/license' in s.uri

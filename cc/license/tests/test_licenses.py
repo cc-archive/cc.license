@@ -23,7 +23,7 @@ class TestAll:
         self.smpsel = cc.license.selectors.choose('recombo')
         self.pdsel = cc.license.selectors.choose('publicdomain')
         self.softwaresel = cc.license.selectors.choose('software')
-        self.cc0sel = cc.license.selectors.choose('CC0')
+        self.cc0sel = cc.license.selectors.choose('zero')
 
     def test_license_class(self):
         stdlic = self.stdsel.by_code('by')
