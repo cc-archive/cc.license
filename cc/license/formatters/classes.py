@@ -13,15 +13,10 @@ the licensed work. The keys of this work_dict are as follows:
 
 import os
 
-from zope.pagetemplate.pagetemplatefile import PageTemplateFile
-from zope.i18n.translationdomain import TranslationDomain
-from zope.i18n.gettextmessagecatalog import GettextMessageCatalog
-from zope.i18n.interfaces import ITranslationDomain
-from zope.i18n.compile import compile_mo_file
 from zope.i18n import translate
 import zope.interface
-from zope import component
 
+from cc.i18npkg import ccorg_i18n_setup
 from cc.license._lib.interfaces import ILicenseFormatter
 from cc.license import util
 from cc.license.formatters.pagetemplate import CCLPageTemplateFile
@@ -74,34 +69,9 @@ class HTMLFormatter(object):
         except KeyError: # if we dont understand it, pretend its not there
             return None
 
-    def setup_i18n(self):
-        global DOMAIN_SETUP
-        if DOMAIN_SETUP:
-            return
-
-        domain = TranslationDomain('cc.license')
-        for catalog in os.listdir(I18N_PATH):
-
-            catalog_path = os.path.join(I18N_PATH, catalog)
-
-            po_path = os.path.join(catalog_path, 'cc.license.po')
-            mo_path = os.path.join(catalog_path, 'cc.license.mo')
-            if not os.path.isdir(catalog_path) or not os.path.exists(po_path):
-                continue
-
-            compile_mo_file('cc.license', catalog_path)
-            
-            domain.addCatalog(GettextMessageCatalog(
-                    catalog, 'cc.license', mo_path))
-
-        component.provideUtility(domain, ITranslationDomain, name='cc.license')
-        DOMAIN_SETUP = True
-
     def format(self, license, work_dict=None, locale='en', country='US'):
         """Return an HTML + RDFa string serialization for the license,
             optionally incorporating the work metadata and locale."""
-        self.setup_i18n()
-
         work_dict = work_dict or {}
 
         main_text_type = 'default'
