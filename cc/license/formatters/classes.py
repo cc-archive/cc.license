@@ -89,7 +89,8 @@ class HTMLFormatter(object):
         if work_dict.get('format'):
             dctype = self._translate_dctype(work_dict['format'].lower())
 
-        target_language = '%s_%s' % (locale, country)
+        target_language = '%s_%s' % (locale.lower(), country.upper())
+
         base_template = CCLPageTemplateFile(
             BASE_TEMPLATE,
             target_language=target_language)
@@ -131,12 +132,11 @@ class CC0HTMLFormatter(HTMLFormatter):
         actor_href = work_dict.get('actor_href', '').strip()
         actor = work_dict.get('name', '').strip()
         
-        target_language = '%s_%s' % (locale, country)
+        target_language = '%s_%s' % (locale.lower(), country.upper())
 
         base_template = CCLPageTemplateFile(
             CC0_BASE_TEMPLATE,
             target_language=target_language)
-        
 
         work_jurisdiction = work_dict.get('work_jurisdiction')
         country_name = None
