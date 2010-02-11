@@ -69,7 +69,7 @@ class HTMLFormatter(object):
         except KeyError: # if we dont understand it, pretend its not there
             return None
 
-    def format(self, license, work_dict=None, locale='en', country='US'):
+    def format(self, license, work_dict=None, locale='en'):
         """Return an HTML + RDFa string serialization for the license,
             optionally incorporating the work metadata and locale."""
         work_dict = work_dict or {}
@@ -89,11 +89,9 @@ class HTMLFormatter(object):
         if work_dict.get('format'):
             dctype = self._translate_dctype(work_dict['format'].lower())
 
-        target_language = '%s_%s' % (locale.lower(), country.upper())
-
         base_template = CCLPageTemplateFile(
             BASE_TEMPLATE,
-            target_language=target_language)
+            target_language=locale)
         rendered_template = base_template.pt_render(
             {"main_text_type": main_text_type,
              "dctype": dctype,
@@ -102,16 +100,16 @@ class HTMLFormatter(object):
              "worktitle": work_dict.get('worktitle'),
              "default_header": CCLPageTemplateFile(
                     DEFAULT_HEADER_TEMPLATE,
-                    target_language=target_language),
+                    target_language=locale),
              "attribution_header": CCLPageTemplateFile(
                     ATTRIBUTION_HEADER_TEMPLATE,
-                    target_language=target_language),
+                    target_language=locale),
              "worktitle_header": CCLPageTemplateFile(
                     WORKTITLE_HEADER_TEMPLATE,
-                    target_language=target_language),
+                    target_language=locale),
              "attribution_worktitle_header": CCLPageTemplateFile(
                     ATTRIBUTION_WORKTITLE_HEADER_TEMPLATE,
-                    target_language=target_language),
+                    target_language=locale),
              "attribution_name": (work_dict.get('attribution_name')
                                   or work_dict.get('attribution_url')),
              "attribution_url": work_dict.get('attribution_url'),
@@ -125,25 +123,23 @@ class CC0HTMLFormatter(HTMLFormatter):
     def __repr__(self):
         return "<CC0LicenseFormatter object '%s'>" % self.id
 
-    def format(self, license, work_dict=None, locale='en', country='US'):
+    def format(self, license, work_dict=None, locale='en'):
         work_dict = work_dict or {}
 
         work_title = work_dict.get('work_title', False)
         actor_href = work_dict.get('actor_href', '').strip()
         actor = work_dict.get('name', '').strip()
-        
-        target_language = '%s_%s' % (locale.lower(), country.upper())
 
         base_template = CCLPageTemplateFile(
             CC0_BASE_TEMPLATE,
-            target_language=target_language)
+            target_language=locale)
 
         work_jurisdiction = work_dict.get('work_jurisdiction')
         country_name = None
         if work_jurisdiction not in ('', '-', None, False):
             country_name = translate(
                 util.CODE_COUNTRY_MAP[work_jurisdiction],
-                target_language=target_language)
+                target_language=locale)
 
         rendered_template = base_template.pt_render(
             {"license": license,
