@@ -128,7 +128,8 @@ class HTMLFormatter(object):
             {"main_text_type": main_text_type,
              "dctype": dctype,
              "dctype_url": "http://purl.org/dc/dcmitype/%s" % dctype,
-             "this_license": license, "locale": locale,
+             "this_license": license,
+             "locale": util.locale_to_dash_style(locale),
              "worktitle": work_dict.get('worktitle'),
              "default_header": CCLPageTemplateFile(
                     DEFAULT_HEADER_TEMPLATE,

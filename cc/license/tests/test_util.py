@@ -54,3 +54,10 @@ def test_simple_inner_xhtml_namespacing():
 def test_output_stripping():
     stripped_output = util.stripped_inner_xml(UNSTRIPPED_TEMPLATE_OUTPUT)
     assert_equal(stripped_output, EXPECTED_STRIPPED_OUTPUT)
+
+
+def test_locale_to_dash_style():
+    assert_equal(
+        util.locale_to_dash_style('en_US'), 'en-us')
+    assert_equal(
+        util.locale_to_dash_style('en'), 'en')

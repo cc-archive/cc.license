@@ -202,6 +202,17 @@ def get_selector_jurisdictions(selector_name='standard'):
     return jurisdictions
 
 
+def locale_to_dash_style(locale):
+    """
+    Convert a 'en_US' style locale to 'en-us' style
+    """
+    if '_' in locale:
+        lang, country = locale.split('_', 1)
+        return '%s-%s' % (lang.lower(), country.lower())
+    else:
+        return locale.lower()
+
+
 ###
 ## ISO 3166 -- country names to country code utilities
 ###
