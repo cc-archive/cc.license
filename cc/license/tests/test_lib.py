@@ -5,6 +5,35 @@ import cc.license
 from cc.license import CCLicenseError
 import cc.license._lib as lib
 
+
+def test_locale_dict_fetch_with_fallbacks():
+    data_dict = {
+        'de-ch': 'de-ch value',
+        'de': 'de value',
+        'en': 'en value',
+        None: 'None value',
+        'unused': 'we do not use this'}
+
+    nose.tools.assert_equal(
+        lib.classes.locale_dict_fetch_with_fallbacks(
+            data_dict, 'de-ch'), 'de-ch value')
+    data_dict.pop('de-ch')
+
+    nose.tools.assert_equal(
+        lib.classes.locale_dict_fetch_with_fallbacks(
+            data_dict, 'de-ch'), 'de value')
+    data_dict.pop('de')
+
+    nose.tools.assert_equal(
+        lib.classes.locale_dict_fetch_with_fallbacks(
+            data_dict, 'de-ch'), 'en value')
+    data_dict.pop('en')
+
+    nose.tools.assert_equal(
+        lib.classes.locale_dict_fetch_with_fallbacks(
+            data_dict, 'de-ch'), 'None value')
+
+
 class TestUriDict:
 
     def __init__(self):
