@@ -88,7 +88,7 @@ class License(object):
     def title(self, language='en'):
         if self._titles is None:
             self._titles = rdf_helper.get_titles(self._model, self.uri)
-        return self._titles.get(language) or self._titles[None]
+        return locale_dict_fetch_with_fallbacks(self._titles, language)
 
     def description(self, language='en'):
         if self._descriptions is None:
@@ -97,7 +97,8 @@ class License(object):
         if self._descriptions == '':
             return ''
         else:
-            return self._descriptions[language]
+            return locale_dict_fetch_with_fallbacks(
+                self._descriptions, language)
 
     @property
     def license_class(self):
@@ -296,15 +297,15 @@ class Question(object):
     def label(self, language='en'):
         if language == '':
             language = 'en' # why not?
-        return self._labels[language]
+        return locale_dict_fetch_with_fallbacks(self._labels, language)
 
     def description(self, language='en'):
         if language == '':
             language = 'en' # why not?
-        return self._descs[language]
+        return locale_dict_fetch_with_fallbacks(self._descs, language)
 
     def answers(self, language='en'):
         if language == '':
             language = 'en' # why not?
-        return [ ( self._enums[k][language], k ) 
-                 for k in self._enums.keys() ]
+        return [(locale_dict_fetch_with_fallbacks(self._enums[k], language), k)
+                for k in self._enums.keys()]
