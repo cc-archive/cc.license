@@ -214,3 +214,19 @@ def all_possible_answers(list_of_questions):
         return recursive_build_answers(new_adl, qs)
 
     return recursive_build_answers(answer_dict_list, questions)
+
+
+def get_valid_jurisdictions(license_class='standard'):
+    # TODO: use license_class here
+    query = RDF.Query(
+        str('PREFIX cc: <http://creativecommons.org/ns#> '
+            'SELECT ?jurisdiction WHERE '
+            '{ ?license cc:licenseClass <http://creativecommons.org/license/> .'
+            '  ?license cc:jurisdiction ?jurisdiction }'),
+        query_language="sparql")
+
+    jurisdictions = set(
+        [unicode(result['jurisdiction'].uri)
+         for result in query.execute(rdf_helper.ALL_MODEL)])
+
+    return jurisdictions
