@@ -184,6 +184,30 @@ def locale_to_dash_style(locale):
         return locale.lower()
 
 
+def locale_dict_fetch_with_fallbacks(data_dict, locale):
+    """
+    Take a dictionary with various locales as keys and translations as
+    values and a locale, and try to find a value that matches with
+    good fallbacks.
+    """
+    # try returning the locale as-is
+    if data_dict.has_key(locale):
+        return data_dict[locale]
+
+    # nope?  try just returning the language...
+    if '-' in locale:
+        language, country = locale.split('-', 1)
+        if data_dict.has_key(language):
+            return data_dict[language]
+
+    # still nope?  okay, try returning 'en', our default...
+    if data_dict.has_key('en'):
+        return data_dict['en']
+
+    # still no??  last attempt!
+    return data_dict[None]
+
+
 ###
 ## ISO 3166 -- country names to country code utilities
 ###

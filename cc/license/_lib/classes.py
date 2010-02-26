@@ -6,6 +6,7 @@ import interfaces
 import rdf_helper
 
 import cc.license
+from cc.license.util import locale_dict_fetch_with_fallbacks
 from cc.license._lib.exceptions import CCLicenseError
 
 
@@ -19,25 +20,6 @@ def _sort_licenses(x, y):
         return 0
     else:
         return -1
-
-
-def locale_dict_fetch_with_fallbacks(data_dict, locale):
-    # try returning the locale as-is
-    if data_dict.has_key(locale):
-        return data_dict[locale]
-
-    # nope?  try just returning the language...
-    if '-' in locale:
-        language, country = locale.split('-', 1)
-        if data_dict.has_key(language):
-            return data_dict[language]
-
-    # still nope?  okay, try returning 'en', our default...
-    if data_dict.has_key('en'):
-        return data_dict['en']
-
-    # still no??  last attempt!
-    return data_dict[None]
 
 
 class License(object):

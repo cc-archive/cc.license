@@ -61,3 +61,31 @@ def test_locale_to_dash_style():
         util.locale_to_dash_style('en_US'), 'en-us')
     assert_equal(
         util.locale_to_dash_style('en'), 'en')
+
+
+def test_locale_dict_fetch_with_fallbacks():
+    data_dict = {
+        'de-ch': 'de-ch value',
+        'de': 'de value',
+        'en': 'en value',
+        None: 'None value',
+        'unused': 'we do not use this'}
+
+    assert_equal(
+        util.locale_dict_fetch_with_fallbacks(
+            data_dict, 'de-ch'), 'de-ch value')
+    data_dict.pop('de-ch')
+
+    assert_equal(
+        util.locale_dict_fetch_with_fallbacks(
+            data_dict, 'de-ch'), 'de value')
+    data_dict.pop('de')
+
+    assert_equal(
+        util.locale_dict_fetch_with_fallbacks(
+            data_dict, 'de-ch'), 'en value')
+    data_dict.pop('en')
+
+    assert_equal(
+        util.locale_dict_fetch_with_fallbacks(
+            data_dict, 'de-ch'), 'None value')
