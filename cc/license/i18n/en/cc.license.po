@@ -37,7 +37,7 @@ msgstr ""
 
 #: cc/license/formatters/templates/base.pt:8
 msgid "Creative Commons License"
-msgstr "test test"
+msgstr ""
 
 #: cc/license/formatters/templates/default_header.pt:21
 msgid "This [span xmlns:dc='http://purl.org/dc/elements/1.1/' href='${dctype_url}' rel='dc:type']work[/span] is licensed under a [a rel='license' href='${license_uri}'] Creative Commons ${license_title} ${license_version} ${license_jurisdiction} License [/a]"
