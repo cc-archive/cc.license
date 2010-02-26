@@ -65,7 +65,8 @@ class Jurisdiction(object):
 
     def title(self, language='en'):
         try:
-            return self._titles[language]
+            return cc.license.util.locale_dict_fetch_with_fallbacks(
+                self._titles, language)
         except KeyError, e:
             import sys
             tb = sys.exc_info()[2]

@@ -52,7 +52,8 @@ class LicenseSelector:
     def title(self, language='en'):
         if self._titles is None:
             self._titles = rdf_helper.get_titles(rdf_helper.SEL_MODEL, self.uri)
-        return self._titles[language]
+        return cc.license.util.locale_dict_fetch_with_fallbacks(
+            self._titles, language)
 
     def by_uri(self, uri):
         # error checking
