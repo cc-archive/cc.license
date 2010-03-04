@@ -208,7 +208,7 @@ def all_possible_answers(list_of_questions):
         new_adl = []
         for adict in adl:
             for enum in q.answers():
-                answer = enum[1]
+                answer = enum[1] # the answer value 
                 aclone = adict.copy()
                 aclone[q.id] = answer
                 new_adl.append(aclone)

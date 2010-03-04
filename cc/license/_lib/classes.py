@@ -292,10 +292,20 @@ class Question(object):
     def answers(self, language='en'):
         if language == '':
             language = 'en' # why not?
-        return [(locale_dict_fetch_with_fallbacks(self._enums[k][0],
-                                                  language),
-                 k,
-                 (self._enums[k][1] != {} and \
-                  locale_dict_fetch_with_fallbacks(self._enums[k][1],
-                                                  language) or None))
-                for k in self._enums.keys()]
+            
+        answers = []
+        for k in self._enums.keys():
+            label = locale_dict_fetch_with_fallbacks(self._enums[k][0],
+                                                     language)
+            # is there a description for this enum?
+            if self._enums[k][1] != {}: 
+                # create a tuple with a localized description
+                enum = ( label, k,
+                         locale_dict_fetch_with_fallbacks(self._enums[k][1],
+                                                         language) )
+            else:
+                enum = ( label, k, None)
+                
+            answers.append(enum)
+            
+        return answers
