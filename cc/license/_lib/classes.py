@@ -295,6 +295,7 @@ class Question(object):
         return [(locale_dict_fetch_with_fallbacks(self._enums[k][0],
                                                   language),
                  k,
-                 locale_dict_fetch_with_fallbacks(self._enums[k][1],
-                                                  language))
+                 (self._enums[k][1] != {} and \
+                  locale_dict_fetch_with_fallbacks(self._enums[k][1],
+                                                  language) or None))
                 for k in self._enums.keys()]
