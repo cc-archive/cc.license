@@ -103,10 +103,6 @@ class TestJurisdictions:
             assert type(title) == unicode
             assert len(title) != 0
 
-    def test_title_fails(self):
-        nose.tools.assert_raises(CCLicenseError,
-                                 self.mx.title, 'roflcopter')
-
     def test_title_default(self):
         assert self.mx.title() == self.mx.title('en')
 
