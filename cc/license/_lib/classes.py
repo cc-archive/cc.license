@@ -260,7 +260,10 @@ class Question(object):
                     elabels = {}
                     for l in e.findall('label'):
                         elabels[l.get(xlang)] = l.text
-                    self._enums[eid] = elabels
+                    edesc = {} 
+                    for d in e.findall('description'):
+                        edesc[d.get(xlang)] = d.text
+                    self._enums[eid] = (elabels, edesc,)
 
         if not _flag:
             raise CCLicenseError, "Question identifier %(id)s not found" % \
@@ -289,5 +292,9 @@ class Question(object):
     def answers(self, language='en'):
         if language == '':
             language = 'en' # why not?
-        return [(locale_dict_fetch_with_fallbacks(self._enums[k], language), k)
+        return [(locale_dict_fetch_with_fallbacks(self._enums[k][0],
+                                                  language),
+                 k,
+                 locale_dict_fetch_with_fallbacks(self._enums[k][1],
+                                                  language))
                 for k in self._enums.keys()]
