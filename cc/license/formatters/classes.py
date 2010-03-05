@@ -28,6 +28,8 @@ from cc.license import util
 from cc.license.formatters.pagetemplate import CCLPageTemplateFile
 from cc.i18npkg.gettext_i18n import CCORG_GETTEXT
 
+import jinja2
+
 TEMPLATE_LOADER = jinja2.PackageLoader('cc.license.formatters', 'templates')
 TEMPLATE_ENV = jinja2.Environment(
     loader=TEMPLATE_LOADER, autoescape=False,
@@ -113,24 +115,11 @@ class HTMLFormatter(object):
             dctype = self._translate_dctype(work_dict['format'].lower())
 
         rendered_template = template.render(
-            {"main_text_type": main_text_type,
-             "dctype": dctype,
+            {"dctype": dctype,
              "dctype_url": "http://purl.org/dc/dcmitype/%s" % dctype,
              "this_license": license,
              "locale": util.locale_to_dash_style(locale),
              "worktitle": work_dict.get('worktitle'),
-             "default_header": CCLPageTemplateFile(
-                    DEFAULT_HEADER_TEMPLATE,
-                    target_language=locale),
-             "attribution_header": CCLPageTemplateFile(
-                    ATTRIBUTION_HEADER_TEMPLATE,
-                    target_language=locale),
-             "worktitle_header": CCLPageTemplateFile(
-                    WORKTITLE_HEADER_TEMPLATE,
-                    target_language=locale),
-             "attribution_worktitle_header": CCLPageTemplateFile(
-                    ATTRIBUTION_WORKTITLE_HEADER_TEMPLATE,
-                    target_language=locale),
              "attribution_name": (work_dict.get('attribution_name')
                                   or work_dict.get('attribution_url')),
              "attribution_url": work_dict.get('attribution_url'),
@@ -174,4 +163,3 @@ class CC0HTMLFormatter(HTMLFormatter):
 
         return util.remove_blank_lines(rendered_template)
 
-setup_i18n()
