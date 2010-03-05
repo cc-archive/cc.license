@@ -26,23 +26,13 @@ from cc.i18npkg import ccorg_i18n_setup
 from cc.license._lib.interfaces import ILicenseFormatter
 from cc.license import util
 from cc.license.formatters.pagetemplate import CCLPageTemplateFile
+from cc.i18npkg.gettext_i18n import CCORG_GETTEXT
 
-
-TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), 'templates')
-BASE_TEMPLATE = os.path.join(TEMPLATE_PATH, 'base.pt')
-DEFAULT_HEADER_TEMPLATE = os.path.join(TEMPLATE_PATH, 'default_header.pt')
-ATTRIBUTION_HEADER_TEMPLATE = os.path.join(
-    TEMPLATE_PATH, 'attribution_header.pt')
-WORKTITLE_HEADER_TEMPLATE = os.path.join(TEMPLATE_PATH, 'worktitle_header.pt')
-ATTRIBUTION_WORKTITLE_HEADER_TEMPLATE = os.path.join(
-    TEMPLATE_PATH, 'attribution_worktitle_header.pt')
-
-CC0_BASE_TEMPLATE = os.path.join(TEMPLATE_PATH, 'cc0.pt')
-
-PARENT_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-I18N_PATH = os.path.join(PARENT_PATH, 'i18n')
-
-DOMAIN_SETUP = False
+TEMPLATE_LOADER = jinja2.PackageLoader('cc.license.formatters', 'templates')
+TEMPLATE_ENV = jinja2.Environment(
+    loader=TEMPLATE_LOADER, autoescape=False,
+    extensions=['jinja2.ext.i18n'])
+TEMPLATE_ENV.install_gettext_translations(CCORG_GETTEXT)
 
 
 def setup_i18n():
@@ -106,25 +96,23 @@ class HTMLFormatter(object):
             optionally incorporating the work metadata and locale."""
         work_dict = work_dict or {}
 
-        main_text_type = 'default'
-        if (work_dict.get('attribution_url')
-                or work_dict.get('attribution_name')) \
-                and work_dict.get('worktitle'):
-            main_text_type = 'attribution_worktitle'
+        if ((work_dict.get('attribution_url')
+             or work_dict.get('attribution_name'))
+                and work_dict.get('worktitle')):
+            template = TEMPLATE_ENV.get_template('attribution_worktitle.html')
         elif work_dict.get('attribution_url') \
                 or work_dict.get('attribution_name'):
-            main_text_type = 'attribution'
+            template = TEMPLATE_ENV.get_template('attribution.html')
         elif work_dict.get('worktitle'):
-            main_text_type = 'worktitle'
+            template = TEMPLATE_ENV.get_template('worktitle.html')
+        else:
+            template = TEMPLATE_ENV.get_template('default.html')
 
         dctype = None
         if work_dict.get('format'):
             dctype = self._translate_dctype(work_dict['format'].lower())
 
-        base_template = CCLPageTemplateFile(
-            BASE_TEMPLATE,
-            target_language=locale)
-        rendered_template = base_template.pt_render(
+        rendered_template = template.render(
             {"main_text_type": main_text_type,
              "dctype": dctype,
              "dctype_url": "http://purl.org/dc/dcmitype/%s" % dctype,

@@ -27,6 +27,7 @@ setup(name='cc.license',
         'enum',
         'zope.i18n',
         'zope.pagetemplate',
+        'jinja2',
       ],
       setup_requires=['setuptools-git',],
       )
