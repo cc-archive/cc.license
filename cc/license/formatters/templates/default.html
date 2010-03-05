@@ -3,9 +3,7 @@
 {% block header %}
   {% if dctype %}
     {% trans license_uri=this_license.uri,
-             license_title=this_license.title(locale),
-             license_version=this_license.version
-             license_jurisdiction=this_license.jurisdiction.title(locale) %}
+             license_title=this_license.title(locale) %}
       This
       <span xmlns:dc="http://purl.org/dc/elements/1.1/"
             href="{{ dctype_url }}"
@@ -14,22 +12,16 @@
       <a rel="license" href="{{ license_uri }}">
         Creative Commons
         {{ license_title }}
-        {{ license_version }}
-        {{ license_jurisdiction }}
         License
       </a>
     {% endtrans %}
   {% else %}
     {% trans license_uri=this_license.uri,
-             license_title=this_license.title(locale),
-             license_version=this_license.version
-             license_jurisdiction=this_license.jurisdiction.title(locale) %}
+             license_title=this_license.title(locale) %}
       This work is licensed under a
       <a rel="license" href="{{ license_uri }}">
         Creative Commons
         {{ license_title }}
-        {{ license_version }}
-        {{ license_jurisdiction }}
         License
       </a>
     {% endtrans %}
