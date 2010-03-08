@@ -1,61 +1,41 @@
-<span metal:define-macro="header"
-      i18n:domain="cc.license"
-      tal:omit-tag="">
-  <span tal:condition="dctype"
-        tal:omit-tag=""
-        i18n:translate="">
-    This
-    [span xmlns:dc='http://purl.org/dc/elements/1.1/'
-          href='<span tal:replace="dctype_url" i18n:name="dctype_url"/>'
-          rel='dc:type']work[/span]
-    by
-    <a xmlns:cc="http://creativecommons.org/ns#"
-       property="cc:attributionName" rel="cc:attributionURL"
-       tal:attributes="href attribution_url"
-       i18n:name="attribution_name"
-       tal:content="attribution_name">
-      ${attribution_name}</a>
-    is licensed under a
-  
-    [a rel='license'
-       href='<span tal:replace="this_license/uri"
-                   i18n:name="license_uri" />']
-      Creative Commons
-      <span tal:replace="python: this_license.title(locale)"
-            i18n:name="license_title">Title</span>
-      <span tal:replace="this_license/version"
-            i18n:name="license_version">License Version</span>
-      <span tal:replace="python: this_license.jurisdiction.title(locale)"
-            i18n:name="license_jurisdiction">
-        License Jurisdiction</span>
-      License
-    [/a]
-  </span>
+{% extends "base.html" %}
 
-  <span tal:condition="not: dctype"
-        tal:omit-tag=""
-        i18n:translate="">
-    This work by
-    <a xmlns:cc="http://creativecommons.org/ns#"
-       property="cc:attributionName" rel="cc:attributionURL"
-       tal:attributes="href attribution_url"
-       i18n:name="attribution_name"
-       tal:content="attribution_name">
-      ${attribution_name}</a>
-    is licensed under a
-  
-    [a rel='license'
-       href='<span tal:replace="this_license/uri"
-                   i18n:name="license_uri" />']
-      Creative Commons
-      <span tal:replace="python: this_license.title(locale)"
-            i18n:name="license_title">Title</span>
-      <span tal:replace="this_license/version"
-            i18n:name="license_version">License Version</span>
-      <span tal:replace="python: this_license.jurisdiction.title(locale)"
-            i18n:name="license_jurisdiction">
-        License Jurisdiction</span>
-      License
-    [/a]
-  </span>
-</span>
+{% block header %}
+  {% if dctype %}
+    {% trans license_uri=this_license.uri,
+             license_title=this_license.title(locale) %}
+      This
+      <span xmlns:dc="http://purl.org/dc/elements/1.1/"
+            href="{{ dctype_url }}"
+            rel="dc:type">work</span>
+      by
+      <a xmlns:cc="http://creativecommons.org/ns#"
+         property="cc:attributionName" rel="cc:attributionURL"
+         href="{{ attribution_url }}">
+        {{ attribution_name }}</a>
+      is licensed under a
+      <a rel="license"
+         href="{{ license_uri }}">
+        Creative Commons
+        {{ license_title }}
+        License
+      </a>
+    {% endtrans %}
+  {% else %}
+    {% trans license_uri=this_license.uri,
+             license_title=this_license.title(locale) %}
+      This work by
+      <a xmlns:cc="http://creativecommons.org/ns#"
+         property="cc:attributionName" rel="cc:attributionURL"
+         href="{{ attribution_url }}">
+        {{ attribution_name }}</a>
+      is licensed under a
+      <a rel="license"
+         href="{{ license_uri }}">
+        Creative Commons
+        {{ license_title }}
+        License
+      </a>
+    {% endtrans %}
+  {% endif %}
+{% endblock %}
