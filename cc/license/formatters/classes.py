@@ -11,21 +11,10 @@ the licensed work. The keys of this work_dict are as follows:
  - more_permissions_url
 """
 
-import os
-
-from zope.pagetemplate.pagetemplatefile import PageTemplateFile
-from zope.i18n.translationdomain import TranslationDomain
-from zope.i18n.gettextmessagecatalog import GettextMessageCatalog
-from zope.i18n.interfaces import ITranslationDomain
-from zope.i18n.compile import compile_mo_file
-from zope.i18n import translate
 import zope.interface
-from zope import component
 
-from cc.i18npkg import ccorg_i18n_setup
 from cc.license._lib.interfaces import ILicenseFormatter
 from cc.license import util
-from cc.license.formatters.pagetemplate import CCLPageTemplateFile
 from cc.i18npkg.gettext_i18n import CCORG_GETTEXT
 
 import jinja2
@@ -35,32 +24,6 @@ TEMPLATE_ENV = jinja2.Environment(
     loader=TEMPLATE_LOADER, autoescape=False,
     extensions=['jinja2.ext.i18n'])
 TEMPLATE_ENV.install_gettext_translations(CCORG_GETTEXT)
-
-
-def setup_i18n():
-    # TODO: we might be merging these into the global translations, so
-    # maybe we will remove this later?
-    global DOMAIN_SETUP
-    if DOMAIN_SETUP:
-        return
-
-    domain = TranslationDomain('cc.license')
-    for catalog in os.listdir(I18N_PATH):
-
-        catalog_path = os.path.join(I18N_PATH, catalog)
-
-        po_path = os.path.join(catalog_path, 'cc.license.po')
-        mo_path = os.path.join(catalog_path, 'cc.license.mo')
-        if not os.path.isdir(catalog_path) or not os.path.exists(po_path):
-            continue
-
-        compile_mo_file('cc.license', catalog_path)
-        
-        domain.addCatalog(GettextMessageCatalog(
-                catalog, 'cc.license', mo_path))
-
-    component.provideUtility(domain, ITranslationDomain, name='cc.license')
-    DOMAIN_SETUP = True
 
 
 class HTMLFormatter(object):
@@ -140,18 +103,15 @@ class CC0HTMLFormatter(HTMLFormatter):
         actor_href = work_dict.get('actor_href', '').strip()
         actor = work_dict.get('name', '').strip()
 
-        base_template = CCLPageTemplateFile(
-            CC0_BASE_TEMPLATE,
-            target_language=locale)
+        template = TEMPLATE_ENV.get_template('cc0.html')
 
         work_jurisdiction = work_dict.get('work_jurisdiction')
         country_name = None
         if work_jurisdiction not in ('', '-', None, False):
-            country_name = translate(
-                util.CODE_COUNTRY_MAP[work_jurisdiction],
-                target_language=locale)
+            country_name = CCORG_GETTEXT.ugettext(
+                    util.CODE_COUNTRY_MAP[work_jurisdiction])
 
-        rendered_template = base_template.pt_render(
+        rendered_template = template.render(
             {"license": license,
              "actor": actor,
              "actor_href": actor_href,
