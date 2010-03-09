@@ -19,8 +19,8 @@ class LicenseSelector:
                       # plenty of room for optimization...
         self._licenses = {}
         self._id = None
-        self._titles = None
-
+        self._titles = None        
+        
         # TODO: refactor this somewhere?
         # populate questions from questions.xml
         self._questions = []
@@ -32,6 +32,12 @@ class LicenseSelector:
                 self._questions.append( 
                      Question(rdf_helper.questions_root,
                                          self.id, fid))
+        
+        self._by_answers  = {
+            'standard' : self._by_answers_standard,
+            'recombo'  : self._by_answers_recombo,
+            }.get(self.id) or self._by_answers_generic(self.id)
+        
 
     def __repr__(self):
         return "<LicenseSelector id='%s'>" % self.id
@@ -87,39 +93,36 @@ class LicenseSelector:
                 self._licenses[license_uri] = None
                 return True
 
-    ## Yet Another Hack
-    ## Unsure where the answers-into-license-code data and logic ought to go.
-    ## In the old api, it's an XSLT document, which feels wrong.
-    ## I believe it should be in the equivalent of questions.xml.
-    ## Until then, each class gets its own hard-coded handler.
+    def _validate_answers(self, answers_dict):
+        
+        for q in self.questions():
+            # verify that all questions are answered 
+            if q.id not in answers_dict.keys():
+                raise CCLicenseError, "Invalid question answered."
+            # verify that answers have an acceptable value
+            # l,v,d = label, value, description :: for each acceptable answer
+            if answers_dict[q.id] not in [ v for l,v,d in q.answers() ]:
+                raise CCLicenseError, "Invalid answer given."
 
-    # TODO: refactor error-checking code into validation method that
-    # checks the answers_dict against questions()
+        return "Bears shit in the woods." is not False
 
     # default behavior is to ignore extra answers
     def by_answers(self, answers_dict):
-        license_code = {'standard' : self._by_answers_standard,
-                        'recombo' : self._by_answers_recombo,
-                        'publicdomain' : self._by_answers_publicdomain,
-                       }[self.id](answers_dict)
-        # get jurisdiction separately
-        try:
-            jurisdiction = answers_dict['jurisdiction']
-        except KeyError:
-            jurisdiction = None
+        """ uses the handler function set in the constructor """
+        # ensure 'jurisdiction' is always a key in the dict
+        jurisdiction = answers_dict.setdefault('jurisdiction', '')
+        # throw an exception if answers_dict is bunk
+        self._validate_answers(answers_dict)
+        # return a license code based on answers to this selector's questions 
+        license_code = self._by_answers(answers_dict)
+        # give back a license object based on the answers 
         return self.by_code(license_code, jurisdiction=jurisdiction)
 
     # TODO: handle 1.0 license weirdness (out-of-order license code)
     def _by_answers_standard(self, answers_dict):
+        
         pieces = ['by']
-        # error checking
-        for s in ('commercial', 'derivatives'):
-            if s not in answers_dict.keys():
-                raise CCLicenseError, "Invalid question answered."
-        for id, values in ( ('commercial', ['y', 'n']),
-                            ('derivatives', ['y', 'sa', 'n']) ):
-            if answers_dict[id] not in values:
-                raise CCLicenseError, "Invalid answer given."
+        
         # create license code
         if answers_dict['commercial'] == 'n':
             pieces.append('nc')
@@ -127,20 +130,22 @@ class LicenseSelector:
             pieces.append('nd')
         if answers_dict['derivatives'] == 'sa':
             pieces.append('sa')
+
         return '-'.join(pieces)
 
     def _by_answers_recombo(self, answers_dict):
-        if 'sampling' not in answers_dict.keys():
-            raise CCLicenseError, "Invalid question answered."
-        a = answers_dict['sampling']
-        try:
-            return {
-                    'sampling' : 'sampling',
-                    'samplingplus' : 'sampling+',
-                    'ncsamplingplus' : 'nc-sampling+',
-                   }[a]
-        except KeyError:
-            raise CCLicenseError, "Invalid answer given."
 
-    def _by_answers_publicdomain(self, answers_dict):
-        return 'publicdomain'
+        return {
+            'sampling' : 'sampling',
+            'samplingplus' : 'sampling+',
+            'ncsamplingplus' : 'nc-sampling+',
+            }[ answers_dict['sampling'] ]
+        
+    def _by_answers_generic(self, license_code):
+        """ function factory for license classes that don't require
+        any answers processing logic (zero, publicdomain, software) """
+        def returns_license_code(answers_dict):
+            """ just return the license code """
+            return license_code
+
+        return returns_license_code
