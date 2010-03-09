@@ -22,7 +22,8 @@
 
 {% if actor or actor_href %}
  {% if actor and actor_href %}
-  <a rel="dct:publisher" href="{{ actor_href }}">
+  <a rel="dct:publisher"
+     href="{{ actor_href }}">
     <span property="dct:title">{{ actor }}</span></a>
  {% elif actor and not actor_href %}
   <span property="dct:title">{{ actor }}</span>
@@ -43,7 +44,7 @@
 {% if work_jurisdiction not in ('', '-', None, False) %}
 This work is published from
 <span property="vcard:Country" datatype="dct:ISO3166"
-      about="{{ publisher }}" content="{{ work_jurisdiction }}">
+      content="{{ work_jurisdiction }}" about="{{ publisher }}">
   {{ country_name }}</span>.
 {% endif %}
 </p>
