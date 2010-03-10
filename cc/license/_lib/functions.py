@@ -174,6 +174,7 @@ def current_version(code, jurisdiction=None):
     # filter on code
     filtered_dicts = [ d for d in license_dicts if d['code'] == code ]
     # filter on jurisdiction
+    if jurisdiction == '' : jurisdiction = None
     if jurisdiction is None:
         filtered_dicts = [ d for d in filtered_dicts
                            if not d.get('jurisdiction') ]
