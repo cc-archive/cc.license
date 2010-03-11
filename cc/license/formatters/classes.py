@@ -15,7 +15,7 @@ import zope.interface
 
 from cc.license._lib.interfaces import ILicenseFormatter
 from cc.license import util
-from cc.i18npkg.gettext_i18n import CCORG_GETTEXT
+from cc.i18npkg.gettext_i18n import ugettext_for_locale
 
 import jinja2
 
@@ -23,7 +23,6 @@ TEMPLATE_LOADER = jinja2.PackageLoader('cc.license.formatters', 'templates')
 TEMPLATE_ENV = jinja2.Environment(
     loader=TEMPLATE_LOADER, autoescape=False,
     extensions=['jinja2.ext.i18n'])
-TEMPLATE_ENV.install_gettext_translations(CCORG_GETTEXT)
 
 
 class HTMLFormatter(object):
@@ -59,6 +58,8 @@ class HTMLFormatter(object):
     def format(self, license, work_dict=None, locale='en'):
         """Return an HTML + RDFa string serialization for the license,
             optionally incorporating the work metadata and locale."""
+        gettext = ugettext_for_locale(locale)
+
         work_dict = work_dict or {}
 
         if ((work_dict.get('attribution_url')
@@ -78,7 +79,8 @@ class HTMLFormatter(object):
             dctype = self._translate_dctype(work_dict['format'].lower())
 
         rendered_template = template.render(
-            {"dctype": dctype,
+            {"gettext": gettext,
+             "dctype": dctype,
              "dctype_url": "http://purl.org/dc/dcmitype/%s" % dctype,
              "this_license": license,
              "locale": util.locale_to_dash_style(locale),
@@ -97,6 +99,8 @@ class CC0HTMLFormatter(HTMLFormatter):
         return "<CC0LicenseFormatter object '%s'>" % self.id
 
     def format(self, license, work_dict=None, locale='en'):
+        gettext = ugettext_for_locale(locale)
+
         work_dict = work_dict or {}
 
         work_title = work_dict.get('work_title', False)
@@ -108,11 +112,11 @@ class CC0HTMLFormatter(HTMLFormatter):
         work_jurisdiction = work_dict.get('work_jurisdiction')
         country_name = None
         if work_jurisdiction not in ('', '-', None, False):
-            country_name = CCORG_GETTEXT.ugettext(
-                    util.CODE_COUNTRY_MAP[work_jurisdiction])
+            country_name = gettext(util.CODE_COUNTRY_MAP[work_jurisdiction])
 
         rendered_template = template.render(
-            {"license": license,
+            {"gettext": gettext,
+             "license": license,
              "actor": actor,
              "actor_href": actor_href,
              "work_jurisdiction": work_jurisdiction,
