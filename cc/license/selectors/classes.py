@@ -36,6 +36,7 @@ class LicenseSelector:
         self._by_answers  = {
             'standard' : self._by_answers_standard,
             'recombo'  : self._by_answers_recombo,
+            'zero'     : self._by_answers_generic('CC0'),
             }.get(self.id) or self._by_answers_generic(self.id)
         
 
