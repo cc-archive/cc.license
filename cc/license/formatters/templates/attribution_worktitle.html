@@ -3,7 +3,7 @@
 {% block header %}
   {% if dctype %}
     {% trans license_uri=this_license.uri,
-             license_title=this_license.title(locale) %}
+             license_title=this_license.title(locale)|escape %}
       <span xmlns:dc="http://purl.org/dc/elements/1.1/"
             property="dc:title"
             href="{{ dctype_url }}"
@@ -25,7 +25,7 @@
     {% endtrans %}
   {% else %}
     {% trans license_uri=this_license.uri,
-             license_title=this_license.title(locale) %}
+             license_title=this_license.title(locale)|escape %}
       <span xmlns:dc="http://purl.org/dc/elements/1.1/"
             property="dc:title">{{ worktitle }}</span>
       by
