@@ -251,6 +251,17 @@ def get_selector_jurisdictions(selector_name='standard'):
     licenses = [
         cc.license.by_uri(str(result['license'].uri))
         for result in query.execute(rdf_helper.ALL_MODEL)]
-    jurisdictions = set([license.jurisdiction for license in licenses])
-    jurisdictions = [juri for juri in jurisdictions if juri.launched]
+
+    # We need to make sure jurisdictions are unique.  The easiest way
+    # to do that is have a second set that keeps track of all the
+    # codes added so far.
+    code_check = set()
+    jurisdictions = set()
+
+    for license in licenses:
+        jurisdiction = license.jurisdiction
+        if jurisdiction.launched and not jurisdiction.code in code_check:
+            jurisdictions.add(jurisdiction)
+            code_check.add(jurisdiction.code)
+
     return jurisdictions
