@@ -234,10 +234,15 @@ def get_valid_jurisdictions(license_class='standard'):
     return jurisdictions
 
 
+_SELECTOR_JURISDICTIONS_CACHE = {}
+
 def get_selector_jurisdictions(selector_name='standard'):
     """
 
     """
+    if _SELECTOR_JURISDICTIONS_CACHE.has_key(selector_name):
+        return _SELECTOR_JURISDICTIONS_CACHE[selector_name]
+
     selector = cc.license.selectors.choose(selector_name)
     qstring = "\n".join(
         ["SELECT ?license",
@@ -263,5 +268,7 @@ def get_selector_jurisdictions(selector_name='standard'):
         if jurisdiction.launched and not jurisdiction.code in code_check:
             jurisdictions.add(jurisdiction)
             code_check.add(jurisdiction.code)
+
+    _SELECTOR_JURISDICTIONS_CACHE[selector_name] = jurisdictions
 
     return jurisdictions
