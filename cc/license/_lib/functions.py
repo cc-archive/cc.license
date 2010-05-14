@@ -33,6 +33,9 @@ def locales():
     solns = list(query.execute(rdf_helper.JURI_MODEL))
     return [ s['lang'].literal_value['string'] for s in solns ]
 
+
+_BY_CODE_CACHE = {}
+
 def by_code(code, jurisdiction=None, version=None):
     """A LicenseSelector-less means of picking a License from a code."""
 
@@ -43,11 +46,18 @@ def by_code(code, jurisdiction=None, version=None):
     if version:
         version = str(version)
 
+    cache_key = (code, jurisdiction, version)
+    if _BY_CODE_CACHE.has_key(cache_key):
+        return _BY_CODE_CACHE[cache_key]
+
     for key, selector in cc.license.selectors.SELECTORS.items():
         try:
-            return selector.by_code(code,
-                                    jurisdiction=jurisdiction,
-                                    version=version)
+            license =  selector.by_code(
+                code,
+                jurisdiction=jurisdiction,
+                version=version)
+            _BY_CODE_CACHE[cache_key] = license
+            return license
         except cc.license.CCLicenseError:
             pass
     raise cc.license.CCLicenseError, "License for code doesn't exist"
