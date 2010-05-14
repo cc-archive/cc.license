@@ -236,7 +236,12 @@ def all_possible_answers(list_of_questions):
     return recursive_build_answers(answer_dict_list, questions)
 
 
+_VALID_JURISDICTIONS_CACHE = {}
+
 def get_valid_jurisdictions(license_class='standard'):
+    if _VALID_JURISDICTIONS_CACHE.has_key(license_class):
+        return _VALID_JURISDICTIONS_CACHE[license_class]
+    
     # TODO: use license_class here
     query = RDF.Query(
         str('PREFIX cc: <http://creativecommons.org/ns#> '
@@ -248,6 +253,8 @@ def get_valid_jurisdictions(license_class='standard'):
     jurisdictions = set(
         [unicode(result['jurisdiction'].uri)
          for result in query.execute(rdf_helper.ALL_MODEL)])
+
+    _VALID_JURISDICTIONS_CACHE[license_class] = jurisdictions
 
     return jurisdictions
 
