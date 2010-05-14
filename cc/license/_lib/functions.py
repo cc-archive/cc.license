@@ -62,11 +62,19 @@ def by_code(code, jurisdiction=None, version=None):
             pass
     raise cc.license.CCLicenseError, "License for code doesn't exist"
 
+_BY_URI_CACHE = {}
+
 def by_uri(uri):
     """A LicenseSelector-less means of picking a License from a URI."""
+    if _BY_URI_CACHE.has_key(uri):
+        return _BY_URI_CACHE[uri]
+
     for key, selector in cc.license.selectors.SELECTORS.items():
         if selector.has_license(uri):
-            return selector.by_uri(uri)
+            license =  selector.by_uri(uri)
+            _BY_URI_CACHE[uri] = license
+            return license
+
     raise CCLicenseError, "License for URI doesn't exist"
 
 def code_from_uri(uri):
