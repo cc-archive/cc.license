@@ -61,12 +61,12 @@ NO_DCTYPE_WORK_TITLE_TEMPLATE = (
 
 def process_work_title(dctype, worktitle):
     if dctype:
-        return DCTYPE_WORK_TITLE_TEMPLATE % (
-            {'dctype_url': % get_dctype_url(dctype),
-             'worktitle': worktitle})
+        return DCTYPE_WORK_TITLE_TEMPLATE % {
+            'dctype_url': % get_dctype_url(dctype),
+            'worktitle': worktitle}
     else:
-        return NO_DCTYPE_WORK_TITLE_TEMPLATE % (
-            {'worktitle': worktitle})
+        return NO_DCTYPE_WORK_TITLE_TEMPLATE % {
+            'worktitle': worktitle}
 
 
 WORK_AUTHOR_TEMPLATE = (
@@ -79,13 +79,17 @@ WORK_AUTHOR_TEMPLATE_NO_URL = (
 
 def process_work_author(attribution_url, attribution_name):
     if attribution_url:
-        return WORK_AUTHOR_TEMPLATE % (
-            {'attribution_name': attribution_name or attribution_url,
-             'attribution_url': attribution_url})
+        return WORK_AUTHOR_TEMPLATE % {
+            'attribution_name': attribution_name or attribution_url,
+            'attribution_url': attribution_url}
     else:
-        return NO_DCTYPE_WORK_TITLE_TEMPLATE % (
-            {'attribution_name': attribution_name})
+        return NO_DCTYPE_WORK_TITLE_TEMPLATE % {
+            'attribution_name': attribution_name}
 
+
+SOURCE_LINK_TEMPLATE = (
+    '<a xmlns:dc="http://purl.org/dc/elements/1.1/"'
+    ' href="%(source_work)s" rel="dc:source">%(source_work)s</a>')
 
 ### END HTMLFormatter support functions
 
@@ -165,6 +169,15 @@ class HTMLFormatter(object):
                 gettext('license.work_type_licensed'))
             header = header_template.substitute(
                 {'work_type': process_work_type(gettext, dctype)})
+
+        message = header
+        if work_dict.get('source_work'):
+            source_work_template = string.Template(
+                gettext('license.work_based_on'))
+            source_work = source_work_template.substitute(
+                {'source_link': SOURCE_LINK_TEMPLATE % {
+                        'source_work': work_dict['source_work']}})
+            message = message + "  " + source_work
 
         rendered_template = template.render(
             {"gettext": gettext,
