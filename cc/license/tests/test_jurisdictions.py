@@ -77,6 +77,15 @@ def test_cache():
     tmp = cc.license.jurisdictions.list_uris()
     assert tmp is not cc.license.jurisdictions.list_uris()
 
+def test_default_language():
+    canada_juris = cc.license.Jurisdiction(
+        'http://creativecommons.org/international/ca/')
+    assert canada_juris.default_language == 'en-ca'
+
+    finland_juris = cc.license.Jurisdiction(
+        'http://creativecommons.org/international/fi/')
+    assert finland_juris.default_language == 'fi'
+
 class TestJurisdictions:
 
     def __init__(self):
