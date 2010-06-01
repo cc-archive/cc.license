@@ -367,6 +367,18 @@ def selector_has_license(model, selector_uri, license_uri):
                       query_language='sparql')
     return query.execute(model).get_boolean()
 
+def get_jurisdiction_default_language(juris_uri):
+    qstring = """
+              PREFIX dc: <http://purl.org/dc/elements/1.1/>
+              PREFIX cc: <http://creativecommons.org/ns#>
+
+              SELECT ?default_language
+              WHERE {
+                     <%s> cc:defaultLanguage ?default_language
+                    }
+              """
+    query = RDF.Query(qstring % juris_uri, query_language='sparql')
+    return str(list(query.execute(JURI_MODEL))[0]['default_language'])
 
 # XXX is this a good idea?
 ALL_MODEL = init_model(INDEX_RDF_PATH)
