@@ -33,7 +33,7 @@ TEMPLATE_ENV = jinja2.Environment(
 ### --------------------------
 
 def get_dctype_url(dctype):
-    return "http://purl.org/dc/dcmitype/%s" % dctype,
+    return "http://purl.org/dc/dcmitype/%s" % dctype
 
 
 WORK_TYPE_TEMPLATE = (
