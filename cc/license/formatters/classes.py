@@ -91,6 +91,11 @@ SOURCE_LINK_TEMPLATE = (
     '<a xmlns:dc="http://purl.org/dc/elements/1.1/"'
     ' href="%(source_work)s" rel="dc:source">%(source_work)s</a>')
 
+MORE_PERMS_LINK_TEMPATE = (
+    '<a xmlns:cc="http://creativecommons.org/ns#"'
+    ' href="%(more_permissions_url)s"'
+    ' rel="cc:morePermissions">%(more_permissions_url)s</a>')
+
 ### END HTMLFormatter support functions
 
 class HTMLFormatter(object):
@@ -179,20 +184,15 @@ class HTMLFormatter(object):
                         'source_work': work_dict['source_work']}})
             message = message + "  " + source_work
 
-        rendered_template = template.render(
-            {"gettext": gettext,
-             "dctype": dctype,
-             "dctype_url": "http://purl.org/dc/dcmitype/%s" % dctype,
-             "this_license": license,
-             "locale": util.locale_to_dash_style(locale),
-             "worktitle": work_dict.get('worktitle'),
-             "attribution_name": (work_dict.get('attribution_name')
-                                  or work_dict.get('attribution_url')),
-             "attribution_url": work_dict.get('attribution_url'),
-             "source_work": work_dict.get('source_work'),
-             "more_permissions_url": work_dict.get('more_permissions_url'),
-             "test_false": False})
-        return util.stripped_inner_xml(rendered_template)
+        if work_dict.get('more_permissions_url'):
+            more_perms_template = string.Template(
+                gettext('license.more_perms_available'))
+            more_perms = more_perms_template.substitute(
+                {'more_perms_link': MORE_PERMS_LINK_TEMPATE % {
+                        'more_perms_link': work_dict['more_perms_link']}})
+            message = message + "  " + more_perms
+
+        return message
 
 
 class CC0HTMLFormatter(HTMLFormatter):
