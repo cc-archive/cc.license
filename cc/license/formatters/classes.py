@@ -37,7 +37,7 @@ def get_dctype_url(dctype):
 
 
 WORK_TYPE_TEMPLATE = (
-    '<span xmlns:dc="http://purl.org/dc/elements/1.1/'
+    '<span xmlns:dc="http://purl.org/dc/elements/1.1/"'
     ' href="%(dctype_url)s"'
     ' rel="dc:type">%(work)s</span>')
 
