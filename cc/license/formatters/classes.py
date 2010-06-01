@@ -62,7 +62,7 @@ NO_DCTYPE_WORK_TITLE_TEMPLATE = (
 def process_work_title(dctype, worktitle):
     if dctype:
         return DCTYPE_WORK_TITLE_TEMPLATE % {
-            'dctype_url': % get_dctype_url(dctype),
+            'dctype_url': get_dctype_url(dctype),
             'worktitle': worktitle}
     else:
         return NO_DCTYPE_WORK_TITLE_TEMPLATE % {
