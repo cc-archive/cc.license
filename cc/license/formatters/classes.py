@@ -195,7 +195,7 @@ class HTMLFormatter(object):
                 gettext('license.more_perms_available'))
             more_perms = more_perms_template.substitute(
                 {'more_perms_link': MORE_PERMS_LINK_TEMPATE % {
-                        'more_perms_link': work_dict['more_permissions_url']}})
+                        'more_permissions_url': work_dict['more_permissions_url']}})
             message = message + "  " + more_perms
 
         return message
