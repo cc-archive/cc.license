@@ -84,7 +84,7 @@ def process_work_author(attribution_url, attribution_name):
             'attribution_name': attribution_name or attribution_url,
             'attribution_url': attribution_url}
     else:
-        return NO_DCTYPE_WORK_TITLE_TEMPLATE % {
+        return WORK_AUTHOR_TEMPLATE_NO_URL % {
             'attribution_name': attribution_name}
 
 
