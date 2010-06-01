@@ -11,6 +11,8 @@ the licensed work. The keys of this work_dict are as follows:
  - more_permissions_url
 """
 
+import string
+
 import zope.interface
 
 from cc.license._lib.interfaces import ILicenseFormatter
@@ -24,6 +26,68 @@ TEMPLATE_ENV = jinja2.Environment(
     loader=TEMPLATE_LOADER, autoescape=False,
     extensions=['jinja2.ext.i18n'])
 
+
+### --------------------------
+### HTMLFormatter support functions
+### --------------------------
+
+def get_dctype_url(dctype):
+    return "http://purl.org/dc/dcmitype/%s" % dctype,
+
+
+WORK_TYPE_TEMPLATE = (
+    '<span xmlns:dc="http://purl.org/dc/elements/1.1/'
+    ' href="%(dctype_url)s"'
+    ' rel="dc:type">%(work)s</span>')
+
+def process_work_type(gettext, dctype):
+    work_word = gettext('util.work')
+    if dctype:
+        return WORK_TYPE_TEMPLATE % (
+            {'dctype_url': get_dctype_url(dctype),
+             'work': work_word})
+    else:
+        return work_word
+
+
+DCTYPE_WORK_TITLE_TEMPLATE = (
+    '<span xmlns:dc="http://purl.org/dc/elements/1.1/"'
+    ' property="dc:title"'
+    ' href="%(dctype_url)s"'
+    ' rel="dc:type">%(worktitle)s</span>')
+NO_DCTYPE_WORK_TITLE_TEMPLATE = (
+    '<span xmlns:dc="http://purl.org/dc/elements/1.1/"'
+    ' property="dc:title">%(worktitle)s</span>')
+
+def process_work_title(dctype, worktitle):
+    if dctype:
+        return DCTYPE_WORK_TITLE_TEMPLATE % (
+            {'dctype_url': % get_dctype_url(dctype),
+             'worktitle': worktitle})
+    else:
+        return NO_DCTYPE_WORK_TITLE_TEMPLATE % (
+            {'worktitle': worktitle})
+
+
+WORK_AUTHOR_TEMPLATE = (
+    '<a xmlns:cc="http://creativecommons.org/ns#"'
+    ' property="cc:attributionName" rel="cc:attributionURL"'
+    ' href="%(attribution_url)s">%(attribution_name)s</a>')
+WORK_AUTHOR_TEMPLATE_NO_URL = (
+    '<span xmlns:cc="http://creativecommons.org/ns#"'
+    ' property="cc:attributionName">%(attribution_name)s</span>')
+
+def process_work_author(attribution_url, attribution_name):
+    if attribution_url:
+        return WORK_AUTHOR_TEMPLATE % (
+            {'attribution_name': attribution_name or attribution_url,
+             'attribution_url': attribution_url})
+    else:
+        return NO_DCTYPE_WORK_TITLE_TEMPLATE % (
+            {'attribution_name': attribution_name})
+
+
+### END HTMLFormatter support functions
 
 class HTMLFormatter(object):
     zope.interface.implements(ILicenseFormatter)
@@ -62,21 +126,45 @@ class HTMLFormatter(object):
 
         work_dict = work_dict or {}
 
-        if ((work_dict.get('attribution_url')
-             or work_dict.get('attribution_name'))
-                and work_dict.get('worktitle')):
-            template = TEMPLATE_ENV.get_template('attribution_worktitle.html')
-        elif work_dict.get('attribution_url') \
-                or work_dict.get('attribution_name'):
-            template = TEMPLATE_ENV.get_template('attribution.html')
-        elif work_dict.get('worktitle'):
-            template = TEMPLATE_ENV.get_template('worktitle.html')
-        else:
-            template = TEMPLATE_ENV.get_template('default.html')
-
         dctype = None
         if work_dict.get('format'):
             dctype = self._translate_dctype(work_dict['format'].lower())
+
+        if ((work_dict.get('attribution_url')
+             or work_dict.get('attribution_name'))
+                and work_dict.get('worktitle')):
+            header_template = string.Template(
+                gettext('license.rdfa_licensed'))
+            header = header_template.substitute(
+                {'work_title': process_work_title(
+                        dctype, work_dict['worktitle']),
+                 'work_author': process_work_author(
+                        work_dict.get('attribution_url'),
+                        work_dict.get('attribution_name'))})
+                 
+        elif work_dict.get('attribution_url') \
+                or work_dict.get('attribution_name'):
+            header_template = string.Template(
+                gettext('license.rdfa_licensed_no_title'))
+            header = header_template.substitute(
+                {'work_type': process_work_type(gettext, dctype),
+                 'work_author': process_work_author(
+                        work_dict.get('attribution_url'),
+                        work_dict.get('attribution_name'))})
+
+        elif work_dict.get('worktitle'):
+            header_template = string.Template(
+                gettext('license.rdfa_licensed_no_attrib'))
+            header = header_template.substitute(
+                {'work_title': process_work_title(
+                        dctype, work_dict['worktitle'])})
+
+        else:
+            work_type = process_work_type(gettext, dctype)
+            header_template = string.Template(
+                gettext('license.work_type_licensed'))
+            header = header_template.substitute(
+                {'work_type': process_work_type(gettext, dctype)})
 
         rendered_template = template.render(
             {"gettext": gettext,
