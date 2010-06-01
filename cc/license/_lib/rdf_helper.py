@@ -378,7 +378,13 @@ def get_jurisdiction_default_language(juris_uri):
                     }
               """
     query = RDF.Query(qstring % juris_uri, query_language='sparql')
-    return str(list(query.execute(JURI_MODEL))[0]['default_language'])
+    results = [
+        str(result['default_language'])
+        for result in query.execute(JURI_MODEL)]
+    if results:
+        return results[0]
+    else:
+        return None
 
 # XXX is this a good idea?
 ALL_MODEL = init_model(INDEX_RDF_PATH)
