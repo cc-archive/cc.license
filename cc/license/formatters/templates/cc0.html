@@ -43,7 +43,7 @@
 
 {% if work_jurisdiction not in ('', '-', None, False) %}
 This work is published from
-<span property="vcard:Country" datatype="dct:ISO3166"
+<span about="[_:publisher]" property="vcard:Country" datatype="dct:ISO3166"
       content="{{ work_jurisdiction }}" about="{{ publisher }}">
   {{ country_name }}</span>.
 {% endif %}
