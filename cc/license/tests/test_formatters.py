@@ -92,7 +92,8 @@ EXPECTED_CC0_ACTOR = """<p xmlns:dct="http://purl.org/dc/terms/" xmlns:vcard="ht
   </a>
   <br />
   To the extent possible under law,
-  <span property="dct:title">Expected Name</span>
+  <span resource="[_:publisher]" rel="dct:publisher">
+    <span property="dct:title">Expected Name</span></span>
   has waived all copyright and related or neighboring rights to
   this work.
 </p>"""
@@ -104,7 +105,8 @@ EXPECTED_CC0_ACTOR_TITLE = """<p xmlns:dct="http://purl.org/dc/terms/" xmlns:vca
   </a>
   <br />
   To the extent possible under law,
-  <span property="dct:title">Expected Name</span>
+  <span resource="[_:publisher]" rel="dct:publisher">
+    <span property="dct:title">Expected Name</span></span>
   has waived all copyright and related or neighboring rights to
   <span property="dct:title">Expected Title</span>.
 </p>"""
