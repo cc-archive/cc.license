@@ -35,7 +35,7 @@ TEMPLATE_ENV = jinja2.Environment(
 IMAGE_HEADER_TEMPLATE = (
     '<a rel="license" href="http://creativecommons.org/licenses/by/3.0/">'
     '<img alt="%(util.Creative_Commons_License)s" style="border-width:0"'
-    ' src="%(license_logo)s" /></a>')
+    ' src="%(license_logo)s" /></a><br />')
 
 
 def get_dctype_url(dctype):
@@ -142,6 +142,11 @@ class HTMLFormatter(object):
 
         work_dict = work_dict or {}
 
+        image_header = IMAGE_HEADER_TEMPLATE % {
+            'util.Creative_Commons_License': gettext(
+                'util.Creative_Commons_License'),
+            'license_logo': license.logo}
+
         dctype = None
         if work_dict.get('format'):
             dctype = self._translate_dctype(work_dict['format'].lower())
@@ -186,7 +191,7 @@ class HTMLFormatter(object):
             body_vars.update(
                 {'work_type': process_work_type(gettext, dctype)})
 
-        message = body_template.substitute(body_vars)
+        message = image_header + body_template.substitute(body_vars)
 
         if work_dict.get('source_work'):
             source_work_template = string.Template(
