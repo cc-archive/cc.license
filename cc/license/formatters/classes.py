@@ -146,16 +146,16 @@ class HTMLFormatter(object):
         if work_dict.get('format'):
             dctype = self._translate_dctype(work_dict['format'].lower())
 
-        header_vars = {
+        body_vars = {
             'license_url': license.uri,
             'license_name': cgi.escape(license.title(locale))}
 
         if ((work_dict.get('attribution_url')
              or work_dict.get('attribution_name'))
                 and work_dict.get('worktitle')):
-            header_template = string.Template(
+            body_template = string.Template(
                 gettext('license.rdfa_licensed'))
-            header_vars.update(
+            body_vars.update(
                 {'work_title': process_work_title(
                         dctype, work_dict['worktitle']),
                  'work_author': process_work_author(
@@ -164,29 +164,29 @@ class HTMLFormatter(object):
                  
         elif work_dict.get('attribution_url') \
                 or work_dict.get('attribution_name'):
-            header_template = string.Template(
+            body_template = string.Template(
                 gettext('license.rdfa_licensed_no_title'))
-            header_vars.update(
+            body_vars.update(
                 {'work_type': process_work_type(gettext, dctype),
                  'work_author': process_work_author(
                         work_dict.get('attribution_url'),
                         work_dict.get('attribution_name'))})
 
         elif work_dict.get('worktitle'):
-            header_template = string.Template(
+            body_template = string.Template(
                 gettext('license.rdfa_licensed_no_attrib'))
-            header_vars.update(
+            body_vars.update(
                 {'work_title': process_work_title(
                         dctype, work_dict['worktitle'])})
 
         else:
             work_type = process_work_type(gettext, dctype)
-            header_template = string.Template(
+            body_template = string.Template(
                 gettext('license.work_type_licensed'))
-            header_vars.update(
+            body_vars.update(
                 {'work_type': process_work_type(gettext, dctype)})
 
-        message = header_template.substitute(header_vars)
+        message = body_template.substitute(body_vars)
 
         if work_dict.get('source_work'):
             source_work_template = string.Template(
