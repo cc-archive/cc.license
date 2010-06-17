@@ -32,6 +32,12 @@ TEMPLATE_ENV = jinja2.Environment(
 ### HTMLFormatter support functions
 ### --------------------------
 
+IMAGE_HEADER_TEMPLATE = (
+    '<a rel="license" href="http://creativecommons.org/licenses/by/3.0/">'
+    '<img alt="%(util.Creative_Commons_License)s" style="border-width:0"'
+    ' src="%(license_logo)s" /></a>')
+
+
 def get_dctype_url(dctype):
     return "http://purl.org/dc/dcmitype/%s" % dctype
 
