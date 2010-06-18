@@ -13,6 +13,7 @@ the licensed work. The keys of this work_dict are as follows:
 
 import cgi
 import string
+from urlparse import urlparse
 
 import zope.interface
 
@@ -96,7 +97,7 @@ def process_work_author(attribution_url, attribution_name):
 
 SOURCE_LINK_TEMPLATE = (
     '<a xmlns:dc="http://purl.org/dc/elements/1.1/"'
-    ' href="%(source_work)s" rel="dc:source">%(source_work)s</a>')
+    ' href="%(source_work)s" rel="dc:source">%(source_domain)s</a>')
 
 MORE_PERMS_LINK_TEMPATE = (
     '<a xmlns:cc="http://creativecommons.org/ns#"'
@@ -197,9 +198,13 @@ class HTMLFormatter(object):
         if work_dict.get('source_work'):
             source_work_template = string.Template(
                 gettext('license.work_based_on'))
+            source_domain = urlparse(work_dict['source_work'])[1]
+            if not source_domain.strip():
+                source_domain = work_dict['source_work']
             source_work = source_work_template.substitute(
                 {'source_link': SOURCE_LINK_TEMPLATE % {
-                        'source_work': work_dict['source_work']}})
+                        'source_work': work_dict['source_work'],
+                        'source_domain': source_domain}})
             message = message + "  " + source_work
 
         if work_dict.get('more_permissions_url'):
