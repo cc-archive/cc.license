@@ -60,8 +60,8 @@ def process_work_type(gettext, dctype):
 
 DCTYPE_WORK_TITLE_TEMPLATE = (
     '<span xmlns:dc="http://purl.org/dc/elements/1.1/"'
-    ' property="dc:title"'
     ' href="%(dctype_url)s"'
+    ' property="dc:title"'
     ' rel="dc:type">%(worktitle)s</span>')
 NO_DCTYPE_WORK_TITLE_TEMPLATE = (
     '<span xmlns:dc="http://purl.org/dc/elements/1.1/"'
@@ -79,8 +79,8 @@ def process_work_title(dctype, worktitle):
 
 WORK_AUTHOR_TEMPLATE = (
     '<a xmlns:cc="http://creativecommons.org/ns#"'
-    ' property="cc:attributionName" rel="cc:attributionURL"'
-    ' href="%(attribution_url)s">%(attribution_name)s</a>')
+    ' href="%(attribution_url)s" property="cc:attributionName"'
+    ' rel="cc:attributionURL">%(attribution_name)s</a>')
 WORK_AUTHOR_TEMPLATE_NO_URL = (
     '<span xmlns:cc="http://creativecommons.org/ns#"'
     ' property="cc:attributionName">%(attribution_name)s</span>')
