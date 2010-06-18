@@ -33,7 +33,7 @@ TEMPLATE_ENV = jinja2.Environment(
 ### --------------------------
 
 IMAGE_HEADER_TEMPLATE = (
-    '<a rel="license" href="http://creativecommons.org/licenses/by/3.0/">'
+    '<a rel="license" href="%(license_url)s">'
     '<img alt="%(util.Creative_Commons_License)s" style="border-width:0"'
     ' src="%(license_logo)s" /></a><br />')
 
@@ -143,6 +143,7 @@ class HTMLFormatter(object):
         work_dict = work_dict or {}
 
         image_header = IMAGE_HEADER_TEMPLATE % {
+            'license_url': license.uri,
             'util.Creative_Commons_License': gettext(
                 'util.Creative_Commons_License'),
             'license_logo': license.logo}
