@@ -132,6 +132,17 @@ class HTMLFormatter(object):
                      'image' : 'StillImage',
                      'text' : 'Text',
                      'interactive' : 'InteractiveResource',
+
+                     # Original DCTYPES
+                     # XXX: This is silly, but then again maybe this whole
+                     #   function is silly.  Regardless, we already get the
+                     #   format type from cc.engine in the correct form; no need
+                     #   to translate.
+                     'sound': 'Sound',
+                     'movingimage': 'MovingImage',
+                     'stillimage': 'StillImage',
+                     'text': 'Text',
+                     'interactiveresource': 'InteractiveResource',
                    }[format]
         except KeyError: # if we dont understand it, pretend its not there
             return None
