@@ -173,6 +173,20 @@ def unicode_cleaner(string):
             return string.decode('utf-8', 'ignore')
 
 
+def escape(string):
+    """
+    Escape a string into something safe to insert into HTML.
+    """
+    # Simplest escaping possible, kinda borrowed from jinja2.
+    return (
+        unicode(string)
+        .replace('&', '&amp;')
+        .replace('>', '&gt;')
+        .replace('<', '&lt;')
+        .replace("'", '&#39;')
+        .replace('"', '&#34;'))
+
+
 def locale_to_dash_style(locale):
     """
     Convert a 'en_US' style locale to 'en-us' style

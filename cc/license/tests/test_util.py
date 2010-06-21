@@ -89,3 +89,6 @@ def test_locale_dict_fetch_with_fallbacks():
     assert_equal(
         util.locale_dict_fetch_with_fallbacks(
             data_dict, 'de-ch'), 'None value')
+
+def test_escape():
+    assert util.escape('\'"<>&') == '&#39;&#34;&lt;&gt;&amp;'
