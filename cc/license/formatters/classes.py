@@ -53,9 +53,9 @@ def process_work_type(gettext, dctype):
     if dctype:
         return WORK_TYPE_TEMPLATE % (
             {'dctype_url': get_dctype_url(dctype),
-             'work': work_word})
+             'work': util.escape(work_word)})
     else:
-        return work_word
+        return util.escape(work_word)
 
 
 DCTYPE_WORK_TITLE_TEMPLATE = (
@@ -71,10 +71,10 @@ def process_work_title(dctype, worktitle):
     if dctype:
         return DCTYPE_WORK_TITLE_TEMPLATE % {
             'dctype_url': get_dctype_url(dctype),
-            'worktitle': worktitle}
+            'worktitle': util.escape(worktitle)}
     else:
         return NO_DCTYPE_WORK_TITLE_TEMPLATE % {
-            'worktitle': worktitle}
+            'worktitle': util.escape(worktitle)}
 
 
 WORK_AUTHOR_TEMPLATE = (
@@ -88,11 +88,12 @@ WORK_AUTHOR_TEMPLATE_NO_URL = (
 def process_work_author(attribution_url, attribution_name):
     if attribution_url:
         return WORK_AUTHOR_TEMPLATE % {
-            'attribution_name': attribution_name or attribution_url,
-            'attribution_url': attribution_url}
+            'attribution_name': util.escape(
+                attribution_name or attribution_url),
+            'attribution_url': util.escape(attribution_url)}
     else:
         return WORK_AUTHOR_TEMPLATE_NO_URL % {
-            'attribution_name': attribution_name}
+            'attribution_name': util.escape(attribution_name)}
 
 
 SOURCE_LINK_TEMPLATE = (
@@ -156,8 +157,8 @@ class HTMLFormatter(object):
 
         image_header = IMAGE_HEADER_TEMPLATE % {
             'license_url': license.uri,
-            'util.Creative_Commons_License': gettext(
-                'util.Creative_Commons_License'),
+            'util.Creative_Commons_License': util.escape(gettext(
+                'util.Creative_Commons_License')),
             'license_logo': license.logo}
 
         dctype = None
@@ -166,7 +167,7 @@ class HTMLFormatter(object):
 
         body_vars = {
             'license_url': license.uri,
-            'license_name': cgi.escape(license.title(locale))}
+            'license_name': util.escape(license.title(locale))}
 
         if ((work_dict.get('attribution_url')
              or work_dict.get('attribution_name'))
@@ -214,8 +215,8 @@ class HTMLFormatter(object):
                 source_domain = work_dict['source_work']
             source_work = source_work_template.substitute(
                 {'source_link': SOURCE_LINK_TEMPLATE % {
-                        'source_work': work_dict['source_work'],
-                        'source_domain': source_domain}})
+                        'source_work': util.escape(work_dict['source_work']),
+                        'source_domain': util.escape(source_domain)}})
             message = message + "<br />" + source_work
 
         if work_dict.get('more_permissions_url'):
@@ -223,7 +224,8 @@ class HTMLFormatter(object):
                 gettext('license.more_perms_available'))
             more_perms = more_perms_template.substitute(
                 {'more_perms_link': MORE_PERMS_LINK_TEMPATE % {
-                        'more_permissions_url': work_dict['more_permissions_url']}})
+                        'more_permissions_url': util.escape(
+                            work_dict['more_permissions_url'])}})
             message = message + "<br />" + more_perms
 
         return message
