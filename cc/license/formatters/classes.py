@@ -216,7 +216,7 @@ class HTMLFormatter(object):
                 {'source_link': SOURCE_LINK_TEMPLATE % {
                         'source_work': work_dict['source_work'],
                         'source_domain': source_domain}})
-            message = message + "  " + source_work
+            message = message + "<br />" + source_work
 
         if work_dict.get('more_permissions_url'):
             more_perms_template = string.Template(
@@ -224,7 +224,7 @@ class HTMLFormatter(object):
             more_perms = more_perms_template.substitute(
                 {'more_perms_link': MORE_PERMS_LINK_TEMPATE % {
                         'more_permissions_url': work_dict['more_permissions_url']}})
-            message = message + "  " + more_perms
+            message = message + "<br />" + more_perms
 
         return message
 
