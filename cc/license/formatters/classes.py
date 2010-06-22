@@ -270,4 +270,19 @@ class PublicDomainHTMLFormatter(HTMLFormatter):
         return "<PublicDomainLicenseFormatter object '%s'>" % self.id
 
     def format(self, license, work_dict=None, locale='en'):
-        pass
+        gettext = ugettext_for_locale(locale)
+        dctype = _translate_dctype(work_dict['format'].lower())
+
+        image_header = IMAGE_HEADER_TEMPLATE % {
+            'license_url': license.uri,
+            'util.Creative_Commons_License': util.escape(gettext(
+                'util.Creative_Commons_License')),
+            'license_logo': license.logo}
+
+        body_template = string.Template(
+            gettext('license.work_type_dedicated'))
+        body_vars = {'work_type': process_work_type(gettext, dctype)}
+
+        message = image_header + body_template.substitute(body_vars)
+
+        return message
