@@ -105,6 +105,30 @@ MORE_PERMS_LINK_TEMPATE = (
     ' href="%(more_permissions_url)s"'
     ' rel="cc:morePermissions">%(more_permissions_url)s</a>')
 
+def _translate_dctype(format):
+    try:
+        return {
+                 None : None,
+                 'audio' : 'Sound',
+                 'video' : 'MovingImage',
+                 'image' : 'StillImage',
+                 'text' : 'Text',
+                 'interactive' : 'InteractiveResource',
+
+                 # Original DCTYPES
+                 # XXX: This is silly, but then again maybe this whole
+                 #   function is silly.  Regardless, we already get the
+                 #   format type from cc.engine in the correct form; no need
+                 #   to translate.
+                 'sound': 'Sound',
+                 'movingimage': 'MovingImage',
+                 'stillimage': 'StillImage',
+                 'text': 'Text',
+                 'interactiveresource': 'InteractiveResource',
+               }[format]
+    except KeyError: # if we dont understand it, pretend its not there
+        return None
+
 ### END HTMLFormatter support functions
 
 class HTMLFormatter(object):
@@ -124,30 +148,6 @@ class HTMLFormatter(object):
     def title(self):
         return "HTML + RDFa formatter"
 
-    def _translate_dctype(self, format):
-        try:
-            return {
-                     None : None,
-                     'audio' : 'Sound',
-                     'video' : 'MovingImage',
-                     'image' : 'StillImage',
-                     'text' : 'Text',
-                     'interactive' : 'InteractiveResource',
-
-                     # Original DCTYPES
-                     # XXX: This is silly, but then again maybe this whole
-                     #   function is silly.  Regardless, we already get the
-                     #   format type from cc.engine in the correct form; no need
-                     #   to translate.
-                     'sound': 'Sound',
-                     'movingimage': 'MovingImage',
-                     'stillimage': 'StillImage',
-                     'text': 'Text',
-                     'interactiveresource': 'InteractiveResource',
-                   }[format]
-        except KeyError: # if we dont understand it, pretend its not there
-            return None
-
     def format(self, license, work_dict=None, locale='en'):
         """Return an HTML + RDFa string serialization for the license,
             optionally incorporating the work metadata and locale."""
@@ -163,7 +163,7 @@ class HTMLFormatter(object):
 
         dctype = None
         if work_dict.get('format'):
-            dctype = self._translate_dctype(work_dict['format'].lower())
+            dctype = _translate_dctype(work_dict['format'].lower())
 
         body_vars = {
             'license_url': license.uri,
