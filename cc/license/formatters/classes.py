@@ -264,3 +264,10 @@ class CC0HTMLFormatter(HTMLFormatter):
 
         return util.remove_blank_lines(rendered_template)
 
+
+class PublicDomainHTMLFormatter(HTMLFormatter):
+    def __repr__(self):
+        return "<PublicDomainLicenseFormatter object '%s'>" % self.id
+
+    def format(self, license, work_dict=None, locale='en'):
+        pass
