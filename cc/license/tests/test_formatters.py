@@ -315,6 +315,12 @@ def test_publicdomain_formatter():
         license, {'format': ''}, 'en')
     assert plain_result == EXPECTED_PUBLICDOMAIN_PLAIN
 
+    # not passing in anything for the work_dict should also give us
+    # the "plain" result
+    plain_result = formatter.format(
+        license, locale='en')
+    assert plain_result == EXPECTED_PUBLICDOMAIN_PLAIN
+
     workformat_result = formatter.format(
         license, {'format': 'MovingImage'}, 'en')
     assert workformat_result == EXPECTED_PUBLICDOMAIN_WORKFORMAT
