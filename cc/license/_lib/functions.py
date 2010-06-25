@@ -33,6 +33,9 @@ def locales():
     solns = list(query.execute(rdf_helper.JURI_MODEL))
     return [ s['lang'].literal_value['string'] for s in solns ]
 
+
+_BY_CODE_CACHE = {}
+
 def by_code(code, jurisdiction=None, version=None):
     """A LicenseSelector-less means of picking a License from a code."""
 
@@ -43,20 +46,35 @@ def by_code(code, jurisdiction=None, version=None):
     if version:
         version = str(version)
 
+    cache_key = (code, jurisdiction, version)
+    if _BY_CODE_CACHE.has_key(cache_key):
+        return _BY_CODE_CACHE[cache_key]
+
     for key, selector in cc.license.selectors.SELECTORS.items():
         try:
-            return selector.by_code(code,
-                                    jurisdiction=jurisdiction,
-                                    version=version)
+            license =  selector.by_code(
+                code,
+                jurisdiction=jurisdiction,
+                version=version)
+            _BY_CODE_CACHE[cache_key] = license
+            return license
         except cc.license.CCLicenseError:
             pass
     raise cc.license.CCLicenseError, "License for code doesn't exist"
 
+_BY_URI_CACHE = {}
+
 def by_uri(uri):
     """A LicenseSelector-less means of picking a License from a URI."""
+    if _BY_URI_CACHE.has_key(uri):
+        return _BY_URI_CACHE[uri]
+
     for key, selector in cc.license.selectors.SELECTORS.items():
         if selector.has_license(uri):
-            return selector.by_uri(uri)
+            license =  selector.by_uri(uri)
+            _BY_URI_CACHE[uri] = license
+            return license
+
     raise CCLicenseError, "License for URI doesn't exist"
 
 def code_from_uri(uri):
@@ -218,7 +236,12 @@ def all_possible_answers(list_of_questions):
     return recursive_build_answers(answer_dict_list, questions)
 
 
+_VALID_JURISDICTIONS_CACHE = {}
+
 def get_valid_jurisdictions(license_class='standard'):
+    if _VALID_JURISDICTIONS_CACHE.has_key(license_class):
+        return _VALID_JURISDICTIONS_CACHE[license_class]
+    
     # TODO: use license_class here
     query = RDF.Query(
         str('PREFIX cc: <http://creativecommons.org/ns#> '
@@ -231,13 +254,20 @@ def get_valid_jurisdictions(license_class='standard'):
         [unicode(result['jurisdiction'].uri)
          for result in query.execute(rdf_helper.ALL_MODEL)])
 
+    _VALID_JURISDICTIONS_CACHE[license_class] = jurisdictions
+
     return jurisdictions
 
+
+_SELECTOR_JURISDICTIONS_CACHE = {}
 
 def get_selector_jurisdictions(selector_name='standard'):
     """
 
     """
+    if _SELECTOR_JURISDICTIONS_CACHE.has_key(selector_name):
+        return _SELECTOR_JURISDICTIONS_CACHE[selector_name]
+
     selector = cc.license.selectors.choose(selector_name)
     qstring = "\n".join(
         ["SELECT ?license",
@@ -251,6 +281,19 @@ def get_selector_jurisdictions(selector_name='standard'):
     licenses = [
         cc.license.by_uri(str(result['license'].uri))
         for result in query.execute(rdf_helper.ALL_MODEL)]
-    jurisdictions = set([license.jurisdiction for license in licenses])
-    jurisdictions = [juri for juri in jurisdictions if juri.launched]
+
+    # We need to make sure jurisdictions are unique.  The easiest way
+    # to do that is have a second set that keeps track of all the
+    # codes added so far.
+    code_check = set()
+    jurisdictions = set()
+
+    for license in licenses:
+        jurisdiction = license.jurisdiction
+        if jurisdiction.launched and not jurisdiction.code in code_check:
+            jurisdictions.add(jurisdiction)
+            code_check.add(jurisdiction.code)
+
+    _SELECTOR_JURISDICTIONS_CACHE[selector_name] = jurisdictions
+
     return jurisdictions
