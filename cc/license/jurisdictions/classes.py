@@ -12,6 +12,8 @@ class Jurisdiction(object):
         """Creates an object representing a jurisdiction, given
            a valid jurisdiction URI. For a complete list, see
            cc.license.jurisdictions.list_uris()"""
+        self._default_language = None
+
         if uri == '': # handle default jurisdiction case
             self.code = ''
             self.id = ''
@@ -73,3 +75,11 @@ class Jurisdiction(object):
             msg = "Language %s does not exist for jurisdiction %s"
             raise CCLicenseError, msg % (language, self.code), tb
 
+    @property
+    def default_language(self):
+        if self._default_language:
+            return self._default_language
+
+        self._default_language = rdf_helper.get_jurisdiction_default_language(
+            self.id)
+        return self._default_language

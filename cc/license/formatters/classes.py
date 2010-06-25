@@ -11,6 +11,10 @@ the licensed work. The keys of this work_dict are as follows:
  - more_permissions_url
 """
 
+import cgi
+import string
+from urlparse import urlparse
+
 import zope.interface
 
 from cc.license._lib.interfaces import ILicenseFormatter
@@ -24,6 +28,108 @@ TEMPLATE_ENV = jinja2.Environment(
     loader=TEMPLATE_LOADER, autoescape=False,
     extensions=['jinja2.ext.i18n'])
 
+
+### --------------------------
+### HTMLFormatter support functions
+### --------------------------
+
+IMAGE_HEADER_TEMPLATE = (
+    '<a rel="license" href="%(license_url)s">'
+    '<img alt="%(util.Creative_Commons_License)s" style="border-width:0"'
+    ' src="%(license_logo)s" /></a><br />')
+
+
+def get_dctype_url(dctype):
+    return "http://purl.org/dc/dcmitype/%s" % dctype
+
+
+WORK_TYPE_TEMPLATE = (
+    '<span xmlns:dc="http://purl.org/dc/elements/1.1/"'
+    ' href="%(dctype_url)s"'
+    ' rel="dc:type">%(work)s</span>')
+
+def process_work_type(gettext, dctype):
+    work_word = gettext('util.work')
+    if dctype:
+        return WORK_TYPE_TEMPLATE % (
+            {'dctype_url': get_dctype_url(dctype),
+             'work': util.escape(work_word)})
+    else:
+        return util.escape(work_word)
+
+
+DCTYPE_WORK_TITLE_TEMPLATE = (
+    '<span xmlns:dc="http://purl.org/dc/elements/1.1/"'
+    ' href="%(dctype_url)s"'
+    ' property="dc:title"'
+    ' rel="dc:type">%(worktitle)s</span>')
+NO_DCTYPE_WORK_TITLE_TEMPLATE = (
+    '<span xmlns:dc="http://purl.org/dc/elements/1.1/"'
+    ' property="dc:title">%(worktitle)s</span>')
+
+def process_work_title(dctype, worktitle):
+    if dctype:
+        return DCTYPE_WORK_TITLE_TEMPLATE % {
+            'dctype_url': get_dctype_url(dctype),
+            'worktitle': util.escape(worktitle)}
+    else:
+        return NO_DCTYPE_WORK_TITLE_TEMPLATE % {
+            'worktitle': util.escape(worktitle)}
+
+
+WORK_AUTHOR_TEMPLATE = (
+    '<a xmlns:cc="http://creativecommons.org/ns#"'
+    ' href="%(attribution_url)s" property="cc:attributionName"'
+    ' rel="cc:attributionURL">%(attribution_name)s</a>')
+WORK_AUTHOR_TEMPLATE_NO_URL = (
+    '<span xmlns:cc="http://creativecommons.org/ns#"'
+    ' property="cc:attributionName">%(attribution_name)s</span>')
+
+def process_work_author(attribution_url, attribution_name):
+    if attribution_url:
+        return WORK_AUTHOR_TEMPLATE % {
+            'attribution_name': util.escape(
+                attribution_name or attribution_url),
+            'attribution_url': util.escape(attribution_url)}
+    else:
+        return WORK_AUTHOR_TEMPLATE_NO_URL % {
+            'attribution_name': util.escape(attribution_name)}
+
+
+SOURCE_LINK_TEMPLATE = (
+    '<a xmlns:dc="http://purl.org/dc/elements/1.1/"'
+    ' href="%(source_work)s" rel="dc:source">%(source_domain)s</a>')
+
+MORE_PERMS_LINK_TEMPATE = (
+    '<a xmlns:cc="http://creativecommons.org/ns#"'
+    ' href="%(more_permissions_url)s"'
+    ' rel="cc:morePermissions">%(more_permissions_url)s</a>')
+
+def _translate_dctype(format):
+    try:
+        return {
+                 None : None,
+                 'audio' : 'Sound',
+                 'video' : 'MovingImage',
+                 'image' : 'StillImage',
+                 'text' : 'Text',
+                 'interactive' : 'InteractiveResource',
+
+                 # Original DCTYPES
+                 # XXX: This is silly, but then again maybe this whole
+                 #   function is silly.  Regardless, we already get the
+                 #   format type from cc.engine in the correct form; no need
+                 #   to translate.
+                 'sound': 'Sound',
+                 'movingimage': 'MovingImage',
+                 'stillimage': 'StillImage',
+                 'text': 'Text',
+                 'interactiveresource': 'InteractiveResource',
+               }[format]
+    except KeyError: # if we dont understand it, pretend its not there
+        return None
+
+### END HTMLFormatter support functions
 
 class HTMLFormatter(object):
     zope.interface.implements(ILicenseFormatter)
@@ -42,19 +148,6 @@ class HTMLFormatter(object):
     def title(self):
         return "HTML + RDFa formatter"
 
-    def _translate_dctype(self, format):
-        try:
-            return {
-                     None : None,
-                     'audio' : 'Sound',
-                     'video' : 'MovingImage',
-                     'image' : 'StillImage',
-                     'text' : 'Text',
-                     'interactive' : 'InteractiveResource',
-                   }[format]
-        except KeyError: # if we dont understand it, pretend its not there
-            return None
-
     def format(self, license, work_dict=None, locale='en'):
         """Return an HTML + RDFa string serialization for the license,
             optionally incorporating the work metadata and locale."""
@@ -62,36 +155,80 @@ class HTMLFormatter(object):
 
         work_dict = work_dict or {}
 
-        if ((work_dict.get('attribution_url')
-             or work_dict.get('attribution_name'))
-                and work_dict.get('worktitle')):
-            template = TEMPLATE_ENV.get_template('attribution_worktitle.html')
-        elif work_dict.get('attribution_url') \
-                or work_dict.get('attribution_name'):
-            template = TEMPLATE_ENV.get_template('attribution.html')
-        elif work_dict.get('worktitle'):
-            template = TEMPLATE_ENV.get_template('worktitle.html')
-        else:
-            template = TEMPLATE_ENV.get_template('default.html')
+        image_header = IMAGE_HEADER_TEMPLATE % {
+            'license_url': license.uri,
+            'util.Creative_Commons_License': util.escape(gettext(
+                'util.Creative_Commons_License')),
+            'license_logo': license.logo}
 
         dctype = None
         if work_dict.get('format'):
-            dctype = self._translate_dctype(work_dict['format'].lower())
+            dctype = _translate_dctype(work_dict['format'].lower())
 
-        rendered_template = template.render(
-            {"gettext": gettext,
-             "dctype": dctype,
-             "dctype_url": "http://purl.org/dc/dcmitype/%s" % dctype,
-             "this_license": license,
-             "locale": util.locale_to_dash_style(locale),
-             "worktitle": work_dict.get('worktitle'),
-             "attribution_name": (work_dict.get('attribution_name')
-                                  or work_dict.get('attribution_url')),
-             "attribution_url": work_dict.get('attribution_url'),
-             "source_work": work_dict.get('source_work'),
-             "more_permissions_url": work_dict.get('more_permissions_url'),
-             "test_false": False})
-        return util.stripped_inner_xml(rendered_template)
+        body_vars = {
+            'license_url': license.uri,
+            'license_name': util.escape(license.title(locale))}
+
+        if ((work_dict.get('attribution_url')
+             or work_dict.get('attribution_name'))
+                and work_dict.get('worktitle')):
+            body_template = string.Template(
+                gettext('license.rdfa_licensed'))
+            body_vars.update(
+                {'work_title': process_work_title(
+                        dctype, work_dict['worktitle']),
+                 'work_author': process_work_author(
+                        work_dict.get('attribution_url'),
+                        work_dict.get('attribution_name'))})
+                 
+        elif work_dict.get('attribution_url') \
+                or work_dict.get('attribution_name'):
+            body_template = string.Template(
+                gettext('license.rdfa_licensed_no_title'))
+            body_vars.update(
+                {'work_type': process_work_type(gettext, dctype),
+                 'work_author': process_work_author(
+                        work_dict.get('attribution_url'),
+                        work_dict.get('attribution_name'))})
+
+        elif work_dict.get('worktitle'):
+            body_template = string.Template(
+                gettext('license.rdfa_licensed_no_attrib'))
+            body_vars.update(
+                {'work_title': process_work_title(
+                        dctype, work_dict['worktitle'])})
+
+        else:
+            work_type = process_work_type(gettext, dctype)
+            body_template = string.Template(
+                gettext('license.work_type_licensed'))
+            body_vars.update(
+                {'work_type': process_work_type(gettext, dctype)})
+
+        message = image_header + body_template.substitute(body_vars)
+
+        if work_dict.get('source_work'):
+            source_work_template = string.Template(
+                gettext('license.work_based_on'))
+            source_domain = urlparse(work_dict['source_work'])[1]
+            if not source_domain.strip():
+                source_domain = work_dict['source_work']
+            source_work = source_work_template.substitute(
+                {'source_link': SOURCE_LINK_TEMPLATE % {
+                        'source_work': util.escape(work_dict['source_work']),
+                        'source_domain': util.escape(source_domain)}})
+            message = message + "<br />" + source_work
+
+        if work_dict.get('more_permissions_url'):
+            more_perms_template = string.Template(
+                gettext('license.more_perms_available'))
+            more_perms = more_perms_template.substitute(
+                {'more_perms_link': MORE_PERMS_LINK_TEMPATE % {
+                        'more_permissions_url': util.escape(
+                            work_dict['more_permissions_url'])}})
+            message = message + "<br />" + more_perms
+
+        return message
 
 
 class CC0HTMLFormatter(HTMLFormatter):
@@ -127,3 +264,25 @@ class CC0HTMLFormatter(HTMLFormatter):
 
         return util.remove_blank_lines(rendered_template)
 
+
+class PublicDomainHTMLFormatter(HTMLFormatter):
+    def __repr__(self):
+        return "<PublicDomainLicenseFormatter object '%s'>" % self.id
+
+    def format(self, license, work_dict=None, locale='en'):
+        gettext = ugettext_for_locale(locale)
+        dctype = _translate_dctype(work_dict['format'].lower())
+
+        image_header = IMAGE_HEADER_TEMPLATE % {
+            'license_url': license.uri,
+            'util.Creative_Commons_License': util.escape(gettext(
+                'util.Creative_Commons_License')),
+            'license_logo': license.logo}
+
+        body_template = string.Template(
+            gettext('license.work_type_dedicated'))
+        body_vars = {'work_type': process_work_type(gettext, dctype)}
+
+        message = image_header + body_template.substitute(body_vars)
+
+        return message

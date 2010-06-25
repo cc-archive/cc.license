@@ -26,7 +26,8 @@
      href="{{ actor_href }}">
     <span property="dct:title">{{ actor }}</span></a>
  {% elif actor and not actor_href %}
-  <span property="dct:title">{{ actor }}</span>
+  <span resource="[_:publisher]" rel="dct:publisher">
+    <span property="dct:title">{{ actor }}</span></span>
  {% elif not actor and actor_href %}
   <a rel="dct:publisher"
      href="{{ actor_href }}">{{ actor_href }}</a>

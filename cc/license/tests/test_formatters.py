@@ -92,7 +92,8 @@ EXPECTED_CC0_ACTOR = """<p xmlns:dct="http://purl.org/dc/terms/" xmlns:vcard="ht
   </a>
   <br />
   To the extent possible under law,
-  <span property="dct:title">Expected Name</span>
+  <span resource="[_:publisher]" rel="dct:publisher">
+    <span property="dct:title">Expected Name</span></span>
   has waived all copyright and related or neighboring rights to
   this work.
 </p>"""
@@ -104,7 +105,8 @@ EXPECTED_CC0_ACTOR_TITLE = """<p xmlns:dct="http://purl.org/dc/terms/" xmlns:vca
   </a>
   <br />
   To the extent possible under law,
-  <span property="dct:title">Expected Name</span>
+  <span resource="[_:publisher]" rel="dct:publisher">
+    <span property="dct:title">Expected Name</span></span>
   has waived all copyright and related or neighboring rights to
   <span property="dct:title">Expected Title</span>.
 </p>"""
@@ -284,6 +286,45 @@ class TestCC0Formatter:
         assert output.strip() == EXPECTED_CC0_COUNTRY_ACTOR_AND_LINK_TITLE
 
 
+EXPECTED_PUBLICDOMAIN_PLAIN = (
+    '<a rel="license" href="http://creativecommons.org/licenses/publicdomain/">'
+    '<img alt="Creative Commons License" style="border-width:0"'
+    ' src="http://i.creativecommons.org/l/publicdomain/88x31.png" /></a><br />'
+    'This work is in the '
+    '<a rel="license" href="http://creativecommons.org/licenses/publicdomain/">'
+    'Public Domain</a>.')
+
+EXPECTED_PUBLICDOMAIN_WORKFORMAT = (
+    '<a rel="license" href="http://creativecommons.org/licenses/publicdomain/">'
+    '<img alt="Creative Commons License" style="border-width:0"'
+    ' src="http://i.creativecommons.org/l/publicdomain/88x31.png" /></a><br />'
+    'This <span xmlns:dc="http://purl.org/dc/elements/1.1/"'
+    ' href="http://purl.org/dc/dcmitype/MovingImage" rel="dc:type">work</span> '
+    'is in the '
+    '<a rel="license" href="http://creativecommons.org/licenses/publicdomain/">'
+    'Public Domain</a>.')
+
+
+def test_publicdomain_formatter():
+    formatter = cc.license.formatters.classes.PublicDomainHTMLFormatter()
+    #####
+
+    license = cc.license.by_code('publicdomain')
+
+    plain_result = formatter.format(
+        license, {'format': ''}, 'en')
+    assert plain_result == EXPECTED_PUBLICDOMAIN_PLAIN
+
+    workformat_result = formatter.format(
+        license, {'format': 'MovingImage'}, 'en')
+    assert workformat_result == EXPECTED_PUBLICDOMAIN_WORKFORMAT
+
+    # XXX: This isn't officially supported on the old engine, but we
+    # should probably add a test for it, since we do?
+    # lang_es_result = formatter.format(
+    #     license, {'format': ''}, 'es')
+
+
 class TestPublicApi:
 
     def __init__(self):
@@ -356,9 +397,3 @@ class TestCustomization:
         for f in self.formatters:
             s = str(f)
             assert f.title in s
-
-
-#####
-# CC0
-#####
-
