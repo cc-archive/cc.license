@@ -4,6 +4,7 @@ the licensed work. The keys of this work_dict are as follows:
 
  - format (Audio:Sound, Video:MovingImage, Image:StillImage,
            Text:Text, Interactive:InteractiveResource)
+          Either this mapping above or the actual dctype
  - worktitle
  - attribution_name
  - attribution_url
@@ -105,7 +106,14 @@ MORE_PERMS_LINK_TEMPATE = (
     ' href="%(more_permissions_url)s"'
     ' rel="cc:morePermissions">%(more_permissions_url)s</a>')
 
+
 def _translate_dctype(format):
+    # NOTE:
+    #
+    # So it's not clear if this function is needed or not.  Do we need
+    # to support the Audio:Sound style mapping?  The current API and
+    # Engine don't require it, but maybe an older version did.  Since
+    # we're not sure we're keeping it here as legacy. :\
     try:
         return {
                  None : None,
