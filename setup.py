@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 import sys, os
 
 setup(name='cc.license',
-      version='0.13.10',
+      version='0.13.11',
       namespace_packages = ['cc',],
       description="License selection based on ccREL-based metadata.",
       classifiers=[],

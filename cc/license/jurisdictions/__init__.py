@@ -53,6 +53,8 @@ def _list():
 def by_code(code):
     if code == '':
         return cc.license.Jurisdiction('')
+    if code not in list_codes():
+        raise cc.license.CCLicenseError, 'Invalid jurisdiction'
     uri = 'http://creativecommons.org/international/%s/' % code
     return cc.license.Jurisdiction(uri)
 
@@ -69,6 +71,8 @@ def uri2code(uri):
 def get_licenses_by_code(code):
     if code == '':
         return cc.license.Jurisdiction('')
+    if code not in list_codes():
+        raise cc.license.CCLicenseError, 'Invalid jurisdiction'
     uri = 'http://creativecommons.org/international/%s/' % code
     return rdf_helper.get_jurisdiction_licenses(uri)
 
