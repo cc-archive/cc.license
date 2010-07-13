@@ -65,3 +65,11 @@ def uri2code(uri):
         raise cc.license.CCLicenseError, "Malformed jurisdiction URI"
     blen = len(base)
     return uri[blen:-1]
+
+def get_licenses_by_code(code):
+    if code == '':
+        return cc.license.Jurisdiction('')
+    uri = 'http://creativecommons.org/international/%s/' % code
+    return rdf_helper.get_jurisdiction_licenses(uri)
+
+    
