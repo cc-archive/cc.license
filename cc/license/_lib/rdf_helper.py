@@ -203,6 +203,22 @@ def get_jurisdiction(model, uri):
     else:
         return cc.license.Jurisdiction(str(solns[0]['jurisdiction'].uri))
 
+def get_jurisdiction_licenses(uri):
+    qstring = """
+              PREFIX cc: <http://creativecommons.org/ns#>
+
+              SELECT ?license
+              WHERE {
+                     ?license cc:jurisdiction <%s> .
+              }
+              """
+    query = RDF.Query(qstring % uri, query_language='sparql')
+    solns = list(query.execute(ALL_MODEL))
+    if len(solns) == 0:
+        return [ ] # empty string makes 'Unported'
+    else:
+        return [ str( l['license'].uri ) for l in solns ]
+
 def get_deprecated(model, uri):
     qstring = """
               PREFIX cc: <http://creativecommons.org/ns#>
