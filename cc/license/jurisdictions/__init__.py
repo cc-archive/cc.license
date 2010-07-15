@@ -69,11 +69,9 @@ def uri2code(uri):
     return uri[blen:-1]
 
 def get_licenses_by_code(code):
-    if code == '':
-        return cc.license.Jurisdiction('')
     if code not in list_codes():
         raise cc.license.CCLicenseError, 'Invalid jurisdiction'
+    if code == '':
+        return rdf_helper.get_unported_license_uris(rdf_helper.ALL_MODEL)
     uri = 'http://creativecommons.org/international/%s/' % code
-    return rdf_helper.get_jurisdiction_licenses(uri)
-
-    
+    return rdf_helper.get_jurisdiction_licenses(rdf_helper.ALL_MODEL, uri)

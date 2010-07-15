@@ -203,7 +203,23 @@ def get_jurisdiction(model, uri):
     else:
         return cc.license.Jurisdiction(str(solns[0]['jurisdiction'].uri))
 
-def get_jurisdiction_licenses(uri):
+def get_unported_license_uris(model):
+    qstring = """
+              PREFIX cc: <http://creativecommons.org/ns#>
+              PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+              SELECT ?luri 
+              WHERE {
+                     ?luri rdf:type cc:License .
+                     OPTIONAL { ?luri cc:jurisdiction ?juri .} .
+                     FILTER (!BOUND(?juri))
+              }
+              """
+    query = RDF.Query(qstring, query_language='sparql')
+    solns = list(query.execute(model))
+    return tuple( str(s['luri'].uri) for s in solns )
+
+def get_jurisdiction_licenses(model, uri):
     qstring = """
               PREFIX cc: <http://creativecommons.org/ns#>
 
@@ -213,7 +229,7 @@ def get_jurisdiction_licenses(uri):
               }
               """
     query = RDF.Query(qstring % uri, query_language='sparql')
-    solns = list(query.execute(ALL_MODEL))
+    solns = list(query.execute(model))
     if len(solns) == 0:
         return [ ] # empty string makes 'Unported'
     else:
