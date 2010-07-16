@@ -72,6 +72,14 @@ def get_licenses_by_code(code):
     if code not in list_codes():
         raise cc.license.CCLicenseError, 'Invalid jurisdiction'
     if code == '':
-        return rdf_helper.get_unported_license_uris(rdf_helper.ALL_MODEL)
+        if 'unported' not in _CACHE.keys():
+            _CACHE['unported'] = []
+            uris = rdf_helper.get_license_uris(rdf_helper.ALL_MODEL,
+                                               'http://creativecommons.org/license/')
+            for uri in uris:
+                l = cc.license.by_uri(uri)
+                if l.jurisdiction.title() == 'Unported':
+                    _CACHE['unported'].append(uri)
+        return _CACHE['unported']
     uri = 'http://creativecommons.org/international/%s/' % code
     return rdf_helper.get_jurisdiction_licenses(rdf_helper.ALL_MODEL, uri)

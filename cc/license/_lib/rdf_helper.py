@@ -203,7 +203,14 @@ def get_jurisdiction(model, uri):
     else:
         return cc.license.Jurisdiction(str(solns[0]['jurisdiction'].uri))
 
+'''
 def get_unported_license_uris(model):
+
+    So this SPARQL query requires librdf > 1.0.10 which is not
+    available in debian stable as of 07/2010. When `squeeze` is
+    released, and a new version of librdf can be safely installed,
+    then we can use the query below and eliminate the python hackery.
+    
     qstring = """
               PREFIX cc: <http://creativecommons.org/ns#>
               PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -218,6 +225,7 @@ def get_unported_license_uris(model):
     query = RDF.Query(qstring, query_language='sparql')
     solns = list(query.execute(model))
     return tuple( str(s['luri'].uri) for s in solns )
+'''
 
 def get_jurisdiction_licenses(model, uri):
     qstring = """
@@ -336,7 +344,6 @@ def get_license_uris(model, selector_uri):
 
               SELECT ?luri
               WHERE {
-                     ?luri rdf:type cc:License .
                      ?luri cc:licenseClass <%s> .
                     }
               """
