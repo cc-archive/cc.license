@@ -263,7 +263,8 @@ _SELECTOR_JURISDICTIONS_CACHE = {}
 
 def get_selector_jurisdictions(selector_name='standard'):
     """
-
+    Get all of the launched jurisdictions that licenses in this
+    selector are part of
     """
     if _SELECTOR_JURISDICTIONS_CACHE.has_key(selector_name):
         return _SELECTOR_JURISDICTIONS_CACHE[selector_name]
