@@ -20,7 +20,7 @@ import zope.interface
 
 from cc.license._lib.interfaces import ILicenseFormatter
 from cc.license import util
-from cc.i18npkg.gettext_i18n import ugettext_for_locale
+from cc.i18n.gettext_i18n import ugettext_for_locale
 
 import jinja2
 
