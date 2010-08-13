@@ -298,11 +298,7 @@ EXPECTED_PDMARK_PLAIN = (
 class TestPDMarkFormatter:
     def __init__(self):
         self.formatter = cc.license.formatters.classes.PDMarkHTMLFormatter()
-
-    # XXX not wrapped in <html> tags
-    def _validate(self, output):
-        assert 0
-        relax_validate(RELAX_HTML, '<html>' + output + '</html>')
+        self.license = cc.license.by_code('publicdomain')
 
     def test_plain(self):
         output = self.formatter.format(self.license, locale='en')

@@ -332,7 +332,7 @@ class PDMarkHTMLFormatter(HTMLFormatter):
 
         waive_cc0 = work_dict.get('waive_cc0', False)
 
-        template = TEMPLATE_ENV.get_template('pd_mark.html')
+        template = TEMPLATE_ENV.get_template('pdmark.html')
 
         rendered_template = template.render(
             {"gettext": gettext,
