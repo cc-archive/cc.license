@@ -286,6 +286,30 @@ class TestCC0Formatter:
         assert output.strip() == EXPECTED_CC0_COUNTRY_ACTOR_AND_LINK_TITLE
 
 
+EXPECTED_PDMARK_PLAIN = (
+    '<a rel="license" href="http://creativecommons.org/publicdomain/mark/1.0/">'
+    '<img src="http://i.creativecommons.org/l/mark/1.0/88x31.png"'
+    '     style="border-style: none;" alt="Public Domain Mark" />'
+    '</a>'
+    '<br />'
+    'This work is free of copyright restrictions.')
+
+
+class TestPDMarkFormatter:
+    def __init__(self):
+        self.formatter = cc.license.formatters.classes.PDMarkHTMLFormatter()
+
+    # XXX not wrapped in <html> tags
+    def _validate(self, output):
+        assert 0
+        relax_validate(RELAX_HTML, '<html>' + output + '</html>')
+
+    def test_plain(self):
+        output = self.formatter.format(self.license, locale='en')
+        assert output.strip() == EXPECTED_PDMARK_PLAIN
+
+
+
 EXPECTED_PUBLICDOMAIN_PLAIN = (
     '<a rel="license" href="http://creativecommons.org/licenses/publicdomain/">'
     '<img alt="Creative Commons License" style="border-width:0"'
