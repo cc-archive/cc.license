@@ -299,3 +299,49 @@ class PublicDomainHTMLFormatter(HTMLFormatter):
         message = image_header + body_template.substitute(body_vars)
 
         return message
+
+
+class PDMarkHTMLFormatter(HTMLFormatter):
+    """
+    Formatter for the Public Domain Mark
+    """
+    def __repr__(self):
+        return "<PDMarkLicenseFormatter object '%s'>" % self.id
+
+    def format(self, license, work_dict=None, locale='en'):
+        """
+        Return an HTML + RDFa string of text for the license.
+
+        work_dict takes the following keys:
+         - work_title: Name of the work
+         - creator: Original author of the work
+         - curator: The person who identified this work
+        """
+        work_dict = work_dict or {}
+
+        gettext = ugettext_for_locale(locale)
+
+        work_title = work_dict.get('work_title', False)
+
+        creator = work_dict.get('creator', '').strip()
+
+        curator = work_dict.get('curator', '').strip()
+        curator_href = work_dict.get('curator_href', '').strip()
+
+        norms_href = work_dict.get('norms_href', '').strip()
+
+        waive_cc0 = work_dict.get('waive_cc0', False)
+
+        template = TEMPLATE_ENV.get_template('pd_mark.html')
+
+        rendered_template = template.render(
+            {"gettext": gettext,
+             "work_title": work_title,
+             "creator": creator,
+             "curator": curator,
+             "curator_href": curator_href,
+             "norms_href": norms_href,
+             "waive_cc0": waive_cc0,
+             "form": work_dict})
+
+        return util.remove_blank_lines(rendered_template)
