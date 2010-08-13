@@ -321,7 +321,7 @@ class PDMarkHTMLFormatter(HTMLFormatter):
          - curator_href: Link to the person who identified this work
          - norms_href: Link to norms for this work
          - waive_cc0: Whether the author has also waived their rights
-           under CC0
+           under CC0 (boolean)
         """
         work_dict = work_dict or {}
 
