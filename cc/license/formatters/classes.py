@@ -314,16 +314,24 @@ class PDMarkHTMLFormatter(HTMLFormatter):
 
         work_dict takes the following keys:
          - work_title: Name of the work
+         - work_href: Link to this work
          - creator: Original author of the work
+         - creator_href: Link to the original author of the work
          - curator: The person who identified this work
+         - curator_href: Link to the person who identified this work
+         - norms_href: Link to norms for this work
+         - waive_cc0: Whether the author has also waived their rights
+           under CC0
         """
         work_dict = work_dict or {}
 
         gettext = ugettext_for_locale(locale)
 
         work_title = work_dict.get('work_title', False)
+        work_href = work_dict.get('work_href', False)
 
         creator = work_dict.get('creator', '').strip()
+        creator_href = work_dict.get('creator_href', '').strip()
 
         curator = work_dict.get('curator', '').strip()
         curator_href = work_dict.get('curator_href', '').strip()
@@ -337,7 +345,9 @@ class PDMarkHTMLFormatter(HTMLFormatter):
         rendered_template = template.render(
             {"gettext": gettext,
              "work_title": work_title,
+             "work_href": work_href,
              "creator": creator,
+             "creator_href": creator_href,
              "curator": curator,
              "curator_href": curator_href,
              "norms_href": norms_href,
