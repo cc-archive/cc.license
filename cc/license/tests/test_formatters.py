@@ -297,7 +297,7 @@ This work is free of copyright restrictions."""
 class TestPDMarkFormatter:
     def __init__(self):
         self.formatter = cc.license.formatters.classes.PDMarkHTMLFormatter()
-        self.license = cc.license.by_code('publicdomain')
+        self.license = cc.license.by_code('mark')
 
     def test_plain(self):
         output = self.formatter.format(self.license, locale='en')
