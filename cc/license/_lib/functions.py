@@ -159,10 +159,9 @@ def dict2uri(license_info):
             jurisdiction = None
 
         version = None
-        try:
+        if license_info.get('version'):
             version = license_info['version']
-        except KeyError:
-            pass # Don't get pissed at me Asheesh, I know what I'm doing.
+
         if not version:
             version = current_version(license_code, jurisdiction)
 
