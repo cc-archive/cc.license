@@ -130,16 +130,17 @@ def uri2dict(uri):
 
 def dict2uri(license_info):
     """Take a dictionary of license values and convert it into a uri."""
-    if license_info['code'] in ['CC0', 'mark']:
+    if license_info['code'] in ('CC0', 'mark'):
+        license_code = license_info['code']
         if license_info.get('version'):
             version = license_info['version']
         else:
             version = current_version(
-                license_info['code'], license_info.get('jurisdiction'))
+                license_code, license_info.get('jurisdiction'))
             
-        if license_info == 'CC0':
+        if license_code == 'CC0':
             return CC0_BASE + version + '/'
-        elif license_info == 'mark':
+        elif license_code == 'mark':
             return PUBLICDOMAIN_MARK_BASE + version + '/'
     else:
         base = LICENSES_BASE
