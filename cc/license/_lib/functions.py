@@ -149,9 +149,6 @@ def dict2uri(license_info):
         if license_code == 'publicdomain': # one URI for publicdomain
             return base + 'publicdomain/'
 
-        if license_code == 'pdmark':
-            return base + 'pdmark/'
-
         if license_info.has_key('jurisdiction'):
             jurisdiction = license_info['jurisdiction']
         else:
