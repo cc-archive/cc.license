@@ -17,7 +17,7 @@ class TestHtmlFormatter:
         self.fmtr = cc.license.formatters.HTML
         # define namespaces
         self.cc = rdflib.Namespace('http://creativecommons.org/ns#')
-        self.dc = rdflib.Namespace('http://purl.org/dc/elements/1.1/')
+        self.dc = rdflib.Namespace('http://purl.org/dc/terms/')
         self.dc_type = rdflib.Namespace('http://purl.org/dc/dcmitype/')
         self.w3 = rdflib.Namespace('http://www.w3.org/1999/xhtml/vocab#')
         self.b = rdflib.Namespace(self.base)

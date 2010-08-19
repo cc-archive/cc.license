@@ -298,8 +298,8 @@ EXPECTED_PUBLICDOMAIN_WORKFORMAT = (
     '<a rel="license" href="http://creativecommons.org/licenses/publicdomain/">'
     '<img alt="Creative Commons License" style="border-width:0"'
     ' src="http://i.creativecommons.org/l/publicdomain/88x31.png" /></a><br />'
-    'This <span xmlns:dc="http://purl.org/dc/elements/1.1/"'
-    ' href="http://purl.org/dc/dcmitype/MovingImage" rel="dc:type">work</span> '
+    'This <span xmlns:dct="http://purl.org/dc/terms/"'
+    ' href="http://purl.org/dc/dcmitype/MovingImage" rel="dct:type">work</span> '
     'is in the '
     '<a rel="license" href="http://creativecommons.org/licenses/publicdomain/">'
     'Public Domain</a>.')
@@ -374,14 +374,14 @@ class TestFilters:
         triples = self._get_triples({'source_work':'ASDFASDF'})
 
         result = triples["http://example.org/testing"].get(
-            "http://purl.org/dc/elements/1.1/source")
+            "http://purl.org/dc/terms/source")
         assert result == ["http://example.org/ASDFASDF"]
 
     def test_source_absence(self):
         triples = self._get_triples({})
 
         result = triples["http://example.org/testing"].get(
-            "http://purl.org/dc/elements/1.1/source")
+            "http://purl.org/dc/terms/source")
         assert result != ["http://example.org/ASDFASDF"]
 
 

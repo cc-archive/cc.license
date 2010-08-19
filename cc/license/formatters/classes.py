@@ -45,9 +45,9 @@ def get_dctype_url(dctype):
 
 
 WORK_TYPE_TEMPLATE = (
-    '<span xmlns:dc="http://purl.org/dc/elements/1.1/"'
+    '<span xmlns:dct="http://purl.org/dc/terms/"'
     ' href="%(dctype_url)s"'
-    ' rel="dc:type">%(work)s</span>')
+    ' rel="dct:type">%(work)s</span>')
 
 def process_work_type(gettext, dctype):
     work_word = gettext('util.work')
@@ -60,13 +60,13 @@ def process_work_type(gettext, dctype):
 
 
 DCTYPE_WORK_TITLE_TEMPLATE = (
-    '<span xmlns:dc="http://purl.org/dc/elements/1.1/"'
+    '<span xmlns:dct="http://purl.org/dc/terms/"'
     ' href="%(dctype_url)s"'
-    ' property="dc:title"'
-    ' rel="dc:type">%(worktitle)s</span>')
+    ' property="dct:title"'
+    ' rel="dct:type">%(worktitle)s</span>')
 NO_DCTYPE_WORK_TITLE_TEMPLATE = (
-    '<span xmlns:dc="http://purl.org/dc/elements/1.1/"'
-    ' property="dc:title">%(worktitle)s</span>')
+    '<span xmlns:dct="http://purl.org/dc/terms/"'
+    ' property="dct:title">%(worktitle)s</span>')
 
 def process_work_title(dctype, worktitle):
     if dctype:
@@ -98,8 +98,8 @@ def process_work_author(attribution_url, attribution_name):
 
 
 SOURCE_LINK_TEMPLATE = (
-    '<a xmlns:dc="http://purl.org/dc/elements/1.1/"'
-    ' href="%(source_work)s" rel="dc:source">%(source_domain)s</a>')
+    '<a xmlns:dct="http://purl.org/dc/terms/"'
+    ' href="%(source_work)s" rel="dct:source">%(source_domain)s</a>')
 
 MORE_PERMS_LINK_TEMPATE = (
     '<a xmlns:cc="http://creativecommons.org/ns#"'
