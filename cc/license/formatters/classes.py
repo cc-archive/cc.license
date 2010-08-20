@@ -340,12 +340,10 @@ class PDMarkHTMLFormatter(HTMLFormatter):
         rendered_template = template.render(
             {"gettext": gettext,
              "work_title": work_title,
-             "work_href": work_href,
              "creator": creator,
              "creator_href": creator_href,
              "curator": curator,
              "curator_href": curator_href,
-             "norms_href": norms_href,
              "waive_cc0": waive_cc0,
              "form": work_dict})
 
