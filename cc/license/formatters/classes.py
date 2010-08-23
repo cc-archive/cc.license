@@ -17,12 +17,17 @@ import string
 from urlparse import urlparse
 
 import zope.interface
+from zope.i18nmessageid import MessageFactory
+from zope.i18n import translate
 
 from cc.license._lib.interfaces import ILicenseFormatter
 from cc.license import util
 from cc.i18n.gettext_i18n import ugettext_for_locale
+from cc.i18n import ccorg_i18n_setup
 
 import jinja2
+
+z_gettext = MessageFactory('cc_org')
 
 TEMPLATE_LOADER = jinja2.PackageLoader('cc.license.formatters', 'templates')
 TEMPLATE_ENV = jinja2.Environment(
@@ -301,6 +306,68 @@ class PublicDomainHTMLFormatter(HTMLFormatter):
         return message
 
 
+### ----------------------------
+### Public Domain Mark formatter
+### ----------------------------
+
+PDMARK_PLAIN = z_gettext(
+    'license.mark_plain',
+    default="This work is free of copyright restrictions.")
+    
+PDMARK_WORKTITLE = z_gettext(
+    'license.mark_worktitle',
+    default=(
+        "This work (${work_title}) is free of copyright restrictions.")
+
+PDMARK_CREATOR = z_gettext(
+    'license.mark_creator',
+    default=(
+        'This work '
+        '(by <a href="${creator_url}" rel="dct:creator">${creator}</a>) '
+        'is free of copyright restrictions.")'))
+
+PDMARK_CURATOR = z_gettext(
+    'license.mark_curator',
+    default=(
+        'This work, '
+        'identified by <a href="${curator_url}" rel="dct:publisher" '
+        'property="dct:title">${curator}</a>, '
+        'is free of copyright restrictions.")'))
+
+PDMARK_WORKTITLE_CREATOR = z_gettext(
+    'license.mark_worktitle_creator',
+    default=(
+        'This work (${work_title}, '
+        'by <a href="${creator_url}" rel="dct:creator">${creator}</a>) '
+        'is free of copyright restrictions.")'))
+
+PDMARK_WORKTITLE_CURATOR = z_gettext(
+    'license.mark_worktitle_curator',
+    default=(
+        'This work (${work_title}), '
+        'identified by <a href="${curator_url}" rel="dct:publisher" '
+        'property="dct:title">${curator}</a>, '
+        'is free of copyright restrictions.")'))
+
+PDMARK_WORKTITLE_CREATOR_CURATOR = z_gettext(
+    'license.mark_worktitle_creator_curator',
+    default=(
+        'This work (${work_title}, '
+        'by <a href="${creator_url}" rel="dct:creator">${creator}</a>), '
+        'identified by <a href="${curator_url}" rel="dct:publisher" '
+        'property="dct:title">${curator}</a>, '
+        'is free of copyright restrictions.")'))
+
+PDMARK_CREATOR_CURATOR = z_gettext(
+    'license.mark_creator_curator',
+    default=(
+        'This work '
+        '(by <a href="${creator_url}" rel="dct:creator">${creator}</a>), '
+        'identified by <a href="${curator_url}" rel="dct:publisher" '
+        'property="dct:title">${curator}</a>, '
+        'is free of copyright restrictions.")'))
+
+
 class PDMarkHTMLFormatter(HTMLFormatter):
     """
     Formatter for the Public Domain Mark
@@ -321,6 +388,8 @@ class PDMarkHTMLFormatter(HTMLFormatter):
          - waive_cc0: Whether the author has also waived their rights
            under CC0 (boolean)
         """
+        _ = z_gettext
+
         work_dict = work_dict or {}
 
         gettext = ugettext_for_locale(locale)
