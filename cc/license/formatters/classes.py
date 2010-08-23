@@ -367,6 +367,13 @@ PDMARK_CREATOR_CURATOR = z_gettext(
         'property="dct:title">${curator}</a>, '
         'is free of copyright restrictions.")'))
 
+PDMARK_LOGO_HTML = """<a rel="license" href="http://creativecommons.org/publicdomain/mark/1.0/">
+<img src="http://i.creativecommons.org/p/mark/1.0/88x31.png" style="border-style: none;" alt="Public Domain Mark" />
+</a>"""
+
+CC0_LOGO_HTML = """<a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/">
+<img src="http://i.creativecommons.org/p/zero/1.0/88x31.png" style="border-style: none;" alt="CC0" />
+</a>"""
 
 class PDMarkHTMLFormatter(HTMLFormatter):
     """
@@ -440,7 +447,7 @@ class PDMarkHTMLFormatter(HTMLFormatter):
         mapping = {}
 
         if work_title:
-            mapping['work_title'] = '<span property="dct:title">%s</span>' % (
+            mapping['work_title'] = u'<span property="dct:title">%s</span>' % (
                 util.escape(work_title))
 
         if has_creator:
@@ -452,7 +459,7 @@ class PDMarkHTMLFormatter(HTMLFormatter):
             if creator_href:
                 mapping['creator_href'] = util.escape(creator_href)
             else:
-                mapping['creator_href'] = '[_:creator]'
+                mapping['creator_href'] = u'[_:creator]'
 
         if has_curator:
             if curator:
@@ -463,7 +470,7 @@ class PDMarkHTMLFormatter(HTMLFormatter):
             if curator_href:
                 mapping['curator_href'] = util.escape(curator_href)
             else:
-                mapping['curator_href'] = '[_:publisher]'
+                mapping['curator_href'] = u'[_:publisher]'
 
 
         body = translate(
@@ -472,17 +479,24 @@ class PDMarkHTMLFormatter(HTMLFormatter):
 
         # Add the header and footers
         # --------------------------
+        output_sections = []
 
-        template = TEMPLATE_ENV.get_template('pdmark.html')
+        # XXX: Norms guidelines may affect opening <p>?
+        if work_title or has_creator or has_curator:
+            output_sections.append(
+                u'<p xmlns:dct="http://purl.org/dc/terms/">')
+        else:
+            output_sections.append(u'<p>')
 
-        rendered_template = template.render(
-            {"gettext": gettext,
-             "work_title": work_title,
-             "creator": creator,
-             "creator_href": creator_href,
-             "curator": curator,
-             "curator_href": curator_href,
-             "waive_cc0": waive_cc0,
-             "form": work_dict})
+        # Add logos
+        output_sections.append(PDMARK_LOGO_HTML)
+        if waive_cc0:
+            output_sections.append(CC0_LOGO_HTML)
 
-        return util.remove_blank_lines(rendered_template)
+        # Add body
+        output_sections.append(body)
+
+        # Add footer
+        output_sections.append(u'</p>')
+
+        return u'\n'.join(output_sections)
