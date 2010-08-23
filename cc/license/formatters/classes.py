@@ -323,14 +323,14 @@ PDMARK_CREATOR = z_gettext(
     'license.mark_creator',
     default=(
         'This work '
-        '(by <a href="${creator_url}" rel="dct:creator">${creator}</a>) '
+        '(by <a href="${creator_href}" rel="dct:creator">${creator}</a>) '
         'is free of copyright restrictions.")'))
 
 PDMARK_CURATOR = z_gettext(
     'license.mark_curator',
     default=(
         'This work, '
-        'identified by <a href="${curator_url}" rel="dct:publisher" '
+        'identified by <a href="${curator_href}" rel="dct:publisher" '
         'property="dct:title">${curator}</a>, '
         'is free of copyright restrictions.")'))
 
@@ -338,14 +338,14 @@ PDMARK_WORKTITLE_CREATOR = z_gettext(
     'license.mark_worktitle_creator',
     default=(
         'This work (${work_title}, '
-        'by <a href="${creator_url}" rel="dct:creator">${creator}</a>) '
+        'by <a href="${creator_href}" rel="dct:creator">${creator}</a>) '
         'is free of copyright restrictions.")'))
 
 PDMARK_WORKTITLE_CURATOR = z_gettext(
     'license.mark_worktitle_curator',
     default=(
         'This work (${work_title}), '
-        'identified by <a href="${curator_url}" rel="dct:publisher" '
+        'identified by <a href="${curator_href}" rel="dct:publisher" '
         'property="dct:title">${curator}</a>, '
         'is free of copyright restrictions.")'))
 
@@ -353,8 +353,8 @@ PDMARK_WORKTITLE_CREATOR_CURATOR = z_gettext(
     'license.mark_worktitle_creator_curator',
     default=(
         'This work (${work_title}, '
-        'by <a href="${creator_url}" rel="dct:creator">${creator}</a>), '
-        'identified by <a href="${curator_url}" rel="dct:publisher" '
+        'by <a href="${creator_href}" rel="dct:creator">${creator}</a>), '
+        'identified by <a href="${curator_href}" rel="dct:publisher" '
         'property="dct:title">${curator}</a>, '
         'is free of copyright restrictions.")'))
 
@@ -362,8 +362,8 @@ PDMARK_CREATOR_CURATOR = z_gettext(
     'license.mark_creator_curator',
     default=(
         'This work '
-        '(by <a href="${creator_url}" rel="dct:creator">${creator}</a>), '
-        'identified by <a href="${curator_url}" rel="dct:publisher" '
+        '(by <a href="${creator_href}" rel="dct:creator">${creator}</a>), '
+        'identified by <a href="${curator_href}" rel="dct:publisher" '
         'property="dct:title">${curator}</a>, '
         'is free of copyright restrictions.")'))
 
@@ -437,6 +437,38 @@ class PDMarkHTMLFormatter(HTMLFormatter):
 
         # Translate the body
         # ------------------
+        mapping = {}
+
+        if work_title:
+            mapping['work_title'] = '<span property="dct:title">%s</span>' % (
+                util.escape(work_title))
+
+        if has_creator:
+            if creator:
+                mapping['creator'] = util.escape(creator)
+            else:
+                mapping['creator'] = util.escape(creator_href)
+
+            if creator_href:
+                mapping['creator_href'] = util.escape(creator_href)
+            else:
+                mapping['creator_href'] = '[_:creator]'
+
+        if has_curator:
+            if curator:
+                mapping['curator'] = util.escape(curator)
+            else:
+                mapping['curator'] = util.escape(curator_href)
+
+            if curator_href:
+                mapping['curator_href'] = util.escape(curator_href)
+            else:
+                mapping['curator_href'] = '[_:publisher]'
+
+
+        body = translate(
+            body_msg, target_language=locale,
+            mapping=mapping)
 
         # Add the header and footers
         # --------------------------
