@@ -495,7 +495,7 @@ class PDMarkHTMLFormatter(HTMLFormatter):
         if waive_cc0:
             output_sections.append(CC0_LOGO_HTML)
 
-        output_sections.append(u'<br /')
+        output_sections.append(u'<br />')
 
         # Add body
         output_sections.append(body)
