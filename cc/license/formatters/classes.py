@@ -390,9 +390,9 @@ class PDMarkHTMLFormatter(HTMLFormatter):
         """
         _ = z_gettext
 
+        # Property gathering
+        # ------------------
         work_dict = work_dict or {}
-
-        gettext = ugettext_for_locale(locale)
 
         work_title = work_dict.get('work_title', False)
 
@@ -403,6 +403,43 @@ class PDMarkHTMLFormatter(HTMLFormatter):
         curator_href = work_dict.get('curator_href', '').strip()
 
         waive_cc0 = work_dict.get('waive_cc0', False)
+
+        # Find the "body" template
+        # ------------------------
+
+        has_creator = bool(creator or creator_href)
+        has_curator = bool(curator or curator_href)
+
+        # All (work_title and creator and curator)
+        if work_title and has_creator and has_curator:
+            body_msg = PDMARK_WORKTITLE_CREATOR_CURATOR
+        # Only work_title
+        elif work_title and not has_creator and not has_curator:
+            body_msg = PDMARK_WORKTITLE
+        # Only creator
+        elif has_creator and not work_title and not has_curator:
+            body_msg = PDMARK_CREATOR
+        # Only curator
+        elif has_curator and not work_title and not has_creator:
+            body_msg = PDMARK_CURATOR
+        # work_title and creator
+        elif work_title and has_creator and not has_curator:
+            body_msg = PDMARK_WORKTITLE_CREATOR
+        # work_title and curator
+        elif work_title and has_curator and not has_creator:
+            body_msg = PDMARK_WORKTITLE_CURATOR
+        # creator and curator
+        elif has_creator and has_curator and not work_title:
+            body_msg = PDMARK_CREATOR_CURATOR
+        # plain
+        else:
+            body_msg = PDMARK_PLAIN
+
+        # Translate the body
+        # ------------------
+
+        # Add the header and footers
+        # --------------------------
 
         template = TEMPLATE_ENV.get_template('pdmark.html')
 
