@@ -368,11 +368,13 @@ PDMARK_CREATOR_CURATOR = z_gettext(
         'is free of copyright restrictions.")'))
 
 PDMARK_LOGO_HTML = """<a rel="license" href="http://creativecommons.org/publicdomain/mark/1.0/">
-<img src="http://i.creativecommons.org/p/mark/1.0/88x31.png" style="border-style: none;" alt="Public Domain Mark" />
+<img src="http://i.creativecommons.org/p/mark/1.0/88x31.png"
+     style="border-style: none;" alt="Public Domain Mark" />
 </a>"""
 
 CC0_LOGO_HTML = """<a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/">
-<img src="http://i.creativecommons.org/p/zero/1.0/88x31.png" style="border-style: none;" alt="CC0" />
+<img src="http://i.creativecommons.org/p/zero/1.0/88x31.png"
+     style="border-style: none;" alt="CC0" />
 </a>"""
 
 class PDMarkHTMLFormatter(HTMLFormatter):
