@@ -286,12 +286,14 @@ class TestCC0Formatter:
         assert output.strip() == EXPECTED_CC0_COUNTRY_ACTOR_AND_LINK_TITLE
 
 
-EXPECTED_PDMARK_PLAIN = """<a rel="license" href="http://creativecommons.org/publicdomain/mark/1.0/">
+EXPECTED_PDMARK_PLAIN = """<p>
+<a rel="license" href="http://creativecommons.org/publicdomain/mark/1.0/">
 <img src="http://i.creativecommons.org/p/mark/1.0/88x31.png"
      style="border-style: none;" alt="Public Domain Mark" />
 </a>
 <br />
-This work is free of copyright restrictions."""
+This work is free of copyright restrictions.
+</p>"""
 
 
 class TestPDMarkFormatter:
