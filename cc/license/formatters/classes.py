@@ -317,7 +317,7 @@ PDMARK_PLAIN = z_gettext(
 PDMARK_WORKTITLE = z_gettext(
     'license.mark_worktitle',
     default=(
-        "This work (${work_title}) is free of copyright restrictions.")
+        "This work (${work_title}) is free of copyright restrictions."))
 
 PDMARK_CREATOR = z_gettext(
     'license.mark_creator',
