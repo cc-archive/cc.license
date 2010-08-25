@@ -447,19 +447,61 @@ class TestPDMarkFormatter:
         pass
 
     def test_worktitle_creator_curator(self):
-        pass
-
+        output = self.formatter.format(
+            self.license,
+            {'work_title': 'WORK TITLE',
+             'creator': 'CREATOR',
+             'creator_href': 'CREATOR_URL',
+             'curator': 'CURATOR',
+             'curator_href': 'CURATOR_URL'},
+            locale='en')
+        assert output.strip() == EXPECTED_PDMARK_WORKTITLE_CREATOR_CURATOR
+        
     def test_worktitle_creator(self):
-        pass
+        output = self.formatter.format(
+            self.license,
+            {'work_title': 'WORK TITLE',
+             'creator': 'CREATOR',
+             'creator_href': 'CREATOR_URL'},
+            locale='en')
+        assert output.strip() == EXPECTED_PDMARK_WORKTITLE_CREATOR
 
     def test_worktitle_curator(self):
-        pass
+        output = self.formatter.format(
+            self.license,
+            {'work_title': 'WORK TITLE',
+             'curator': 'CURATOR',
+             'curator_href': 'CURATOR_URL'},
+            locale='en')
+        assert output.strip() == EXPECTED_PDMARK_WORKTITLE_CURATOR
 
     def test_creator_curator(self):
-        pass
+        output = self.formatter.format(
+            self.license,
+            {'creator': 'CREATOR',
+             'creator_href': 'CREATOR_URL',
+             'curator': 'CURATOR',
+             'curator_href': 'CURATOR_URL'},
+            locale='en')
+        assert output.strip() == EXPECTED_PDMARK_CREATOR_CURATOR
 
     def test_cc0(self):
-        pass
+        output = self.formatter.format(
+            self.license,
+            {'waive_cc0': True},
+            locale='en')
+        assert output.strip() == EXPECTED_PDMARK_CC0
+
+        output = self.formatter.format(
+            self.license,
+            {'work_title': 'WORK TITLE',
+             'creator': 'CREATOR',
+             'creator_href': 'CREATOR_URL',
+             'curator': 'CURATOR',
+             'curator_href': 'CURATOR_URL',
+             'waive_cc0': True},
+            locale='en')
+        assert output.strip() == EXPECTED_PDMARK_WORKTITLE_CREATOR_CURATOR_CC0
 
     def test_escaping(self):
         pass
