@@ -414,7 +414,15 @@ EXPECTED_PDMARK_WORKTITLE_CREATOR_CURATOR_CC0 = """<p xmlns:dct="http://purl.org
 This work (<span property="dct:title">WORK TITLE</span>, by <a href="CREATOR_URL" rel="dct:creator">CREATOR</a>), identified by <a href="CURATOR_URL" rel="dct:publisher" property="dct:title">CURATOR</a>, is free of copyright restrictions.
 </p>"""
 
-EXPECTED_PDMARK_WORKTITLE_CREATOR_CURATOR_ESCAPETEST = None
+EXPECTED_PDMARK_ESCAPETEST = """<p xmlns:dct="http://purl.org/dc/terms/">
+<a rel="license" href="http://creativecommons.org/publicdomain/mark/1.0/">
+<img src="http://i.creativecommons.org/p/mark/1.0/88x31.png"
+     style="border-style: none;" alt="Public Domain Mark" />
+</a>
+<br />
+This work (<span property="dct:title">&lt;b&gt;&#39;HAXX0rs&#39; &amp; &#34;LAMERS&#34;&lt;/b&gt;</span>, by <a href="&lt;b&gt;&#39;HAXX0rs&#39; &amp; &#34;LAMERS&#34;&lt;/b&gt;" rel="dct:creator">&lt;b&gt;&#39;HAXX0rs&#39; &amp; &#34;LAMERS&#34;&lt;/b&gt;</a>), identified by <a href="&lt;b&gt;&#39;HAXX0rs&#39; &amp; &#34;LAMERS&#34;&lt;/b&gt;" rel="dct:publisher" property="dct:title">&lt;b&gt;&#39;HAXX0rs&#39; &amp; &#34;LAMERS&#34;&lt;/b&gt;</a>, is free of copyright restrictions.
+</p>"""
+
 
 
 
@@ -504,7 +512,15 @@ class TestPDMarkFormatter:
         assert output.strip() == EXPECTED_PDMARK_WORKTITLE_CREATOR_CURATOR_CC0
 
     def test_escaping(self):
-        pass
+        output = self.formatter.format(
+            self.license,
+            {'work_title': '<b>\'HAXX0rs\' & "LAMERS"</b>',
+             'creator': '<b>\'HAXX0rs\' & "LAMERS"</b>',
+             'creator_href': '<b>\'HAXX0rs\' & "LAMERS"</b>',
+             'curator': '<b>\'HAXX0rs\' & "LAMERS"</b>',
+             'curator_href': '<b>\'HAXX0rs\' & "LAMERS"</b>'},
+            locale='en')
+        assert output.strip() == EXPECTED_PDMARK_ESCAPETEST
 
 
 EXPECTED_PUBLICDOMAIN_PLAIN = (
