@@ -424,8 +424,6 @@ This work (<span property="dct:title">&lt;b&gt;&#39;HAXX0rs&#39; &amp; &#34;LAME
 </p>"""
 
 
-
-
 class TestPDMarkFormatter:
     def __init__(self):
         self.formatter = cc.license.formatters.classes.PDMarkHTMLFormatter()
