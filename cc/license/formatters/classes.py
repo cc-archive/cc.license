@@ -475,9 +475,8 @@ class PDMarkHTMLFormatter(HTMLFormatter):
                 mapping['curator_href'] = u'[_:publisher]'
 
 
-        body = translate(
-            body_msg, target_language=locale,
-            mapping=mapping)
+        body = string.Template(
+            translate(body_msg, target_language=locale)).substitute(mapping)
 
         # Add the header and footers
         # --------------------------
