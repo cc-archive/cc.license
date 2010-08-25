@@ -395,7 +395,7 @@ EXPECTED_PDMARK_CC0 = """<p xmlns:dct="http://purl.org/dc/terms/">
 </a>
 <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/">
 <img src="http://i.creativecommons.org/p/zero/1.0/88x31.png"
-     style="border-style: none;" alt="Public Domain Mark" />
+     style="border-style: none;" alt="CC0" />
 </a>
 <br />
 This work is free of copyright restrictions.
@@ -408,7 +408,7 @@ EXPECTED_PDMARK_WORKTITLE_CREATOR_CURATOR_CC0 = """<p xmlns:dct="http://purl.org
 </a>
 <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/">
 <img src="http://i.creativecommons.org/p/zero/1.0/88x31.png"
-     style="border-style: none;" alt="Public Domain Mark" />
+     style="border-style: none;" alt="CC0" />
 </a>
 <br />
 This work (<span property="dct:title">WORK TITLE</span>, by <a href="CREATOR_URL" rel="dct:creator">CREATOR</a>), identified by <a href="CURATOR_URL" rel="dct:publisher" property="dct:title">CURATOR</a>, is free of copyright restrictions.
