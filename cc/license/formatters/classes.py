@@ -324,7 +324,7 @@ PDMARK_CREATOR = z_gettext(
     default=(
         'This work '
         '(by <a href="${creator_href}" rel="dct:creator">${creator}</a>) '
-        'is free of copyright restrictions.")'))
+        'is free of copyright restrictions.'))
 
 PDMARK_CURATOR = z_gettext(
     'license.mark_curator',
@@ -332,14 +332,14 @@ PDMARK_CURATOR = z_gettext(
         'This work, '
         'identified by <a href="${curator_href}" rel="dct:publisher" '
         'property="dct:title">${curator}</a>, '
-        'is free of copyright restrictions.")'))
+        'is free of copyright restrictions.'))
 
 PDMARK_WORKTITLE_CREATOR = z_gettext(
     'license.mark_worktitle_creator',
     default=(
         'This work (${work_title}, '
         'by <a href="${creator_href}" rel="dct:creator">${creator}</a>) '
-        'is free of copyright restrictions.")'))
+        'is free of copyright restrictions.'))
 
 PDMARK_WORKTITLE_CURATOR = z_gettext(
     'license.mark_worktitle_curator',
@@ -347,7 +347,7 @@ PDMARK_WORKTITLE_CURATOR = z_gettext(
         'This work (${work_title}), '
         'identified by <a href="${curator_href}" rel="dct:publisher" '
         'property="dct:title">${curator}</a>, '
-        'is free of copyright restrictions.")'))
+        'is free of copyright restrictions.'))
 
 PDMARK_WORKTITLE_CREATOR_CURATOR = z_gettext(
     'license.mark_worktitle_creator_curator',
@@ -356,7 +356,7 @@ PDMARK_WORKTITLE_CREATOR_CURATOR = z_gettext(
         'by <a href="${creator_href}" rel="dct:creator">${creator}</a>), '
         'identified by <a href="${curator_href}" rel="dct:publisher" '
         'property="dct:title">${curator}</a>, '
-        'is free of copyright restrictions.")'))
+        'is free of copyright restrictions.'))
 
 PDMARK_CREATOR_CURATOR = z_gettext(
     'license.mark_creator_curator',
@@ -365,7 +365,7 @@ PDMARK_CREATOR_CURATOR = z_gettext(
         '(by <a href="${creator_href}" rel="dct:creator">${creator}</a>), '
         'identified by <a href="${curator_href}" rel="dct:publisher" '
         'property="dct:title">${curator}</a>, '
-        'is free of copyright restrictions.")'))
+        'is free of copyright restrictions.'))
 
 PDMARK_LOGO_HTML = """<a rel="license" href="http://creativecommons.org/publicdomain/mark/1.0/">
 <img src="http://i.creativecommons.org/p/mark/1.0/88x31.png"
