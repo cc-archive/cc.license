@@ -428,7 +428,11 @@ class TestPDMarkFormatter:
         assert output.strip() == EXPECTED_PDMARK_PLAIN
 
     def test_worktitle(self):
-        pass
+        output = self.formatter.format(
+            self.license,
+            {'work_title': 'WORK TITLE'},
+            locale='en')
+        assert output.strip() == EXPECTED_PDMARK_WORKTITLE
 
     def test_creator(self):
         # Normal
