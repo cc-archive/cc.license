@@ -367,7 +367,7 @@ PDMARK_CREATOR_LINK = (
     u'<span property="dct:title">%(creator)s</span></a>')
 PDMARK_CREATOR_NOLINK = (
     u'<span resource="[_:creator]" rel="dct:creator">'
-    u'<span property="dct:title>%(creator)s</span></span>')
+    u'<span property="dct:title">%(creator)s</span></span>')
 PDMARK_CREATOR_ONLYLINK = (
     u'<a href="%(creator_href)s" rel="dct:creator">'
     u'%(creator_href)s</a>')
@@ -377,7 +377,7 @@ PDMARK_CURATOR_LINK = (
     u'<span property="dct:title">%(curator)s</span></a>')
 PDMARK_CURATOR_NOLINK = (
     u'<span resource="[_:curator]" rel="dct:publisher">'
-    u'<span property="dct:title>%(curator)s</span></span>')
+    u'<span property="dct:title">%(curator)s</span></span>')
 PDMARK_CURATOR_ONLYLINK = (
     u'<a href="%(curator_href)s" rel="dct:publisher">'
     u'%(curator_href)s</a>')
