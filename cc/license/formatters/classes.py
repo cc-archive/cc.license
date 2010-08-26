@@ -360,6 +360,7 @@ PDMARK_CREATOR_CURATOR = z_gettext(
         '(by ${creator}), identified by ${curator}, '
         'is free of copyright restrictions.'))
 
+
 PDMARK_CREATOR = (
     u'<a href="%(creator_href)s" rel="dct:creator">'
     u'<span property="dct:title">%(creator)s</span></a>')
