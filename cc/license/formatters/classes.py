@@ -361,7 +361,8 @@ PDMARK_CREATOR_CURATOR = z_gettext(
         'is free of copyright restrictions.'))
 
 
-PDMARK_CREATOR = (
+# The "links" html that are substituted into the wider templates
+PDMARK_CREATOR_LINK = (
     u'<a href="%(creator_href)s" rel="dct:creator">'
     u'<span property="dct:title">%(creator)s</span></a>')
 PDMARK_CREATOR_NOLINK = (
@@ -371,7 +372,7 @@ PDMARK_CREATOR_ONLYLINK = (
     u'<a href="%(creator_href)s" rel="dct:creator">'
     u'%(creator_href)s</a>')
 
-PDMARK_CURATOR = (
+PDMARK_CURATOR_LINK = (
     u'<a href="%(curator_href)s" rel="dct:publisher">'
     u'<span property="dct:title">%(curator)s</span></a>')
 PDMARK_CURATOR_NOLINK = (
@@ -469,7 +470,7 @@ class PDMarkHTMLFormatter(HTMLFormatter):
 
         if has_creator:
             if creator and creator_href:
-                mapping['creator'] = PDMARK_CREATOR % (
+                mapping['creator'] = PDMARK_CREATOR_LINK % (
                     {'creator': util.escape(creator),
                      'creator_href': util.escape(creator_href)})
             elif creator and not creator_href:
@@ -481,7 +482,7 @@ class PDMarkHTMLFormatter(HTMLFormatter):
                 
         if has_curator:
             if curator and curator_href:
-                mapping['curator'] = PDMARK_CURATOR % (
+                mapping['curator'] = PDMARK_CURATOR_LINK % (
                     {'curator': util.escape(curator),
                      'curator_href': util.escape(curator_href)})
             elif curator and not curator_href:
