@@ -377,7 +377,7 @@ PDMARK_CURATOR_LINK = (
     u'<span property="dct:title">%(curator)s</span></a>')
 PDMARK_CURATOR_NOLINK = (
     u'<span resource="[_:publisher]" rel="dct:publisher">'
-    u'<span property="dct:title" >%(curator)s</span></span>')
+    u'<span property="dct:title">%(curator)s</span></span>')
 PDMARK_CURATOR_ONLYLINK = (
     u'<a href="%(curator_href)s" rel="dct:publisher">'
     u'%(curator_href)s</a>')
