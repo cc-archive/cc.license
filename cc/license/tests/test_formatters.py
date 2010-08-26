@@ -313,14 +313,14 @@ EXPECTED_PDMARK_CREATOR = """<p xmlns:dct="http://purl.org/dc/terms/">
 This work (by <a href="CREATOR_URL" rel="dct:creator"><span property="dct:title">CREATOR</span></a>) is free of copyright restrictions.
 </p>"""
 
-EXPECTED_PDMARK_CREATOR_NOLINK = None # = """<p xmlns:dct="http://purl.org/dc/terms/">
-# <a rel="license" href="http://creativecommons.org/publicdomain/mark/1.0/">
-# <img src="http://i.creativecommons.org/p/mark/1.0/88x31.png"
-#      style="border-style: none;" alt="Public Domain Mark" />
-# </a>
-# <br />
-# This work (by <span resource="[_:creator]" rel="dct:creator">CREATOR</span>) is free of copyright restrictions.
-# </p>"""
+EXPECTED_PDMARK_CREATOR_NOLINK = """<p xmlns:dct="http://purl.org/dc/terms/">
+<a rel="license" href="http://creativecommons.org/publicdomain/mark/1.0/">
+<img src="http://i.creativecommons.org/p/mark/1.0/88x31.png"
+     style="border-style: none;" alt="Public Domain Mark" />
+</a>
+<br />
+This work (by <span resource="[_:creator]" rel="dct:creator"><span property="dct:title">CREATOR</span></span>) is free of copyright restrictions.
+</p>"""
 
 EXPECTED_PDMARK_CREATOR_ONLYLINK = """<p xmlns:dct="http://purl.org/dc/terms/">
 <a rel="license" href="http://creativecommons.org/publicdomain/mark/1.0/">
@@ -442,15 +442,49 @@ class TestPDMarkFormatter:
 
     def test_creator(self):
         # Normal
+        output = self.formatter.format(
+            self.license,
+            {'creator': 'CREATOR',
+             'creator_href': 'CREATOR_URL'},
+            locale='en')
+        assert output.strip() == EXPECTED_PDMARK_CREATOR
+
         # No link
+        output = self.formatter.format(
+            self.license,
+            {'creator': 'CREATOR'},
+            locale='en')
+        assert output.strip() == EXPECTED_PDMARK_CREATOR_NOLINK
+
         # Only link
-        pass
+        output = self.formatter.format(
+            self.license,
+            {'creator_href': 'CREATOR_URL'},
+            locale='en')
+        assert output.strip() == EXPECTED_PDMARK_CREATOR_ONLYLINK
 
     def test_curator(self):
         # Normal
+        output = self.formatter.format(
+            self.license,
+            {'curator': 'CURATOR',
+             'curator_href': 'CURATOR_URL'},
+            locale='en')
+        assert output.strip() == EXPECTED_PDMARK_CURATOR
+
         # No link
+        output = self.formatter.format(
+            self.license,
+            {'curator': 'CURATOR'},
+            locale='en')
+        assert output.strip() == EXPECTED_PDMARK_CURATOR_NOLINK
+
         # Only link
-        pass
+        output = self.formatter.format(
+            self.license,
+            {'curator_href': 'CURATOR_URL'},
+            locale='en')
+        assert output.strip() == EXPECTED_PDMARK_CURATOR_ONLYLINK
 
     def test_worktitle_creator_curator(self):
         output = self.formatter.format(
