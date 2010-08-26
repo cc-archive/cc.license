@@ -340,7 +340,7 @@ EXPECTED_PDMARK_CURATOR = """<p xmlns:dct="http://purl.org/dc/terms/">
 This work, identified by <a href="CURATOR_URL" rel="dct:publisher"><span property="dct:title">CURATOR</span></a>, is free of copyright restrictions.
 </p>"""
 
-EXPECTED_PDMARK_CURATOR = """<p xmlns:dct="http://purl.org/dc/terms/">
+EXPECTED_PDMARK_CURATOR_NOLINK = """<p xmlns:dct="http://purl.org/dc/terms/">
 <a rel="license" href="http://creativecommons.org/publicdomain/mark/1.0/">
 <img src="http://i.creativecommons.org/p/mark/1.0/88x31.png"
      style="border-style: none;" alt="Public Domain Mark" />
