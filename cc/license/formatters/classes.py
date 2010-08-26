@@ -323,49 +323,63 @@ PDMARK_CREATOR = z_gettext(
     'license.mark_creator',
     default=(
         'This work '
-        '(by <a href="${creator_href}" rel="dct:creator">${creator}</a>) '
+        '(by ${creator}) '
         'is free of copyright restrictions.'))
 
 PDMARK_CURATOR = z_gettext(
     'license.mark_curator',
     default=(
         'This work, '
-        'identified by <a href="${curator_href}" rel="dct:publisher" '
-        'property="dct:title">${curator}</a>, '
+        'identified by ${curator}, '
         'is free of copyright restrictions.'))
 
 PDMARK_WORKTITLE_CREATOR = z_gettext(
     'license.mark_worktitle_creator',
     default=(
-        'This work (${work_title}, '
-        'by <a href="${creator_href}" rel="dct:creator">${creator}</a>) '
+        'This work (${work_title}, by ${creator}) '
         'is free of copyright restrictions.'))
 
 PDMARK_WORKTITLE_CURATOR = z_gettext(
     'license.mark_worktitle_curator',
     default=(
         'This work (${work_title}), '
-        'identified by <a href="${curator_href}" rel="dct:publisher" '
-        'property="dct:title">${curator}</a>, '
+        'identified by ${curator}, '
         'is free of copyright restrictions.'))
 
 PDMARK_WORKTITLE_CREATOR_CURATOR = z_gettext(
     'license.mark_worktitle_creator_curator',
     default=(
         'This work (${work_title}, '
-        'by <a href="${creator_href}" rel="dct:creator">${creator}</a>), '
-        'identified by <a href="${curator_href}" rel="dct:publisher" '
-        'property="dct:title">${curator}</a>, '
+        'by ${creator}), identified by ${curator}, '
         'is free of copyright restrictions.'))
 
 PDMARK_CREATOR_CURATOR = z_gettext(
     'license.mark_creator_curator',
     default=(
         'This work '
-        '(by <a href="${creator_href}" rel="dct:creator">${creator}</a>), '
-        'identified by <a href="${curator_href}" rel="dct:publisher" '
-        'property="dct:title">${curator}</a>, '
+        '(by ${creator}), identified by ${curator}, '
         'is free of copyright restrictions.'))
+
+PDMARK_CREATOR = (
+    u'<a href="%(creator_href)s" rel="dct:creator">'
+    u'<span property="dct:title">%(creator)s</span></a>')
+PDMARK_CREATOR_NOLINK = (
+    u'<span resource="[_:creator]" rel="dct:creator">'
+    u'<span property="dct:title>%(creator)s</span></span>')
+PDMARK_CREATOR_ONLYLINK = (
+    u'<a href="%(creator_href)s" rel="dct:creator">'
+    u'%(creator_href)s</a>')
+
+PDMARK_CURATOR = (
+    u'<a href="%(curator_href)s" rel="dct:publisher">'
+    u'<span property="dct:title">%(curator)s</span></a>')
+PDMARK_CURATOR_NOLINK = (
+    u'<span resource="[_:curator]" rel="dct:publisher">'
+    u'<span property="dct:title>%(curator)s</span></span>')
+PDMARK_CURATOR_ONLYLINK = (
+    u'<a href="%(curator_href)s" rel="dct:publisher">'
+    u'%(curator_href)s</a>')
+
 
 PDMARK_LOGO_HTML = """<a rel="license" href="http://creativecommons.org/publicdomain/mark/1.0/">
 <img src="http://i.creativecommons.org/p/mark/1.0/88x31.png"
@@ -453,27 +467,28 @@ class PDMarkHTMLFormatter(HTMLFormatter):
                 util.escape(work_title))
 
         if has_creator:
-            if creator:
-                mapping['creator'] = util.escape(creator)
-            else:
-                mapping['creator'] = util.escape(creator_href)
-
-            if creator_href:
-                mapping['creator_href'] = util.escape(creator_href)
-            else:
-                mapping['creator_href'] = u'[_:creator]'
-
+            if creator and creator_href:
+                mapping['creator'] = PDMARK_CREATOR % (
+                    {'creator': util.escape(creator),
+                     'creator_href': util.escape(creator_href)})
+            elif creator and not creator_href:
+                mapping['creator'] = PDMARK_CREATOR_NOLINK % (
+                    {'creator': util.escape(creator)})
+            elif creator_href and not creator:
+                mapping['creator'] = PDMARK_CREATOR_ONLYLINK % (
+                    {'creator_href': util.escape(creator_href)})
+                
         if has_curator:
-            if curator:
-                mapping['curator'] = util.escape(curator)
-            else:
-                mapping['curator'] = util.escape(curator_href)
-
-            if curator_href:
-                mapping['curator_href'] = util.escape(curator_href)
-            else:
-                mapping['curator_href'] = u'[_:publisher]'
-
+            if curator and curator_href:
+                mapping['curator'] = PDMARK_CURATOR % (
+                    {'curator': util.escape(curator),
+                     'curator_href': util.escape(curator_href)})
+            elif curator and not curator_href:
+                mapping['curator'] = PDMARK_CURATOR_NOLINK % (
+                    {'curator': util.escape(curator)})
+            elif curator_href and not curator:
+                mapping['curator'] = PDMARK_CURATOR_ONLYLINK % (
+                    {'curator_href': util.escape(curator_href)})
 
         body = string.Template(
             translate(body_msg, target_language=locale)).substitute(mapping)
