@@ -346,7 +346,7 @@ EXPECTED_PDMARK_CURATOR_NOLINK = """<p xmlns:dct="http://purl.org/dc/terms/">
      style="border-style: none;" alt="Public Domain Mark" />
 </a>
 <br />
-This work, identified by <a href="CURATOR_URL" rel="dct:publisher">CURATOR_URL</a>, is free of copyright restrictions.
+This work, identified by <span resource="[_:publisher]" rel="dct:publisher"><span property="dct:title">CURATOR</span></span>, is free of copyright restrictions.
 </p>"""
 
 EXPECTED_PDMARK_CURATOR_ONLYLINK = """<p xmlns:dct="http://purl.org/dc/terms/">
