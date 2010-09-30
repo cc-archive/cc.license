@@ -11,3 +11,6 @@ bin
 cc.license.egg-info
 build
 dist
+/.coverage
+/coverage.xml
+/nosetests.xml
