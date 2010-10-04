@@ -312,53 +312,53 @@ class PublicDomainHTMLFormatter(HTMLFormatter):
 
 PDMARK_PLAIN = z_gettext(
     'license.mark_plain',
-    default="This work is free of copyright restrictions.")
+    default="This work is free of known copyright restrictions.")
     
 PDMARK_WORKTITLE = z_gettext(
     'license.mark_worktitle',
     default=(
-        "This work (${work_title}) is free of copyright restrictions."))
+        "This work (${work_title}) is free of known copyright restrictions."))
 
 PDMARK_CREATOR = z_gettext(
     'license.mark_creator',
     default=(
         'This work '
         '(by ${creator}) '
-        'is free of copyright restrictions.'))
+        'is free of known copyright restrictions.'))
 
 PDMARK_CURATOR = z_gettext(
     'license.mark_curator',
     default=(
         'This work, '
         'identified by ${curator}, '
-        'is free of copyright restrictions.'))
+        'is free of known copyright restrictions.'))
 
 PDMARK_WORKTITLE_CREATOR = z_gettext(
     'license.mark_worktitle_creator',
     default=(
         'This work (${work_title}, by ${creator}) '
-        'is free of copyright restrictions.'))
+        'is free of known copyright restrictions.'))
 
 PDMARK_WORKTITLE_CURATOR = z_gettext(
     'license.mark_worktitle_curator',
     default=(
         'This work (${work_title}), '
         'identified by ${curator}, '
-        'is free of copyright restrictions.'))
+        'is free of known copyright restrictions.'))
 
 PDMARK_WORKTITLE_CREATOR_CURATOR = z_gettext(
     'license.mark_worktitle_creator_curator',
     default=(
         'This work (${work_title}, '
         'by ${creator}), identified by ${curator}, '
-        'is free of copyright restrictions.'))
+        'is free of known copyright restrictions.'))
 
 PDMARK_CREATOR_CURATOR = z_gettext(
     'license.mark_creator_curator',
     default=(
         'This work '
         '(by ${creator}), identified by ${curator}, '
-        'is free of copyright restrictions.'))
+        'is free of known copyright restrictions.'))
 
 
 # The "links" html that are substituted into the wider templates

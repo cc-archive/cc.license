@@ -292,7 +292,7 @@ EXPECTED_PDMARK_PLAIN = """<p>
      style="border-style: none;" alt="Public Domain Mark" />
 </a>
 <br />
-This work is free of copyright restrictions.
+This work is free of known copyright restrictions.
 </p>"""
 
 EXPECTED_PDMARK_WORKTITLE = """<p xmlns:dct="http://purl.org/dc/terms/">
@@ -301,7 +301,7 @@ EXPECTED_PDMARK_WORKTITLE = """<p xmlns:dct="http://purl.org/dc/terms/">
      style="border-style: none;" alt="Public Domain Mark" />
 </a>
 <br />
-This work (<span property="dct:title">WORK TITLE</span>) is free of copyright restrictions.
+This work (<span property="dct:title">WORK TITLE</span>) is free of known copyright restrictions.
 </p>"""
 
 EXPECTED_PDMARK_CREATOR = """<p xmlns:dct="http://purl.org/dc/terms/">
@@ -310,7 +310,7 @@ EXPECTED_PDMARK_CREATOR = """<p xmlns:dct="http://purl.org/dc/terms/">
      style="border-style: none;" alt="Public Domain Mark" />
 </a>
 <br />
-This work (by <a href="CREATOR_URL" rel="dct:creator"><span property="dct:title">CREATOR</span></a>) is free of copyright restrictions.
+This work (by <a href="CREATOR_URL" rel="dct:creator"><span property="dct:title">CREATOR</span></a>) is free of known copyright restrictions.
 </p>"""
 
 EXPECTED_PDMARK_CREATOR_NOLINK = """<p xmlns:dct="http://purl.org/dc/terms/">
@@ -319,7 +319,7 @@ EXPECTED_PDMARK_CREATOR_NOLINK = """<p xmlns:dct="http://purl.org/dc/terms/">
      style="border-style: none;" alt="Public Domain Mark" />
 </a>
 <br />
-This work (by <span resource="[_:creator]" rel="dct:creator"><span property="dct:title">CREATOR</span></span>) is free of copyright restrictions.
+This work (by <span resource="[_:creator]" rel="dct:creator"><span property="dct:title">CREATOR</span></span>) is free of known copyright restrictions.
 </p>"""
 
 EXPECTED_PDMARK_CREATOR_ONLYLINK = """<p xmlns:dct="http://purl.org/dc/terms/">
@@ -328,7 +328,7 @@ EXPECTED_PDMARK_CREATOR_ONLYLINK = """<p xmlns:dct="http://purl.org/dc/terms/">
      style="border-style: none;" alt="Public Domain Mark" />
 </a>
 <br />
-This work (by <a href="CREATOR_URL" rel="dct:creator">CREATOR_URL</a>) is free of copyright restrictions.
+This work (by <a href="CREATOR_URL" rel="dct:creator">CREATOR_URL</a>) is free of known copyright restrictions.
 </p>"""
 
 EXPECTED_PDMARK_CURATOR = """<p xmlns:dct="http://purl.org/dc/terms/">
@@ -337,7 +337,7 @@ EXPECTED_PDMARK_CURATOR = """<p xmlns:dct="http://purl.org/dc/terms/">
      style="border-style: none;" alt="Public Domain Mark" />
 </a>
 <br />
-This work, identified by <a href="CURATOR_URL" rel="dct:publisher"><span property="dct:title">CURATOR</span></a>, is free of copyright restrictions.
+This work, identified by <a href="CURATOR_URL" rel="dct:publisher"><span property="dct:title">CURATOR</span></a>, is free of known copyright restrictions.
 </p>"""
 
 EXPECTED_PDMARK_CURATOR_NOLINK = """<p xmlns:dct="http://purl.org/dc/terms/">
@@ -346,7 +346,7 @@ EXPECTED_PDMARK_CURATOR_NOLINK = """<p xmlns:dct="http://purl.org/dc/terms/">
      style="border-style: none;" alt="Public Domain Mark" />
 </a>
 <br />
-This work, identified by <span resource="[_:publisher]" rel="dct:publisher"><span property="dct:title">CURATOR</span></span>, is free of copyright restrictions.
+This work, identified by <span resource="[_:publisher]" rel="dct:publisher"><span property="dct:title">CURATOR</span></span>, is free of known copyright restrictions.
 </p>"""
 
 EXPECTED_PDMARK_CURATOR_ONLYLINK = """<p xmlns:dct="http://purl.org/dc/terms/">
@@ -355,7 +355,7 @@ EXPECTED_PDMARK_CURATOR_ONLYLINK = """<p xmlns:dct="http://purl.org/dc/terms/">
      style="border-style: none;" alt="Public Domain Mark" />
 </a>
 <br />
-This work, identified by <a href="CURATOR_URL" rel="dct:publisher">CURATOR_URL</a>, is free of copyright restrictions.
+This work, identified by <a href="CURATOR_URL" rel="dct:publisher">CURATOR_URL</a>, is free of known copyright restrictions.
 </p>"""
 
 
@@ -365,7 +365,7 @@ EXPECTED_PDMARK_WORKTITLE_CREATOR_CURATOR = """<p xmlns:dct="http://purl.org/dc/
      style="border-style: none;" alt="Public Domain Mark" />
 </a>
 <br />
-This work (<span property="dct:title">WORK TITLE</span>, by <a href="CREATOR_URL" rel="dct:creator"><span property="dct:title">CREATOR</span></a>), identified by <a href="CURATOR_URL" rel="dct:publisher"><span property="dct:title">CURATOR</span></a>, is free of copyright restrictions.
+This work (<span property="dct:title">WORK TITLE</span>, by <a href="CREATOR_URL" rel="dct:creator"><span property="dct:title">CREATOR</span></a>), identified by <a href="CURATOR_URL" rel="dct:publisher"><span property="dct:title">CURATOR</span></a>, is free of known copyright restrictions.
 </p>"""
 
 EXPECTED_PDMARK_WORKTITLE_CREATOR = """<p xmlns:dct="http://purl.org/dc/terms/">
@@ -374,7 +374,7 @@ EXPECTED_PDMARK_WORKTITLE_CREATOR = """<p xmlns:dct="http://purl.org/dc/terms/">
      style="border-style: none;" alt="Public Domain Mark" />
 </a>
 <br />
-This work (<span property="dct:title">WORK TITLE</span>, by <a href="CREATOR_URL" rel="dct:creator"><span property="dct:title">CREATOR</span></a>) is free of copyright restrictions.
+This work (<span property="dct:title">WORK TITLE</span>, by <a href="CREATOR_URL" rel="dct:creator"><span property="dct:title">CREATOR</span></a>) is free of known copyright restrictions.
 </p>"""
 
 EXPECTED_PDMARK_WORKTITLE_CURATOR = """<p xmlns:dct="http://purl.org/dc/terms/">
@@ -383,7 +383,7 @@ EXPECTED_PDMARK_WORKTITLE_CURATOR = """<p xmlns:dct="http://purl.org/dc/terms/">
      style="border-style: none;" alt="Public Domain Mark" />
 </a>
 <br />
-This work (<span property="dct:title">WORK TITLE</span>), identified by <a href="CURATOR_URL" rel="dct:publisher"><span property="dct:title">CURATOR</span></a>, is free of copyright restrictions.
+This work (<span property="dct:title">WORK TITLE</span>), identified by <a href="CURATOR_URL" rel="dct:publisher"><span property="dct:title">CURATOR</span></a>, is free of known copyright restrictions.
 </p>"""
 
 EXPECTED_PDMARK_CREATOR_CURATOR = """<p xmlns:dct="http://purl.org/dc/terms/">
@@ -392,7 +392,7 @@ EXPECTED_PDMARK_CREATOR_CURATOR = """<p xmlns:dct="http://purl.org/dc/terms/">
      style="border-style: none;" alt="Public Domain Mark" />
 </a>
 <br />
-This work (by <a href="CREATOR_URL" rel="dct:creator"><span property="dct:title">CREATOR</span></a>), identified by <a href="CURATOR_URL" rel="dct:publisher"><span property="dct:title">CURATOR</span></a>, is free of copyright restrictions.
+This work (by <a href="CREATOR_URL" rel="dct:creator"><span property="dct:title">CREATOR</span></a>), identified by <a href="CURATOR_URL" rel="dct:publisher"><span property="dct:title">CURATOR</span></a>, is free of known copyright restrictions.
 </p>"""
 
 EXPECTED_PDMARK_CC0 = """<p>
@@ -405,7 +405,7 @@ EXPECTED_PDMARK_CC0 = """<p>
      style="border-style: none;" alt="CC0" />
 </a>
 <br />
-This work is free of copyright restrictions.
+This work is free of known copyright restrictions.
 </p>"""
 
 EXPECTED_PDMARK_WORKTITLE_CREATOR_CURATOR_CC0 = """<p xmlns:dct="http://purl.org/dc/terms/">
@@ -418,7 +418,7 @@ EXPECTED_PDMARK_WORKTITLE_CREATOR_CURATOR_CC0 = """<p xmlns:dct="http://purl.org
      style="border-style: none;" alt="CC0" />
 </a>
 <br />
-This work (<span property="dct:title">WORK TITLE</span>, by <a href="CREATOR_URL" rel="dct:creator"><span property="dct:title">CREATOR</span></a>), identified by <a href="CURATOR_URL" rel="dct:publisher"><span property="dct:title">CURATOR</span></a>, is free of copyright restrictions.
+This work (<span property="dct:title">WORK TITLE</span>, by <a href="CREATOR_URL" rel="dct:creator"><span property="dct:title">CREATOR</span></a>), identified by <a href="CURATOR_URL" rel="dct:publisher"><span property="dct:title">CURATOR</span></a>, is free of known copyright restrictions.
 </p>"""
 
 EXPECTED_PDMARK_ESCAPETEST = """<p xmlns:dct="http://purl.org/dc/terms/">
@@ -427,7 +427,7 @@ EXPECTED_PDMARK_ESCAPETEST = """<p xmlns:dct="http://purl.org/dc/terms/">
      style="border-style: none;" alt="Public Domain Mark" />
 </a>
 <br />
-This work (<span property="dct:title">&lt;b&gt;&#39;HAXX0rs&#39; &amp; &#34;LAMERS&#34;&lt;/b&gt;</span>, by <a href="&lt;b&gt;&#39;HAXX0rs&#39; &amp; &#34;LAMERS&#34;&lt;/b&gt;" rel="dct:creator"><span property="dct:title">&lt;b&gt;&#39;HAXX0rs&#39; &amp; &#34;LAMERS&#34;&lt;/b&gt;</span></a>), identified by <a href="&lt;b&gt;&#39;HAXX0rs&#39; &amp; &#34;LAMERS&#34;&lt;/b&gt;" rel="dct:publisher"><span property="dct:title">&lt;b&gt;&#39;HAXX0rs&#39; &amp; &#34;LAMERS&#34;&lt;/b&gt;</span></a>, is free of copyright restrictions.
+This work (<span property="dct:title">&lt;b&gt;&#39;HAXX0rs&#39; &amp; &#34;LAMERS&#34;&lt;/b&gt;</span>, by <a href="&lt;b&gt;&#39;HAXX0rs&#39; &amp; &#34;LAMERS&#34;&lt;/b&gt;" rel="dct:creator"><span property="dct:title">&lt;b&gt;&#39;HAXX0rs&#39; &amp; &#34;LAMERS&#34;&lt;/b&gt;</span></a>), identified by <a href="&lt;b&gt;&#39;HAXX0rs&#39; &amp; &#34;LAMERS&#34;&lt;/b&gt;" rel="dct:publisher"><span property="dct:title">&lt;b&gt;&#39;HAXX0rs&#39; &amp; &#34;LAMERS&#34;&lt;/b&gt;</span></a>, is free of known copyright restrictions.
 </p>"""
 
 
