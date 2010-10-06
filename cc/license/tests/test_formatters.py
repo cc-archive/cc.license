@@ -304,31 +304,31 @@ EXPECTED_PDMARK_WORKTITLE = """<p xmlns:dct="http://purl.org/dc/terms/">
 This work (<span property="dct:title">WORK TITLE</span>) is free of known copyright restrictions.
 </p>"""
 
-EXPECTED_PDMARK_CREATOR = """<p xmlns:dct="http://purl.org/dc/terms/">
+EXPECTED_PDMARK_AUTHOR = """<p xmlns:dct="http://purl.org/dc/terms/">
 <a rel="license" href="http://creativecommons.org/publicdomain/mark/1.0/">
 <img src="http://i.creativecommons.org/p/mark/1.0/88x31.png"
      style="border-style: none;" alt="Public Domain Mark" />
 </a>
 <br />
-This work (by <a href="CREATOR_URL" rel="dct:creator"><span property="dct:title">CREATOR</span></a>) is free of known copyright restrictions.
+This work (by <a href="AUTHOR_URL" rel="dct:creator"><span property="dct:title">AUTHOR</span></a>) is free of known copyright restrictions.
 </p>"""
 
-EXPECTED_PDMARK_CREATOR_NOLINK = """<p xmlns:dct="http://purl.org/dc/terms/">
+EXPECTED_PDMARK_AUTHOR_NOLINK = """<p xmlns:dct="http://purl.org/dc/terms/">
 <a rel="license" href="http://creativecommons.org/publicdomain/mark/1.0/">
 <img src="http://i.creativecommons.org/p/mark/1.0/88x31.png"
      style="border-style: none;" alt="Public Domain Mark" />
 </a>
 <br />
-This work (by <span resource="[_:creator]" rel="dct:creator"><span property="dct:title">CREATOR</span></span>) is free of known copyright restrictions.
+This work (by <span resource="[_:creator]" rel="dct:creator"><span property="dct:title">AUTHOR</span></span>) is free of known copyright restrictions.
 </p>"""
 
-EXPECTED_PDMARK_CREATOR_ONLYLINK = """<p xmlns:dct="http://purl.org/dc/terms/">
+EXPECTED_PDMARK_AUTHOR_ONLYLINK = """<p xmlns:dct="http://purl.org/dc/terms/">
 <a rel="license" href="http://creativecommons.org/publicdomain/mark/1.0/">
 <img src="http://i.creativecommons.org/p/mark/1.0/88x31.png"
      style="border-style: none;" alt="Public Domain Mark" />
 </a>
 <br />
-This work (by <a href="CREATOR_URL" rel="dct:creator">CREATOR_URL</a>) is free of known copyright restrictions.
+This work (by <a href="AUTHOR_URL" rel="dct:creator">AUTHOR_URL</a>) is free of known copyright restrictions.
 </p>"""
 
 EXPECTED_PDMARK_CURATOR = """<p xmlns:dct="http://purl.org/dc/terms/">
@@ -359,22 +359,22 @@ This work, identified by <a href="CURATOR_URL" rel="dct:publisher">CURATOR_URL</
 </p>"""
 
 
-EXPECTED_PDMARK_WORKTITLE_CREATOR_CURATOR = """<p xmlns:dct="http://purl.org/dc/terms/">
+EXPECTED_PDMARK_WORKTITLE_AUTHOR_CURATOR = """<p xmlns:dct="http://purl.org/dc/terms/">
 <a rel="license" href="http://creativecommons.org/publicdomain/mark/1.0/">
 <img src="http://i.creativecommons.org/p/mark/1.0/88x31.png"
      style="border-style: none;" alt="Public Domain Mark" />
 </a>
 <br />
-This work (<span property="dct:title">WORK TITLE</span>, by <a href="CREATOR_URL" rel="dct:creator"><span property="dct:title">CREATOR</span></a>), identified by <a href="CURATOR_URL" rel="dct:publisher"><span property="dct:title">CURATOR</span></a>, is free of known copyright restrictions.
+This work (<span property="dct:title">WORK TITLE</span>, by <a href="AUTHOR_URL" rel="dct:creator"><span property="dct:title">AUTHOR</span></a>), identified by <a href="CURATOR_URL" rel="dct:publisher"><span property="dct:title">CURATOR</span></a>, is free of known copyright restrictions.
 </p>"""
 
-EXPECTED_PDMARK_WORKTITLE_CREATOR = """<p xmlns:dct="http://purl.org/dc/terms/">
+EXPECTED_PDMARK_WORKTITLE_AUTHOR = """<p xmlns:dct="http://purl.org/dc/terms/">
 <a rel="license" href="http://creativecommons.org/publicdomain/mark/1.0/">
 <img src="http://i.creativecommons.org/p/mark/1.0/88x31.png"
      style="border-style: none;" alt="Public Domain Mark" />
 </a>
 <br />
-This work (<span property="dct:title">WORK TITLE</span>, by <a href="CREATOR_URL" rel="dct:creator"><span property="dct:title">CREATOR</span></a>) is free of known copyright restrictions.
+This work (<span property="dct:title">WORK TITLE</span>, by <a href="AUTHOR_URL" rel="dct:creator"><span property="dct:title">AUTHOR</span></a>) is free of known copyright restrictions.
 </p>"""
 
 EXPECTED_PDMARK_WORKTITLE_CURATOR = """<p xmlns:dct="http://purl.org/dc/terms/">
@@ -386,13 +386,13 @@ EXPECTED_PDMARK_WORKTITLE_CURATOR = """<p xmlns:dct="http://purl.org/dc/terms/">
 This work (<span property="dct:title">WORK TITLE</span>), identified by <a href="CURATOR_URL" rel="dct:publisher"><span property="dct:title">CURATOR</span></a>, is free of known copyright restrictions.
 </p>"""
 
-EXPECTED_PDMARK_CREATOR_CURATOR = """<p xmlns:dct="http://purl.org/dc/terms/">
+EXPECTED_PDMARK_AUTHOR_CURATOR = """<p xmlns:dct="http://purl.org/dc/terms/">
 <a rel="license" href="http://creativecommons.org/publicdomain/mark/1.0/">
 <img src="http://i.creativecommons.org/p/mark/1.0/88x31.png"
      style="border-style: none;" alt="Public Domain Mark" />
 </a>
 <br />
-This work (by <a href="CREATOR_URL" rel="dct:creator"><span property="dct:title">CREATOR</span></a>), identified by <a href="CURATOR_URL" rel="dct:publisher"><span property="dct:title">CURATOR</span></a>, is free of known copyright restrictions.
+This work (by <a href="AUTHOR_URL" rel="dct:creator"><span property="dct:title">AUTHOR</span></a>), identified by <a href="CURATOR_URL" rel="dct:publisher"><span property="dct:title">CURATOR</span></a>, is free of known copyright restrictions.
 </p>"""
 
 EXPECTED_PDMARK_CC0 = """<p>
@@ -408,7 +408,7 @@ EXPECTED_PDMARK_CC0 = """<p>
 This work is free of known copyright restrictions.
 </p>"""
 
-EXPECTED_PDMARK_WORKTITLE_CREATOR_CURATOR_CC0 = """<p xmlns:dct="http://purl.org/dc/terms/">
+EXPECTED_PDMARK_WORKTITLE_AUTHOR_CURATOR_CC0 = """<p xmlns:dct="http://purl.org/dc/terms/">
 <a rel="license" href="http://creativecommons.org/publicdomain/mark/1.0/">
 <img src="http://i.creativecommons.org/p/mark/1.0/88x31.png"
      style="border-style: none;" alt="Public Domain Mark" />
@@ -418,7 +418,7 @@ EXPECTED_PDMARK_WORKTITLE_CREATOR_CURATOR_CC0 = """<p xmlns:dct="http://purl.org
      style="border-style: none;" alt="CC0" />
 </a>
 <br />
-This work (<span property="dct:title">WORK TITLE</span>, by <a href="CREATOR_URL" rel="dct:creator"><span property="dct:title">CREATOR</span></a>), identified by <a href="CURATOR_URL" rel="dct:publisher"><span property="dct:title">CURATOR</span></a>, is free of known copyright restrictions.
+This work (<span property="dct:title">WORK TITLE</span>, by <a href="AUTHOR_URL" rel="dct:creator"><span property="dct:title">AUTHOR</span></a>), identified by <a href="CURATOR_URL" rel="dct:publisher"><span property="dct:title">CURATOR</span></a>, is free of known copyright restrictions.
 </p>"""
 
 EXPECTED_PDMARK_ESCAPETEST = """<p xmlns:dct="http://purl.org/dc/terms/">
@@ -447,34 +447,34 @@ class TestPDMarkFormatter:
             locale='en')
         assert output.strip() == EXPECTED_PDMARK_WORKTITLE
 
-    def test_creator(self):
+    def test_author(self):
         # Normal
         output = self.formatter.format(
             self.license,
-            {'creator': 'CREATOR',
-             'creator_href': 'CREATOR_URL'},
+            {'author_title': 'AUTHOR',
+             'author_href': 'AUTHOR_URL'},
             locale='en')
-        assert output.strip() == EXPECTED_PDMARK_CREATOR
+        assert output.strip() == EXPECTED_PDMARK_AUTHOR
 
         # No link
         output = self.formatter.format(
             self.license,
-            {'creator': 'CREATOR'},
+            {'author_title': 'AUTHOR'},
             locale='en')
-        assert output.strip() == EXPECTED_PDMARK_CREATOR_NOLINK
+        assert output.strip() == EXPECTED_PDMARK_AUTHOR_NOLINK
 
         # Only link
         output = self.formatter.format(
             self.license,
-            {'creator_href': 'CREATOR_URL'},
+            {'author_href': 'AUTHOR_URL'},
             locale='en')
-        assert output.strip() == EXPECTED_PDMARK_CREATOR_ONLYLINK
+        assert output.strip() == EXPECTED_PDMARK_AUTHOR_ONLYLINK
 
     def test_curator(self):
         # Normal
         output = self.formatter.format(
             self.license,
-            {'curator': 'CURATOR',
+            {'curator_title': 'CURATOR',
              'curator_href': 'CURATOR_URL'},
             locale='en')
         assert output.strip() == EXPECTED_PDMARK_CURATOR
@@ -482,7 +482,7 @@ class TestPDMarkFormatter:
         # No link
         output = self.formatter.format(
             self.license,
-            {'curator': 'CURATOR'},
+            {'curator_title': 'CURATOR'},
             locale='en')
         assert output.strip() == EXPECTED_PDMARK_CURATOR_NOLINK
 
@@ -493,44 +493,44 @@ class TestPDMarkFormatter:
             locale='en')
         assert output.strip() == EXPECTED_PDMARK_CURATOR_ONLYLINK
 
-    def test_worktitle_creator_curator(self):
+    def test_worktitle_author_curator(self):
         output = self.formatter.format(
             self.license,
             {'work_title': 'WORK TITLE',
-             'creator': 'CREATOR',
-             'creator_href': 'CREATOR_URL',
-             'curator': 'CURATOR',
+             'author_title': 'AUTHOR',
+             'author_href': 'AUTHOR_URL',
+             'curator_title': 'CURATOR',
              'curator_href': 'CURATOR_URL'},
             locale='en')
-        assert output.strip() == EXPECTED_PDMARK_WORKTITLE_CREATOR_CURATOR
+        assert output.strip() == EXPECTED_PDMARK_WORKTITLE_AUTHOR_CURATOR
         
-    def test_worktitle_creator(self):
+    def test_worktitle_author(self):
         output = self.formatter.format(
             self.license,
             {'work_title': 'WORK TITLE',
-             'creator': 'CREATOR',
-             'creator_href': 'CREATOR_URL'},
+             'author_title': 'AUTHOR',
+             'author_href': 'AUTHOR_URL'},
             locale='en')
-        assert output.strip() == EXPECTED_PDMARK_WORKTITLE_CREATOR
+        assert output.strip() == EXPECTED_PDMARK_WORKTITLE_AUTHOR
 
     def test_worktitle_curator(self):
         output = self.formatter.format(
             self.license,
             {'work_title': 'WORK TITLE',
-             'curator': 'CURATOR',
+             'curator_title': 'CURATOR',
              'curator_href': 'CURATOR_URL'},
             locale='en')
         assert output.strip() == EXPECTED_PDMARK_WORKTITLE_CURATOR
 
-    def test_creator_curator(self):
+    def test_author_curator(self):
         output = self.formatter.format(
             self.license,
-            {'creator': 'CREATOR',
-             'creator_href': 'CREATOR_URL',
-             'curator': 'CURATOR',
+            {'author_title': 'AUTHOR',
+             'author_href': 'AUTHOR_URL',
+             'curator_title': 'CURATOR',
              'curator_href': 'CURATOR_URL'},
             locale='en')
-        assert output.strip() == EXPECTED_PDMARK_CREATOR_CURATOR
+        assert output.strip() == EXPECTED_PDMARK_AUTHOR_CURATOR
 
     def test_cc0(self):
         output = self.formatter.format(
@@ -542,21 +542,21 @@ class TestPDMarkFormatter:
         output = self.formatter.format(
             self.license,
             {'work_title': 'WORK TITLE',
-             'creator': 'CREATOR',
-             'creator_href': 'CREATOR_URL',
-             'curator': 'CURATOR',
+             'author_title': 'AUTHOR',
+             'author_href': 'AUTHOR_URL',
+             'curator_title': 'CURATOR',
              'curator_href': 'CURATOR_URL',
              'waive_cc0': True},
             locale='en')
-        assert output.strip() == EXPECTED_PDMARK_WORKTITLE_CREATOR_CURATOR_CC0
+        assert output.strip() == EXPECTED_PDMARK_WORKTITLE_AUTHOR_CURATOR_CC0
 
     def test_escaping(self):
         output = self.formatter.format(
             self.license,
             {'work_title': '<b>\'HAXX0rs\' & "LAMERS"</b>',
-             'creator': '<b>\'HAXX0rs\' & "LAMERS"</b>',
-             'creator_href': '<b>\'HAXX0rs\' & "LAMERS"</b>',
-             'curator': '<b>\'HAXX0rs\' & "LAMERS"</b>',
+             'author_title': '<b>\'HAXX0rs\' & "LAMERS"</b>',
+             'author_href': '<b>\'HAXX0rs\' & "LAMERS"</b>',
+             'curator_title': '<b>\'HAXX0rs\' & "LAMERS"</b>',
              'curator_href': '<b>\'HAXX0rs\' & "LAMERS"</b>'},
             locale='en')
         assert output.strip() == EXPECTED_PDMARK_ESCAPETEST

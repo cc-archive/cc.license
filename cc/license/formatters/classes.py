@@ -319,11 +319,11 @@ PDMARK_WORKTITLE = z_gettext(
     default=(
         "This work (${work_title}) is free of known copyright restrictions."))
 
-PDMARK_CREATOR = z_gettext(
-    'license.mark_creator',
+PDMARK_AUTHOR = z_gettext(
+    'license.mark_author',
     default=(
         'This work '
-        '(by ${creator}) '
+        '(by ${author}) '
         'is free of known copyright restrictions.'))
 
 PDMARK_CURATOR = z_gettext(
@@ -333,10 +333,10 @@ PDMARK_CURATOR = z_gettext(
         'identified by ${curator}, '
         'is free of known copyright restrictions.'))
 
-PDMARK_WORKTITLE_CREATOR = z_gettext(
-    'license.mark_worktitle_creator',
+PDMARK_WORKTITLE_AUTHOR = z_gettext(
+    'license.mark_worktitle_author',
     default=(
-        'This work (${work_title}, by ${creator}) '
+        'This work (${work_title}, by ${author}) '
         'is free of known copyright restrictions.'))
 
 PDMARK_WORKTITLE_CURATOR = z_gettext(
@@ -346,38 +346,38 @@ PDMARK_WORKTITLE_CURATOR = z_gettext(
         'identified by ${curator}, '
         'is free of known copyright restrictions.'))
 
-PDMARK_WORKTITLE_CREATOR_CURATOR = z_gettext(
-    'license.mark_worktitle_creator_curator',
+PDMARK_WORKTITLE_AUTHOR_CURATOR = z_gettext(
+    'license.mark_worktitle_author_curator',
     default=(
         'This work (${work_title}, '
-        'by ${creator}), identified by ${curator}, '
+        'by ${author}), identified by ${curator}, '
         'is free of known copyright restrictions.'))
 
-PDMARK_CREATOR_CURATOR = z_gettext(
-    'license.mark_creator_curator',
+PDMARK_AUTHOR_CURATOR = z_gettext(
+    'license.mark_author_curator',
     default=(
         'This work '
-        '(by ${creator}), identified by ${curator}, '
+        '(by ${author}), identified by ${curator}, '
         'is free of known copyright restrictions.'))
 
 
 # The "links" html that are substituted into the wider templates
-PDMARK_CREATOR_LINK = (
-    u'<a href="%(creator_href)s" rel="dct:creator">'
-    u'<span property="dct:title">%(creator)s</span></a>')
-PDMARK_CREATOR_NOLINK = (
+PDMARK_AUTHOR_LINK = (
+    u'<a href="%(author_href)s" rel="dct:creator">'
+    u'<span property="dct:title">%(author_title)s</span></a>')
+PDMARK_AUTHOR_NOLINK = (
     u'<span resource="[_:creator]" rel="dct:creator">'
-    u'<span property="dct:title">%(creator)s</span></span>')
-PDMARK_CREATOR_ONLYLINK = (
-    u'<a href="%(creator_href)s" rel="dct:creator">'
-    u'%(creator_href)s</a>')
+    u'<span property="dct:title">%(author_title)s</span></span>')
+PDMARK_AUTHOR_ONLYLINK = (
+    u'<a href="%(author_href)s" rel="dct:creator">'
+    u'%(author_href)s</a>')
 
 PDMARK_CURATOR_LINK = (
     u'<a href="%(curator_href)s" rel="dct:publisher">'
-    u'<span property="dct:title">%(curator)s</span></a>')
+    u'<span property="dct:title">%(curator_title)s</span></a>')
 PDMARK_CURATOR_NOLINK = (
     u'<span resource="[_:publisher]" rel="dct:publisher">'
-    u'<span property="dct:title">%(curator)s</span></span>')
+    u'<span property="dct:title">%(curator_title)s</span></span>')
 PDMARK_CURATOR_ONLYLINK = (
     u'<a href="%(curator_href)s" rel="dct:publisher">'
     u'%(curator_href)s</a>')
@@ -406,9 +406,9 @@ class PDMarkHTMLFormatter(HTMLFormatter):
 
         work_dict takes the following keys:
          - work_title: Name of the work
-         - creator: Original author of the work
-         - creator_href: Link to the original author of the work
-         - curator: The person who identified this work
+         - author_title: Original author of the work
+         - author_href: Link to the original author of the work
+         - curator_title: The person who identified this work
          - curator_href: Link to the person who identified this work
          - waive_cc0: Whether the author has also waived their rights
            under CC0 (boolean)
@@ -421,10 +421,10 @@ class PDMarkHTMLFormatter(HTMLFormatter):
 
         work_title = work_dict.get('work_title', False)
 
-        creator = work_dict.get('creator', '').strip()
-        creator_href = work_dict.get('creator_href', '').strip()
+        author_title = work_dict.get('author_title', '').strip()
+        author_href = work_dict.get('author_href', '').strip()
 
-        curator = work_dict.get('curator', '').strip()
+        curator_title = work_dict.get('curator_title', '').strip()
         curator_href = work_dict.get('curator_href', '').strip()
 
         waive_cc0 = work_dict.get('waive_cc0', False)
@@ -432,30 +432,30 @@ class PDMarkHTMLFormatter(HTMLFormatter):
         # Find the "body" template
         # ------------------------
 
-        has_creator = bool(creator or creator_href)
-        has_curator = bool(curator or curator_href)
+        has_author = bool(author_title or author_href)
+        has_curator = bool(curator_title or curator_href)
 
-        # All (work_title and creator and curator)
-        if work_title and has_creator and has_curator:
-            body_msg = PDMARK_WORKTITLE_CREATOR_CURATOR
+        # All (work_title and author and curator)
+        if work_title and has_author and has_curator:
+            body_msg = PDMARK_WORKTITLE_AUTHOR_CURATOR
         # Only work_title
-        elif work_title and not has_creator and not has_curator:
+        elif work_title and not has_author and not has_curator:
             body_msg = PDMARK_WORKTITLE
-        # Only creator
-        elif has_creator and not work_title and not has_curator:
-            body_msg = PDMARK_CREATOR
+        # Only author
+        elif has_author and not work_title and not has_curator:
+            body_msg = PDMARK_AUTHOR
         # Only curator
-        elif has_curator and not work_title and not has_creator:
+        elif has_curator and not work_title and not has_author:
             body_msg = PDMARK_CURATOR
-        # work_title and creator
-        elif work_title and has_creator and not has_curator:
-            body_msg = PDMARK_WORKTITLE_CREATOR
+        # work_title and author
+        elif work_title and has_author and not has_curator:
+            body_msg = PDMARK_WORKTITLE_AUTHOR
         # work_title and curator
-        elif work_title and has_curator and not has_creator:
+        elif work_title and has_curator and not has_author:
             body_msg = PDMARK_WORKTITLE_CURATOR
-        # creator and curator
-        elif has_creator and has_curator and not work_title:
-            body_msg = PDMARK_CREATOR_CURATOR
+        # author and curator
+        elif has_author and has_curator and not work_title:
+            body_msg = PDMARK_AUTHOR_CURATOR
         # plain
         else:
             body_msg = PDMARK_PLAIN
@@ -468,27 +468,27 @@ class PDMarkHTMLFormatter(HTMLFormatter):
             mapping['work_title'] = u'<span property="dct:title">%s</span>' % (
                 util.escape(work_title))
 
-        if has_creator:
-            if creator and creator_href:
-                mapping['creator'] = PDMARK_CREATOR_LINK % (
-                    {'creator': util.escape(creator),
-                     'creator_href': util.escape(creator_href)})
-            elif creator and not creator_href:
-                mapping['creator'] = PDMARK_CREATOR_NOLINK % (
-                    {'creator': util.escape(creator)})
-            elif creator_href and not creator:
-                mapping['creator'] = PDMARK_CREATOR_ONLYLINK % (
-                    {'creator_href': util.escape(creator_href)})
+        if has_author:
+            if author_title and author_href:
+                mapping['author'] = PDMARK_AUTHOR_LINK % (
+                    {'author_title': util.escape(author_title),
+                     'author_href': util.escape(author_href)})
+            elif author_title and not author_href:
+                mapping['author'] = PDMARK_AUTHOR_NOLINK % (
+                    {'author_title': util.escape(author_title)})
+            elif author_href and not author_title:
+                mapping['author'] = PDMARK_AUTHOR_ONLYLINK % (
+                    {'author_href': util.escape(author_href)})
                 
         if has_curator:
-            if curator and curator_href:
+            if curator_title and curator_href:
                 mapping['curator'] = PDMARK_CURATOR_LINK % (
-                    {'curator': util.escape(curator),
+                    {'curator_title': util.escape(curator_title),
                      'curator_href': util.escape(curator_href)})
-            elif curator and not curator_href:
+            elif curator_title and not curator_href:
                 mapping['curator'] = PDMARK_CURATOR_NOLINK % (
-                    {'curator': util.escape(curator)})
-            elif curator_href and not curator:
+                    {'curator_title': util.escape(curator_title)})
+            elif curator_href and not curator_title:
                 mapping['curator'] = PDMARK_CURATOR_ONLYLINK % (
                     {'curator_href': util.escape(curator_href)})
 
@@ -500,7 +500,7 @@ class PDMarkHTMLFormatter(HTMLFormatter):
         output_sections = []
 
         # XXX: Norms guidelines may affect opening <p>?
-        if work_title or has_creator or has_curator:
+        if work_title or has_author or has_curator:
             output_sections.append(
                 u'<p xmlns:dct="http://purl.org/dc/terms/">')
         else:
