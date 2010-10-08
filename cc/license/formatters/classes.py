@@ -17,12 +17,17 @@ import string
 from urlparse import urlparse
 
 import zope.interface
+from zope.i18nmessageid import MessageFactory
+from zope.i18n import translate
 
 from cc.license._lib.interfaces import ILicenseFormatter
 from cc.license import util
 from cc.i18n.gettext_i18n import ugettext_for_locale
+from cc.i18n import ccorg_i18n_setup
 
 import jinja2
+
+z_gettext = MessageFactory('cc_org')
 
 TEMPLATE_LOADER = jinja2.PackageLoader('cc.license.formatters', 'templates')
 TEMPLATE_ENV = jinja2.Environment(
@@ -299,3 +304,219 @@ class PublicDomainHTMLFormatter(HTMLFormatter):
         message = image_header + body_template.substitute(body_vars)
 
         return message
+
+
+### ----------------------------
+### Public Domain Mark formatter
+### ----------------------------
+
+PDMARK_PLAIN = z_gettext(
+    'license.mark_plain',
+    default="This work is free of known copyright restrictions.")
+    
+PDMARK_WORKTITLE = z_gettext(
+    'license.mark_worktitle',
+    default=(
+        "This work (${work_title}) is free of known copyright restrictions."))
+
+PDMARK_AUTHOR = z_gettext(
+    'license.mark_author',
+    default=(
+        'This work '
+        '(by ${author}) '
+        'is free of known copyright restrictions.'))
+
+PDMARK_CURATOR = z_gettext(
+    'license.mark_curator',
+    default=(
+        'This work, '
+        'identified by ${curator}, '
+        'is free of known copyright restrictions.'))
+
+PDMARK_WORKTITLE_AUTHOR = z_gettext(
+    'license.mark_worktitle_author',
+    default=(
+        'This work (${work_title}, by ${author}) '
+        'is free of known copyright restrictions.'))
+
+PDMARK_WORKTITLE_CURATOR = z_gettext(
+    'license.mark_worktitle_curator',
+    default=(
+        'This work (${work_title}), '
+        'identified by ${curator}, '
+        'is free of known copyright restrictions.'))
+
+PDMARK_WORKTITLE_AUTHOR_CURATOR = z_gettext(
+    'license.mark_worktitle_author_curator',
+    default=(
+        'This work (${work_title}, '
+        'by ${author}), identified by ${curator}, '
+        'is free of known copyright restrictions.'))
+
+PDMARK_AUTHOR_CURATOR = z_gettext(
+    'license.mark_author_curator',
+    default=(
+        'This work '
+        '(by ${author}), identified by ${curator}, '
+        'is free of known copyright restrictions.'))
+
+
+# The "links" html that are substituted into the wider templates
+PDMARK_AUTHOR_LINK = (
+    u'<a href="%(author_href)s" rel="dct:creator">'
+    u'<span property="dct:title">%(author_title)s</span></a>')
+PDMARK_AUTHOR_NOLINK = (
+    u'<span resource="[_:creator]" rel="dct:creator">'
+    u'<span property="dct:title">%(author_title)s</span></span>')
+PDMARK_AUTHOR_ONLYLINK = (
+    u'<a href="%(author_href)s" rel="dct:creator">'
+    u'%(author_href)s</a>')
+
+PDMARK_CURATOR_LINK = (
+    u'<a href="%(curator_href)s" rel="dct:publisher">'
+    u'<span property="dct:title">%(curator_title)s</span></a>')
+PDMARK_CURATOR_NOLINK = (
+    u'<span resource="[_:publisher]" rel="dct:publisher">'
+    u'<span property="dct:title">%(curator_title)s</span></span>')
+PDMARK_CURATOR_ONLYLINK = (
+    u'<a href="%(curator_href)s" rel="dct:publisher">'
+    u'%(curator_href)s</a>')
+
+
+PDMARK_LOGO_HTML = """<a rel="license" href="http://creativecommons.org/publicdomain/mark/1.0/">
+<img src="http://i.creativecommons.org/p/mark/1.0/88x31.png"
+     style="border-style: none;" alt="Public Domain Mark" />
+</a>"""
+
+CC0_LOGO_HTML = """<a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/">
+<img src="http://i.creativecommons.org/p/zero/1.0/88x31.png"
+     style="border-style: none;" alt="CC0" />
+</a>"""
+
+class PDMarkHTMLFormatter(HTMLFormatter):
+    """
+    Formatter for the Public Domain Mark
+    """
+    def __repr__(self):
+        return "<PDMarkLicenseFormatter object '%s'>" % self.id
+
+    def format(self, license, work_dict=None, locale='en'):
+        """
+        Return an HTML + RDFa string of text for the license.
+
+        work_dict takes the following keys:
+         - work_title: Name of the work
+         - author_title: Original author of the work
+         - author_href: Link to the original author of the work
+         - curator_title: The person who identified this work
+         - curator_href: Link to the person who identified this work
+         - waive_cc0: Whether the author has also waived their rights
+           under CC0 (boolean)
+        """
+        _ = z_gettext
+
+        # Property gathering
+        # ------------------
+        work_dict = work_dict or {}
+
+        work_title = work_dict.get('work_title', False)
+
+        author_title = work_dict.get('author_title', '').strip()
+        author_href = work_dict.get('author_href', '').strip()
+
+        curator_title = work_dict.get('curator_title', '').strip()
+        curator_href = work_dict.get('curator_href', '').strip()
+
+        waive_cc0 = work_dict.get('waive_cc0', False)
+
+        # Find the "body" template
+        # ------------------------
+
+        has_author = bool(author_title or author_href)
+        has_curator = bool(curator_title or curator_href)
+
+        # All (work_title and author and curator)
+        if work_title and has_author and has_curator:
+            body_msg = PDMARK_WORKTITLE_AUTHOR_CURATOR
+        # Only work_title
+        elif work_title and not has_author and not has_curator:
+            body_msg = PDMARK_WORKTITLE
+        # Only author
+        elif has_author and not work_title and not has_curator:
+            body_msg = PDMARK_AUTHOR
+        # Only curator
+        elif has_curator and not work_title and not has_author:
+            body_msg = PDMARK_CURATOR
+        # work_title and author
+        elif work_title and has_author and not has_curator:
+            body_msg = PDMARK_WORKTITLE_AUTHOR
+        # work_title and curator
+        elif work_title and has_curator and not has_author:
+            body_msg = PDMARK_WORKTITLE_CURATOR
+        # author and curator
+        elif has_author and has_curator and not work_title:
+            body_msg = PDMARK_AUTHOR_CURATOR
+        # plain
+        else:
+            body_msg = PDMARK_PLAIN
+
+        # Translate the body
+        # ------------------
+        mapping = {}
+
+        if work_title:
+            mapping['work_title'] = u'<span property="dct:title">%s</span>' % (
+                util.escape(work_title))
+
+        if has_author:
+            if author_title and author_href:
+                mapping['author'] = PDMARK_AUTHOR_LINK % (
+                    {'author_title': util.escape(author_title),
+                     'author_href': util.escape(author_href)})
+            elif author_title and not author_href:
+                mapping['author'] = PDMARK_AUTHOR_NOLINK % (
+                    {'author_title': util.escape(author_title)})
+            elif author_href and not author_title:
+                mapping['author'] = PDMARK_AUTHOR_ONLYLINK % (
+                    {'author_href': util.escape(author_href)})
+                
+        if has_curator:
+            if curator_title and curator_href:
+                mapping['curator'] = PDMARK_CURATOR_LINK % (
+                    {'curator_title': util.escape(curator_title),
+                     'curator_href': util.escape(curator_href)})
+            elif curator_title and not curator_href:
+                mapping['curator'] = PDMARK_CURATOR_NOLINK % (
+                    {'curator_title': util.escape(curator_title)})
+            elif curator_href and not curator_title:
+                mapping['curator'] = PDMARK_CURATOR_ONLYLINK % (
+                    {'curator_href': util.escape(curator_href)})
+
+        body = string.Template(
+            translate(body_msg, target_language=locale)).substitute(mapping)
+
+        # Add the header and footers
+        # --------------------------
+        output_sections = []
+
+        # XXX: Norms guidelines may affect opening <p>?
+        if work_title or has_author or has_curator:
+            output_sections.append(
+                u'<p xmlns:dct="http://purl.org/dc/terms/">')
+        else:
+            output_sections.append(u'<p>')
+
+        # Add logos
+        output_sections.append(PDMARK_LOGO_HTML)
+        if waive_cc0:
+            output_sections.append(CC0_LOGO_HTML)
+
+        output_sections.append(u'<br />')
+
+        # Add body
+        output_sections.append(body)
+
+        # Add footer
+        output_sections.append(u'</p>')
+
+        return u'\n'.join(output_sections)

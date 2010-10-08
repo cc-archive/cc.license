@@ -176,7 +176,7 @@ EXPECTED_CC0_COUNTRY = """<p xmlns:dct="http://purl.org/dc/terms/" xmlns:vcard="
   <span rel="dct:publisher" resource="[_:publisher]">the person who associated CC0</span>
   with this work has waived all copyright and related or neighboring
   rights to this work.
-This work is published from
+This work is published from:
 <span property="vcard:Country" datatype="dct:ISO3166"
       content="AU" about="[_:publisher]">
   Australia</span>.
@@ -194,7 +194,7 @@ EXPECTED_CC0_COUNTRY_ACTOR_AND_LINK_TITLE = """<p xmlns:dct="http://purl.org/dc/
     <span property="dct:title">Expected Name</span></a>
   has waived all copyright and related or neighboring rights to
   <span property="dct:title">Expected Title</span>.
-This work is published from
+This work is published from:
 <span property="vcard:Country" datatype="dct:ISO3166"
       content="AU" about="http://example.org/expected_url">
   Australia</span>.
@@ -284,6 +284,282 @@ class TestCC0Formatter:
                 'actor_href': 'http://example.org/expected_url',
                 'work_jurisdiction': 'AU'})
         assert output.strip() == EXPECTED_CC0_COUNTRY_ACTOR_AND_LINK_TITLE
+
+
+EXPECTED_PDMARK_PLAIN = """<p>
+<a rel="license" href="http://creativecommons.org/publicdomain/mark/1.0/">
+<img src="http://i.creativecommons.org/p/mark/1.0/88x31.png"
+     style="border-style: none;" alt="Public Domain Mark" />
+</a>
+<br />
+This work is free of known copyright restrictions.
+</p>"""
+
+EXPECTED_PDMARK_WORKTITLE = """<p xmlns:dct="http://purl.org/dc/terms/">
+<a rel="license" href="http://creativecommons.org/publicdomain/mark/1.0/">
+<img src="http://i.creativecommons.org/p/mark/1.0/88x31.png"
+     style="border-style: none;" alt="Public Domain Mark" />
+</a>
+<br />
+This work (<span property="dct:title">WORK TITLE</span>) is free of known copyright restrictions.
+</p>"""
+
+EXPECTED_PDMARK_AUTHOR = """<p xmlns:dct="http://purl.org/dc/terms/">
+<a rel="license" href="http://creativecommons.org/publicdomain/mark/1.0/">
+<img src="http://i.creativecommons.org/p/mark/1.0/88x31.png"
+     style="border-style: none;" alt="Public Domain Mark" />
+</a>
+<br />
+This work (by <a href="AUTHOR_URL" rel="dct:creator"><span property="dct:title">AUTHOR</span></a>) is free of known copyright restrictions.
+</p>"""
+
+EXPECTED_PDMARK_AUTHOR_NOLINK = """<p xmlns:dct="http://purl.org/dc/terms/">
+<a rel="license" href="http://creativecommons.org/publicdomain/mark/1.0/">
+<img src="http://i.creativecommons.org/p/mark/1.0/88x31.png"
+     style="border-style: none;" alt="Public Domain Mark" />
+</a>
+<br />
+This work (by <span resource="[_:creator]" rel="dct:creator"><span property="dct:title">AUTHOR</span></span>) is free of known copyright restrictions.
+</p>"""
+
+EXPECTED_PDMARK_AUTHOR_ONLYLINK = """<p xmlns:dct="http://purl.org/dc/terms/">
+<a rel="license" href="http://creativecommons.org/publicdomain/mark/1.0/">
+<img src="http://i.creativecommons.org/p/mark/1.0/88x31.png"
+     style="border-style: none;" alt="Public Domain Mark" />
+</a>
+<br />
+This work (by <a href="AUTHOR_URL" rel="dct:creator">AUTHOR_URL</a>) is free of known copyright restrictions.
+</p>"""
+
+EXPECTED_PDMARK_CURATOR = """<p xmlns:dct="http://purl.org/dc/terms/">
+<a rel="license" href="http://creativecommons.org/publicdomain/mark/1.0/">
+<img src="http://i.creativecommons.org/p/mark/1.0/88x31.png"
+     style="border-style: none;" alt="Public Domain Mark" />
+</a>
+<br />
+This work, identified by <a href="CURATOR_URL" rel="dct:publisher"><span property="dct:title">CURATOR</span></a>, is free of known copyright restrictions.
+</p>"""
+
+EXPECTED_PDMARK_CURATOR_NOLINK = """<p xmlns:dct="http://purl.org/dc/terms/">
+<a rel="license" href="http://creativecommons.org/publicdomain/mark/1.0/">
+<img src="http://i.creativecommons.org/p/mark/1.0/88x31.png"
+     style="border-style: none;" alt="Public Domain Mark" />
+</a>
+<br />
+This work, identified by <span resource="[_:publisher]" rel="dct:publisher"><span property="dct:title">CURATOR</span></span>, is free of known copyright restrictions.
+</p>"""
+
+EXPECTED_PDMARK_CURATOR_ONLYLINK = """<p xmlns:dct="http://purl.org/dc/terms/">
+<a rel="license" href="http://creativecommons.org/publicdomain/mark/1.0/">
+<img src="http://i.creativecommons.org/p/mark/1.0/88x31.png"
+     style="border-style: none;" alt="Public Domain Mark" />
+</a>
+<br />
+This work, identified by <a href="CURATOR_URL" rel="dct:publisher">CURATOR_URL</a>, is free of known copyright restrictions.
+</p>"""
+
+
+EXPECTED_PDMARK_WORKTITLE_AUTHOR_CURATOR = """<p xmlns:dct="http://purl.org/dc/terms/">
+<a rel="license" href="http://creativecommons.org/publicdomain/mark/1.0/">
+<img src="http://i.creativecommons.org/p/mark/1.0/88x31.png"
+     style="border-style: none;" alt="Public Domain Mark" />
+</a>
+<br />
+This work (<span property="dct:title">WORK TITLE</span>, by <a href="AUTHOR_URL" rel="dct:creator"><span property="dct:title">AUTHOR</span></a>), identified by <a href="CURATOR_URL" rel="dct:publisher"><span property="dct:title">CURATOR</span></a>, is free of known copyright restrictions.
+</p>"""
+
+EXPECTED_PDMARK_WORKTITLE_AUTHOR = """<p xmlns:dct="http://purl.org/dc/terms/">
+<a rel="license" href="http://creativecommons.org/publicdomain/mark/1.0/">
+<img src="http://i.creativecommons.org/p/mark/1.0/88x31.png"
+     style="border-style: none;" alt="Public Domain Mark" />
+</a>
+<br />
+This work (<span property="dct:title">WORK TITLE</span>, by <a href="AUTHOR_URL" rel="dct:creator"><span property="dct:title">AUTHOR</span></a>) is free of known copyright restrictions.
+</p>"""
+
+EXPECTED_PDMARK_WORKTITLE_CURATOR = """<p xmlns:dct="http://purl.org/dc/terms/">
+<a rel="license" href="http://creativecommons.org/publicdomain/mark/1.0/">
+<img src="http://i.creativecommons.org/p/mark/1.0/88x31.png"
+     style="border-style: none;" alt="Public Domain Mark" />
+</a>
+<br />
+This work (<span property="dct:title">WORK TITLE</span>), identified by <a href="CURATOR_URL" rel="dct:publisher"><span property="dct:title">CURATOR</span></a>, is free of known copyright restrictions.
+</p>"""
+
+EXPECTED_PDMARK_AUTHOR_CURATOR = """<p xmlns:dct="http://purl.org/dc/terms/">
+<a rel="license" href="http://creativecommons.org/publicdomain/mark/1.0/">
+<img src="http://i.creativecommons.org/p/mark/1.0/88x31.png"
+     style="border-style: none;" alt="Public Domain Mark" />
+</a>
+<br />
+This work (by <a href="AUTHOR_URL" rel="dct:creator"><span property="dct:title">AUTHOR</span></a>), identified by <a href="CURATOR_URL" rel="dct:publisher"><span property="dct:title">CURATOR</span></a>, is free of known copyright restrictions.
+</p>"""
+
+EXPECTED_PDMARK_CC0 = """<p>
+<a rel="license" href="http://creativecommons.org/publicdomain/mark/1.0/">
+<img src="http://i.creativecommons.org/p/mark/1.0/88x31.png"
+     style="border-style: none;" alt="Public Domain Mark" />
+</a>
+<a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/">
+<img src="http://i.creativecommons.org/p/zero/1.0/88x31.png"
+     style="border-style: none;" alt="CC0" />
+</a>
+<br />
+This work is free of known copyright restrictions.
+</p>"""
+
+EXPECTED_PDMARK_WORKTITLE_AUTHOR_CURATOR_CC0 = """<p xmlns:dct="http://purl.org/dc/terms/">
+<a rel="license" href="http://creativecommons.org/publicdomain/mark/1.0/">
+<img src="http://i.creativecommons.org/p/mark/1.0/88x31.png"
+     style="border-style: none;" alt="Public Domain Mark" />
+</a>
+<a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/">
+<img src="http://i.creativecommons.org/p/zero/1.0/88x31.png"
+     style="border-style: none;" alt="CC0" />
+</a>
+<br />
+This work (<span property="dct:title">WORK TITLE</span>, by <a href="AUTHOR_URL" rel="dct:creator"><span property="dct:title">AUTHOR</span></a>), identified by <a href="CURATOR_URL" rel="dct:publisher"><span property="dct:title">CURATOR</span></a>, is free of known copyright restrictions.
+</p>"""
+
+EXPECTED_PDMARK_ESCAPETEST = """<p xmlns:dct="http://purl.org/dc/terms/">
+<a rel="license" href="http://creativecommons.org/publicdomain/mark/1.0/">
+<img src="http://i.creativecommons.org/p/mark/1.0/88x31.png"
+     style="border-style: none;" alt="Public Domain Mark" />
+</a>
+<br />
+This work (<span property="dct:title">&lt;b&gt;&#39;HAXX0rs&#39; &amp; &#34;LAMERS&#34;&lt;/b&gt;</span>, by <a href="&lt;b&gt;&#39;HAXX0rs&#39; &amp; &#34;LAMERS&#34;&lt;/b&gt;" rel="dct:creator"><span property="dct:title">&lt;b&gt;&#39;HAXX0rs&#39; &amp; &#34;LAMERS&#34;&lt;/b&gt;</span></a>), identified by <a href="&lt;b&gt;&#39;HAXX0rs&#39; &amp; &#34;LAMERS&#34;&lt;/b&gt;" rel="dct:publisher"><span property="dct:title">&lt;b&gt;&#39;HAXX0rs&#39; &amp; &#34;LAMERS&#34;&lt;/b&gt;</span></a>, is free of known copyright restrictions.
+</p>"""
+
+
+class TestPDMarkFormatter:
+    def __init__(self):
+        self.formatter = cc.license.formatters.classes.PDMarkHTMLFormatter()
+        self.license = cc.license.by_code('mark')
+
+    def test_plain(self):
+        output = self.formatter.format(self.license, locale='en')
+        assert output.strip() == EXPECTED_PDMARK_PLAIN
+
+    def test_worktitle(self):
+        output = self.formatter.format(
+            self.license,
+            {'work_title': 'WORK TITLE'},
+            locale='en')
+        assert output.strip() == EXPECTED_PDMARK_WORKTITLE
+
+    def test_author(self):
+        # Normal
+        output = self.formatter.format(
+            self.license,
+            {'author_title': 'AUTHOR',
+             'author_href': 'AUTHOR_URL'},
+            locale='en')
+        assert output.strip() == EXPECTED_PDMARK_AUTHOR
+
+        # No link
+        output = self.formatter.format(
+            self.license,
+            {'author_title': 'AUTHOR'},
+            locale='en')
+        assert output.strip() == EXPECTED_PDMARK_AUTHOR_NOLINK
+
+        # Only link
+        output = self.formatter.format(
+            self.license,
+            {'author_href': 'AUTHOR_URL'},
+            locale='en')
+        assert output.strip() == EXPECTED_PDMARK_AUTHOR_ONLYLINK
+
+    def test_curator(self):
+        # Normal
+        output = self.formatter.format(
+            self.license,
+            {'curator_title': 'CURATOR',
+             'curator_href': 'CURATOR_URL'},
+            locale='en')
+        assert output.strip() == EXPECTED_PDMARK_CURATOR
+
+        # No link
+        output = self.formatter.format(
+            self.license,
+            {'curator_title': 'CURATOR'},
+            locale='en')
+        assert output.strip() == EXPECTED_PDMARK_CURATOR_NOLINK
+
+        # Only link
+        output = self.formatter.format(
+            self.license,
+            {'curator_href': 'CURATOR_URL'},
+            locale='en')
+        assert output.strip() == EXPECTED_PDMARK_CURATOR_ONLYLINK
+
+    def test_worktitle_author_curator(self):
+        output = self.formatter.format(
+            self.license,
+            {'work_title': 'WORK TITLE',
+             'author_title': 'AUTHOR',
+             'author_href': 'AUTHOR_URL',
+             'curator_title': 'CURATOR',
+             'curator_href': 'CURATOR_URL'},
+            locale='en')
+        assert output.strip() == EXPECTED_PDMARK_WORKTITLE_AUTHOR_CURATOR
+        
+    def test_worktitle_author(self):
+        output = self.formatter.format(
+            self.license,
+            {'work_title': 'WORK TITLE',
+             'author_title': 'AUTHOR',
+             'author_href': 'AUTHOR_URL'},
+            locale='en')
+        assert output.strip() == EXPECTED_PDMARK_WORKTITLE_AUTHOR
+
+    def test_worktitle_curator(self):
+        output = self.formatter.format(
+            self.license,
+            {'work_title': 'WORK TITLE',
+             'curator_title': 'CURATOR',
+             'curator_href': 'CURATOR_URL'},
+            locale='en')
+        assert output.strip() == EXPECTED_PDMARK_WORKTITLE_CURATOR
+
+    def test_author_curator(self):
+        output = self.formatter.format(
+            self.license,
+            {'author_title': 'AUTHOR',
+             'author_href': 'AUTHOR_URL',
+             'curator_title': 'CURATOR',
+             'curator_href': 'CURATOR_URL'},
+            locale='en')
+        assert output.strip() == EXPECTED_PDMARK_AUTHOR_CURATOR
+
+    def test_cc0(self):
+        output = self.formatter.format(
+            self.license,
+            {'waive_cc0': True},
+            locale='en')
+        assert output.strip() == EXPECTED_PDMARK_CC0
+
+        output = self.formatter.format(
+            self.license,
+            {'work_title': 'WORK TITLE',
+             'author_title': 'AUTHOR',
+             'author_href': 'AUTHOR_URL',
+             'curator_title': 'CURATOR',
+             'curator_href': 'CURATOR_URL',
+             'waive_cc0': True},
+            locale='en')
+        assert output.strip() == EXPECTED_PDMARK_WORKTITLE_AUTHOR_CURATOR_CC0
+
+    def test_escaping(self):
+        output = self.formatter.format(
+            self.license,
+            {'work_title': '<b>\'HAXX0rs\' & "LAMERS"</b>',
+             'author_title': '<b>\'HAXX0rs\' & "LAMERS"</b>',
+             'author_href': '<b>\'HAXX0rs\' & "LAMERS"</b>',
+             'curator_title': '<b>\'HAXX0rs\' & "LAMERS"</b>',
+             'curator_href': '<b>\'HAXX0rs\' & "LAMERS"</b>'},
+            locale='en')
+        assert output.strip() == EXPECTED_PDMARK_ESCAPETEST
 
 
 EXPECTED_PUBLICDOMAIN_PLAIN = (

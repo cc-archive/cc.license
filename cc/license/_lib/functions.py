@@ -11,6 +11,7 @@ import cc.license
 
 LICENSES_BASE = 'http://creativecommons.org/licenses/'
 CC0_BASE = 'http://creativecommons.org/publicdomain/zero/'
+PUBLICDOMAIN_MARK_BASE = 'http://creativecommons.org/publicdomain/mark/'
 
 
 def locales():
@@ -116,19 +117,31 @@ def uri2dict(uri):
         retval['version'] = uri.rstrip('/').split('/')[-1]
         return retval
 
+    elif uri.startswith(PUBLICDOMAIN_MARK_BASE) and uri.endswith('/'):
+        base = PUBLICDOMAIN_MARK_BASE
+
+        retval = {'code': 'mark', 'jurisdiction': None}
+        retval['version'] = uri.rstrip('/').split('/')[-1]
+        return retval
+
+
     else:
         raise CCLicenseError, "Malformed Creative Commons URI: <%s>" % uri
 
 def dict2uri(license_info):
     """Take a dictionary of license values and convert it into a uri."""
-    if license_info['code'] == 'CC0':
+    if license_info['code'] in ('CC0', 'mark'):
+        license_code = license_info['code']
         if license_info.get('version'):
             version = license_info['version']
         else:
             version = current_version(
-                license_info['code'], license_info.get('jurisdiction'))
+                license_code, license_info.get('jurisdiction'))
             
-        return CC0_BASE + version + '/'
+        if license_code == 'CC0':
+            return CC0_BASE + version + '/'
+        elif license_code == 'mark':
+            return PUBLICDOMAIN_MARK_BASE + version + '/'
     else:
         base = LICENSES_BASE
 
@@ -146,10 +159,9 @@ def dict2uri(license_info):
             jurisdiction = None
 
         version = None
-        try:
+        if license_info.get('version'):
             version = license_info['version']
-        except KeyError:
-            pass # Don't get pissed at me Asheesh, I know what I'm doing.
+
         if not version:
             version = current_version(license_code, jurisdiction)
 
