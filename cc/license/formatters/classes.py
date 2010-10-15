@@ -27,7 +27,7 @@ from cc.i18n import ccorg_i18n_setup
 
 import jinja2
 
-z_gettext = MessageFactory('cc_org')
+_ = MessageFactory('cc_org')
 
 TEMPLATE_LOADER = jinja2.PackageLoader('cc.license.formatters', 'templates')
 TEMPLATE_ENV = jinja2.Environment(
@@ -310,50 +310,50 @@ class PublicDomainHTMLFormatter(HTMLFormatter):
 ### Public Domain Mark formatter
 ### ----------------------------
 
-PDMARK_PLAIN = z_gettext(
+PDMARK_PLAIN = _(
     'license.mark_plain',
     default="This work is free of known copyright restrictions.")
     
-PDMARK_WORKTITLE = z_gettext(
+PDMARK_WORKTITLE = _(
     'license.mark_worktitle',
     default=(
         "This work (${work_title}) is free of known copyright restrictions."))
 
-PDMARK_AUTHOR = z_gettext(
+PDMARK_AUTHOR = _(
     'license.mark_author',
     default=(
         'This work '
         '(by ${author}) '
         'is free of known copyright restrictions.'))
 
-PDMARK_CURATOR = z_gettext(
+PDMARK_CURATOR = _(
     'license.mark_curator',
     default=(
         'This work, '
         'identified by ${curator}, '
         'is free of known copyright restrictions.'))
 
-PDMARK_WORKTITLE_AUTHOR = z_gettext(
+PDMARK_WORKTITLE_AUTHOR = _(
     'license.mark_worktitle_author',
     default=(
         'This work (${work_title}, by ${author}) '
         'is free of known copyright restrictions.'))
 
-PDMARK_WORKTITLE_CURATOR = z_gettext(
+PDMARK_WORKTITLE_CURATOR = _(
     'license.mark_worktitle_curator',
     default=(
         'This work (${work_title}), '
         'identified by ${curator}, '
         'is free of known copyright restrictions.'))
 
-PDMARK_WORKTITLE_AUTHOR_CURATOR = z_gettext(
+PDMARK_WORKTITLE_AUTHOR_CURATOR = _(
     'license.mark_worktitle_author_curator',
     default=(
         'This work (${work_title}, '
         'by ${author}), identified by ${curator}, '
         'is free of known copyright restrictions.'))
 
-PDMARK_AUTHOR_CURATOR = z_gettext(
+PDMARK_AUTHOR_CURATOR = _(
     'license.mark_author_curator',
     default=(
         'This work '
@@ -413,8 +413,6 @@ class PDMarkHTMLFormatter(HTMLFormatter):
          - waive_cc0: Whether the author has also waived their rights
            under CC0 (boolean)
         """
-        _ = z_gettext
-
         # Property gathering
         # ------------------
         work_dict = work_dict or {}
