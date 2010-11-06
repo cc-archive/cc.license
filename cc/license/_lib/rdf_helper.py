@@ -425,6 +425,32 @@ def get_jurisdiction_default_language(juris_uri):
     else:
         return None
 
+def get_jurisdiction_languages(juris_uri):
+    """
+    Get all languages for given jurisdiction
+
+    Args:
+    - juris_uri: URI for the jurisdiction in question
+    
+    Returns:
+      List of all languages
+    """
+
+    qstring = """
+              PREFIX dc: <http://purl.org/dc/elements/1.1/>
+              PREFIX cc: <http://creativecommons.org/ns#>
+
+              SELECT ?language
+              WHERE {
+                     <%s> dc:language ?language
+                    }
+              """
+    query = RDF.Query(qstring % juris_uri, query_language='sparql')
+    results = [
+        str(result['language'])
+        for result in query.execute(JURI_MODEL)]
+    return results
+
 # XXX is this a good idea?
 ALL_MODEL = init_model(INDEX_RDF_PATH)
 JURI_MODEL = init_model(JURI_RDF_PATH)
