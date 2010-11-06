@@ -1,4 +1,4 @@
-"""Unit tests and functional tests exercising cc.license.lib"""
+"""Unit tests and functional tests exercising cc.license._lib"""
 
 import nose.tools
 import cc.license
