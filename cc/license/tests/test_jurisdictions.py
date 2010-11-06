@@ -163,3 +163,15 @@ class TestCustomization:
     def test_str_unported(self):
         s = str(self.unported)
         assert self.unported.title() in s
+
+
+def test_default_language():
+    juris = cc.license.Jurisdiction(
+        'http://creativecommons.org/international/be/')
+    assert juris.default_language == 'fr-be'
+    
+
+def test_languages():
+    juris = cc.license.Jurisdiction(
+        'http://creativecommons.org/international/be/')
+    assert set(juris.languages) == set(['fr-be', 'nl-be'])
