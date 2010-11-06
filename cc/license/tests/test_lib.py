@@ -111,3 +111,8 @@ class TestFunctions:
         for d in dicts:
             assert lib.dict2uri(d) == \
                    'http://creativecommons.org/licenses/sampling+/1.0/'
+
+def test_get_jurisdiction_languages():
+    result = lib.rdf_helper.get_jurisdiction_languages(
+        'http://creativecommons.org/international/be/')
+    assert set(result) == set(['nl-be', 'fr-be'])
