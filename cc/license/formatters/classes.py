@@ -180,7 +180,8 @@ class HTMLFormatter(object):
 
         body_vars = {
             'license_url': license.uri,
-            'license_name': util.escape(license.title(locale))}
+            'license_name': util.escape(
+                license.title(util.locale_to_dash_style(locale)))}
 
         if ((work_dict.get('attribution_url')
              or work_dict.get('attribution_name'))
