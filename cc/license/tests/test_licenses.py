@@ -73,7 +73,7 @@ class TestAll:
         lic = self.stdsel.by_code('by')
         assert lic.title() == lic.title('en')
         assert lic.title('en') == u'Attribution 3.0 Unported'
-        assert lic.title('es') == u'Reconocimiento 3.0 Unported'
+        assert lic.title('es') == u'Atribuci\xf3n 3.0 Unported'
         assert lic.title('de') == u'Namensnennung 3.0 Unported'
 
     def test_deprecated(self):
