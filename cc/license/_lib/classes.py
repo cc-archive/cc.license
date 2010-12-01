@@ -72,16 +72,6 @@ class License(object):
             self._titles = rdf_helper.get_titles(self._model, self.uri)
         return locale_dict_fetch_with_fallbacks(self._titles, language)
 
-    def description(self, language='en'):
-        if self._descriptions is None:
-            self._descriptions = rdf_helper.get_descriptions(
-                                           self._model, self.uri)
-        if self._descriptions == '':
-            return ''
-        else:
-            return locale_dict_fetch_with_fallbacks(
-                self._descriptions, language)
-
     @property
     def license_class(self):
         if self._lclass is None:
