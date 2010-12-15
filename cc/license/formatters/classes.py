@@ -24,6 +24,7 @@ from cc.license._lib.interfaces import ILicenseFormatter
 from cc.license import util
 from cc.i18n.gettext_i18n import ugettext_for_locale
 from cc.i18n import ccorg_i18n_setup
+from cc.i18n.util import negotiate_locale
 
 import jinja2
 
@@ -492,7 +493,9 @@ class PDMarkHTMLFormatter(HTMLFormatter):
                     {'curator_href': util.escape(curator_href)})
 
         body = string.Template(
-            translate(body_msg, target_language=locale)).substitute(mapping)
+            translate(
+                body_msg,
+                target_language=negotiate_locale(locale))).substitute(mapping)
 
         # Add the header and footers
         # --------------------------
