@@ -60,18 +60,7 @@ def by_code(code, jurisdiction=None, version=None):
             _BY_CODE_CACHE[cache_key] = license
             return license
         except cc.license.CCLicenseError:
-            # old *nc-nd licenses were actually ordered nd-nc.  Try
-            # for searching for those if appropriate
-            if 'nc-nd' in code:
-                try:
-                    license = selector.by_code(
-                        code.replace('nc-nd', 'nd-nc'),
-                        jurisdiction=jurisdiction,
-                        version=version)
-                    _BY_CODE_CACHE[cache_key] = license
-                    return license
-                except cc.license.CCLicenseError:
-                    pass
+            pass
 
     raise cc.license.CCLicenseError, "License for code doesn't exist"
 
