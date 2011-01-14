@@ -26,6 +26,18 @@ def test_by_code():
     lic2 = cc.license.selectors.choose('recombo').by_code('sampling')
     assert lic2 == cc.license.by_code('sampling')
 
+def test_by_code_old_ndnc():
+    """
+    Old licenses were nd-nc which are now nc-nd.  by_code should
+    handle that... make sure it does.
+    """
+    lic = cc.license.by_code('by-nc-nd', version='1.0')
+    assert lic.uri == "http://creativecommons.org/licenses/by-nd-nc/1.0/"
+
+    # But... obviously don't correct where we shouldn't.
+    lic = cc.license.by_code('by-nc-nd', version='3.0')
+    assert lic.uri == "http://creativecommons.org/licenses/by-nc-nd/3.0/"
+
 def test_by_code_jurisdiction():
     lic = cc.license.selectors.choose('standard').by_code('by',
                                                           jurisdiction='jp')

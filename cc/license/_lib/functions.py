@@ -53,14 +53,26 @@ def by_code(code, jurisdiction=None, version=None):
 
     for key, selector in cc.license.selectors.SELECTORS.items():
         try:
-            license =  selector.by_code(
+            license = selector.by_code(
                 code,
                 jurisdiction=jurisdiction,
                 version=version)
             _BY_CODE_CACHE[cache_key] = license
             return license
         except cc.license.CCLicenseError:
-            pass
+            # old *nc-nd licenses were actually ordered nd-nc.  Try
+            # for searching for those if appropriate
+            if 'nc-nd' in code:
+                try:
+                    license = selector.by_code(
+                        code.replace('nc-nd', 'nd-nc'),
+                        jurisdiction=jurisdiction,
+                        version=version)
+                    _BY_CODE_CACHE[cache_key] = license
+                    return license
+                except cc.license.CCLicenseError:
+                    pass
+
     raise cc.license.CCLicenseError, "License for code doesn't exist"
 
 _BY_URI_CACHE = {}
