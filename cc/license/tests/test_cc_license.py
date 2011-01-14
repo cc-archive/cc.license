@@ -34,8 +34,16 @@ def test_by_code_old_ndnc():
     lic = cc.license.by_code('by-nc-nd', version='1.0')
     assert lic.uri == "http://creativecommons.org/licenses/by-nd-nc/1.0/"
 
+    # Also for selectors
+    lic = cc.license.selectors.choose('standard').by_code(
+        'by-nc-nd', version='1.0')
+    assert lic.uri == "http://creativecommons.org/licenses/by-nd-nc/1.0/"
+
     # But... obviously don't correct where we shouldn't.
     lic = cc.license.by_code('by-nc-nd', version='3.0')
+    assert lic.uri == "http://creativecommons.org/licenses/by-nc-nd/3.0/"
+    lic = cc.license.selectors.choose('standard').by_code(
+        'by-nc-nd', version='3.0')
     assert lic.uri == "http://creativecommons.org/licenses/by-nc-nd/3.0/"
 
 def test_by_code_jurisdiction():

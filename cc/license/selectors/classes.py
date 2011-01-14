@@ -75,9 +75,23 @@ class LicenseSelector:
                                             version=version,
                                             code=license_code))
         if not self.has_license(uri):
-            raise CCLicenseError, \
-                  "License code '%s' is invalid for selector %s" % \
-                  (license_code, self.id)
+            # old *nc-nd licenses were actually ordered nd-nc.  Try
+            # for searching for those if appropriate
+            if 'nc-nd' in license_code:
+                # See if this works!
+                uri = cc.license._lib.dict2uri(
+                    dict(jurisdiction=jurisdiction,
+                         version=version,
+                         code=license_code.replace('nc-nd', 'nd-nc')))
+                if not self.has_license(uri):
+                    raise CCLicenseError, \
+                        "License code '%s' is invalid for selector %s" % \
+                        (license_code, self.id)
+            else:
+                raise CCLicenseError, \
+                    "License code '%s' is invalid for selector %s" % \
+                    (license_code, self.id)
+
         return self.by_uri(uri)
 
     def questions(self):
