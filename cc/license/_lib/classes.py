@@ -226,6 +226,7 @@ class Question(object):
            identifier string, populate this Question object with all
            relevant data found in the etree."""
         self._id = id
+        self._answers = {}  # key is language
 
         _flag = False # for error checking
         # xml:lang namespace
@@ -280,6 +281,9 @@ class Question(object):
         return locale_dict_fetch_with_fallbacks(self._descs, language)
 
     def answers(self, language='en'):
+        if self._answers.has_key(language):
+            return self._answers[language]
+
         if language == '':
             language = 'en' # why not?
             
@@ -298,4 +302,6 @@ class Question(object):
                 
             answers.append(enum)
             
+        self._answers[language] = answers
+
         return answers
