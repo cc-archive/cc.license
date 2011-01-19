@@ -1,9 +1,14 @@
-
 import zope.interface
 import cc.license
 from cc.license._lib import interfaces, rdf_helper
 from cc.license._lib.classes import License, Question
 from cc.license._lib.exceptions import CCLicenseError
+
+
+# Cache by_code results via the key:
+# (selector.uri, license_code, jurisdiction, version)
+SELECTOR_BY_CODE_CACHE = {}
+
 
 class LicenseSelector:
     zope.interface.implements(interfaces.ILicenseSelector)
@@ -71,6 +76,11 @@ class LicenseSelector:
         return self._licenses[uri]
 
     def by_code(self, license_code, jurisdiction=None, version=None):
+        cache_key = (self.uri, license_code, jurisdiction, version)
+        # Do we have the license cached already?
+        if SELECTOR_BY_CODE_CACHE.has_key(cache_key):
+            return SELECTOR_BY_CODE_CACHE[cache_key]
+
         uri = cc.license._lib.dict2uri(dict(jurisdiction=jurisdiction,
                                             version=version,
                                             code=license_code))
@@ -92,7 +102,10 @@ class LicenseSelector:
                     "License code '%s' is invalid for selector %s" % \
                     (license_code, self.id)
 
-        return self.by_uri(uri)
+        license = self.by_uri(uri)
+        SELECTOR_BY_CODE_CACHE[cache_key] = license
+
+        return license
 
     def questions(self):
         return list(self._questions)
