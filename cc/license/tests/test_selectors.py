@@ -141,6 +141,21 @@ class TestAnswersStandard:
             lic = self.sel.by_answers(answer_dict)
             assert type(lic) == cc.license.License
 
+    def test_sa_upwards_compatibility_correction(self):
+        """
+        1.0 SA licenses don't have upwards compatibility, so we
+        shouldn't issue them.
+        """
+        # fi BY-SA license is 1.0 only, so issue unported instead
+        license = self.sel.by_answers(
+            {'commercial': 'y', 'derivatives': 'sa', 'jurisdiction': 'fi'})
+        assert license.uri == 'http://creativecommons.org/licenses/by-sa/3.0/'
+
+        # Don't correct where unnecessary though
+        license = self.sel.by_answers(
+            {'commercial': 'y', 'derivatives': 'sa', 'jurisdiction': 'es'})
+        assert license.uri == 'http://creativecommons.org/licenses/by-sa/3.0/es/'
+
 
 class TestAnswersSampling:
 
