@@ -144,7 +144,17 @@ class LicenseSelector:
         # return a license code based on answers to this selector's questions 
         license_code = self._by_answers(answers_dict)
         # give back a license object based on the answers 
-        return self.by_code(license_code, jurisdiction=jurisdiction)
+        license = self.by_code(license_code, jurisdiction=jurisdiction)
+
+        # We shouldn't provide 1.0 versions of 'sa' licenses because
+        # those aren't upwards-comptible.  So, select the newest
+        # (which means dropping the jurisdiction)
+        if (('sa' in license_code.split('-')
+             and license.version == '1.0'
+             and self.id == 'standard')):
+            license = self.by_code(license_code)
+
+        return license
 
     # TODO: handle 1.0 license weirdness (out-of-order license code)
     def _by_answers_standard(self, answers_dict):
