@@ -224,6 +224,45 @@ def current_version(code, jurisdiction=None):
     versions = [ StrictVersion(d['version']) for d in filtered_dicts ]
     return str(max(versions))
 
+
+ALL_POSSIBLE_VERSIONS_CACHE = {}
+def all_possible_versions(code, jurisdiction=None):
+    """
+    Given a license code and optional jurisdiction, determine all
+    possible license versions available.
+
+    Returns:
+     A list of URIs.
+    """
+    cache_key = (code, jurisdiction)
+    if ALL_POSSIBLE_VERSIONS_CACHE.has_key(cache_key):
+        return ALL_POSSIBLE_VERSIONS_CACHE[cache_key]
+
+    qstring = """
+              PREFIX dc: <http://purl.org/dc/elements/1.1/>
+
+              SELECT ?license
+              WHERE {
+                ?license dc:identifier '%s' }"""
+    query = RDF.Query(
+        qstring % code,
+        query_language='sparql')
+
+    license_results = [
+        cc.license.by_uri(str(result['license'].uri))
+        for result in query.execute(rdf_helper.ALL_MODEL)]
+
+    # only keep results with the same jurisdiction
+    license_results = filter(
+        lambda lic: lic.jurisdiction == jurisdiction, license_results)
+
+    license_results.sort(_sort_licenses)
+    
+    ALL_POSSIBLE_VERSIONS_CACHE[cache_key] = license_results
+
+    return license_results
+
+
 def all_possible_answers(list_of_questions):
     """Given a sequence of IQuestions, return a list of answer dictionaries.
        These are meant to be used with LicenseSelector.by_answers. This
