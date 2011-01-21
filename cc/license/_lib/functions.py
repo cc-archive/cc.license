@@ -225,11 +225,27 @@ def current_version(code, jurisdiction=None):
     return str(max(versions))
 
 
+def sort_licenses(x, y):
+    """
+    Sort function for licenses.
+    """
+    x_version = StrictVersion(x.version)
+    y_version = StrictVersion(y.version)
+
+    if x_version > y_version:
+        return 1
+    elif x_version == y_version:
+        return 0
+    else:
+        return -1
+
+
 ALL_POSSIBLE_VERSIONS_CACHE = {}
 def all_possible_license_versions(code, jurisdiction=None):
     """
     Given a license code and optional jurisdiction, determine all
     possible license versions available.
+    'jurisdiction' should be a short code and not a jurisdiction URI.
 
     Returns:
      A list of URIs.
@@ -252,11 +268,13 @@ def all_possible_license_versions(code, jurisdiction=None):
         cc.license.by_uri(str(result['license'].uri))
         for result in query.execute(rdf_helper.ALL_MODEL)]
 
+    jurisdiction_obj = cc.license.jurisdictions.by_code(jurisdiction or '')
+
     # only keep results with the same jurisdiction
     license_results = filter(
-        lambda lic: lic.jurisdiction == jurisdiction, license_results)
+        lambda lic: lic.jurisdiction == jurisdiction_obj, license_results)
 
-    license_results.sort(_sort_licenses)
+    license_results.sort(sort_licenses)
     
     ALL_POSSIBLE_VERSIONS_CACHE[cache_key] = license_results
 
