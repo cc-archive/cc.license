@@ -2,19 +2,7 @@
 import nose.tools
 import cc.license
 from cc.license import CCLicenseError
-from cc.license._lib.classes import License, _sort_licenses
-
-
-def test_sort_licenses():
-    lic1 = cc.license.by_code('by', version='1.0')
-    lic2 = cc.license.by_code('by', version='2.0')
-    lic2_5 = cc.license.by_code('by', version='2.5')
-    lic3 = cc.license.by_code('by', version='3.0')
-
-    licenses = [lic2, lic1, lic3, lic2_5]
-    licenses.sort(_sort_licenses)
-    assert licenses == [lic1, lic2, lic2_5, lic3]
-
+from cc.license._lib.classes import License
 
 class TestAll:
 

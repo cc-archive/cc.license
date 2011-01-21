@@ -8,18 +8,7 @@ import rdf_helper
 import cc.license
 from cc.license.util import locale_dict_fetch_with_fallbacks
 from cc.license._lib.exceptions import CCLicenseError
-
-
-def _sort_licenses(x, y):
-    x_version = StrictVersion(x.version)
-    y_version = StrictVersion(y.version)
-
-    if x_version > y_version:
-        return 1
-    elif x_version == y_version:
-        return 0
-    else:
-        return -1
+from cc.license._lib.functions import all_possible_license_versions
 
 
 class License(object):
@@ -106,25 +95,9 @@ class License(object):
         """
         Get the current version of the license.
         """
-        qstring = """
-                  PREFIX dc: <http://purl.org/dc/elements/1.1/>
+        license_results = all_possible_license_versions(
+            self.license_code, self.jurisdiction.id)
 
-                  SELECT ?license
-                  WHERE {
-                    ?license dc:identifier '%s' }"""
-        query = RDF.Query(
-            qstring % self.license_code,
-            query_language='sparql')
-
-        license_results = [
-            cc.license.by_uri(str(result['license'].uri))
-            for result in query.execute(rdf_helper.ALL_MODEL)]
-
-        # only keep results with the same jurisdiction
-        license_results = filter(
-            lambda lic: lic.jurisdiction == self.jurisdiction, license_results)
-
-        license_results.sort(_sort_licenses)
         return license_results[-1]
 
     @property

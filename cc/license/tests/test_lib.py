@@ -116,3 +116,14 @@ def test_get_jurisdiction_languages():
     result = lib.rdf_helper.get_jurisdiction_languages(
         'http://creativecommons.org/international/be/')
     assert set(result) == set(['nl-be', 'fr-be'])
+
+
+def test_sort_licenses():
+    lic1 = cc.license.by_code('by', version='1.0')
+    lic2 = cc.license.by_code('by', version='2.0')
+    lic2_5 = cc.license.by_code('by', version='2.5')
+    lic3 = cc.license.by_code('by', version='3.0')
+
+    licenses = [lic2, lic1, lic3, lic2_5]
+    licenses.sort(lib.functions.sort_licenses)
+    assert licenses == [lic1, lic2, lic2_5, lic3]
