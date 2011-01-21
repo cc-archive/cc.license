@@ -226,7 +226,7 @@ def current_version(code, jurisdiction=None):
 
 
 ALL_POSSIBLE_VERSIONS_CACHE = {}
-def all_possible_versions(code, jurisdiction=None):
+def all_possible_license_versions(code, jurisdiction=None):
     """
     Given a license code and optional jurisdiction, determine all
     possible license versions available.
