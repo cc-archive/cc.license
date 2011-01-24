@@ -261,14 +261,14 @@ def all_possible_license_versions(code, jurisdiction=None):
               WHERE {
                 ?license dc:identifier '%s' }"""
     query = RDF.Query(
-        qstring % code,
+        qstring % str(code),
         query_language='sparql')
 
     license_results = [
         cc.license.by_uri(str(result['license'].uri))
         for result in query.execute(rdf_helper.ALL_MODEL)]
 
-    jurisdiction_obj = cc.license.jurisdictions.by_code(jurisdiction or '')
+    jurisdiction_obj = cc.license.jurisdictions.by_code(str(jurisdiction or ''))
 
     # only keep results with the same jurisdiction
     license_results = filter(
