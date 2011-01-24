@@ -127,3 +127,31 @@ def test_sort_licenses():
     licenses = [lic2, lic1, lic3, lic2_5]
     licenses.sort(lib.functions.sort_licenses)
     assert licenses == [lic1, lic2, lic2_5, lic3]
+
+
+def test_all_possible_license_versions():
+    """
+    Make sure all_possible_license_versions works
+    """
+    license_uris = [
+        lic.uri
+        for lic in lib.all_possible_license_versions('by')]
+
+    nose.tools.assert_equal(
+        license_uris,
+        ['http://creativecommons.org/licenses/by/1.0/',
+         'http://creativecommons.org/licenses/by/2.0/',
+         'http://creativecommons.org/licenses/by/2.5/',
+         'http://creativecommons.org/licenses/by/3.0/'])
+
+    license_uris = [
+        lic.uri
+        for lic in lib.all_possible_license_versions('by-sa', 'es')]
+
+    nose.tools.assert_equal(
+        license_uris,
+        ['http://creativecommons.org/licenses/by-sa/2.0/es/',
+         'http://creativecommons.org/licenses/by-sa/2.1/es/',
+         'http://creativecommons.org/licenses/by-sa/2.5/es/',
+         'http://creativecommons.org/licenses/by-sa/3.0/es/'])
+    
