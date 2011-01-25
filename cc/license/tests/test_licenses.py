@@ -87,7 +87,12 @@ class TestAll:
         lic = self.stdsel.by_code('by')
         assert isinstance(lic.current_version, License)
         assert lic.current_version.version == lic.version
+
         lic2 = self.stdsel.by_code('by', version='1.0')
+        assert isinstance(lic2.current_version, License)
+        assert lic2.current_version.version == '3.0'
+
+        lic2 = self.stdsel.by_code('by', jurisdiction="es")
         assert isinstance(lic2.current_version, License)
         assert lic2.current_version.version == '3.0'
 

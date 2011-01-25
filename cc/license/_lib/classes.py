@@ -96,7 +96,7 @@ class License(object):
         Get the current version of the license.
         """
         license_results = all_possible_license_versions(
-            self.license_code, self.jurisdiction.id)
+            self.license_code, self.jurisdiction.code)
 
         return license_results[-1]
 
