@@ -118,6 +118,26 @@ def test_get_jurisdiction_languages():
     assert set(result) == set(['nl-be', 'fr-be'])
 
 
+def test_jurisdictions_for_selector():
+    """
+    Test for rdf_helper.jurisdictions_for_selector
+    """
+    # Presumably, we won't be adding sampling licenses, so this test
+    # might be pretty stable :)
+    nose.tools.assert_equal(
+        lib.rdf_helper.jurisdictions_for_selector(
+            'http://creativecommons.org/license/sampling/'),
+        set(['http://creativecommons.org/international/br/',
+             'http://creativecommons.org/international/de/',
+             'http://creativecommons.org/international/tw/']))
+            
+    # CC0 is international!  No jurisdictions!  Shouldn't have anything.
+    nose.tools.assert_equal(
+        lib.rdf_helper.jurisdictions_for_selector(
+            'http://creativecommons.org/choose/mark/'),
+        set())
+
+
 def test_sort_licenses():
     lic1 = cc.license.by_code('by', version='1.0')
     lic2 = cc.license.by_code('by', version='2.0')
