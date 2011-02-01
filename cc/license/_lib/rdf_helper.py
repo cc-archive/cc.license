@@ -451,6 +451,38 @@ def get_jurisdiction_languages(juris_uri):
         for result in query.execute(JURI_MODEL)]
     return results
 
+
+JURISDICTIONS_FOR_SELECTOR_CACHE = {}
+def jurisdictions_for_selector(selector_uri):
+    """
+    Find out all the jurisdictions relevant to a selector/licenseclass
+
+    That is, find all the unique jurisdictions that licenses in this
+    selector have.
+
+    Returns:
+      A list of jurisdiction URIs
+    """
+    if JURISDICTIONS_FOR_SELECTOR_CACHE.has_key(selector_uri):
+        return JURISDICTIONS_FOR_SELECTOR_CACHE[selector_uri]
+    
+    qstring = """
+       PREFIX cc: <http://creativecommons.org/ns#>
+
+       SELECT ?jurisdiction
+       WHERE {
+         ?license cc:licenseClass <%s> .
+         ?license cc:jurisdiction ?jurisdiction . }"""
+    query = RDF.Query(qstring % selector_uri, query_language='sparql')
+    results = set(
+        [str(result['jurisdiction'].uri)
+         for result in query.execute(ALL_MODEL)])
+
+    JURISDICTIONS_FOR_SELECTOR_CACHE[selector_uri] = results
+
+    return results
+
+
 # XXX is this a good idea?
 ALL_MODEL = init_model(INDEX_RDF_PATH)
 JURI_MODEL = init_model(JURI_RDF_PATH)
