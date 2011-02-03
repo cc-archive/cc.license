@@ -180,7 +180,9 @@ class TestAnswersSampling:
         assert lic == lic2
 
     def test_all(self):
-        known_bad = [dict(jurisdiction='br', sampling='ncsamplingplus')]
+        known_bad = [dict(jurisdiction='br', sampling='ncsamplingplus'),
+                     dict(jurisdiction='de', sampling='ncsamplingplus'),
+                     dict(jurisdiction='de', sampling='sampling')]
         for answer_dict in all_possible_answers(self.sel.questions()):
             if answer_dict in known_bad:
                 continue
