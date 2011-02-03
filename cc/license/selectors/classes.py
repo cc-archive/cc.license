@@ -1,7 +1,7 @@
 import zope.interface
 import cc.license
 from cc.license._lib import interfaces, rdf_helper
-from cc.license._lib.classes import License, Question
+from cc.license._lib.classes import License, Question, JurisdictionQuestion
 from cc.license._lib.exceptions import CCLicenseError
 
 
@@ -38,6 +38,9 @@ class LicenseSelector:
                      Question(rdf_helper.questions_root,
                                          self.id, fid))
         
+        if rdf_helper.jurisdictions_for_selector(self._uri):
+            self._questions.append(JurisdictionQuestion(self.id, self._uri))
+
         self._by_answers  = {
             'standard' : self._by_answers_standard,
             'recombo'  : self._by_answers_recombo,

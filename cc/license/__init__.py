@@ -1,7 +1,7 @@
 import selectors
 import formatters
 import jurisdictions
-from _lib.classes import License, Question
+from _lib.classes import License, Question, JurisdictionQuestion
 from jurisdictions.classes import Jurisdiction
 from selectors.classes import LicenseSelector
 from _lib.functions import locales, by_code, by_uri

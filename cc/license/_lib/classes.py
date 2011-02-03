@@ -5,6 +5,8 @@ import zope.interface
 import interfaces 
 import rdf_helper
 
+from cc.i18n.gettext_i18n import ugettext_for_locale
+
 import cc.license
 from cc.license.util import locale_dict_fetch_with_fallbacks
 from cc.license._lib.exceptions import CCLicenseError
@@ -276,5 +278,60 @@ class Question(object):
             answers.append(enum)
             
         self._answers[language] = answers
+
+        return answers
+
+
+class JurisdictionQuestion(object):
+    #zope.interface.implements(interfaces.IQuestion)
+
+    def __init__(self, lclass, lclass_uri):
+        self.id = 'jurisdiction'
+
+        self._lclass = lclass
+        self._lclass_uri = lclass_uri
+        self._jurisdictions = rdf_helper.jurisdictions_for_selector(
+            self._lclass_uri)
+        self._answers = {}
+
+    def __repr__(self):
+        return "<LicenseQuestion object id='%(id)s'>" % {'id': self.id}
+
+    def __str__(self):
+        return "LicenseQuestion: %(label)s" % {'label': self.label()}
+            
+    def label(self, language='en'):
+        if language == '':
+            language = 'en' # why not?
+
+        gettext = ugettext_for_locale(language)
+        return gettext("license.jurisdiction_question")
+
+    def description(self, language='en'):
+        if language == '':
+            language = 'en' # why not?
+
+        gettext = ugettext_for_locale(language)
+        return gettext("license.jurisdiction_help")
+
+    def answers(self, language='en'):
+        if language == '':
+            language = 'en' # why not?
+            
+        gettext = ugettext_for_locale(language)
+
+        answers = []
+        for jurisdiction in self._jurisdictions:
+            # Answers format is
+            # (label, id/key, description)
+            # And jurisdictions don't need a description ;)
+            juris_code = str(jurisdiction.rstrip('/').split('/')[-1])
+            answers.append(
+                (gettext('country.' + juris_code), juris_code, None))
+
+        answers = sorted(answers, key=lambda answer: answer[1])
+
+        if answers:
+            answers = [(gettext('util.International'), '', None)] + answers
 
         return answers
