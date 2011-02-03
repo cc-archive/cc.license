@@ -295,10 +295,10 @@ class JurisdictionQuestion(object):
         self._answers = {}
 
     def __repr__(self):
-        return "<LicenseQuestion object id='%(id)s'>" % {'id': self.id}
+        return "<JurisdictionQuestion object id='%(id)s'>" % {'id': self.id}
 
     def __str__(self):
-        return "LicenseQuestion: %(label)s" % {'label': self.label()}
+        return "JurisdictionQuestion: %(label)s" % {'label': self.label()}
             
     def label(self, language='en'):
         if language == '':
