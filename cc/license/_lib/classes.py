@@ -283,9 +283,20 @@ class Question(object):
 
 
 class JurisdictionQuestion(object):
+    """
+    The Question object works off of questions.xml, but jurisdiction
+    information is kept up to date in jurisdictions.rdf, so we should
+    pull from there for jurisdiction questions.
+    """
     #zope.interface.implements(interfaces.IQuestion)
 
     def __init__(self, lclass, lclass_uri):
+        """
+        Keyword arguments:
+        - lclass: The license class of the parent selector, ie 'standard'
+        - lclass_uri: The license class url, ie
+          'http://creativecommons.org/license/'
+        """
         self.id = 'jurisdiction'
 
         self._lclass = lclass
