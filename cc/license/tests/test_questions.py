@@ -9,7 +9,8 @@ class TestStandard:
     def __init__(self):
         self.qc = cc.license.Question(root, 'standard', 'commercial')
         self.qd = cc.license.Question(root, 'standard', 'derivatives')
-        self.qj = cc.license.Question(root, 'standard', 'jurisdiction')
+        self.qj = cc.license.JurisdictionQuestion(
+            'standard', 'http://creativecommons.org/license/')
         self.all = [self.qc, self.qd, self.qj]
 
     def test_id(self):
@@ -45,7 +46,7 @@ class TestStandard:
             answers = q.answers()
             for answer in answers:
                 assert type(answer) is tuple
-                assert type(answer[0]) is str
+                assert type(answer[0]) in (str, unicode)
                 assert type(answer[1]) is str
             answers2 = q.answers('ja')
             for i in range(len(answers)):

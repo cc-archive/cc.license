@@ -100,7 +100,8 @@ class TestQuestions:
         assert type(questions) == list
         assert len(questions) != 0
         for q in questions:
-            assert type(q) == cc.license.Question
+            assert type(q) in (
+                cc.license.Question, cc.license.JurisdictionQuestion)
 
     def test_publicdomain_questions(self):
         questions = self.pd.questions()
