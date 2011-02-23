@@ -483,6 +483,37 @@ def jurisdictions_for_selector(selector_uri):
     return results
 
 
+def get_license_legalcodes(license_uri):
+    """
+    Return a list of [(legalcode_uri, legalcode_lang)] for license_uri
+
+    If this is a single-legalcode option, it'll probably return
+    [(legalcode_uri, None)]
+    """
+    qstring = """
+       PREFIX cc: <http://creativecommons.org/ns#>
+       PREFIX dcq: <http://purl.org/dc/terms/>
+
+       SELECT ?legalcode, ?lang
+       WHERE {
+         <%s> cc:legalcode ?legalcode .
+         OPTIONAL { ?legalcode dcq:language ?lang } . }"""
+    query = RDF.Query(qstring % license_uri, query_language='sparql')
+    results = set()
+
+    for result in query.execute(ALL_MODEL):
+        if result['lang']:
+            results.add(
+                (str(result['legalcode'].uri),
+                 str(result['lang'])))
+        else:
+            results.add(
+                (str(result['legalcode'].uri),
+                 None))
+
+    return results
+
+
 # XXX is this a good idea?
 ALL_MODEL = init_model(INDEX_RDF_PATH)
 JURI_MODEL = init_model(JURI_RDF_PATH)
