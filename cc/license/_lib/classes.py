@@ -1,11 +1,10 @@
-from distutils.version import StrictVersion
-
 import RDF
 import zope.interface
 import interfaces 
 import rdf_helper
 
 from cc.i18n.gettext_i18n import ugettext_for_locale
+from cc.i18n.util import locale_to_lower_upper
 
 import cc.license
 from cc.license.util import locale_dict_fetch_with_fallbacks
@@ -34,6 +33,7 @@ class License(object):
         self._prohibits = None
         self._code = None
         self._logos = None
+        self._legalcodes = {}
 
         # make sure the license actually exists
         qstring = """
@@ -191,6 +191,44 @@ class License(object):
         text.append('</rdf:RDF>')
 
         return '\n'.join(text)
+
+
+    def legalcodes(self, language='en'):
+        """
+        Return a list of
+        [(legalcode_uri, legalcode_lang, legalcode_lang_translated)]
+        for this license.
+
+        If this is a single-legalcode option, it'll probably return
+        [(legalcode_uri, None, None)]
+
+        """
+        if self._legalcodes.has_key(language):
+            return self._legalcodes[language]
+
+        gettext = ugettext_for_locale(language)
+
+        legalcodes = set()
+        for legalcode, lang in rdf_helper.get_license_legalcodes(self.uri):
+            if lang is None:
+                translated_lang = None
+            # <terrible_fixable_hacks>
+            # We should probably add lang.sr_CYRL and lang.sr_LATN messages
+            elif lang == 'sr-Cyrl':
+                translated_lang = gettext('lang.sr')
+            elif lang == 'sr-Latn':
+                translated_lang = 'srpski (latinica)'
+            # </terrible_fixable_hacks>
+            else:
+                translated_lang = gettext(
+                    'lang.' + locale_to_lower_upper(lang))
+
+            legalcodes.add(
+                (legalcode, lang, translated_lang))
+
+        self._legalcodes[language] = legalcodes
+
+        return legalcodes
 
 
 class Question(object):
