@@ -175,3 +175,23 @@ def test_all_possible_license_versions():
          'http://creativecommons.org/licenses/by-sa/2.5/es/',
          'http://creativecommons.org/licenses/by-sa/3.0/es/'])
     
+
+def test_get_license_legalcodes():
+    """
+    Test rdf_helper.get_license_legalcodes()
+    """
+    # One-legalcode
+    nose.tools.assert_equal(
+        lib.rdf_helper.get_license_legalcodes(
+            'http://creativecommons.org/licenses/by/2.5/'),
+        set([('http://creativecommons.org/licenses/by/2.5/legalcode', None)]))
+
+    # Multi(language)-legalcode
+    expected = set(
+        [('http://creativecommons.org/licenses/by/2.5/es/legalcode.ca', 'ca'),
+         ('http://creativecommons.org/licenses/by/2.5/es/legalcode.es', 'es'),
+         ('http://creativecommons.org/licenses/by/2.5/es/legalcode.eu', 'eu'),
+         ('http://creativecommons.org/licenses/by/2.5/es/legalcode.gl', 'gl')])
+    result = lib.rdf_helper.get_license_legalcodes(
+        'http://creativecommons.org/licenses/by/2.5/es/')
+    nose.tools.assert_equal(result, expected)
