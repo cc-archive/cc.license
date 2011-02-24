@@ -165,6 +165,48 @@ class TestAll:
 </rdf:RDF>"""
         assert by.rdf == expected
 
+    def test_legalcodes(self):
+        # Single-legalcode, no translation
+        by_2point5 = self.stdsel.by_code('by', version='2.5')
+        expected = set(
+            [('http://creativecommons.org/licenses/by/2.5/legalcode',
+              None, None)])
+        result = by_2point5.legalcodes()
+        nose.tools.assert_equal(result, expected)
+
+        # Single-legalcode, with translation
+        # "trick question!"  We just don't want it to break with that last None
+        result = by_2point5.legalcodes('es')
+        nose.tools.assert_equal(result, expected)
+
+        # Multi(lang)-legalcode, no translation
+        by_2point5_es = self.stdsel.by_code(
+            'by', version='2.5', jurisdiction='es')
+        expected = set(
+            [('http://creativecommons.org/licenses/by/2.5/es/legalcode.ca',
+              'ca', u'Catalan'),
+             ('http://creativecommons.org/licenses/by/2.5/es/legalcode.es',
+              'es', u'Spanish'),
+             ('http://creativecommons.org/licenses/by/2.5/es/legalcode.eu',
+              'eu', u'Basque'),
+             ('http://creativecommons.org/licenses/by/2.5/es/legalcode.gl',
+              'gl', u'Galician')])
+        result = by_2point5_es.legalcodes()
+        nose.tools.assert_equal(result, expected)
+        
+        # Multi(lang)-legalcode, with translation
+        expected = set(
+            [('http://creativecommons.org/licenses/by/2.5/es/legalcode.ca',
+              'ca', u'Catal\xe1n'),
+             ('http://creativecommons.org/licenses/by/2.5/es/legalcode.es',
+              'es', u'Castellano'),
+             ('http://creativecommons.org/licenses/by/2.5/es/legalcode.eu',
+              'eu', u'Vasco'),
+             ('http://creativecommons.org/licenses/by/2.5/es/legalcode.gl',
+              'gl', u'Gallego')])
+        result = by_2point5_es.legalcodes('es')
+        nose.tools.assert_equal(result, expected)
+
 
 class TestStandard:
 
