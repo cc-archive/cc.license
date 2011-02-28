@@ -492,24 +492,34 @@ def get_license_legalcodes(license_uri):
     """
     qstring = """
        PREFIX cc: <http://creativecommons.org/ns#>
-       PREFIX dcq: <http://purl.org/dc/terms/>
 
-       SELECT ?legalcode, ?lang
+       SELECT ?legalcode
        WHERE {
-         <%s> cc:legalcode ?legalcode .
-         OPTIONAL { ?legalcode dcq:language ?lang } . }"""
+         <%s> cc:legalcode ?legalcode }"""
     query = RDF.Query(qstring % license_uri, query_language='sparql')
     results = set()
 
     for result in query.execute(ALL_MODEL):
-        if result['lang']:
+        legalcode_uri = str(result['legalcode'].uri)
+                            
+        qstring = """
+           PREFIX dcq: <http://purl.org/dc/terms/>
+
+           SELECT ?lang
+           WHERE {
+             <%s> dcq:language ?lang }"""
+        query = RDF.Query(qstring % legalcode_uri, query_language='sparql')
+        
+        lang_results = [str(result['lang'])
+                   for result in query.execute(ALL_MODEL)]
+
+        if lang_results:
             results.add(
-                (str(result['legalcode'].uri),
-                 str(result['lang'])))
+                (legalcode_uri,
+                 str(lang_results[0])))
         else:
             results.add(
-                (str(result['legalcode'].uri),
-                 None))
+                (legalcode_uri, None))
 
     return results
 
