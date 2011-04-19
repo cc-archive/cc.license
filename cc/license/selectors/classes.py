@@ -147,7 +147,14 @@ class LicenseSelector:
         # return a license code based on answers to this selector's questions 
         license_code = self._by_answers(answers_dict)
         # give back a license object based on the answers 
-        license = self.by_code(license_code, jurisdiction=jurisdiction)
+        if jurisdiction:
+            try:
+                license = self.by_code(license_code, jurisdiction=jurisdiction)
+            # try a fallback to unported if this jurisdiction doesn't work
+            except CCLicenseError:
+                license = self.by_code(license_code)
+        else:
+            license = self.by_code(license_code, jurisdiction=jurisdiction)
 
         # We shouldn't provide 1.0 versions of 'sa' licenses because
         # those aren't upwards-comptible.  So, select the newest
