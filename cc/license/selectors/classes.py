@@ -154,7 +154,7 @@ class LicenseSelector:
             except CCLicenseError:
                 license = self.by_code(license_code)
         else:
-            license = self.by_code(license_code, jurisdiction=jurisdiction)
+            license = self.by_code(license_code)
 
         # We shouldn't provide 1.0 versions of 'sa' licenses because
         # those aren't upwards-comptible.  So, select the newest
