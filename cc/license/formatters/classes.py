@@ -139,6 +139,7 @@ def _translate_dctype(format):
                  'stillimage': 'StillImage',
                  'text': 'Text',
                  'interactiveresource': 'InteractiveResource',
+                 'dataset': 'Dataset',
                }[format]
     except KeyError: # if we dont understand it, pretend its not there
         return None
