@@ -41,10 +41,12 @@ def query_to_language_value_dict(model, subject, predicate, object):
                                    "so I don't know what you want back")
 
     query = RDF.Statement(subject, predicate, object)
-    results = list(model.find_statements(query))
+    results = model.find_statements(query)
 
+    # list of 
     interesting_ones = [getattr(result, is_none[0]) for result in results]
-    values_with_lang = [uri2lang_and_value(result) for result in interesting_ones]
+    values_with_lang = [uri2lang_and_value(result)
+                        for result in interesting_ones]
 
     # Now, collapse this into a dict, ensuring there are no duplicate keys
     ret = {}
@@ -141,10 +143,9 @@ def get_titles(model, uri):
                   """
     # get the data back
     query = RDF.Query(qstring % uri, query_language='sparql')
-    solns = list(query.execute(model))
     # parse the data
     _titles = {}
-    for s in solns:
+    for s in query.execute(model):
         tmp = s['title'].literal_value
         _titles[ tmp['language'] ] = tmp['string']
     return _titles
@@ -160,7 +161,7 @@ def get_descriptions(model, uri):
               """
     # get the data back
     query = RDF.Query(qstring % uri, query_language='sparql')
-    solns = list(query.execute(model))
+    solns = [i for i in query.execute(model)]
     # parse the data
     if len(solns) == 0:
         return ''
@@ -181,7 +182,7 @@ def get_version(model, uri):
                     }
               """
     query = RDF.Query(qstring % uri, query_language='sparql')
-    solns = list(query.execute(model))
+    solns = [i for i in query.execute(model)]
     if len(solns) == 0:
         return ''
     else:
@@ -197,7 +198,7 @@ def get_jurisdiction(model, uri):
               }
               """
     query = RDF.Query(qstring % uri, query_language='sparql')
-    solns = list(query.execute(model))
+    solns = [i for i in query.execute(model)]
     if len(solns) == 0:
         return cc.license.Jurisdiction('') # empty string makes 'Unported'
     else:
@@ -223,8 +224,7 @@ def get_unported_license_uris(model):
               }
               """
     query = RDF.Query(qstring, query_language='sparql')
-    solns = list(query.execute(model))
-    return tuple( str(s['luri'].uri) for s in solns )
+    return tuple(str(s['luri'].uri) for s in query.execute(model))
 '''
 
 def get_jurisdiction_licenses(model, uri):
@@ -237,11 +237,11 @@ def get_jurisdiction_licenses(model, uri):
               }
               """
     query = RDF.Query(qstring % uri, query_language='sparql')
-    solns = list(query.execute(model))
+    solns = [i for i in query.execute(model)]
     if len(solns) == 0:
-        return [ ] # empty string makes 'Unported'
+        return [] # empty makes 'Unported'
     else:
-        return [ str( l['license'].uri ) for l in solns ]
+        return [str( l['license'].uri ) for l in solns]
 
 def get_deprecated(model, uri):
     qstring = """
@@ -262,8 +262,7 @@ def get_permits(model, uri):
               }
               """
     query = RDF.Query(qstring % uri, query_language='sparql')
-    solns = list(query.execute(model))
-    return tuple( str(p['permission'].uri) for p in solns )
+    return tuple(str(p['permission'].uri) for p in query.execute(model))
 
 def get_requires(model, uri):
     qstring = """
@@ -275,8 +274,7 @@ def get_requires(model, uri):
               }
               """
     query = RDF.Query(qstring % uri, query_language='sparql')
-    solns = list(query.execute(model))
-    return tuple( str(p['requirement'].uri) for p in solns )
+    return tuple(str(p['requirement'].uri) for p in query.execute(model))
 
 def get_prohibits(model, uri):
     qstring = """
@@ -288,8 +286,7 @@ def get_prohibits(model, uri):
               }
               """
     query = RDF.Query(qstring % uri, query_language='sparql')
-    solns = list(query.execute(model))
-    return tuple( str(p['prohibition'].uri) for p in solns )
+    return tuple(str(p['prohibition'].uri) for p in query.execute(model))
 
 def get_superseded(model, uri):
     """Watch out: returns a tuple and not just a value."""
@@ -302,7 +299,7 @@ def get_superseded(model, uri):
                     }
               """
     query = RDF.Query(qstring % uri, query_language='sparql')
-    solns = list(query.execute(model))
+    solns = [i for i in query.execute(model)]
     if len(solns) == 0:
         return (False, None)
     else:
@@ -321,8 +318,7 @@ def get_selector_uris():
                     }
               """
     query = RDF.Query(qstring, query_language='sparql')
-    solns = list(query.execute(SEL_MODEL))
-    return [ str(s['uri'].uri) for s in solns ]
+    return [str(s['uri'].uri) for s in query.execute(SEL_MODEL)]
 
 def get_selector_id(uri):
     qstring = """
@@ -334,7 +330,7 @@ def get_selector_id(uri):
                     }
               """
     query = RDF.Query(qstring % uri, query_language='sparql')
-    solns = list(query.execute(SEL_MODEL))
+    solns = [i for i in query.execute(SEL_MODEL)]
     return str(solns[0]['lcode'].literal_value['string'])
 
 def get_license_uris(model, selector_uri):
@@ -348,8 +344,7 @@ def get_license_uris(model, selector_uri):
                     }
               """
     query = RDF.Query(qstring % selector_uri, query_language='sparql')
-    solns = list(query.execute(model))
-    return tuple( str(s['luri'].uri) for s in solns )
+    return tuple(str(s['luri'].uri) for s in query.execute(model))
 
 
 def get_license_code(model, uri):
@@ -362,7 +357,7 @@ def get_license_code(model, uri):
               }
               """
     query = RDF.Query(qstring % uri, query_language='sparql')
-    solns = list(query.execute(model))
+    solns = [i for i in query.execute(model)]
     return str(solns[0]['code'].literal_value['string'])
 
 def get_license_class(model, uri):
@@ -375,7 +370,7 @@ def get_license_class(model, uri):
               }
               """
     query = RDF.Query(qstring % uri, query_language='sparql')
-    solns = list(query.execute(model))
+    solns = [i for i in query.execute(model)]
     return str(solns[0]['lclassuri'].uri)
 
 def get_logos(model, uri):
@@ -388,8 +383,7 @@ def get_logos(model, uri):
               }
               """
     query = RDF.Query(qstring % uri, query_language='sparql')
-    solns = list(query.execute(model))
-    return tuple( str(s['img'].uri) for s in solns )
+    return tuple(str(s['img'].uri) for s in query.execute(model))
 
 
 def selector_has_license(model, selector_uri, license_uri):

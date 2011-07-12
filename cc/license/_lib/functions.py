@@ -1,4 +1,5 @@
 
+import copy
 from distutils.version import StrictVersion
 import urlparse
 import RDF
@@ -31,8 +32,8 @@ def locales():
          }
                   """
     query = RDF.Query(query_string, query_language='sparql')
-    solns = list(query.execute(rdf_helper.JURI_MODEL))
-    return [ s['lang'].literal_value['string'] for s in solns ]
+    return [s['lang'].literal_value['string']
+            for s in query.execute(rdf_helper.JURI_MODEL)]
 
 
 _BY_CODE_CACHE = {}
@@ -199,20 +200,21 @@ def current_version(code, jurisdiction=None):
          }
                   """
     query = RDF.Query(query_string, query_language='sparql')
-    solns = list(query.execute(rdf_helper.ALL_MODEL))
-    license_uris = [ str(s['license'].uri) for s in solns ] # XXX CACHE ME
-    license_dicts = [ uri2dict(uri) for uri in license_uris ]
+     # XXX CACHE ME
+    license_uris = [str(s['license'].uri)
+                    for s in query.execute(rdf_helper.ALL_MODEL)]
+    license_dicts = [uri2dict(uri) for uri in license_uris]
     # filter on code
-    filtered_dicts = [ d for d in license_dicts if d['code'] == code ]
+    filtered_dicts = [d for d in license_dicts if d['code'] == code]
     # filter on jurisdiction
     if jurisdiction == '' : jurisdiction = None
     if jurisdiction is None:
-        filtered_dicts = [ d for d in filtered_dicts
-                           if not d.get('jurisdiction') ]
+        filtered_dicts = [d for d in filtered_dicts
+                          if not d.get('jurisdiction')]
     else:
-        filtered_dicts = [ d for d in filtered_dicts
-                           if d.has_key('jurisdiction') and
-                              d['jurisdiction'] == jurisdiction ]
+        filtered_dicts = [d for d in filtered_dicts
+                          if d.has_key('jurisdiction') and
+                             d['jurisdiction'] == jurisdiction]
     if len(filtered_dicts) == 0:
         return '' # didn't find any matching that code and jurisdiction
     # more error checking; found error in publicdomain
@@ -221,7 +223,7 @@ def current_version(code, jurisdiction=None):
             d['version']
         except KeyError:
             return ''
-    versions = [ StrictVersion(d['version']) for d in filtered_dicts ]
+    versions = [StrictVersion(d['version']) for d in filtered_dicts]
     return str(max(versions))
 
 
@@ -286,7 +288,7 @@ def all_possible_answers(list_of_questions):
        These are meant to be used with LicenseSelector.by_answers. This
        function will generate a set of answer dictionaries that embody
        every possible permutation of the answers to the questions given."""
-    questions = list(list_of_questions) # copy
+    questions = copy.deepcopy(list_of_questions)
     answer_dict_list = []
     answer_dict_list.append({}) # seed
 
