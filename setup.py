@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(name='cc.license',
-      version='0.14.18',
+      version='0.14.19',
       namespace_packages = ['cc',],
       description="License selection based on ccREL-based metadata.",
       classifiers=[],
@@ -26,5 +26,10 @@ setup(name='cc.license',
         'jinja2',
         'cc.i18n',
       ],
+
+      dependency_links = [
+        'http://code.creativecommons.org/basket/',
+        ],
+
       setup_requires=['setuptools-git',],
       )
