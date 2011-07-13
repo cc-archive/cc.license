@@ -26,5 +26,10 @@ setup(name='cc.license',
         'jinja2',
         'cc.i18n',
       ],
+
+      dependency_links = [
+        'http://code.creativecommons.org/basket/',
+        ],
+
       setup_requires=['setuptools-git',],
       )
