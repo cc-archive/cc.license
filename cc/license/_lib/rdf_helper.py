@@ -57,31 +57,6 @@ JURI_MODEL = init_model(JURI_RDF_PATH)
 SEL_MODEL = init_model(SEL_RDF_PATH)
 
 
-last=None
-singular=True
-def debug(note, model):
-    global last, singular
-    
-    mstr = "UNKNOWN"
-    if model == ALL_MODEL:
-        mstr = "ALL_MODEL"
-    if model == JURI_MODEL:
-        mstr = "JURI_MODEL"
-    if model == SEL_MODEL:
-        mstr = "SEL_MODEL"
-
-    if last is not None:
-        if last != "VOLITILE" and mstr != last:
-            last = "VOLITILE"
-            print last
-    else:
-        last = mstr
-        print "-->", note.upper()
-        print mstr
-
-
-
-
 # NOTE: 'object' shadows a global, but fixing it is nontrivial
 def query_to_language_value_dict(subject, predicate, object,
                                  model = JURI_MODEL):
