@@ -1,3 +1,4 @@
+
 import pkg_resources
 
 import RDF
@@ -27,8 +28,63 @@ def die_unless(cause, message):
     else:
         raise RdfHelperError, message
 
+def init_model(*filenames):
+    """Input: An on-disk path (filenames) to start from.
+       Output: A model with those suckers parsed."""
+    for filename in filenames: # filenames, not URIs
+        die_unless(':/' not in filename, "You passed in something that " +
+                                         "looks like a URI; blowing up")
+
+    storage = RDF.Storage(storage_name="hashes",
+                          name="test",
+                          options_string="new='yes',hash-type='memory',dir='.'")
+    if storage is None:
+        raise "new RDF.Storage failed"
+
+    model = RDF.Model(storage)
+    if model is None:
+        raise "new RDF.Model failed"
+
+    parser = RDF.Parser('raptor')
+    for filename in filenames:
+        filename_uri = RDF.Uri(string="file:" + filename)
+        parser.parse_into_model(model, filename_uri)
+    return model
+
+# XXX is this a good idea?
+ALL_MODEL = init_model(INDEX_RDF_PATH)
+JURI_MODEL = init_model(JURI_RDF_PATH)
+SEL_MODEL = init_model(SEL_RDF_PATH)
+
+
+last=None
+singular=True
+def debug(note, model):
+    global last, singular
+    
+    mstr = "UNKNOWN"
+    if model == ALL_MODEL:
+        mstr = "ALL_MODEL"
+    if model == JURI_MODEL:
+        mstr = "JURI_MODEL"
+    if model == SEL_MODEL:
+        mstr = "SEL_MODEL"
+
+    if last is not None:
+        if last != "VOLITILE" and mstr != last:
+            last = "VOLITILE"
+            print last
+    else:
+        last = mstr
+        print "-->", note.upper()
+        print mstr
+
+
+
+
 # NOTE: 'object' shadows a global, but fixing it is nontrivial
-def query_to_language_value_dict(model, subject, predicate, object):
+def query_to_language_value_dict(subject, predicate, object,
+                                 model = JURI_MODEL):
     """Given a model and a subject, predicate, object (one of which
        is None), generate a dictionary of language values.
        The dictionary is in the form {'en' : u'Germany'}.
@@ -58,11 +114,15 @@ def query_to_language_value_dict(model, subject, predicate, object):
 default_flag_value = object() # TODO: ask asheesh why this is here
 
 # NOTE: 'object' shadows a global, but fixing it is nontrivial
-def query_to_single_value(model, subject, predicate, object, default = default_flag_value):
+def query_to_single_value(subject, predicate, object,
+                          default=default_flag_value,
+                          model=JURI_MODEL):
     """Much like query_to_language_value_dict, but only returns a single
        value. In fact, raises an exception if the query returns multiple
        values."""
-    with_lang = query_to_language_value_dict(model, subject, predicate, object)
+    
+    with_lang = query_to_language_value_dict(subject, predicate, object,
+                                             model)
     if len(with_lang) > 1:
         raise RdfHelperError, "Somehow I found too many values."
     if len(with_lang) == 1:
@@ -103,32 +163,10 @@ def uri2lang_and_value(uri): # TODO: takes a RDF.Node, not RDF.Url
 def uri2value(uri):
     return uri2lang_and_value(uri)[1]
 
-def init_model(*filenames):
-    """Input: An on-disk path (filenames) to start from.
-       Output: A model with those suckers parsed."""
-    for filename in filenames: # filenames, not URIs
-        die_unless(':/' not in filename, "You passed in something that " +
-                                         "looks like a URI; blowing up")
-
-    storage = RDF.Storage(storage_name="hashes",
-                          name="test",
-                          options_string="new='yes',hash-type='memory',dir='.'")
-    if storage is None:
-        raise "new RDF.Storage failed"
-
-    model = RDF.Model(storage)
-    if model is None:
-        raise "new RDF.Model failed"
-
-    parser = RDF.Parser('raptor')
-    for filename in filenames:
-        filename_uri = RDF.Uri(string="file:" + filename)
-        parser.parse_into_model(model, filename_uri)
-    return model
 
 # XXX all get_* helpers below are not directly tested
 
-def get_titles(model, uri):
+def get_titles(uri, model=ALL_MODEL):
     """Given a URI for an RDF resource, return a dictionary of
        corresponding to its dc:title properties. The indices will
        be locale codes, and the values will be titles."""
@@ -150,7 +188,8 @@ def get_titles(model, uri):
         _titles[ tmp['language'] ] = tmp['string']
     return _titles
 
-def get_descriptions(model, uri):
+def get_descriptions(uri, model=ALL_MODEL):
+    # Fixme: This function isn't hit by any tests.
     qstring = """
               PREFIX dc: <http://purl.org/dc/elements/1.1/>
 
@@ -159,6 +198,10 @@ def get_descriptions(model, uri):
                      <%s> dc:description ?desc .
                     }
               """
+
+    debug("get_descriptions", model)
+
+    
     # get the data back
     query = RDF.Query(qstring % uri, query_language='sparql')
     solns = [i for i in query.execute(model)]
@@ -172,7 +215,7 @@ def get_descriptions(model, uri):
             _descriptions[ tmp['language'] ] = tmp['string']
         return _descriptions
 
-def get_version(model, uri):
+def get_version(uri, model=ALL_MODEL):
     qstring = """
               PREFIX dcq: <http://purl.org/dc/terms/>
 
@@ -188,7 +231,7 @@ def get_version(model, uri):
     else:
         return solns[0]['version'].literal_value['string']
 
-def get_jurisdiction(model, uri):
+def get_jurisdiction(uri, model=ALL_MODEL):
     qstring = """
               PREFIX cc: <http://creativecommons.org/ns#>
 
@@ -197,6 +240,8 @@ def get_jurisdiction(model, uri):
                      <%s> cc:jurisdiction ?jurisdiction .
               }
               """
+
+    
     query = RDF.Query(qstring % uri, query_language='sparql')
     solns = [i for i in query.execute(model)]
     if len(solns) == 0:
@@ -227,7 +272,8 @@ def get_unported_license_uris(model):
     return tuple(str(s['luri'].uri) for s in query.execute(model))
 '''
 
-def get_jurisdiction_licenses(model, uri):
+def get_jurisdiction_licenses(uri, model=ALL_MODEL):
+    # FIXME: This function is never hit by any unit tests.
     qstring = """
               PREFIX cc: <http://creativecommons.org/ns#>
 
@@ -243,7 +289,7 @@ def get_jurisdiction_licenses(model, uri):
     else:
         return [str( l['license'].uri ) for l in solns]
 
-def get_deprecated(model, uri):
+def get_deprecated(uri, model=ALL_MODEL):
     qstring = """
               PREFIX cc: <http://creativecommons.org/ns#>
               PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -252,7 +298,7 @@ def get_deprecated(model, uri):
     query = RDF.Query(qstring % uri, query_language='sparql')
     return query.execute(model).get_boolean()
 
-def get_permits(model, uri):
+def get_permits(uri, model=ALL_MODEL):
     qstring = """
               PREFIX cc: <http://creativecommons.org/ns#>
 
@@ -264,7 +310,7 @@ def get_permits(model, uri):
     query = RDF.Query(qstring % uri, query_language='sparql')
     return tuple(str(p['permission'].uri) for p in query.execute(model))
 
-def get_requires(model, uri):
+def get_requires(uri, model=ALL_MODEL):
     qstring = """
               PREFIX cc: <http://creativecommons.org/ns#>
 
@@ -276,7 +322,7 @@ def get_requires(model, uri):
     query = RDF.Query(qstring % uri, query_language='sparql')
     return tuple(str(p['requirement'].uri) for p in query.execute(model))
 
-def get_prohibits(model, uri):
+def get_prohibits(uri, model=ALL_MODEL):
     qstring = """
               PREFIX cc: <http://creativecommons.org/ns#>
 
@@ -288,7 +334,7 @@ def get_prohibits(model, uri):
     query = RDF.Query(qstring % uri, query_language='sparql')
     return tuple(str(p['prohibition'].uri) for p in query.execute(model))
 
-def get_superseded(model, uri):
+def get_superseded(uri, model=ALL_MODEL):
     """Watch out: returns a tuple and not just a value."""
     qstring = """
               PREFIX dcq: <http://purl.org/dc/terms/>
@@ -333,7 +379,8 @@ def get_selector_id(uri):
     solns = [i for i in query.execute(SEL_MODEL)]
     return str(solns[0]['lcode'].literal_value['string'])
 
-def get_license_uris(model, selector_uri):
+def get_license_uris(selector_uri, model=ALL_MODEL):
+    # FIXME: This function is never hit by any unit tests.
     qstring = """
               PREFIX cc: <http://creativecommons.org/ns#>
               PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -347,7 +394,7 @@ def get_license_uris(model, selector_uri):
     return tuple(str(s['luri'].uri) for s in query.execute(model))
 
 
-def get_license_code(model, uri):
+def get_license_code(uri, model=ALL_MODEL):
     qstring = """
               PREFIX dc: <http://purl.org/dc/elements/1.1/>
 
@@ -360,7 +407,7 @@ def get_license_code(model, uri):
     solns = [i for i in query.execute(model)]
     return str(solns[0]['code'].literal_value['string'])
 
-def get_license_class(model, uri):
+def get_license_class(uri, model=ALL_MODEL):
     qstring = """
               PREFIX cc: <http://creativecommons.org/ns#>
 
@@ -373,7 +420,7 @@ def get_license_class(model, uri):
     solns = [i for i in query.execute(model)]
     return str(solns[0]['lclassuri'].uri)
 
-def get_logos(model, uri):
+def get_logos(uri, model=ALL_MODEL):
     qstring = """
               PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 
@@ -386,7 +433,7 @@ def get_logos(model, uri):
     return tuple(str(s['img'].uri) for s in query.execute(model))
 
 
-def selector_has_license(model, selector_uri, license_uri):
+def selector_has_license(selector_uri, license_uri, model=ALL_MODEL):
     qstring = """
               PREFIX cc: <http://creativecommons.org/ns#>
 
@@ -516,12 +563,6 @@ def get_license_legalcodes(license_uri):
                 (legalcode_uri, None))
 
     return results
-
-
-# XXX is this a good idea?
-ALL_MODEL = init_model(INDEX_RDF_PATH)
-JURI_MODEL = init_model(JURI_RDF_PATH)
-SEL_MODEL = init_model(SEL_RDF_PATH)
 
 #####################
 ## Questions stuff ##

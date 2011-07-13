@@ -27,18 +27,16 @@ class Jurisdiction(object):
             raise CCLicenseError, "Malformed jurisdiction URI: <%s>" % uri
         self.code = cc.license.jurisdictions.uri2code(uri)
         self.id = uri
-        self._titles = rdf_helper.get_titles(rdf_helper.JURI_MODEL, self.id)
+        self._titles = rdf_helper.get_titles(self.id, rdf_helper.JURI_MODEL)
         id_uri = RDF.Uri(self.id)
         try:
             self.local_url = rdf_helper.query_to_single_value(
-                rdf_helper.JURI_MODEL, id_uri,
-                RDF.Uri(rdf_helper.NS_CC + 'jurisdictionSite'), None)
+                id_uri, RDF.Uri(rdf_helper.NS_CC + 'jurisdictionSite'), None)
         except NoValuesFoundError:
             self.local_url = None
         try:
             self.launched = rdf_helper.query_to_single_value(
-                rdf_helper.JURI_MODEL, id_uri,
-                RDF.Uri(rdf_helper.NS_CC + 'launched'), None)
+                id_uri, RDF.Uri(rdf_helper.NS_CC + 'launched'), None)
         except NoValuesFoundError:
             self.launched = None
 

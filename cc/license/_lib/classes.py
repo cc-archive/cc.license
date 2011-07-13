@@ -60,13 +60,13 @@ class License(object):
 
     def title(self, language='en'):
         if self._titles is None:
-            self._titles = rdf_helper.get_titles(self._model, self.uri)
+            self._titles = rdf_helper.get_titles(self.uri, self._model)
         return locale_dict_fetch_with_fallbacks(self._titles, language)
 
     @property
     def license_class(self):
         if self._lclass is None:
-            lclass_uri = rdf_helper.get_license_class(self._model, self.uri)
+            lclass_uri = rdf_helper.get_license_class(self.uri, self._model)
             # XXX this feels hackish
             for value in cc.license.selectors.SELECTORS.values():
                 if value.uri == lclass_uri:
@@ -78,14 +78,14 @@ class License(object):
     @property
     def version(self):
         if self._version is None:
-            self._version = rdf_helper.get_version(self._model, self.uri)
+            self._version = rdf_helper.get_version(self.uri, self._model)
         return self._version
 
     # XXX return what if nonexistent?
     @property
     def jurisdiction(self):
         if self._jurisdiction is None:
-            self._jurisdiction = rdf_helper.get_jurisdiction(self._model, self.uri)
+            self._jurisdiction = rdf_helper.get_jurisdiction(self.uri, self._model)
         return self._jurisdiction
 
     @property
@@ -105,21 +105,22 @@ class License(object):
     @property
     def deprecated(self):
         if self._deprecated is None:
-            self._deprecated = rdf_helper.get_deprecated(self._model, self.uri)
+            self._deprecated = rdf_helper.get_deprecated(self.uri,
+                                                         self._model)
         return self._deprecated
 
     @property
     def superseded(self):
         if self._superseded is None:
-            self._superseded, self._superseded_by = \
-                            rdf_helper.get_superseded(self._model, self.uri)
+            self._superseded, self._superseded_by = rdf_helper.get_superseded(
+                self.uri, self._model)
             # just in case superseded_by is needed down the line
         return self._superseded
 
     @property
     def license_code(self):
         if self._code is None:
-            self._code = rdf_helper.get_license_code(self._model, self.uri)
+            self._code = rdf_helper.get_license_code(self.uri, self._model)
         return self._code
 
     @property
@@ -131,19 +132,19 @@ class License(object):
     @property
     def permits(self):
         if self._permits is None:
-            self._permits = rdf_helper.get_permits(self._model, self.uri)
+            self._permits = rdf_helper.get_permits(self.uri, self._model)
         return self._permits
 
     @property
     def requires(self):
         if self._requires is None:
-            self._requires = rdf_helper.get_requires(self._model, self.uri)
+            self._requires = rdf_helper.get_requires(self.uri, self._model)
         return self._requires
 
     @property
     def prohibits(self):
         if self._prohibits is None:
-            self._prohibits = rdf_helper.get_prohibits(self._model, self.uri)
+            self._prohibits = rdf_helper.get_prohibits(self.uri, self._model)
         return self._prohibits
 
     @property
@@ -152,7 +153,7 @@ class License(object):
 
     def logo_method(self, size='88x31'):
         if self._logos is None:
-            self._logos = rdf_helper.get_logos(self._model, self.uri)
+            self._logos = rdf_helper.get_logos(self.uri, self._model)
 
         if self._logos:
             try:

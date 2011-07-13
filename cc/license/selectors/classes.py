@@ -20,7 +20,7 @@ class LicenseSelector:
            In the questions.xml will be deprecated later, with all
            that information moving to RDF."""
         self._uri = uri
-        self._model = rdf_helper.ALL_MODEL
+        #self._model = rdf_helper.ALL_MODEL
                       # plenty of room for optimization...
         self._licenses = {}
         self._id = None
@@ -66,16 +66,17 @@ class LicenseSelector:
 
     def title(self, language='en'):
         if self._titles is None:
-            self._titles = rdf_helper.get_titles(rdf_helper.SEL_MODEL, self.uri)
+            self._titles = rdf_helper.get_titles(self.uri,
+                                                 rdf_helper.SEL_MODEL)
         return cc.license.util.locale_dict_fetch_with_fallbacks(
             self._titles, language)
 
     def by_uri(self, uri):
         # error checking
-        if not rdf_helper.selector_has_license(self._model, self.uri, uri):
+        if not rdf_helper.selector_has_license(self.uri, uri):
             raise CCLicenseError, "Invalid license URI."
         if uri not in self._licenses or self._licenses[uri] is None:
-            self._licenses[uri] = License(self._model, uri)
+            self._licenses[uri] = License(rdf_helper.ALL_MODEL, uri)
         return self._licenses[uri]
 
     def by_code(self, license_code, jurisdiction=None, version=None):
@@ -117,8 +118,7 @@ class LicenseSelector:
         if license_uri in self._licenses.keys():
             return True
         else:
-            if not rdf_helper.selector_has_license(
-                       self._model, self.uri, license_uri):
+            if not rdf_helper.selector_has_license(self.uri, license_uri):
                 return False
             else:
                 self._licenses[license_uri] = None
