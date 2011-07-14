@@ -59,7 +59,7 @@ SEL_MODEL = init_model(SEL_RDF_PATH)
 
 # NOTE: 'object' shadows a global, but fixing it is nontrivial
 def query_to_language_value_dict(subject, predicate, object,
-                                 model = JURI_MODEL):
+                                 model=JURI_MODEL):
     """Given a model and a subject, predicate, object (one of which
        is None), generate a dictionary of language values.
        The dictionary is in the form {'en' : u'Germany'}.
