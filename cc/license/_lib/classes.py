@@ -16,10 +16,9 @@ class License(object):
     """Base class for ILicense implementation modeling a specific license."""
     zope.interface.implements(interfaces.ILicense)
 
-    def __init__(self, model, uri):
+    def __init__(self, uri):
         # XXX do this as a dict later?
         self._uri = uri
-        self._model = model # hang on to the model for lazy queries later
         self._lclass = None
         self._titles = None
         self._descriptions = None
@@ -42,7 +41,7 @@ class License(object):
                 
                   ASK { <%s> rdf:type cc:License . }"""
         query = RDF.Query(qstring % self.uri, query_language='sparql')
-        uri_exists = query.execute(self._model).get_boolean()
+        uri_exists = query.execute(rdf_helper.ALL_MODEL).get_boolean()
         if not uri_exists:
             raise CCLicenseError, \
                   "License <%(uri)s> does not exist in model given." % {
@@ -60,13 +59,13 @@ class License(object):
 
     def title(self, language='en'):
         if self._titles is None:
-            self._titles = rdf_helper.get_titles(self.uri, self._model)
+            self._titles = rdf_helper.get_titles(self.uri)
         return locale_dict_fetch_with_fallbacks(self._titles, language)
 
     @property
     def license_class(self):
         if self._lclass is None:
-            lclass_uri = rdf_helper.get_license_class(self.uri, self._model)
+            lclass_uri = rdf_helper.get_license_class(self.uri)
             # XXX this feels hackish
             for value in cc.license.selectors.SELECTORS.values():
                 if value.uri == lclass_uri:
@@ -78,14 +77,14 @@ class License(object):
     @property
     def version(self):
         if self._version is None:
-            self._version = rdf_helper.get_version(self.uri, self._model)
+            self._version = rdf_helper.get_version(self.uri)
         return self._version
 
     # XXX return what if nonexistent?
     @property
     def jurisdiction(self):
         if self._jurisdiction is None:
-            self._jurisdiction = rdf_helper.get_jurisdiction(self.uri, self._model)
+            self._jurisdiction = rdf_helper.get_jurisdiction(self.uri)
         return self._jurisdiction
 
     @property
@@ -105,22 +104,21 @@ class License(object):
     @property
     def deprecated(self):
         if self._deprecated is None:
-            self._deprecated = rdf_helper.get_deprecated(self.uri,
-                                                         self._model)
+            self._deprecated = rdf_helper.get_deprecated(self.uri)
         return self._deprecated
 
     @property
     def superseded(self):
         if self._superseded is None:
             self._superseded, self._superseded_by = rdf_helper.get_superseded(
-                self.uri, self._model)
+                self.uri)
             # just in case superseded_by is needed down the line
         return self._superseded
 
     @property
     def license_code(self):
         if self._code is None:
-            self._code = rdf_helper.get_license_code(self.uri, self._model)
+            self._code = rdf_helper.get_license_code(self.uri)
         return self._code
 
     @property
@@ -132,19 +130,19 @@ class License(object):
     @property
     def permits(self):
         if self._permits is None:
-            self._permits = rdf_helper.get_permits(self.uri, self._model)
+            self._permits = rdf_helper.get_permits(self.uri)
         return self._permits
 
     @property
     def requires(self):
         if self._requires is None:
-            self._requires = rdf_helper.get_requires(self.uri, self._model)
+            self._requires = rdf_helper.get_requires(self.uri)
         return self._requires
 
     @property
     def prohibits(self):
         if self._prohibits is None:
-            self._prohibits = rdf_helper.get_prohibits(self.uri, self._model)
+            self._prohibits = rdf_helper.get_prohibits(self.uri)
         return self._prohibits
 
     @property
@@ -153,7 +151,7 @@ class License(object):
 
     def logo_method(self, size='88x31'):
         if self._logos is None:
-            self._logos = rdf_helper.get_logos(self.uri, self._model)
+            self._logos = rdf_helper.get_logos(self.uri)
 
         if self._logos:
             try:

@@ -20,8 +20,6 @@ class LicenseSelector:
            In the questions.xml will be deprecated later, with all
            that information moving to RDF."""
         self._uri = uri
-        #self._model = rdf_helper.ALL_MODEL
-                      # plenty of room for optimization...
         self._licenses = {}
         self._id = None
         self._titles = None        
@@ -76,7 +74,7 @@ class LicenseSelector:
         if not rdf_helper.selector_has_license(self.uri, uri):
             raise CCLicenseError, "Invalid license URI."
         if uri not in self._licenses or self._licenses[uri] is None:
-            self._licenses[uri] = License(rdf_helper.ALL_MODEL, uri)
+            self._licenses[uri] = License(uri)
         return self._licenses[uri]
 
     def by_code(self, license_code, jurisdiction=None, version=None):
