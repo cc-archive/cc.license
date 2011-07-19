@@ -184,48 +184,18 @@ def dict2uri(license_info):
 
         return base
 
+
 def current_version(code, jurisdiction=None):
     """Given a license code and optional jurisdiction, determine what
        the current (latest) license version is. Returns a just the version
        number, as a string. 'jurisdiction' should be a short code and
        not a jurisdiction URI."""
-    query_string = """
-        PREFIX cc: <http://creativecommons.org/ns#>
-        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-
-        SELECT ?license
-        WHERE
-         {
-            ?license rdf:type cc:License .
-         }
-                  """
-    query = RDF.Query(query_string, query_language='sparql')
-     # XXX CACHE ME
-    license_uris = [str(s['license'].uri)
-                    for s in query.execute(rdf_helper.ALL_MODEL)]
-    license_dicts = [uri2dict(uri) for uri in license_uris]
-    # filter on code
-    filtered_dicts = [d for d in license_dicts if d['code'] == code]
-    # filter on jurisdiction
-    if jurisdiction == '' : jurisdiction = None
-    if jurisdiction is None:
-        filtered_dicts = [d for d in filtered_dicts
-                          if not d.get('jurisdiction')]
-    else:
-        filtered_dicts = [d for d in filtered_dicts
-                          if d.has_key('jurisdiction') and
-                             d['jurisdiction'] == jurisdiction]
-    if len(filtered_dicts) == 0:
-        return '' # didn't find any matching that code and jurisdiction
-    # more error checking; found error in publicdomain
-    for d in filtered_dicts:
-        try:
-            d['version']
-        except KeyError:
-            return ''
-    versions = [StrictVersion(d['version']) for d in filtered_dicts]
-    return str(max(versions))
-
+    versions = all_possible_license_versions(code, jurisdiction)
+    current = ''
+    if len(versions):
+        current = str(versions[-1].version)
+    return current
+    
 
 def sort_licenses(x, y):
     """
@@ -276,8 +246,7 @@ def all_possible_license_versions(code, jurisdiction=None):
     license_results = filter(
         lambda lic: lic.jurisdiction == jurisdiction_obj, license_results)
 
-    license_results.sort(sort_licenses)
-    
+    license_results.sort(sort_licenses)    
     ALL_POSSIBLE_VERSIONS_CACHE[cache_key] = license_results
 
     return license_results
