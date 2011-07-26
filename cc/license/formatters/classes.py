@@ -25,6 +25,7 @@ from cc.license import util
 from cc.i18n.gettext_i18n import ugettext_for_locale
 from cc.i18n import ccorg_i18n_setup
 from cc.i18n.util import negotiate_locale
+from cc.i18n.util import locale_to_lower_lower
 
 import jinja2
 
@@ -183,7 +184,7 @@ class HTMLFormatter(object):
         body_vars = {
             'license_url': license.uri,
             'license_name': util.escape(
-                license.title(util.locale_to_dash_style(locale)))}
+                license.title(locale_to_lower_lower(locale)))}
 
         if ((work_dict.get('attribution_url')
              or work_dict.get('attribution_name'))

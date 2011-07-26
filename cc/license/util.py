@@ -187,15 +187,16 @@ def escape(string):
         .replace('"', '&#34;'))
 
 
-def locale_to_dash_style(locale):
-    """
-    Convert a 'en_US' style locale to 'en-us' style
-    """
-    if '_' in locale:
-        lang, country = locale.split('_', 1)
-        return '%s-%s' % (lang.lower(), country.lower())
-    else:
-        return locale.lower()
+#def locale_to_dash_style(locale):
+#    """
+#    Convert a 'en_US' style locale to 'en-us' style
+#    """
+#    
+#    if '_' in locale:
+#        lang, country = locale.split('_', 1)
+#        return '%s-%s' % (lang.lower(), country.lower())
+#    else:
+#        return locale.lower()
 
 
 def locale_dict_fetch_with_fallbacks(data_dict, locale):

@@ -56,13 +56,6 @@ def test_output_stripping():
     assert_equal(stripped_output, EXPECTED_STRIPPED_OUTPUT)
 
 
-def test_locale_to_dash_style():
-    assert_equal(
-        util.locale_to_dash_style('en_US'), 'en-us')
-    assert_equal(
-        util.locale_to_dash_style('en'), 'en')
-
-
 def test_locale_dict_fetch_with_fallbacks():
     data_dict = {
         'de-ch': 'de-ch value',
