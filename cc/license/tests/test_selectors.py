@@ -85,7 +85,7 @@ class TestIssuers:
 
     def test_by_uri_fails(self):
         for b in self.bad_uris:
-            nose.tools.assert_raises(CCLicenseError, self.std.by_uri, b)
+            assert self.std.by_uri(b) == None
 
     # TODO: test by_code
 

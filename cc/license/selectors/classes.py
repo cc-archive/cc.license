@@ -72,7 +72,7 @@ class LicenseSelector:
     def by_uri(self, uri):
         # error checking
         if not rdf_helper.selector_has_license(self.uri, uri):
-            raise CCLicenseError, "Invalid license URI."
+            return None
         if uri not in self._licenses or self._licenses[uri] is None:
             self._licenses[uri] = License(uri)
         return self._licenses[uri]
