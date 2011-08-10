@@ -225,9 +225,9 @@ class TestStandard:
         # assert_true(lic.libre) # FIXME: Should this be here?
 
     def test_bysa_us(self):
-        # nonexistent license raises an error
-        nose.tools.assert_raises(CCLicenseError, self.selector.by_code,
-                    'by-sa', jurisdiction='us', version='1.0')
+        # nonexistent license returns None
+        lic = self.selector.by_code('by-sa', jurisdiction='us', version='1.0')
+        assert lic == None
 
         lic = self.selector.by_code('by-sa', jurisdiction='us', version='3.0')
         assert lic.jurisdiction.code == 'us'

@@ -96,13 +96,11 @@ class LicenseSelector:
                          version=version,
                          code=license_code.replace('nc-nd', 'nd-nc')))
                 if not self.has_license(uri):
-                    raise CCLicenseError, \
-                        "License code '%s' is invalid for selector %s" % \
-                        (license_code, self.id)
+                    # "License code is invalid for this entity?
+                    return None
             else:
-                raise CCLicenseError, \
-                    "License code '%s' is invalid for selector %s" % \
-                    (license_code, self.id)
+                # "License code is invalid for this entity?
+                return None
 
         license = self.by_uri(uri)
         SELECTOR_BY_CODE_CACHE[cache_key] = license
@@ -146,10 +144,9 @@ class LicenseSelector:
         license_code = self._by_answers(answers_dict)
         # give back a license object based on the answers 
         if jurisdiction:
-            try:
-                license = self.by_code(license_code, jurisdiction=jurisdiction)
-            # try a fallback to unported if this jurisdiction doesn't work
-            except CCLicenseError:
+            license = self.by_code(license_code, jurisdiction=jurisdiction)
+            if not license:
+                # try a fallback to unported if this jurisdiction doesn't work
                 license = self.by_code(license_code)
         else:
             license = self.by_code(license_code)

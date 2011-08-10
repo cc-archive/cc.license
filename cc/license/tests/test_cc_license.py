@@ -17,8 +17,7 @@ def test_by_uri():
     assert lic == cc.license.by_uri(uri)
 
 def test_by_uri_fails():
-    nose.tools.assert_raises(cc.license.CCLicenseError,
-                             cc.license.by_uri, 'roflcopter')
+    assert cc.license.by_uri('roflcopter') == None
 
 def test_by_code():
     lic = cc.license.selectors.choose('standard').by_code('by')
@@ -63,8 +62,8 @@ def test_by_code_all():
     assert lic == cc.license.by_code('by-nc', jurisdiction='jp', version='2.0')
 
 def test_by_code_fails():
-    nose.tools.assert_raises(cc.license.CCLicenseError,
-                             cc.license.by_code, 'lollerskates')
+    lic = cc.license.by_code('lollerskates')
+    assert lic == None
 
 class TestPublicApi:
 
