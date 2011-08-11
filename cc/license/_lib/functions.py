@@ -6,7 +6,7 @@ import RDF
 import rdf_helper
 
 from cc.license.jurisdictions.classes import Jurisdiction
-from cc.license._lib.exceptions import CCLicenseError, MalformedURIError
+from cc.license._lib.exceptions import MalformedURIError
 import cc.license
 
 

@@ -2,7 +2,7 @@ import zope.interface
 import cc.license
 from cc.license._lib import interfaces, rdf_helper
 from cc.license._lib.classes import License, Question, JurisdictionQuestion
-from cc.license._lib.exceptions import CCLicenseError, SelectorQAError
+from cc.license._lib.exceptions import SelectorQAError
 
 
 # Cache by_code results via the key:
