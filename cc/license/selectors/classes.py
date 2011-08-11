@@ -2,7 +2,7 @@ import zope.interface
 import cc.license
 from cc.license._lib import interfaces, rdf_helper
 from cc.license._lib.classes import License, Question, JurisdictionQuestion
-from cc.license._lib.exceptions import CCLicenseError
+from cc.license._lib.exceptions import CCLicenseError, SelectorQAError
 
 
 # Cache by_code results via the key:
@@ -125,11 +125,11 @@ class LicenseSelector:
         for q in self.questions():
             # verify that all questions are answered 
             if q.id not in answers_dict.keys():
-                raise CCLicenseError, "Invalid question answered."
+                raise SelectorQAError, "Invalid question answered."
             # verify that answers have an acceptable value
             # l,v,d = label, value, description :: for each acceptable answer
             if answers_dict[q.id] not in [ v for l,v,d in q.answers() ]:
-                raise CCLicenseError, "Invalid answer given."
+                raise SelectorQAError, "Invalid answer given."
 
         return "Bears shit in the woods." is not False
 

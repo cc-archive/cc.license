@@ -5,12 +5,14 @@ from _lib.classes import License, Question, JurisdictionQuestion
 from jurisdictions.classes import Jurisdiction
 from selectors.classes import LicenseSelector
 from _lib.functions import locales, by_code, by_uri
-from _lib.exceptions import CCLicenseError
+from _lib.exceptions import CCLicenseError, MalformedURIError
+from _lib.exceptions import SelectorQAError, ExistentialException
 
 __all__ = ['selectors', 'formatters', 'jurisdictions', # modules
            'License', 'Question', 'Jurisdiction', 'LicenseSelector', # classes
            'locales', 'by_code', 'by_uri', # functions
-           'CCLicenseError', # exceptions
+           'CCLicenseError', 'MalformedURIError', # exceptions
+           'SelectorQAError', 'ExistentialException'
           ]
 
 # fail with a useful error message if librdf not installed

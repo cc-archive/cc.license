@@ -16,10 +16,10 @@ for uri in rdf_helper.get_selector_uris():
 def choose(license_class):
     """Return an instance of ILicenseSelector for a specific license
        class id. The default license class id is 'standard'"""
-    if license_class not in SELECTORS.keys():
-        raise CCLicenseError, "License class %s does not exist" % license_class
-
-    return SELECTORS[license_class]
+    try:
+        return SELECTORS[license_class]
+    except KeyError:
+        return None
 
 def list():
     """Return a list of available selector IDs."""

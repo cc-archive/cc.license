@@ -32,8 +32,7 @@ def test_id_and_uri():
 def test_get_selector_key_error():
     """selectors.choose() should raise a CCLicenseError if supplied 
        with an invalid selector id."""
-    nose.tools.assert_raises(CCLicenseError,
-                             cc.license.selectors.choose, 'roflcopter')
+    assert cc.license.selectors.choose('roflcopter') == None
 
 def test_has_license():
     std = cc.license.selectors.choose('standard')
