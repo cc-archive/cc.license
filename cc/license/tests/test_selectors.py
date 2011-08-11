@@ -113,11 +113,11 @@ class TestAnswersStandard:
         self.sel = cc.license.selectors.choose('standard')
 
     def test_empty_answers(self):
-        nose.tools.assert_raises(CCLicenseError, self.sel.by_answers, {})
+        assert self.sel.by_answers({}) == None
 
     def test_nonsense_answers(self):
-        nose.tools.assert_raises(CCLicenseError, self.sel.by_answers,
-                                 {'commercial':'foo', 'derivatives':'bar'})
+        assert self.sel.by_answers(
+            {'commercial':'foo', 'derivatives':'bar'}) == None
 
     def test_extra_answers(self):
         lic = self.sel.by_answers({'commercial':'y',
@@ -163,11 +163,10 @@ class TestAnswersSampling:
         self.sel = cc.license.selectors.choose('recombo')
 
     def test_no_answers(self):
-        nose.tools.assert_raises(CCLicenseError, self.sel.by_answers, {})
+        assert self.sel.by_answers({}) == None
 
     def test_invalid_answers(self):
-        nose.tools.assert_raises(CCLicenseError, self.sel.by_answers,
-                                 {'sampling':'roflcopter'})
+        assert self.sel.by_answers({'sampling':'roflcopter'}) == None
 
     def test_extra_answers(self):
         lic = self.sel.by_answers({'sampling':'sampling',
