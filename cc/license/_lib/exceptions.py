@@ -21,6 +21,6 @@ class SelectorQAError(CCLicenseError):
     pass
 
 class ExistentialException(CCLicenseError):
-    """Raised when something requested doesn't exist, or when you are 
-    wondering what is the point if it all ends the same way."""
+    """Raised when something requested doesn't exist, or when you question
+    what the point of it all is, if it all ends the same way."""
     pass
