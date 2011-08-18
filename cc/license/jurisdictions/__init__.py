@@ -65,7 +65,7 @@ def uri2code(uri):
         return '' # trivial case
     base = 'http://creativecommons.org/international/' 
     if not uri.startswith(base):
-        raise cc.license.MalformedURIError, "Malformed jurisdiction URI"
+        raise cc.license.InvalidURIError, "Invalid jurisdiction URI"
     blen = len(base)
     return uri[blen:-1]
 

@@ -2,7 +2,7 @@ import zope.interface
 import RDF
 
 import cc.license
-from cc.license._lib.exceptions import NoValuesFoundError, MalformedURIError
+from cc.license._lib.exceptions import NoValuesFoundError, InvalidURIError
 from cc.license._lib import interfaces, rdf_helper
 
 class Jurisdiction(object):
@@ -24,7 +24,7 @@ class Jurisdiction(object):
             return
         if not uri.startswith('http://creativecommons.org/international/') \
            or not uri.endswith('/'):
-            raise MalformedURIError, "Malformed jurisdiction URI: <%s>" % uri
+            raise InvalidURIError, "Invalid jurisdiction URI: <%s>" % uri
         self.code = cc.license.jurisdictions.uri2code(uri)
         self.id = uri
         self._titles = rdf_helper.get_titles(self.id, rdf_helper.JURI_MODEL)
@@ -71,7 +71,7 @@ class Jurisdiction(object):
         except KeyError, e:
             import sys
             tb = sys.exc_info()[2]
-            raise MalformedURIError, \
+            raise InvalidURIError, \
                 "Language %s does not exist for jurisdiction %s" \
                 % (language, self.code), tb
 

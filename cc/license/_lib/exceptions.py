@@ -12,7 +12,7 @@ class CCLicenseError(Exception):
     """Generic exception when misuse cc.license"""
     pass
 
-class MalformedURIError(CCLicenseError):
+class InvalidURIError(CCLicenseError):
     """Raised when a URI is unusuable because of it being formatted wrong."""
     pass
 

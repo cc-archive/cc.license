@@ -6,7 +6,7 @@ import RDF
 import rdf_helper
 
 from cc.license.jurisdictions.classes import Jurisdiction
-from cc.license._lib.exceptions import MalformedURIError
+from cc.license._lib.exceptions import InvalidURIError
 import cc.license
 
 
@@ -86,7 +86,7 @@ def code_from_uri(uri):
     elif uri.startswith(CC0_BASE):
         return 'CC0'
     else:
-        raise MalformedURIError, "Invalid License URI"
+        raise InvalidURIError, "Invalid License URI"
 
 def uri2dict(uri):
     """Take a license uri and convert it into a dictionary of values."""
@@ -100,7 +100,7 @@ def uri2dict(uri):
         info_list = raw_info.split('/') 
 
         if len(info_list) not in (1,2,3):
-            raise MalformedURIError, "Malformed Creative Commons URI: <%s>"%uri
+            raise InvalidURIError, "Invalid Creative Commons URI: <%s>"%uri
 
         retval = dict( code=info_list[0] )
         if len(info_list) > 1:
@@ -127,7 +127,7 @@ def uri2dict(uri):
 
 
     else:
-        raise MalformedURIError, "Malformed Creative Commons URI: <%s>" % uri
+        raise InvalidURIError, "Invalid Creative Commons URI: <%s>" % uri
 
 def dict2uri(license_info):
     """Take a dictionary of license values and convert it into a uri."""
