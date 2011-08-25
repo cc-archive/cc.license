@@ -54,7 +54,8 @@ def by_code(code):
     if code == '':
         return cc.license.Jurisdiction('')
     if code not in list_codes():
-        raise cc.license.CCLicenseError, 'Invalid jurisdiction'
+        # invalid jurisdiction
+        return None
     uri = 'http://creativecommons.org/international/%s/' % code
     return cc.license.Jurisdiction(uri)
 
@@ -64,13 +65,14 @@ def uri2code(uri):
         return '' # trivial case
     base = 'http://creativecommons.org/international/' 
     if not uri.startswith(base):
-        raise cc.license.CCLicenseError, "Malformed jurisdiction URI"
+        raise cc.license.MalformedURIError, "Malformed jurisdiction URI"
     blen = len(base)
     return uri[blen:-1]
 
 def get_licenses_by_code(code):
     if code not in list_codes():
-        raise cc.license.CCLicenseError, 'Invalid jurisdiction'
+        # 'Invalid jurisdiction'
+        return None
     if code == '':
         if 'unported' not in _CACHE.keys():
             _CACHE['unported'] = []

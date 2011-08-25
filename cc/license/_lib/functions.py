@@ -6,7 +6,7 @@ import RDF
 import rdf_helper
 
 from cc.license.jurisdictions.classes import Jurisdiction
-from cc.license._lib.exceptions import CCLicenseError
+from cc.license._lib.exceptions import MalformedURIError
 import cc.license
 
 
@@ -53,17 +53,16 @@ def by_code(code, jurisdiction=None, version=None):
         return _BY_CODE_CACHE[cache_key]
 
     for key, selector in cc.license.selectors.SELECTORS.items():
-        try:
-            license = selector.by_code(
-                code,
-                jurisdiction=jurisdiction,
-                version=version)
+        license = selector.by_code(
+            code,
+            jurisdiction=jurisdiction,
+            version=version)
+        if license:
             _BY_CODE_CACHE[cache_key] = license
             return license
-        except cc.license.CCLicenseError:
-            pass
 
-    raise cc.license.CCLicenseError, "License for code doesn't exist"
+    # License for code doesn't exist
+    return None
 
 _BY_URI_CACHE = {}
 
@@ -78,7 +77,7 @@ def by_uri(uri):
             _BY_URI_CACHE[uri] = license
             return license
 
-    raise CCLicenseError, "License for URI doesn't exist"
+    return None
 
 def code_from_uri(uri):
     """Given a URI representing a CC license, parse out the license_code."""
@@ -87,7 +86,7 @@ def code_from_uri(uri):
     elif uri.startswith(CC0_BASE):
         return 'CC0'
     else:
-        raise CCLicenseError, "Invalid License URI"
+        raise MalformedURIError, "Invalid License URI"
 
 def uri2dict(uri):
     """Take a license uri and convert it into a dictionary of values."""
@@ -101,7 +100,7 @@ def uri2dict(uri):
         info_list = raw_info.split('/') 
 
         if len(info_list) not in (1,2,3):
-            raise CCLicenseError, "Malformed Creative Commons URI: <%s>" % uri
+            raise MalformedURIError, "Malformed Creative Commons URI: <%s>"%uri
 
         retval = dict( code=info_list[0] )
         if len(info_list) > 1:
@@ -128,7 +127,7 @@ def uri2dict(uri):
 
 
     else:
-        raise CCLicenseError, "Malformed Creative Commons URI: <%s>" % uri
+        raise MalformedURIError, "Malformed Creative Commons URI: <%s>" % uri
 
 def dict2uri(license_info):
     """Take a dictionary of license values and convert it into a uri."""

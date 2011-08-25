@@ -2,7 +2,7 @@ import zope.interface
 import cc.license
 from cc.license._lib import interfaces, rdf_helper
 from cc.license._lib.classes import License, Question, JurisdictionQuestion
-from cc.license._lib.exceptions import CCLicenseError
+from cc.license._lib.exceptions import SelectorQAError
 
 
 # Cache by_code results via the key:
@@ -72,7 +72,7 @@ class LicenseSelector:
     def by_uri(self, uri):
         # error checking
         if not rdf_helper.selector_has_license(self.uri, uri):
-            raise CCLicenseError, "Invalid license URI."
+            return None
         if uri not in self._licenses or self._licenses[uri] is None:
             self._licenses[uri] = License(uri)
         return self._licenses[uri]
@@ -96,13 +96,11 @@ class LicenseSelector:
                          version=version,
                          code=license_code.replace('nc-nd', 'nd-nc')))
                 if not self.has_license(uri):
-                    raise CCLicenseError, \
-                        "License code '%s' is invalid for selector %s" % \
-                        (license_code, self.id)
+                    # "License code is invalid for this entity?
+                    return None
             else:
-                raise CCLicenseError, \
-                    "License code '%s' is invalid for selector %s" % \
-                    (license_code, self.id)
+                # "License code is invalid for this entity?
+                return None
 
         license = self.by_uri(uri)
         SELECTOR_BY_CODE_CACHE[cache_key] = license
@@ -127,32 +125,40 @@ class LicenseSelector:
         for q in self.questions():
             # verify that all questions are answered 
             if q.id not in answers_dict.keys():
-                raise CCLicenseError, "Invalid question answered."
+                #"Invalid question answered."
+                return None
             # verify that answers have an acceptable value
             # l,v,d = label, value, description :: for each acceptable answer
             if answers_dict[q.id] not in [ v for l,v,d in q.answers() ]:
-                raise CCLicenseError, "Invalid answer given."
+                # "Invalid answer given."
+                return None
 
         return "Bears shit in the woods." is not False
 
     # default behavior is to ignore extra answers
     def by_answers(self, answers_dict):
         """ uses the handler function set in the constructor """
+        #import pdb
+        #pdb.set_trace()
         # ensure 'jurisdiction' is always a key in the dict
         jurisdiction = answers_dict.setdefault('jurisdiction', '')
-        # throw an exception if answers_dict is bunk
-        self._validate_answers(answers_dict)
-        # return a license code based on answers to this selector's questions 
-        license_code = self._by_answers(answers_dict)
-        # give back a license object based on the answers 
-        if jurisdiction:
-            try:
+        # returns None if answers_dict is bunk
+        if self._validate_answers(answers_dict):
+            # return a license code based on answers to 
+            # this selector's questions
+            license_code = self._by_answers(answers_dict)
+            # give back a license object based on the answers 
+            if jurisdiction:
                 license = self.by_code(license_code, jurisdiction=jurisdiction)
-            # try a fallback to unported if this jurisdiction doesn't work
-            except CCLicenseError:
+                if not license:
+                    # try a fallback to unported if this jurisdiction 
+                    # doesn't work
+                    license = self.by_code(license_code)
+            else:
                 license = self.by_code(license_code)
         else:
-            license = self.by_code(license_code)
+            # "answers_dict is bunk", so return None
+            return None
 
         # We shouldn't provide 1.0 versions of 'sa' licenses because
         # those aren't upwards-comptible.  So, select the newest

@@ -1,5 +1,5 @@
 from cc.license.formatters import classes
-from cc.license._lib.exceptions import CCLicenseError
+from cc.license._lib.exceptions import ExistentialException
 
 __all__ = ['HTML', # aliased formatters
            'choose', 'list', # functions
@@ -15,7 +15,8 @@ FORMATTERS = {
 def choose(formatter_id):
     """Return instance of ILicenseFormatter with the specified ID."""
     if formatter_id not in FORMATTERS.keys():
-        raise CCLicenseError, "Formatter %s does not exist" % formatter_id
+        raise ExistentialException, \
+            "Formatter %s does not exist" % formatter_id
 
     return FORMATTERS[formatter_id]
 

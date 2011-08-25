@@ -11,3 +11,16 @@ class NoValuesFoundError(RdfHelperError):
 class CCLicenseError(Exception):
     """Generic exception when misuse cc.license"""
     pass
+
+class MalformedURIError(CCLicenseError):
+    """Raised when a URI is unusuable because of it being formatted wrong."""
+    pass
+
+class SelectorQAError(CCLicenseError):
+    """Raised when a question or answer is invalid."""
+    pass
+
+class ExistentialException(CCLicenseError):
+    """Raised when something requested doesn't exist, or when you question
+    what the point of it all is, if it all ends the same way."""
+    pass

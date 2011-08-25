@@ -8,7 +8,7 @@ from cc.i18n.util import locale_to_lower_upper
 
 import cc.license
 from cc.license.util import locale_dict_fetch_with_fallbacks
-from cc.license._lib.exceptions import CCLicenseError
+from cc.license._lib.exceptions import SelectorQAError, ExistentialException
 from cc.license._lib.functions import all_possible_license_versions
 
 
@@ -43,7 +43,7 @@ class License(object):
         query = RDF.Query(qstring % self.uri, query_language='sparql')
         uri_exists = query.execute(rdf_helper.ALL_MODEL).get_boolean()
         if not uri_exists:
-            raise CCLicenseError, \
+            raise ExistentialException, \
                   "License <%(uri)s> does not exist in model given." % {
                               'uri': self.uri }
 
@@ -269,7 +269,7 @@ class Question(object):
                     self._enums[eid] = (elabels, edesc,)
 
         if not _flag:
-            raise CCLicenseError, "Question identifier %(id)s not found" % \
+            raise SelectorQAError, "Question identifier %(id)s not found" % \
                     {'id': self.id}
 
     def __repr__(self):
