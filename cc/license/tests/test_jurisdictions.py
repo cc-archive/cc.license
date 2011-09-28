@@ -168,5 +168,5 @@ class TestCustomization:
 def test_default_language():
     juris = cc.license.Jurisdiction(
         'http://creativecommons.org/international/be/')
-    assert juris.default_language == 'fr-be'
+    assert juris.default_language == 'fr'
     

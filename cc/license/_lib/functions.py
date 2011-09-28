@@ -27,7 +27,7 @@ def locales():
         SELECT ?lang
         WHERE
          {
-            ?x dc:language ?lang .
+            ?x cc:defaultLanguage ?lang .
             ?x rdf:type cc:Jurisdiction .
          }
                   """
