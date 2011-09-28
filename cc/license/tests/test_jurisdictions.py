@@ -170,8 +170,3 @@ def test_default_language():
         'http://creativecommons.org/international/be/')
     assert juris.default_language == 'fr-be'
     
-
-def test_languages():
-    juris = cc.license.Jurisdiction(
-        'http://creativecommons.org/international/be/')
-    assert set(juris.languages) == set(['fr-be', 'nl-be'])

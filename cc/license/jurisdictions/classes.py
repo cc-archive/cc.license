@@ -13,7 +13,6 @@ class Jurisdiction(object):
            a valid jurisdiction URI. For a complete list, see
            cc.license.jurisdictions.list_uris()"""
         self._default_language = None
-        self._languages = None
 
         if uri == '': # handle default jurisdiction case
             self.code = ''
@@ -83,12 +82,3 @@ class Jurisdiction(object):
         self._default_language = rdf_helper.get_jurisdiction_default_language(
             self.id)
         return self._default_language
-
-    @property
-    def languages(self):
-        if self._languages:
-            return self._languages
-
-        self._languages = rdf_helper.get_jurisdiction_languages(
-            self.id)
-        return self._languages
