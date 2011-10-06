@@ -353,14 +353,22 @@ class JurisdictionQuestion(object):
             language = 'en' # why not?
 
         gettext = ugettext_for_locale(language)
-        return gettext("license.jurisdiction_question")
+        return gettext("Jurisdiction of your license")
 
     def description(self, language='en'):
         if language == '':
             language = 'en' # why not?
 
         gettext = ugettext_for_locale(language)
-        return gettext("license.jurisdiction_help")
+        return gettext(
+            """\
+Use the option "International" if you desire a license using language
+and terminology from international treaties.  If the licenses have
+been ported to your jurisdiction and you feel that your jurisdiction's
+ported licenses account for some aspect of local legislation that the
+international licenses do not, then you may want to consider
+<a href="http://wiki.creativecommons.org/Frequently_Asked_Questions#Should_I_choose_an_international_license_or_a_ported_license.3F">which
+license is better suited for your needs</a>.""")
 
     def answers(self, language='en'):
         if language == '':
@@ -380,6 +388,6 @@ class JurisdictionQuestion(object):
         answers = sorted(answers, key=lambda answer: answer[1])
 
         if answers:
-            answers = [(gettext('util.International'), '', None)] + answers
+            answers = [(gettext('International'), '', None)] + answers
 
         return answers
