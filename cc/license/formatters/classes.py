@@ -22,6 +22,7 @@ from cc.license import util
 from cc.i18n.gettext_i18n import ugettext_for_locale
 from cc.i18n.gettext_i18n import fake_ugettext as _
 from cc.i18n.util import locale_to_lower_lower
+from cc.i18n import mappers
 
 import jinja2
 
@@ -274,7 +275,7 @@ class CC0HTMLFormatter(HTMLFormatter):
         work_jurisdiction = work_dict.get('work_jurisdiction')
         country_name = None
         if work_jurisdiction not in ('', '-', None, False):
-            country_name = gettext(util.CODE_COUNTRY_MAP[work_jurisdiction])
+            country_name = gettext(mappers.COUNTRY_MAP[work_jurisdiction])
 
         rendered_template = template.render(
             {"gettext": gettext,
