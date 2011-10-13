@@ -5,6 +5,7 @@ import rdf_helper
 
 from cc.i18n.gettext_i18n import ugettext_for_locale
 from cc.i18n.util import locale_to_lower_upper
+from cc.i18n import mappers
 
 import cc.license
 from cc.license.util import locale_dict_fetch_with_fallbacks
@@ -383,7 +384,7 @@ license is better suited for your needs</a>.""")
             # And jurisdictions don't need a description ;)
             juris_code = str(jurisdiction.rstrip('/').split('/')[-1])
             answers.append(
-                (gettext('country.' + juris_code), juris_code, None))
+                (gettext(mappers.COUNTRY_MAP[juris_code]), juris_code, None))
 
         answers = sorted(answers, key=lambda answer: answer[1])
 
