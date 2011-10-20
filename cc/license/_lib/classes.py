@@ -215,13 +215,13 @@ class License(object):
             # <terrible_fixable_hacks>
             # We should probably add lang.sr_CYRL and lang.sr_LATN messages
             elif lang == 'sr-Cyrl':
-                translated_lang = gettext('lang.sr')
+                translated_lang = gettext('Serbian')
             elif lang == 'sr-Latn':
                 translated_lang = 'srpski (latinica)'
             # </terrible_fixable_hacks>
             else:
                 translated_lang = gettext(
-                    'lang.' + locale_to_lower_upper(lang))
+                    mappers.LANG_MAP(locale_to_lower_upper(lang)))
 
             legalcodes.add(
                 (legalcode, lang, translated_lang))
