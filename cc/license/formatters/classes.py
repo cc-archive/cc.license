@@ -329,35 +329,35 @@ PDMARK_PLAIN = _(
     "This work is free of known copyright restrictions.")
     
 PDMARK_WORKTITLE = _(
-    "This work (${work_title}) is free of known copyright restrictions.")
+    "This work (%(work_title)s) is free of known copyright restrictions.")
 
 PDMARK_AUTHOR = _(
     'This work '
-    '(by ${author}) '
+    '(by %(author)s) '
     'is free of known copyright restrictions.')
 
 PDMARK_CURATOR = _(
     'This work, '
-    'identified by ${curator}, '
+    'identified by %(curator)s, '
     'is free of known copyright restrictions.')
 
 PDMARK_WORKTITLE_AUTHOR = _(
-    'This work (${work_title}, by ${author}) '
+    'This work (%(work_title)s, by %(author)s) '
     'is free of known copyright restrictions.')
 
 PDMARK_WORKTITLE_CURATOR = _(
-    'This work (${work_title}), '
-    'identified by ${curator}, '
+    'This work (%(work_title)s), '
+    'identified by %(curator)s, '
     'is free of known copyright restrictions.')
 
 PDMARK_WORKTITLE_AUTHOR_CURATOR = _(
-    'This work (${work_title}, '
-    'by ${author}), identified by ${curator}, '
+    'This work (%(work_title)s, '
+    'by %(author)s), identified by %(curator)s, '
     'is free of known copyright restrictions.')
 
 PDMARK_AUTHOR_CURATOR = _(
     'This work '
-    '(by ${author}), identified by ${curator}, '
+    '(by %(author)s), identified by %(curator)s, '
     'is free of known copyright restrictions.')
 
 
