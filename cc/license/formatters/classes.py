@@ -12,7 +12,6 @@ the licensed work. The keys of this work_dict are as follows:
  - more_permissions_url
 """
 
-import string
 from urlparse import urlparse
 
 import zope.interface
@@ -185,11 +184,10 @@ class HTMLFormatter(object):
         if ((work_dict.get('attribution_url')
              or work_dict.get('attribution_name'))
                 and work_dict.get('worktitle')):
-            body_template = string.Template(
-                gettext(
+            body_template = gettext(
                     u'%(work_title)s by %(work_author)s is licensed under a '
                     u'<a rel="license" href="%(license_url)s">Creative Commons '
-                    u'%(license_name)s License</a>.'))
+                    u'%(license_name)s License</a>.')
             body_vars.update(
                 {'work_title': process_work_title(
                         dctype, work_dict['worktitle']),
@@ -199,11 +197,10 @@ class HTMLFormatter(object):
                  
         elif work_dict.get('attribution_url') \
                 or work_dict.get('attribution_name'):
-            body_template = string.Template(
-                gettext(
+            body_template = gettext(
                     u'This %(work_type)s by %(work_author)s is licensed under '
                     u'a <a rel="license" href="%(license_url)s">Creative '
-                    u'Commons %(license_name)s License</a>.'))
+                    u'Commons %(license_name)s License</a>.')
             body_vars.update(
                 {'work_type': process_work_type(gettext, dctype),
                  'work_author': process_work_author(
@@ -211,47 +208,44 @@ class HTMLFormatter(object):
                         work_dict.get('attribution_name'))})
 
         elif work_dict.get('worktitle'):
-            body_template = string.Template(
-                gettext(
+            body_template = gettext(
                     u'%(work_title)s is licensed under a '
                     u'<a rel="license" href="%(license_url)s">Creative Commons '
-                    u'%(license_name)s License</a>.'))
+                    u'%(license_name)s License</a>.')
             body_vars.update(
                 {'work_title': process_work_title(
                         dctype, work_dict['worktitle'])})
 
         else:
-            body_template = string.Template(
-                gettext(
+            body_template = gettext(
                     u'This %(work_type)s is licensed under a '
                     u'<a rel="license" href="%(license_url)s">Creative Commons '
-                    u'%(license_name)s License</a>.'))
+                    u'%(license_name)s License</a>.')
             body_vars.update(
                 {'work_type': process_work_type(gettext, dctype)})
 
-        message = image_header + body_template.substitute(body_vars)
+        message = image_header + body_template % body_vars
 
         if work_dict.get('source_work'):
-            source_work_template = string.Template(
-                gettext(u'Based on a work at %(source_link)s.'))
+            source_work_template = gettext(
+                u'Based on a work at %(source_link)s.')
             source_domain = urlparse(work_dict['source_work'])[1]
             if not source_domain.strip():
                 source_domain = work_dict['source_work']
-            source_work = source_work_template.substitute(
-                {'source_link': SOURCE_LINK_TEMPLATE % {
-                        'source_work': util.escape(work_dict['source_work']),
-                        'source_domain': util.escape(source_domain)}})
+            source_work = source_work_template % {
+                'source_link': SOURCE_LINK_TEMPLATE % {
+                    'source_work': util.escape(work_dict['source_work']),
+                    'source_domain': util.escape(source_domain)}}
             message = message + "<br />" + source_work
 
         if work_dict.get('more_permissions_url'):
-            more_perms_template = string.Template(
-                gettext(
+            more_perms_template = gettext(
                     u'Permissions beyond the scope of this license may be '
-                    u'available at %(more_perms_link)s.'))
-            more_perms = more_perms_template.substitute(
-                {'more_perms_link': MORE_PERMS_LINK_TEMPATE % {
-                        'more_permissions_url': util.escape(
-                            work_dict['more_permissions_url'])}})
+                    u'available at %(more_perms_link)s.')
+            more_perms = more_perms_template % {
+                'more_perms_link': MORE_PERMS_LINK_TEMPATE % {
+                    'more_permissions_url': util.escape(
+                        work_dict['more_permissions_url'])}}
             message = message + "<br />" + more_perms
 
         return message
@@ -316,7 +310,7 @@ class PublicDomainHTMLFormatter(HTMLFormatter):
                 u'<a rel="license" href="http://creativecommons.org/licenses/publicdomain/">Public Domain</a>.'))
         body_vars = {'work_type': process_work_type(gettext, dctype)}
 
-        message = image_header + body_template.substitute(body_vars)
+        message = image_header + body_template % body_vars
 
         return message
 
