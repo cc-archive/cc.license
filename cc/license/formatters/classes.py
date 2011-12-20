@@ -269,7 +269,8 @@ class CC0HTMLFormatter(HTMLFormatter):
         work_jurisdiction = work_dict.get('work_jurisdiction')
         country_name = None
         if work_jurisdiction not in ('', '-', None, False):
-            country_name = gettext(mappers.COUNTRY_MAP[work_jurisdiction])
+            country_name = gettext(
+                mappers.COUNTRY_MAP[work_jurisdiction.lower()])
 
         rendered_template = template.render(
             {"gettext": gettext,
@@ -304,10 +305,9 @@ class PublicDomainHTMLFormatter(HTMLFormatter):
                 u'Creative Commons License')),
             'license_logo': license.logo}
 
-        body_template = string.Template(
-            gettext(
-                u'This %(work_type)s is in the '
-                u'<a rel="license" href="http://creativecommons.org/licenses/publicdomain/">Public Domain</a>.'))
+        body_template = gettext(
+            u'This %(work_type)s is in the '
+            u'<a rel="license" href="http://creativecommons.org/licenses/publicdomain/">Public Domain</a>.')
         body_vars = {'work_type': process_work_type(gettext, dctype)}
 
         message = image_header + body_template % body_vars
@@ -486,8 +486,7 @@ class PDMarkHTMLFormatter(HTMLFormatter):
                 mapping['curator'] = PDMARK_CURATOR_ONLYLINK % (
                     {'curator_href': util.escape(curator_href)})
 
-        body = string.Template(
-            gettext(body_msg))
+        body = gettext(body_msg)
 
         # Add the header and footers
         # --------------------------
