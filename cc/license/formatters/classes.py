@@ -486,7 +486,7 @@ class PDMarkHTMLFormatter(HTMLFormatter):
                 mapping['curator'] = PDMARK_CURATOR_ONLYLINK % (
                     {'curator_href': util.escape(curator_href)})
 
-        body = gettext(body_msg)
+        body = gettext(body_msg) % mapping
 
         # Add the header and footers
         # --------------------------
