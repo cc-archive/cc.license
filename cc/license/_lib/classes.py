@@ -221,7 +221,7 @@ class License(object):
             # </terrible_fixable_hacks>
             else:
                 translated_lang = gettext(
-                    mappers.LANG_MAP(locale_to_lower_upper(lang)))
+                    mappers.LANG_MAP[locale_to_lower_upper(lang)])
 
             legalcodes.add(
                 (legalcode, lang, translated_lang))
@@ -384,7 +384,8 @@ license is better suited for your needs</a>.""")
             # And jurisdictions don't need a description ;)
             juris_code = str(jurisdiction.rstrip('/').split('/')[-1])
             answers.append(
-                (gettext(mappers.COUNTRY_MAP[juris_code]), juris_code, None))
+                (gettext(mappers.COUNTRY_MAP[juris_code.lower()]),
+                 juris_code, None))
 
         answers = sorted(answers, key=lambda answer: answer[1])
 
