@@ -269,8 +269,14 @@ class CC0HTMLFormatter(HTMLFormatter):
         work_jurisdiction = work_dict.get('work_jurisdiction')
         country_name = None
         if work_jurisdiction not in ('', '-', None, False):
-            country_name = gettext(
-                mappers.COUNTRY_MAP[work_jurisdiction.lower()])
+            if work_jurisdiction.lower() in mappers.COUNTRY_MAP:
+                country_name = gettext(
+                    mappers.COUNTRY_MAP[work_jurisdiction.lower()])
+            # Crappy fallback to this CSV.  We should homogenize these
+            # things...
+            elif work_jurisdiction.upper() in util.CODE_COUNTRY_MAP:
+                country_name = gettext(
+                    util.CODE_COUNTRY_MAP[work_jurisdiction.upper()])
 
         rendered_template = template.render(
             {"gettext": gettext,
