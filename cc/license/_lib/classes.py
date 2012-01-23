@@ -5,6 +5,7 @@ import rdf_helper
 
 from cc.i18n.gettext_i18n import ugettext_for_locale
 from cc.i18n.util import locale_to_lower_upper
+from cc.i18n import mappers
 
 import cc.license
 from cc.license.util import locale_dict_fetch_with_fallbacks
@@ -214,13 +215,13 @@ class License(object):
             # <terrible_fixable_hacks>
             # We should probably add lang.sr_CYRL and lang.sr_LATN messages
             elif lang == 'sr-Cyrl':
-                translated_lang = gettext('lang.sr')
+                translated_lang = gettext('Serbian')
             elif lang == 'sr-Latn':
                 translated_lang = 'srpski (latinica)'
             # </terrible_fixable_hacks>
             else:
                 translated_lang = gettext(
-                    'lang.' + locale_to_lower_upper(lang))
+                    mappers.LANG_MAP[locale_to_lower_upper(lang)])
 
             legalcodes.add(
                 (legalcode, lang, translated_lang))
@@ -353,14 +354,22 @@ class JurisdictionQuestion(object):
             language = 'en' # why not?
 
         gettext = ugettext_for_locale(language)
-        return gettext("license.jurisdiction_question")
+        return gettext("Jurisdiction of your license")
 
     def description(self, language='en'):
         if language == '':
             language = 'en' # why not?
 
         gettext = ugettext_for_locale(language)
-        return gettext("license.jurisdiction_help")
+        return gettext(
+            """\
+Use the option "International" if you desire a license using language
+and terminology from international treaties.  If the licenses have
+been ported to your jurisdiction and you feel that your jurisdiction's
+ported licenses account for some aspect of local legislation that the
+international licenses do not, then you may want to consider
+<a href="http://wiki.creativecommons.org/Frequently_Asked_Questions#Should_I_choose_an_international_license_or_a_ported_license.3F">which
+license is better suited for your needs</a>.""")
 
     def answers(self, language='en'):
         if language == '':
@@ -375,11 +384,12 @@ class JurisdictionQuestion(object):
             # And jurisdictions don't need a description ;)
             juris_code = str(jurisdiction.rstrip('/').split('/')[-1])
             answers.append(
-                (gettext('country.' + juris_code), juris_code, None))
+                (gettext(mappers.COUNTRY_MAP[juris_code.lower()]),
+                 juris_code, None))
 
         answers = sorted(answers, key=lambda answer: answer[1])
 
         if answers:
-            answers = [(gettext('util.International'), '', None)] + answers
+            answers = [(gettext('International'), '', None)] + answers
 
         return answers
