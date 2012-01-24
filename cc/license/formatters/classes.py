@@ -12,24 +12,19 @@ the licensed work. The keys of this work_dict are as follows:
  - more_permissions_url
 """
 
-import cgi
-import string
 from urlparse import urlparse
 
 import zope.interface
-from zope.i18nmessageid import MessageFactory
-from zope.i18n import translate
 
 from cc.license._lib.interfaces import ILicenseFormatter
 from cc.license import util
 from cc.i18n.gettext_i18n import ugettext_for_locale
-from cc.i18n import ccorg_i18n_setup
-from cc.i18n.util import negotiate_locale
+from cc.i18n.gettext_i18n import fake_ugettext as _
 from cc.i18n.util import locale_to_lower_lower
+from cc.i18n import mappers
 
 import jinja2
 
-_ = MessageFactory('cc_org')
 
 TEMPLATE_LOADER = jinja2.PackageLoader('cc.license.formatters', 'templates')
 TEMPLATE_ENV = jinja2.Environment(
@@ -57,7 +52,7 @@ WORK_TYPE_TEMPLATE = (
     ' rel="dct:type">%(work)s</span>')
 
 def process_work_type(gettext, dctype):
-    work_word = gettext('util.work')
+    work_word = gettext('work')
     if dctype:
         return WORK_TYPE_TEMPLATE % (
             {'dctype_url': get_dctype_url(dctype),
@@ -173,8 +168,8 @@ class HTMLFormatter(object):
 
         image_header = IMAGE_HEADER_TEMPLATE % {
             'license_url': license.uri,
-            'util.Creative_Commons_License': util.escape(gettext(
-                'util.Creative_Commons_License')),
+            'util.Creative_Commons_License': util.escape(
+                gettext(u'Creative Commons License')),
             'license_logo': license.logo}
 
         dctype = None
@@ -189,8 +184,10 @@ class HTMLFormatter(object):
         if ((work_dict.get('attribution_url')
              or work_dict.get('attribution_name'))
                 and work_dict.get('worktitle')):
-            body_template = string.Template(
-                gettext('license.rdfa_licensed'))
+            body_template = gettext(
+                    u'%(work_title)s by %(work_author)s is licensed under a '
+                    u'<a rel="license" href="%(license_url)s">Creative Commons '
+                    u'%(license_name)s License</a>.')
             body_vars.update(
                 {'work_title': process_work_title(
                         dctype, work_dict['worktitle']),
@@ -200,8 +197,10 @@ class HTMLFormatter(object):
                  
         elif work_dict.get('attribution_url') \
                 or work_dict.get('attribution_name'):
-            body_template = string.Template(
-                gettext('license.rdfa_licensed_no_title'))
+            body_template = gettext(
+                    u'This %(work_type)s by %(work_author)s is licensed under '
+                    u'a <a rel="license" href="%(license_url)s">Creative '
+                    u'Commons %(license_name)s License</a>.')
             body_vars.update(
                 {'work_type': process_work_type(gettext, dctype),
                  'work_author': process_work_author(
@@ -209,40 +208,44 @@ class HTMLFormatter(object):
                         work_dict.get('attribution_name'))})
 
         elif work_dict.get('worktitle'):
-            body_template = string.Template(
-                gettext('license.rdfa_licensed_no_attrib'))
+            body_template = gettext(
+                    u'%(work_title)s is licensed under a '
+                    u'<a rel="license" href="%(license_url)s">Creative Commons '
+                    u'%(license_name)s License</a>.')
             body_vars.update(
                 {'work_title': process_work_title(
                         dctype, work_dict['worktitle'])})
 
         else:
-            work_type = process_work_type(gettext, dctype)
-            body_template = string.Template(
-                gettext('license.work_type_licensed'))
+            body_template = gettext(
+                    u'This %(work_type)s is licensed under a '
+                    u'<a rel="license" href="%(license_url)s">Creative Commons '
+                    u'%(license_name)s License</a>.')
             body_vars.update(
                 {'work_type': process_work_type(gettext, dctype)})
 
-        message = image_header + body_template.substitute(body_vars)
+        message = image_header + body_template % body_vars
 
         if work_dict.get('source_work'):
-            source_work_template = string.Template(
-                gettext('license.work_based_on'))
+            source_work_template = gettext(
+                u'Based on a work at %(source_link)s.')
             source_domain = urlparse(work_dict['source_work'])[1]
             if not source_domain.strip():
                 source_domain = work_dict['source_work']
-            source_work = source_work_template.substitute(
-                {'source_link': SOURCE_LINK_TEMPLATE % {
-                        'source_work': util.escape(work_dict['source_work']),
-                        'source_domain': util.escape(source_domain)}})
+            source_work = source_work_template % {
+                'source_link': SOURCE_LINK_TEMPLATE % {
+                    'source_work': util.escape(work_dict['source_work']),
+                    'source_domain': util.escape(source_domain)}}
             message = message + "<br />" + source_work
 
         if work_dict.get('more_permissions_url'):
-            more_perms_template = string.Template(
-                gettext('license.more_perms_available'))
-            more_perms = more_perms_template.substitute(
-                {'more_perms_link': MORE_PERMS_LINK_TEMPATE % {
-                        'more_permissions_url': util.escape(
-                            work_dict['more_permissions_url'])}})
+            more_perms_template = gettext(
+                    u'Permissions beyond the scope of this license may be '
+                    u'available at %(more_perms_link)s.')
+            more_perms = more_perms_template % {
+                'more_perms_link': MORE_PERMS_LINK_TEMPATE % {
+                    'more_permissions_url': util.escape(
+                        work_dict['more_permissions_url'])}}
             message = message + "<br />" + more_perms
 
         return message
@@ -266,7 +269,14 @@ class CC0HTMLFormatter(HTMLFormatter):
         work_jurisdiction = work_dict.get('work_jurisdiction')
         country_name = None
         if work_jurisdiction not in ('', '-', None, False):
-            country_name = gettext(util.CODE_COUNTRY_MAP[work_jurisdiction])
+            if work_jurisdiction.lower() in mappers.COUNTRY_MAP:
+                country_name = gettext(
+                    mappers.COUNTRY_MAP[work_jurisdiction.lower()])
+            # Crappy fallback to this CSV.  We should homogenize these
+            # things...
+            elif work_jurisdiction.upper() in util.CODE_COUNTRY_MAP:
+                country_name = gettext(
+                    util.CODE_COUNTRY_MAP[work_jurisdiction.upper()])
 
         rendered_template = template.render(
             {"gettext": gettext,
@@ -298,14 +308,15 @@ class PublicDomainHTMLFormatter(HTMLFormatter):
         image_header = IMAGE_HEADER_TEMPLATE % {
             'license_url': license.uri,
             'util.Creative_Commons_License': util.escape(gettext(
-                'util.Creative_Commons_License')),
+                u'Creative Commons License')),
             'license_logo': license.logo}
 
-        body_template = string.Template(
-            gettext('license.work_type_dedicated'))
+        body_template = gettext(
+            u'This %(work_type)s is in the '
+            u'<a rel="license" href="http://creativecommons.org/licenses/publicdomain/">Public Domain</a>.')
         body_vars = {'work_type': process_work_type(gettext, dctype)}
 
-        message = image_header + body_template.substitute(body_vars)
+        message = image_header + body_template % body_vars
 
         return message
 
@@ -315,54 +326,39 @@ class PublicDomainHTMLFormatter(HTMLFormatter):
 ### ----------------------------
 
 PDMARK_PLAIN = _(
-    'license.mark_plain',
-    default="This work is free of known copyright restrictions.")
+    "This work is free of known copyright restrictions.")
     
 PDMARK_WORKTITLE = _(
-    'license.mark_worktitle',
-    default=(
-        "This work (${work_title}) is free of known copyright restrictions."))
+    "This work (%(work_title)s) is free of known copyright restrictions.")
 
 PDMARK_AUTHOR = _(
-    'license.mark_author',
-    default=(
-        'This work '
-        '(by ${author}) '
-        'is free of known copyright restrictions.'))
+    'This work '
+    '(by %(author)s) '
+    'is free of known copyright restrictions.')
 
 PDMARK_CURATOR = _(
-    'license.mark_curator',
-    default=(
-        'This work, '
-        'identified by ${curator}, '
-        'is free of known copyright restrictions.'))
+    'This work, '
+    'identified by %(curator)s, '
+    'is free of known copyright restrictions.')
 
 PDMARK_WORKTITLE_AUTHOR = _(
-    'license.mark_worktitle_author',
-    default=(
-        'This work (${work_title}, by ${author}) '
-        'is free of known copyright restrictions.'))
+    'This work (%(work_title)s, by %(author)s) '
+    'is free of known copyright restrictions.')
 
 PDMARK_WORKTITLE_CURATOR = _(
-    'license.mark_worktitle_curator',
-    default=(
-        'This work (${work_title}), '
-        'identified by ${curator}, '
-        'is free of known copyright restrictions.'))
+    'This work (%(work_title)s), '
+    'identified by %(curator)s, '
+    'is free of known copyright restrictions.')
 
 PDMARK_WORKTITLE_AUTHOR_CURATOR = _(
-    'license.mark_worktitle_author_curator',
-    default=(
-        'This work (${work_title}, '
-        'by ${author}), identified by ${curator}, '
-        'is free of known copyright restrictions.'))
+    'This work (%(work_title)s, '
+    'by %(author)s), identified by %(curator)s, '
+    'is free of known copyright restrictions.')
 
 PDMARK_AUTHOR_CURATOR = _(
-    'license.mark_author_curator',
-    default=(
-        'This work '
-        '(by ${author}), identified by ${curator}, '
-        'is free of known copyright restrictions.'))
+    'This work '
+    '(by %(author)s), identified by %(curator)s, '
+    'is free of known copyright restrictions.')
 
 
 # The "links" html that are substituted into the wider templates
@@ -417,6 +413,8 @@ class PDMarkHTMLFormatter(HTMLFormatter):
          - waive_cc0: Whether the author has also waived their rights
            under CC0 (boolean)
         """
+        gettext = ugettext_for_locale(locale)
+
         # Property gathering
         # ------------------
         work_dict = work_dict or {}
@@ -494,10 +492,7 @@ class PDMarkHTMLFormatter(HTMLFormatter):
                 mapping['curator'] = PDMARK_CURATOR_ONLYLINK % (
                     {'curator_href': util.escape(curator_href)})
 
-        body = string.Template(
-            translate(
-                body_msg,
-                target_language=negotiate_locale(locale))).substitute(mapping)
+        body = gettext(body_msg) % mapping
 
         # Add the header and footers
         # --------------------------
