@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(name='cc.license',
-      version='0.14.22',
+      version='0.14.23',
       namespace_packages = ['cc',],
       description="License selection based on ccREL-based metadata.",
       classifiers=[],
@@ -22,7 +22,7 @@ setup(name='cc.license',
         'nose',
         'lxml',
         'rdfadict',
-        'python-gettext',
+        'python-gettext<2.0',
         'jinja2',
         'cc.i18n',
       ],
