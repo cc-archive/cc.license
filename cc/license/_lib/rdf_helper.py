@@ -174,9 +174,6 @@ def get_descriptions(uri, model=ALL_MODEL):
                     }
               """
 
-    debug("get_descriptions", model)
-
-    
     # get the data back
     query = RDF.Query(qstring % uri, query_language='sparql')
     solns = [i for i in query.execute(model)]
