@@ -11,7 +11,7 @@ import cc.license
 from cc.license.util import locale_dict_fetch_with_fallbacks
 from cc.license._lib.exceptions import SelectorQAError, ExistentialException
 from cc.license._lib.functions import all_possible_license_versions
-
+from cc.licenserdf.util import inverse_translate
 
 class License(object):
     """Base class for ILicense implementation modeling a specific license."""
@@ -61,7 +61,8 @@ class License(object):
     def title(self, language='en'):
         if self._titles is None:
             self._titles = rdf_helper.get_titles(self.uri)
-        return locale_dict_fetch_with_fallbacks(self._titles, language)
+        i18n_title = self._titles['i18n']
+        return inverse_translate(i18n_title, locale_to_lower_upper(language))
 
     @property
     def license_class(self):
