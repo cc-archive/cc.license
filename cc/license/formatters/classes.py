@@ -167,7 +167,10 @@ class HTMLFormatter(object):
         work_dict = work_dict or {}
 
         localized_deed = license.uri
-        if locale!='en':
+        default_lang = license.jurisdiction.default_language
+        if not default_lang:
+            default_lang = "en"
+        if locale != default_lang:
             localized_deed += "deed." + locale
 
         image_header = IMAGE_HEADER_TEMPLATE % {
