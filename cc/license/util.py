@@ -215,8 +215,9 @@ def locale_dict_fetch_with_fallbacks(data_dict, locale):
 ## ISO 3166 -- country names to country code utilities
 ###
 
-CODE_COUNTRY_LIST = [
+CODE_COUNTRY_LIST = sorted([
     (unicode_cleaner(code), unicode_cleaner(country))
     for code, country in csv.reader(
-        file(pkg_resources.resource_filename('cc.license', 'iso3166.csv')))]
+        file(pkg_resources.resource_filename('cc.license', 'iso3166.csv')))],
+    key=lambda country: country[1])
 CODE_COUNTRY_MAP = dict(CODE_COUNTRY_LIST)
