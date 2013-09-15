@@ -13,9 +13,11 @@ def test_jurisdictions():
 
 def test_jurisdiction_codes():
     codes = cc.license.jurisdictions.list_codes()
-    # scotland is in there, and it's the only one that isn't 2 letters
+    # scotland and igo are the only ones that aren't 2 letters
     assert 'scotland' in codes
     codes.remove('scotland')
+    assert 'igo' in codes
+    codes.remove('igo')
     # excepting the empty string (default jurisdiction) of course
     assert '' in codes
     codes.remove('')
