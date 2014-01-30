@@ -147,15 +147,16 @@ class LicenseSelector:
             # return a license code based on answers to 
             # this selector's questions
             license_code = self._by_answers(answers_dict)
+            version = answers_dict['version'] or None
             # give back a license object based on the answers 
             if jurisdiction:
-                license = self.by_code(license_code, jurisdiction=jurisdiction)
+                license = self.by_code(license_code, jurisdiction=jurisdiction, version=version)
                 if not license:
                     # try a fallback to unported if this jurisdiction 
                     # doesn't work
-                    license = self.by_code(license_code)
+                    license = self.by_code(license_code, version=version)
             else:
-                license = self.by_code(license_code)
+                license = self.by_code(license_code, version=version)
         else:
             # "answers_dict is bunk", so return None
             return None
