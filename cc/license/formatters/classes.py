@@ -166,15 +166,8 @@ class HTMLFormatter(object):
 
         work_dict = work_dict or {}
 
-        localized_deed = license.uri
-        default_lang = license.jurisdiction.default_language
-        if not default_lang:
-            default_lang = "en"
-        if locale != default_lang:
-            localized_deed += "deed." + locale
-
         image_header = IMAGE_HEADER_TEMPLATE % {
-            'license_url': localized_deed,
+            'license_url': license.uri,
             'util.Creative_Commons_License': util.escape(
                 gettext(u'Creative Commons License')),
             'license_logo': license.logo}
@@ -184,7 +177,7 @@ class HTMLFormatter(object):
             dctype = _translate_dctype(work_dict['format'].lower())
 
         body_vars = {
-            'license_url': localized_deed,
+            'license_url': license.uri,
             'license_name': util.escape(
                 license.title(locale_to_lower_lower(locale)))}
 
