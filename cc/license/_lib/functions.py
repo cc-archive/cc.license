@@ -311,10 +311,10 @@ def get_selector_jurisdictions(selector_name='standard'):
 
     selector = cc.license.selectors.choose(selector_name)
     qstring = "\n".join(
-        ["SELECT ?license",
-         "WHERE (?license cc:licenseClass <%s>)" % str(selector.uri),
-         "USING cc FOR <http://creativecommons.org/ns#>"])
-    query = RDF.Query(qstring, query_language="rdql")
+        ["PREFIX cc: <http://creativecommons.org/ns#>",
+         "SELECT ?license",
+         "WHERE {?license cc:licenseClass <%s>}" % str(selector.uri)])
+    query = RDF.Query(qstring, query_language="sparql")
 
     # This is so stupid, but if we add a WHERE clause for
     # jurisdictions in the query string it takes approximately 5
