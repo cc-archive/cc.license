@@ -6,9 +6,9 @@ class IJurisdiction(Interface):
     code = Attribute(u"The short code for this jurisdiction.")
 
     id = Attribute(u"String URL of the jurisdiction ID, like "
-                   "http://creativecommons.org/international/us")
+                   "https://creativecommons.org/international/us")
     local_url = Attribute(u"The URL of the local jurisdiction site, "
-                           "like http://creativecommons.org.mx/.")
+                           "like https://creativecommons.org.mx/.")
     launched = Attribute(u"Boolean attribute; True if this jurisdiction has "
                          "launched")
 

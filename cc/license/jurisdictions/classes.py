@@ -21,7 +21,7 @@ class Jurisdiction(object):
             self.local_url = ''
             self.launched = True
             return
-        if not uri.startswith('http://creativecommons.org/international/') \
+        if not uri.startswith('https://creativecommons.org/international/') \
            or not uri.endswith('/'):
             raise InvalidURIError, "Invalid jurisdiction URI: <%s>" % uri
         self.code = cc.license.jurisdictions.uri2code(uri)

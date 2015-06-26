@@ -81,11 +81,11 @@ def process_work_title(dctype, worktitle):
 
 
 WORK_AUTHOR_TEMPLATE = (
-    '<a xmlns:cc="http://creativecommons.org/ns#"'
+    '<a xmlns:cc="https://creativecommons.org/ns#"'
     ' href="%(attribution_url)s" property="cc:attributionName"'
     ' rel="cc:attributionURL">%(attribution_name)s</a>')
 WORK_AUTHOR_TEMPLATE_NO_URL = (
-    '<span xmlns:cc="http://creativecommons.org/ns#"'
+    '<span xmlns:cc="https://creativecommons.org/ns#"'
     ' property="cc:attributionName">%(attribution_name)s</span>')
 
 def process_work_author(attribution_url, attribution_name):
@@ -104,7 +104,7 @@ SOURCE_LINK_TEMPLATE = (
     ' href="%(source_work)s" rel="dct:source">%(source_domain)s</a>')
 
 MORE_PERMS_LINK_TEMPATE = (
-    '<a xmlns:cc="http://creativecommons.org/ns#"'
+    '<a xmlns:cc="https://creativecommons.org/ns#"'
     ' href="%(more_permissions_url)s"'
     ' rel="cc:morePermissions">%(more_permissions_url)s</a>')
 
@@ -313,7 +313,7 @@ class PublicDomainHTMLFormatter(HTMLFormatter):
 
         body_template = gettext(
             u'This %(work_type)s is in the '
-            u'<a rel="license" href="http://creativecommons.org/licenses/publicdomain/">Public Domain</a>.')
+            u'<a rel="license" href="https://creativecommons.org/licenses/publicdomain/">Public Domain</a>.')
         body_vars = {'work_type': process_work_type(gettext, dctype)}
 
         message = image_header + body_template % body_vars
@@ -383,13 +383,13 @@ PDMARK_CURATOR_ONLYLINK = (
     u'%(curator_href)s</a>')
 
 
-PDMARK_LOGO_HTML = """<a rel="license" href="http://creativecommons.org/publicdomain/mark/1.0/">
-<img src="http://i.creativecommons.org/p/mark/1.0/88x31.png"
+PDMARK_LOGO_HTML = """<a rel="license" href="https://creativecommons.org/publicdomain/mark/1.0/">
+<img src="https://licensebuttons.net/p/mark/1.0/88x31.png"
      style="border-style: none;" alt="Public Domain Mark" />
 </a>"""
 
-CC0_LOGO_HTML = """<a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/">
-<img src="http://i.creativecommons.org/p/zero/1.0/88x31.png"
+CC0_LOGO_HTML = """<a rel="license" href="https://creativecommons.org/publicdomain/zero/1.0/">
+<img src="https://licensebuttons.net/p/zero/1.0/88x31.png"
      style="border-style: none;" alt="CC0" />
 </a>"""
 

@@ -10,9 +10,9 @@ from cc.license._lib.exceptions import InvalidURIError
 import cc.license
 
 
-LICENSES_BASE = 'http://creativecommons.org/licenses/'
-CC0_BASE = 'http://creativecommons.org/publicdomain/zero/'
-PUBLICDOMAIN_MARK_BASE = 'http://creativecommons.org/publicdomain/mark/'
+LICENSES_BASE = 'https://creativecommons.org/licenses/'
+CC0_BASE = 'https://creativecommons.org/publicdomain/zero/'
+PUBLICDOMAIN_MARK_BASE = 'https://creativecommons.org/publicdomain/mark/'
 
 
 def locales():
@@ -20,7 +20,7 @@ def locales():
        A locale is a string that represents the language of a jurisdiction.
        Note that locales are not the same as jurisdiction codes."""
     query_string = """
-        PREFIX cc: <http://creativecommons.org/ns#>
+        PREFIX cc: <https://creativecommons.org/ns#>
         PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         PREFIX dc: <http://purl.org/dc/elements/1.1/>
 
@@ -284,9 +284,9 @@ def get_valid_jurisdictions(license_class='standard'):
     
     # TODO: use license_class here
     query = RDF.Query(
-        str('PREFIX cc: <http://creativecommons.org/ns#> '
+        str('PREFIX cc: <https://creativecommons.org/ns#> '
             'SELECT ?jurisdiction WHERE '
-            '{ ?license cc:licenseClass <http://creativecommons.org/license/> .'
+            '{ ?license cc:licenseClass <https://creativecommons.org/license/> .'
             '  ?license cc:jurisdiction ?jurisdiction }'),
         query_language="sparql")
 
@@ -311,7 +311,7 @@ def get_selector_jurisdictions(selector_name='standard'):
 
     selector = cc.license.selectors.choose(selector_name)
     qstring = "\n".join(
-        ["PREFIX cc: <http://creativecommons.org/ns#>",
+        ["PREFIX cc: <https://creativecommons.org/ns#>",
          "SELECT ?license",
          "WHERE {?license cc:licenseClass <%s>}" % str(selector.uri)])
     query = RDF.Query(qstring, query_language="sparql")
