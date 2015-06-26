@@ -37,7 +37,7 @@ class License(object):
 
         # make sure the license actually exists
         qstring = """
-                  PREFIX cc: <https://creativecommons.org/ns#>
+                  PREFIX cc: <http://creativecommons.org/ns#>
                   PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
                 
                   ASK { <%s> rdf:type cc:License . }"""
@@ -171,7 +171,7 @@ class License(object):
         """
         text = []
         text.append(
-            '<rdf:RDF xmlns="https://creativecommons.org/ns#" '
+            '<rdf:RDF xmlns="http://creativecommons.org/ns#" '
             'xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">')
         text.append(
             '  <License rdf:about="%s">' % self.uri)
@@ -334,7 +334,7 @@ class JurisdictionQuestion(object):
         Keyword arguments:
         - lclass: The license class of the parent selector, ie 'standard'
         - lclass_uri: The license class url, ie
-          'https://creativecommons.org/license/'
+          'http://creativecommons.org/license/'
         """
         self.id = 'jurisdiction'
 

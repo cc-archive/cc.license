@@ -8,7 +8,7 @@ import cc.license
 from cc.license._lib.exceptions import RdfHelperError, NoValuesFoundError
 
 # TODO: replace these with RDF.NS objects instead
-NS_CC = 'https://creativecommons.org/ns#'
+NS_CC = 'http://creativecommons.org/ns#'
 NS_DC = 'http://purl.org/dc/elements/1.1/'
 NS_DCQ = 'http://purl.org/dc/terms/'
 
@@ -205,7 +205,7 @@ def get_version(uri, model=ALL_MODEL):
 
 def get_jurisdiction(uri, model=ALL_MODEL):
     qstring = """
-              PREFIX cc: <https://creativecommons.org/ns#>
+              PREFIX cc: <http://creativecommons.org/ns#>
 
               SELECT ?jurisdiction
               WHERE {
@@ -230,7 +230,7 @@ def get_unported_license_uris(model):
     then we can use the query below and eliminate the python hackery.
     
     qstring = """
-              PREFIX cc: <https://creativecommons.org/ns#>
+              PREFIX cc: <http://creativecommons.org/ns#>
               PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
               SELECT ?luri 
@@ -247,7 +247,7 @@ def get_unported_license_uris(model):
 def get_jurisdiction_licenses(uri, model=ALL_MODEL):
     # FIXME: This function is never hit by any unit tests.
     qstring = """
-              PREFIX cc: <https://creativecommons.org/ns#>
+              PREFIX cc: <http://creativecommons.org/ns#>
 
               SELECT ?license
               WHERE {
@@ -263,7 +263,7 @@ def get_jurisdiction_licenses(uri, model=ALL_MODEL):
 
 def get_deprecated(uri, model=ALL_MODEL):
     qstring = """
-              PREFIX cc: <https://creativecommons.org/ns#>
+              PREFIX cc: <http://creativecommons.org/ns#>
               PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
                 
               ASK { <%s> cc:deprecatedOn ?date . }"""
@@ -272,7 +272,7 @@ def get_deprecated(uri, model=ALL_MODEL):
 
 def get_permits(uri, model=ALL_MODEL):
     qstring = """
-              PREFIX cc: <https://creativecommons.org/ns#>
+              PREFIX cc: <http://creativecommons.org/ns#>
 
               SELECT ?permission
               WHERE {
@@ -284,7 +284,7 @@ def get_permits(uri, model=ALL_MODEL):
 
 def get_requires(uri, model=ALL_MODEL):
     qstring = """
-              PREFIX cc: <https://creativecommons.org/ns#>
+              PREFIX cc: <http://creativecommons.org/ns#>
 
               SELECT ?requirement
               WHERE {
@@ -296,7 +296,7 @@ def get_requires(uri, model=ALL_MODEL):
 
 def get_prohibits(uri, model=ALL_MODEL):
     qstring = """
-              PREFIX cc: <https://creativecommons.org/ns#>
+              PREFIX cc: <http://creativecommons.org/ns#>
 
               SELECT ?prohibition
               WHERE {
@@ -327,7 +327,7 @@ def get_superseded(uri, model=ALL_MODEL):
 def get_selector_uris():
     """Returns a list of LicenseSelector URIs."""
     qstring = """
-              PREFIX cc: <https://creativecommons.org/ns#>
+              PREFIX cc: <http://creativecommons.org/ns#>
               PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
               SELECT ?uri
@@ -340,7 +340,7 @@ def get_selector_uris():
 
 def get_selector_id(uri):
     qstring = """
-              PREFIX cc: <https://creativecommons.org/ns#>
+              PREFIX cc: <http://creativecommons.org/ns#>
 
               SELECT ?lcode
               WHERE {
@@ -354,7 +354,7 @@ def get_selector_id(uri):
 def get_license_uris(selector_uri, model=ALL_MODEL):
     # FIXME: This function is never hit by any unit tests.
     qstring = """
-              PREFIX cc: <https://creativecommons.org/ns#>
+              PREFIX cc: <http://creativecommons.org/ns#>
               PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
               SELECT ?luri
@@ -381,7 +381,7 @@ def get_license_code(uri, model=ALL_MODEL):
 
 def get_license_class(uri, model=ALL_MODEL):
     qstring = """
-              PREFIX cc: <https://creativecommons.org/ns#>
+              PREFIX cc: <http://creativecommons.org/ns#>
 
               SELECT ?lclassuri
               WHERE {
@@ -407,7 +407,7 @@ def get_logos(uri, model=ALL_MODEL):
 
 def selector_has_license(selector_uri, license_uri, model=ALL_MODEL):
     qstring = """
-              PREFIX cc: <https://creativecommons.org/ns#>
+              PREFIX cc: <http://creativecommons.org/ns#>
 
               ASK { <%s> cc:licenseClass <%s> . }"""
     # can't interpolate empty strings
@@ -422,7 +422,7 @@ def selector_has_license(selector_uri, license_uri, model=ALL_MODEL):
 def get_jurisdiction_default_language(juris_uri):
     qstring = """
               PREFIX dc: <http://purl.org/dc/elements/1.1/>
-              PREFIX cc: <https://creativecommons.org/ns#>
+              PREFIX cc: <http://creativecommons.org/ns#>
 
               SELECT ?default_language
               WHERE {
@@ -453,7 +453,7 @@ def jurisdictions_for_selector(selector_uri):
         return JURISDICTIONS_FOR_SELECTOR_CACHE[selector_uri]
     
     qstring = """
-       PREFIX cc: <https://creativecommons.org/ns#>
+       PREFIX cc: <http://creativecommons.org/ns#>
 
        SELECT ?jurisdiction
        WHERE {
@@ -477,7 +477,7 @@ def get_license_legalcodes(license_uri):
     [(legalcode_uri, None)]
     """
     qstring = """
-       PREFIX cc: <https://creativecommons.org/ns#>
+       PREFIX cc: <http://creativecommons.org/ns#>
 
        SELECT ?legalcode
        WHERE {

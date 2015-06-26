@@ -22,7 +22,7 @@ def list_uris():
     return list_t(_CACHE['uri'])
 
 def _list_uris():
-    cc_jurisdiction_url = RDF.Uri('https://creativecommons.org/ns#Jurisdiction')
+    cc_jurisdiction_url = RDF.Uri('http://creativecommons.org/ns#Jurisdiction')
     # grab the url strings from the RDF Nodes
     uris = [ rdf_helper.uri2value(j.subject)
              for j in
@@ -56,14 +56,14 @@ def by_code(code):
     if code not in list_codes():
         # invalid jurisdiction
         return None
-    uri = 'https://creativecommons.org/international/%s/' % code
+    uri = 'http://creativecommons.org/international/%s/' % code
     return cc.license.Jurisdiction(uri)
 
 def uri2code(uri):
     """Given a jurisdiction URI, parse out the jurisdiction short code."""
     if uri == '':
         return '' # trivial case
-    base = 'https://creativecommons.org/international/' 
+    base = 'http://creativecommons.org/international/' 
     if not uri.startswith(base):
         raise cc.license.InvalidURIError, "Invalid jurisdiction URI"
     blen = len(base)
@@ -77,11 +77,11 @@ def get_licenses_by_code(code):
         if 'unported' not in _CACHE.keys():
             _CACHE['unported'] = []
             uris = rdf_helper.get_license_uris(
-                'https://creativecommons.org/license/')
+                'http://creativecommons.org/license/')
             for uri in uris:
                 l = cc.license.by_uri(uri)
                 if l.jurisdiction.title() == 'Unported':
                     _CACHE['unported'].append(uri)
         return _CACHE['unported']
-    uri = 'https://creativecommons.org/international/%s/' % code
+    uri = 'http://creativecommons.org/international/%s/' % code
     return rdf_helper.get_jurisdiction_licenses(uri)
