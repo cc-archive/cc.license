@@ -6,6 +6,7 @@
 .installed.cfg
 parts
 eggs
+.eggs
 develop-eggs
 bin
 cc.license.egg-info

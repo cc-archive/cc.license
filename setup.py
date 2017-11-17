@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(name='cc.license',
-      version='0.14.24',
+      version='0.14.25',
       namespace_packages = ['cc',],
       description="License selection based on ccREL-based metadata.",
       classifiers=[],
@@ -28,8 +28,9 @@ setup(name='cc.license',
       ],
 
       dependency_links = [
-        'http://code.creativecommons.org/basket/',
-        ],
+        'https://github.com/creativecommons/cc.i18n/tarball/master#egg=cc.i18n',
+        'https://github.com/creativecommons/cc.licenserdf/tarball/master#egg=cc.licenserdf',
+      ],
 
       setup_requires=['setuptools-git',],
       )
