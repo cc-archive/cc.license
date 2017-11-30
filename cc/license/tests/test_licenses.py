@@ -32,17 +32,17 @@ class TestAll(object):
         lic = self.stdsel.by_uri(uri)
         assert lic.version == u'1.0'
         lic2 = self.stdsel.by_code('by')
-        assert lic2.version == u'3.0'
+        assert lic2.version == u'4.0'
 
     def test_uri(self):
-        uri = 'http://creativecommons.org/licenses/by-sa/3.0/'
+        uri = 'http://creativecommons.org/licenses/by-sa/4.0/'
         lic = self.stdsel.by_uri(uri)
         assert lic.uri == uri
         lic2 = self.stdsel.by_code('by-sa')
         assert lic2.uri == uri
 
     def test_uri_multiple(self):
-        uri = 'http://creativecommons.org/licenses/by-nc-nd/3.0/'
+        uri = 'http://creativecommons.org/licenses/by-nc-nd/4.0/'
         lic = self.stdsel.by_uri(uri)
         assert lic.uri == uri
         lic2 = self.stdsel.by_uri(uri)
@@ -53,6 +53,7 @@ class TestAll(object):
 
     def test_jurisdiction(self):
         lic = self.stdsel.by_code('by-sa')
+        print(lic.jurisdiction.title())
         assert lic.jurisdiction.title() == 'Unported'
         assert lic.jurisdiction == cc.license.jurisdictions.by_code('')
         lic2 = self.stdsel.by_code('by-nc', jurisdiction='jp')
@@ -62,9 +63,9 @@ class TestAll(object):
     def test_title(self):
         lic = self.stdsel.by_code('by')
         assert lic.title() == lic.title('en')
-        assert lic.title('en') == u'Attribution 3.0 Unported'
-        assert lic.title('es') == u'Atribuci\xf3n 3.0 Unported'
-        assert lic.title('de') == u'Namensnennung 3.0 Unported'
+        assert lic.title('en') == u'Attribution 4.0 International'
+        assert lic.title('es') == u'Atribuci\xf3n 4.0 Internacional'
+        assert lic.title('de') == u'Namensnennung 4.0 International'
 
     def test_deprecated(self):
         lic = self.stdsel.by_code('by')
@@ -92,7 +93,7 @@ class TestAll(object):
 
         lic2 = self.stdsel.by_code('by', version='1.0')
         assert isinstance(lic2.current_version, License)
-        assert lic2.current_version.version == '3.0'
+        assert lic2.current_version.version == '4.0'
 
         lic2 = self.stdsel.by_code('by', jurisdiction="es")
         assert isinstance(lic2.current_version, License)
@@ -125,7 +126,7 @@ class TestAll(object):
             assert not u.libre
 
     def test_logo(self):
-        base = 'http://i.creativecommons.org/l/'
+        base = 'https://i.creativecommons.org/l/'
         by = self.stdsel.by_code('by')
         assert type(by.logo) is str
         assert by.logo.startswith(base)
@@ -157,7 +158,7 @@ class TestAll(object):
     def test_rdf(self):
         by = self.stdsel.by_code('by')
         expected = """<rdf:RDF xmlns="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-  <License rdf:about="http://creativecommons.org/licenses/by/3.0/">
+  <License rdf:about="http://creativecommons.org/licenses/by/4.0/">
     <permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks"/>
     <permits rdf:resource="http://creativecommons.org/ns#Distribution"/>
     <permits rdf:resource="http://creativecommons.org/ns#Reproduction"/>

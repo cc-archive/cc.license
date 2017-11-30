@@ -30,7 +30,7 @@ def test_id_and_uri():
 
         assert ('http://creativecommons.org/license' in s.uri) or \
                 ('http://creativecommons.org/choose' in s.uri)
-    
+
 def test_get_selector_key_error():
     """selectors.choose() should raise a CCLicenseError if supplied 
        with an invalid selector id."""
@@ -127,7 +127,7 @@ class TestAnswersStandard(object):
                                    'foo':'bar',
                                    'lolcats':'roflcopter'})
         assert type(lic) == cc.license.License
-        assert lic.title() == 'Attribution 3.0 Unported'
+        assert lic.title() == 'Attribution 4.0 International'
         lic2 = self.sel.by_code('by')
         assert lic == lic2
 
@@ -151,7 +151,7 @@ class TestAnswersStandard(object):
         # fi BY-SA license is 1.0 only, so issue unported instead
         license = self.sel.by_answers(
             {'commercial': 'y', 'derivatives': 'sa', 'jurisdiction': 'fi'})
-        assert license.uri == 'http://creativecommons.org/licenses/by-sa/3.0/'
+        assert license.uri == 'http://creativecommons.org/licenses/by-sa/4.0/'
 
         # Don't correct where unnecessary though
         license = self.sel.by_answers(

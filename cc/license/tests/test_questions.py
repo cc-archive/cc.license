@@ -1,6 +1,7 @@
 from builtins import str
 from builtins import range
 from builtins import object
+from six import string_types
 
 import nose.tools
 import cc.license
@@ -28,7 +29,7 @@ class TestStandard(object):
                              root, 'standard', 'qwertyitis')
         nose.tools.assert_raises(CCLicenseError, cc.license.Question,
                              root, 'azerbaijan', 'icanhascheezburger')
-    
+
     def test_label(self):
         assert self.qd.label() == 'Allow modifications of your work?'
         assert self.qd.label('es') == \
@@ -49,8 +50,8 @@ class TestStandard(object):
             answers = q.answers()
             for answer in answers:
                 assert type(answer) is tuple
-                assert type(answer[0]) in (str, str)
-                assert type(answer[1]) is str
+                assert isinstance(answer[0], string_types)
+                assert isinstance(answer[1], string_types)
             answers2 = q.answers('ja')
             for i in range(len(answers)):
                 assert answers[i][1] == answers2[i][1]

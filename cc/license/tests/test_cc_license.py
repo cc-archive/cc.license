@@ -1,6 +1,7 @@
 """Tests for functionality within the cc.license module.
    This file is a catch-all for tests with no place else to go."""
 from builtins import object
+from six import string_types
 
 import cc.license
 import nose.tools
@@ -8,7 +9,7 @@ import nose.tools
 def test_locales():
     locales = cc.license.locales()
     for l in locales:
-        assert type(l) == str
+        assert isinstance(l, string_types)
     for c in ('en', 'de', 'he', 'ja', 'fr'):
         assert c in locales
 

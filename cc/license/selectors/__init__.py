@@ -22,6 +22,8 @@ def choose(license_class):
     except KeyError:
         return None
 
+PYTHON_BUILTIN_LIST = list
+
 def list():
     """Return a list of available selector IDs."""
-    return list(SELECTORS.keys())
+    return PYTHON_BUILTIN_LIST(SELECTORS.keys())

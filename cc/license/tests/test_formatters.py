@@ -1,5 +1,6 @@
 from builtins import str
 from builtins import object
+from six import string_types
 
 import nose.tools
 from zope.interface import implementedBy
@@ -19,7 +20,7 @@ def test_list_formatters():
     formatters = cc.license.formatters.list()
     assert type(formatters) == list
     for f in formatters:
-        assert type(f) == str
+        assert isinstance(f, string_types)
 
 def test_get_formatter():
     """formatters.choose() must return a valid IFormatter for each formatter."""
@@ -28,9 +29,9 @@ def test_get_formatter():
         assert ILicenseFormatter in implementedBy(f.__class__)
         f2 = cc.license.formatters.choose(formatter_id)
         assert f2 is f # singletons
-    
+
 def test_get_formatter_key_error():
-    """formatters.choose() should raise a CCLicenseError if supplied 
+    """formatters.choose() should raise a CCLicenseError if supplied
        with an invalid formatter id."""
     nose.tools.assert_raises(CCLicenseError,
                              cc.license.formatters.choose, 'roflcopter')
@@ -505,7 +506,7 @@ class TestPDMarkFormatter(object):
              'curator_href': 'CURATOR_URL'},
             locale='en')
         assert output.strip() == EXPECTED_PDMARK_WORKTITLE_AUTHOR_CURATOR
-        
+
     def test_worktitle_author(self):
         output = self.formatter.format(
             self.license,
@@ -567,7 +568,7 @@ class TestPDMarkFormatter(object):
 EXPECTED_PUBLICDOMAIN_PLAIN = (
     '<a rel="license" href="http://creativecommons.org/licenses/publicdomain/">'
     '<img alt="Creative Commons License" style="border-width:0"'
-    ' src="http://i.creativecommons.org/l/publicdomain/88x31.png" /></a><br />'
+    ' src="https://i.creativecommons.org/l/publicdomain/88x31.png" /></a><br />'
     'This work is in the '
     '<a rel="license" href="http://creativecommons.org/licenses/publicdomain/">'
     'Public Domain</a>.')
@@ -575,7 +576,7 @@ EXPECTED_PUBLICDOMAIN_PLAIN = (
 EXPECTED_PUBLICDOMAIN_WORKFORMAT = (
     '<a rel="license" href="http://creativecommons.org/licenses/publicdomain/">'
     '<img alt="Creative Commons License" style="border-width:0"'
-    ' src="http://i.creativecommons.org/l/publicdomain/88x31.png" /></a><br />'
+    ' src="https://i.creativecommons.org/l/publicdomain/88x31.png" /></a><br />'
     'This <span xmlns:dct="http://purl.org/dc/terms/"'
     ' href="http://purl.org/dc/dcmitype/MovingImage" rel="dct:type">work</span> '
     'is in the '

@@ -3,7 +3,7 @@ from builtins import str
 from builtins import object
 import RDF
 import zope.interface
-from . import interfaces 
+from . import interfaces
 from . import rdf_helper
 
 from cc.i18n.gettext_i18n import ugettext_for_locale
@@ -63,7 +63,7 @@ class License(object):
     def title(self, language='en'):
         if self._titles is None:
             self._titles = rdf_helper.get_titles(self.uri)
-        i18n_title = self._titles['i18n']
+        i18n_title = self._titles['x-i18n']
         return inverse_translate(i18n_title, locale_to_lower_upper(language))
 
     @property

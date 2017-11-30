@@ -2,6 +2,7 @@
    to jurisdictions."""
 from builtins import str
 from builtins import object
+from six import string_types
 
 import cc.license
 from cc.license import CCLicenseError
@@ -25,7 +26,7 @@ def test_jurisdiction_codes():
     codes.remove('')
     # they are all strings of length 2
     for c in codes:
-        assert type(c) == str
+        assert isinstance(c, string_types)
         assert len(c) == 2
     # test a few big jurisdictions
     for k in ('us', 'uk', 'fr', 'de', 'jp', 'ca'):
@@ -113,7 +114,7 @@ class TestJurisdictions(object):
     def test_titles(self):
         for t in self.langs:
             title = self.mx.title(t)
-            assert type(title) == str
+            assert isinstance(title, string_types)
             assert len(title) != 0
 
     def test_title_default(self):

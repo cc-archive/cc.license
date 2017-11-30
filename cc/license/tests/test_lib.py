@@ -1,5 +1,6 @@
 """Unit tests and functional tests exercising cc.license._lib"""
 from builtins import object
+from six import string_types
 
 import nose.tools
 import cc.license
@@ -44,7 +45,7 @@ class TestUriDict(object):
         d = dict(code='by', version='3.0', jurisdiction=None)
         assert lib.dict2uri(d) == 'http://creativecommons.org/licenses/by/3.0/'
         e = dict(code='by')
-        assert lib.dict2uri(e) == 'http://creativecommons.org/licenses/by/3.0/'
+        assert lib.dict2uri(e) == 'http://creativecommons.org/licenses/by/4.0/'
         f = dict(code='by-sa', version='1.0')
         assert lib.dict2uri(f) == 'http://creativecommons.org/licenses/by-sa/1.0/'
 
@@ -56,8 +57,7 @@ class TestFunctions(object):
          ('http://creativecommons.org/licenses/by/3.0/', 'by'),
          ('http://creativecommons.org/licenses/by-sa/2.5/mx/', 'by-sa'),
          ('http://creativecommons.org/publicdomain/zero/1.0/', 'CC0'),
-         
-                    )
+        )
         self.apl = lib.all_possible_answers # aliasing for brevity
 
     def test_code_from_uri(self):
@@ -70,7 +70,8 @@ class TestFunctions(object):
 
     def test_current_version(self):
         for j in ('us', 'de', 'jp', 'uk', 'es'):
-            assert type(lib.current_version('by', jurisdiction=j)) == str
+            assert isinstance(lib.current_version('by', jurisdiction=j),
+                              string_types)
         assert lib.current_version('by', jurisdiction='us') == '3.0'
         assert lib.current_version('by-sa', jurisdiction='mx') == '2.5'
         assert lib.current_version('by-nc', jurisdiction='uk') == '2.0'
@@ -125,7 +126,7 @@ def test_jurisdictions_for_selector():
         set(['http://creativecommons.org/international/br/',
              'http://creativecommons.org/international/de/',
              'http://creativecommons.org/international/tw/']))
-            
+
     # CC0 is international!  No jurisdictions!  Shouldn't have anything.
     nose.tools.assert_equal(
         lib.rdf_helper.jurisdictions_for_selector(
@@ -157,7 +158,8 @@ def test_all_possible_license_versions():
         ['http://creativecommons.org/licenses/by/1.0/',
          'http://creativecommons.org/licenses/by/2.0/',
          'http://creativecommons.org/licenses/by/2.5/',
-         'http://creativecommons.org/licenses/by/3.0/'])
+         'http://creativecommons.org/licenses/by/3.0/',
+         'http://creativecommons.org/licenses/by/4.0/'])
 
     license_uris = [
         lic.uri
@@ -169,7 +171,7 @@ def test_all_possible_license_versions():
          'http://creativecommons.org/licenses/by-sa/2.1/es/',
          'http://creativecommons.org/licenses/by-sa/2.5/es/',
          'http://creativecommons.org/licenses/by-sa/3.0/es/'])
-    
+
 
 def test_get_license_legalcodes():
     """

@@ -5,7 +5,7 @@ from builtins import str
 
 import copy
 from distutils.version import StrictVersion
-import urllib.parse
+import future.moves.urllib.parse
 import RDF
 from . import rdf_helper
 
@@ -170,18 +170,18 @@ def dict2uri(license_info):
         if not version:
             version = current_version(license_code, jurisdiction)
 
-        # apparently urlparse.urljoin is retarded, or handles /'s differently
-        # than i expect; if string is empty, concatenating yields a single '/'
+        # Apparently urlparse.urljoin is broken, or handles /'s differently
+        # than I expect; if string is empty, concatenating yields a single '/'
         # which brings the URI up a level.
-        base = urllib.parse.urljoin(base, license_code)
+        base = future.moves.urllib.parse.urljoin(base, license_code)
         if not base.endswith('/'):
             base += '/'
-        base = urllib.parse.urljoin(base, version)
+        base = future.moves.urllib.parse.urljoin(base, version)
         if not base.endswith('/'):
             base += '/'
 
         if jurisdiction:
-            base = urllib.parse.urljoin(base, jurisdiction)
+            base = future.moves.urllib.parse.urljoin(base, jurisdiction)
             if not base.endswith('/'):
                 base += '/'
 

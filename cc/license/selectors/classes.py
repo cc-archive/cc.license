@@ -23,8 +23,8 @@ class LicenseSelector(object):
         self._uri = uri
         self._licenses = {}
         self._id = None
-        self._titles = None        
-        
+        self._titles = None
+
         # TODO: refactor this somewhere?
         # populate questions from questions.xml
         self._questions = []
@@ -33,10 +33,10 @@ class LicenseSelector(object):
                 continue
             for field in child.findall('field'):
                 fid = field.get('id')
-                self._questions.append( 
+                self._questions.append(
                      Question(rdf_helper.questions_root,
                                          self.id, fid))
-        
+
         if rdf_helper.jurisdictions_for_selector(self._uri):
             self._questions.append(JurisdictionQuestion(self.id, self._uri))
 
@@ -45,7 +45,7 @@ class LicenseSelector(object):
             'recombo'  : self._by_answers_recombo,
             'zero'     : self._by_answers_generic('CC0'),
             }.get(self.id) or self._by_answers_generic(self.id)
-        
+
 
     def __repr__(self):
         return "<LicenseSelector id='%s'>" % self.id
@@ -122,9 +122,9 @@ class LicenseSelector(object):
                 return True
 
     def _validate_answers(self, answers_dict):
-        
+
         for q in self.questions():
-            # verify that all questions are answered 
+            # verify that all questions are answered
             if q.id not in list(answers_dict.keys()):
                 #"Invalid question answered."
                 return None
@@ -145,15 +145,15 @@ class LicenseSelector(object):
         jurisdiction = answers_dict.setdefault('jurisdiction', '')
         # returns None if answers_dict is bunk
         if self._validate_answers(answers_dict):
-            # return a license code based on answers to 
+            # return a license code based on answers to
             # this selector's questions
             license_code = self._by_answers(answers_dict)
-            version = answers_dict['version'] or None
-            # give back a license object based on the answers 
+            version = answers_dict.get('version', None)
+            # give back a license object based on the answers
             if jurisdiction:
                 license = self.by_code(license_code, jurisdiction=jurisdiction, version=version)
                 if not license:
-                    # try a fallback to unported if this jurisdiction 
+                    # try a fallback to unported if this jurisdiction
                     # doesn't work
                     license = self.by_code(license_code, version=version)
             else:
@@ -174,9 +174,9 @@ class LicenseSelector(object):
 
     # TODO: handle 1.0 license weirdness (out-of-order license code)
     def _by_answers_standard(self, answers_dict):
-        
+
         pieces = ['by']
-        
+
         # create license code
         if answers_dict['commercial'] == 'n':
             pieces.append('nc')
@@ -194,7 +194,7 @@ class LicenseSelector(object):
             'samplingplus' : 'sampling+',
             'ncsamplingplus' : 'nc-sampling+',
             }[ answers_dict['sampling'] ]
-        
+
     def _by_answers_generic(self, license_code):
         """ function factory for license classes that don't require
         any answers processing logic (zero, publicdomain, software) """
