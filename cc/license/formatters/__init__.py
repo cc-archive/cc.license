@@ -15,8 +15,7 @@ FORMATTERS = {
 def choose(formatter_id):
     """Return instance of ILicenseFormatter with the specified ID."""
     if formatter_id not in FORMATTERS.keys():
-        raise ExistentialException, \
-            "Formatter %s does not exist" % formatter_id
+        raise ExistentialException("Formatter %s does not exist" % formatter_id)
 
     return FORMATTERS[formatter_id]
 

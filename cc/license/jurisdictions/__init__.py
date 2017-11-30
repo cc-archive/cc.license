@@ -17,7 +17,7 @@ def list_uris():
     """Returns sequence of all jurisdiction codes possible. Jurisdiction
        codes are strings that yield a Jurisdiction object when passed
        to cc.license.jurisdiction.Jurisdiction"""
-    if not _CACHE.has_key('uri'):
+    if 'uri' not in _CACHE:
         _CACHE['uri'] = _list_uris()
     return list_t(_CACHE['uri'])
 
@@ -34,7 +34,7 @@ def _list_uris():
 
 # is this a useful / desirable function to have?
 def list_codes():
-    if not _CACHE.has_key('code'):
+    if 'code' not in _CACHE:
         _CACHE['code'] = _list_codes()
     return list_t(_CACHE['code'])
 
@@ -42,7 +42,7 @@ def _list_codes():
     return [ uri2code(uri) for uri in list_uris() ]
 
 def list():
-    if not _CACHE.has_key('juri'):
+    if 'juri' not in _CACHE:
         _CACHE['juri'] = _list()
     return list_t(_CACHE['juri'])
 
@@ -65,7 +65,7 @@ def uri2code(uri):
         return '' # trivial case
     base = 'http://creativecommons.org/international/' 
     if not uri.startswith(base):
-        raise cc.license.InvalidURIError, "Invalid jurisdiction URI"
+        raise cc.license.InvalidURIError("Invalid jurisdiction URI")
     blen = len(base)
     return uri[blen:-1]
 

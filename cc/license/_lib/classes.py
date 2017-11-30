@@ -1,7 +1,8 @@
+from __future__ import absolute_import
 import RDF
 import zope.interface
-import interfaces 
-import rdf_helper
+from . import interfaces 
+from . import rdf_helper
 
 from cc.i18n.gettext_i18n import ugettext_for_locale
 from cc.i18n.util import locale_to_lower_upper
@@ -44,9 +45,8 @@ class License(object):
         query = RDF.Query(qstring % self.uri, query_language='sparql')
         uri_exists = query.execute(rdf_helper.ALL_MODEL).get_boolean()
         if not uri_exists:
-            raise ExistentialException, \
-                  "License <%(uri)s> does not exist in model given." % {
-                              'uri': self.uri }
+            raise ExistentialException("License <%(uri)s> does not exist in model given." % {
+                              'uri': self.uri })
 
     def __repr__(self):
         return "<License object '%(uri)s'>" % {'uri': self.uri}
@@ -204,7 +204,7 @@ class License(object):
         [(legalcode_uri, None, None)]
 
         """
-        if self._legalcodes.has_key(language):
+        if language in self._legalcodes:
             return self._legalcodes[language]
 
         gettext = ugettext_for_locale(language)
@@ -271,8 +271,8 @@ class Question(object):
                     self._enums[eid] = (elabels, edesc,)
 
         if not _flag:
-            raise SelectorQAError, "Question identifier %(id)s not found" % \
-                    {'id': self.id}
+            raise SelectorQAError("Question identifier %(id)s not found" % \
+                    {'id': self.id})
 
     def __repr__(self):
         return "<Question object id='%(id)s'>" % {'id': self.id}
@@ -295,7 +295,7 @@ class Question(object):
         return locale_dict_fetch_with_fallbacks(self._descs, language)
 
     def answers(self, language='en'):
-        if self._answers.has_key(language):
+        if language in self._answers:
             return self._answers[language]
 
         if language == '':

@@ -23,7 +23,7 @@ class Jurisdiction(object):
             return
         if not uri.startswith('http://creativecommons.org/international/') \
            or not uri.endswith('/'):
-            raise InvalidURIError, "Invalid jurisdiction URI: <%s>" % uri
+            raise InvalidURIError("Invalid jurisdiction URI: <%s>" % uri)
         self.code = cc.license.jurisdictions.uri2code(uri)
         self.id = uri
         self._titles = rdf_helper.get_titles(self.id, rdf_helper.JURI_MODEL)
@@ -67,7 +67,7 @@ class Jurisdiction(object):
         try:
             return cc.license.util.locale_dict_fetch_with_fallbacks(
                 self._titles, language)
-        except KeyError, e:
+        except KeyError as e:
             import sys
             tb = sys.exc_info()[2]
             raise InvalidURIError, \

@@ -1,9 +1,10 @@
+from __future__ import absolute_import
 
 import copy
 from distutils.version import StrictVersion
 import urlparse
 import RDF
-import rdf_helper
+from . import rdf_helper
 
 from cc.license.jurisdictions.classes import Jurisdiction
 from cc.license._lib.exceptions import InvalidURIError
@@ -49,7 +50,7 @@ def by_code(code, jurisdiction=None, version=None):
         version = str(version)
 
     cache_key = (code, jurisdiction, version)
-    if _BY_CODE_CACHE.has_key(cache_key):
+    if cache_key in _BY_CODE_CACHE:
         return _BY_CODE_CACHE[cache_key]
 
     for key, selector in cc.license.selectors.SELECTORS.items():
@@ -68,7 +69,7 @@ _BY_URI_CACHE = {}
 
 def by_uri(uri):
     """A LicenseSelector-less means of picking a License from a URI."""
-    if _BY_URI_CACHE.has_key(uri):
+    if uri in _BY_URI_CACHE:
         return _BY_URI_CACHE[uri]
 
     for key, selector in cc.license.selectors.SELECTORS.items():
@@ -86,7 +87,7 @@ def code_from_uri(uri):
     elif uri.startswith(CC0_BASE):
         return 'CC0'
     else:
-        raise InvalidURIError, "Invalid License URI"
+        raise InvalidURIError("Invalid License URI")
 
 def uri2dict(uri):
     """Take a license uri and convert it into a dictionary of values."""
@@ -100,7 +101,7 @@ def uri2dict(uri):
         info_list = raw_info.split('/') 
 
         if len(info_list) not in (1,2,3):
-            raise InvalidURIError, "Invalid Creative Commons URI: <%s>"%uri
+            raise InvalidURIError("Invalid Creative Commons URI: <%s>"%uri)
 
         retval = dict( code=info_list[0] )
         if len(info_list) > 1:
@@ -127,7 +128,7 @@ def uri2dict(uri):
 
 
     else:
-        raise InvalidURIError, "Invalid Creative Commons URI: <%s>" % uri
+        raise InvalidURIError("Invalid Creative Commons URI: <%s>" % uri)
 
 def dict2uri(license_info):
     """Take a dictionary of license values and convert it into a uri."""
@@ -151,7 +152,7 @@ def dict2uri(license_info):
         if license_code == 'publicdomain': # one URI for publicdomain
             return base + 'publicdomain/'
 
-        if license_info.has_key('jurisdiction'):
+        if 'jurisdiction' in license_info:
             jurisdiction = license_info['jurisdiction']
         else:
             jurisdiction = None
@@ -222,7 +223,7 @@ def all_possible_license_versions(code, jurisdiction=None):
      A list of URIs.
     """
     cache_key = (code, jurisdiction)
-    if ALL_POSSIBLE_VERSIONS_CACHE.has_key(cache_key):
+    if cache_key in ALL_POSSIBLE_VERSIONS_CACHE:
         return ALL_POSSIBLE_VERSIONS_CACHE[cache_key]
 
     qstring = """
@@ -279,7 +280,7 @@ def all_possible_answers(list_of_questions):
 _VALID_JURISDICTIONS_CACHE = {}
 
 def get_valid_jurisdictions(license_class='standard'):
-    if _VALID_JURISDICTIONS_CACHE.has_key(license_class):
+    if license_class in _VALID_JURISDICTIONS_CACHE:
         return _VALID_JURISDICTIONS_CACHE[license_class]
     
     # TODO: use license_class here
@@ -306,7 +307,7 @@ def get_selector_jurisdictions(selector_name='standard'):
     Get all of the launched jurisdictions that licenses in this
     selector are part of
     """
-    if _SELECTOR_JURISDICTIONS_CACHE.has_key(selector_name):
+    if selector_name in _SELECTOR_JURISDICTIONS_CACHE:
         return _SELECTOR_JURISDICTIONS_CACHE[selector_name]
 
     selector = cc.license.selectors.choose(selector_name)

@@ -194,17 +194,17 @@ def locale_dict_fetch_with_fallbacks(data_dict, locale):
     good fallbacks.
     """
     # try returning the locale as-is
-    if data_dict.has_key(locale):
+    if locale in data_dict:
         return data_dict[locale]
 
     # nope?  try just returning the language...
     if '-' in locale:
         language, country = locale.split('-', 1)
-        if data_dict.has_key(language):
+        if language in data_dict:
             return data_dict[language]
 
     # still nope?  okay, try returning 'en', our default...
-    if data_dict.has_key('en'):
+    if 'en' in data_dict:
         return data_dict['en']
 
     # still no??  last attempt!

@@ -1,7 +1,8 @@
+from __future__ import absolute_import
 
 from cc.license._lib import rdf_helper
 from cc.license._lib.exceptions import CCLicenseError
-import classes
+from . import classes
 
 SELECTORS = {}
 

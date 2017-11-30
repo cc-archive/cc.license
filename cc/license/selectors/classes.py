@@ -80,7 +80,7 @@ class LicenseSelector:
     def by_code(self, license_code, jurisdiction=None, version=None):
         cache_key = (self.uri, license_code, jurisdiction, version)
         # Do we have the license cached already?
-        if SELECTOR_BY_CODE_CACHE.has_key(cache_key):
+        if cache_key in SELECTOR_BY_CODE_CACHE:
             return SELECTOR_BY_CODE_CACHE[cache_key]
 
         uri = cc.license._lib.dict2uri(dict(jurisdiction=jurisdiction,

@@ -26,7 +26,7 @@ def die_unless(cause, message):
     if cause:
         pass
     else:
-        raise RdfHelperError, message
+        raise RdfHelperError(message)
 
 def init_model(*filenames):
     """Input: An on-disk path (filenames) to start from.
@@ -99,13 +99,13 @@ def query_to_single_value(subject, predicate, object,
     with_lang = query_to_language_value_dict(subject, predicate, object,
                                              model)
     if len(with_lang) > 1:
-        raise RdfHelperError, "Somehow I found too many values."
+        raise RdfHelperError("Somehow I found too many values.")
     if len(with_lang) == 1:
         return with_lang.values()[0]
     else: # Nothing to 
         if default is default_flag_value:
             # Then no default was specified
-            raise NoValuesFoundError, "No values found."
+            raise NoValuesFoundError("No values found.")
         else:
             return default
 
@@ -449,7 +449,7 @@ def jurisdictions_for_selector(selector_uri):
     Returns:
       A list of jurisdiction URIs
     """
-    if JURISDICTIONS_FOR_SELECTOR_CACHE.has_key(selector_uri):
+    if selector_uri in JURISDICTIONS_FOR_SELECTOR_CACHE:
         return JURISDICTIONS_FOR_SELECTOR_CACHE[selector_uri]
     
     qstring = """

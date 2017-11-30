@@ -1,3 +1,4 @@
+from __future__ import print_function
 
 from StringIO import StringIO
 import lxml.etree
@@ -15,7 +16,7 @@ def relax_validate(schema_filename, instance_buffer):
     instance = lxml.etree.parse(StringIO(instance_buffer))
 
     if not relaxng.validate(instance):
-        print relaxng.error_log.last_error
+        print(relaxng.error_log.last_error)
         return False
     else:
         return True
