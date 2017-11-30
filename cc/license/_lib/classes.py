@@ -3,8 +3,6 @@ from builtins import str
 from builtins import object
 import RDF
 import zope.interface
-from . import interfaces
-from . import rdf_helper
 
 from cc.i18n.gettext_i18n import ugettext_for_locale
 from cc.i18n.util import locale_to_lower_upper
@@ -12,6 +10,8 @@ from cc.i18n import mappers
 
 import cc.license
 from cc.license.util import locale_dict_fetch_with_fallbacks
+from cc.license._lib import interfaces
+from cc.license._lib import rdf_helper
 from cc.license._lib.exceptions import SelectorQAError, ExistentialException
 from cc.license._lib.functions import all_possible_license_versions
 from cc.licenserdf.util import inverse_translate
