@@ -11,8 +11,11 @@ the licensed work. The keys of this work_dict are as follows:
  - source_work
  - more_permissions_url
 """
+from future import standard_library
+standard_library.install_aliases()
+from builtins import object
 
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 import zope.interface
 

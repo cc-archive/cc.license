@@ -1,4 +1,6 @@
-import StringIO
+from future import standard_library
+standard_library.install_aliases()
+import io
 
 from lxml import etree
 from nose.tools import assert_equal

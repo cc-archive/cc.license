@@ -1,5 +1,7 @@
 """Tests for Jurisdiction class and other functionality related
    to jurisdictions."""
+from builtins import str
+from builtins import object
 
 import cc.license
 from cc.license import CCLicenseError
@@ -88,7 +90,7 @@ def test_default_language():
         'http://creativecommons.org/international/fi/')
     assert finland_juris.default_language == 'fi'
 
-class TestJurisdictions:
+class TestJurisdictions(object):
 
     def __init__(self):
         self.langs = ('fr', 'ja', 'de', 'en')
@@ -111,7 +113,7 @@ class TestJurisdictions:
     def test_titles(self):
         for t in self.langs:
             title = self.mx.title(t)
-            assert type(title) == unicode
+            assert type(title) == str
             assert len(title) != 0
 
     def test_title_default(self):
@@ -122,7 +124,7 @@ class TestJurisdictions:
                              cc.license.Jurisdiction, 'lollerskates')
 
 
-class TestPublicApi:
+class TestPublicApi(object):
 
     def __init__(self):
         self.dir = dir(cc.license.jurisdictions)
@@ -132,7 +134,7 @@ class TestPublicApi:
             assert f in self.dir
 
 
-class TestCustomization:
+class TestCustomization(object):
 
     def __init__(self):
         self.jurisdictions = []

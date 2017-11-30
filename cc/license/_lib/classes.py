@@ -1,4 +1,6 @@
 from __future__ import absolute_import
+from builtins import str
+from builtins import object
 import RDF
 import zope.interface
 from . import interfaces 
@@ -69,7 +71,7 @@ class License(object):
         if self._lclass is None:
             lclass_uri = rdf_helper.get_license_class(self.uri)
             # XXX this feels hackish
-            for value in cc.license.selectors.SELECTORS.values():
+            for value in list(cc.license.selectors.SELECTORS.values()):
                 if value.uri == lclass_uri:
                     self._lclass = value.id
         return self._lclass
@@ -302,7 +304,7 @@ class Question(object):
             language = 'en' # why not?
             
         answers = []
-        for k in self._enums.keys():
+        for k in list(self._enums.keys()):
             label = locale_dict_fetch_with_fallbacks(self._enums[k][0],
                                                      language)
             # is there a description for this enum?

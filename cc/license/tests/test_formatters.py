@@ -1,3 +1,5 @@
+from builtins import str
+from builtins import object
 
 import nose.tools
 from zope.interface import implementedBy
@@ -33,7 +35,7 @@ def test_get_formatter_key_error():
     nose.tools.assert_raises(CCLicenseError,
                              cc.license.formatters.choose, 'roflcopter')
 
-class TestHTMLFormatter:
+class TestHTMLFormatter(object):
 
     def __init__(self):
         self.lic = cc.license.by_code('by')
@@ -200,7 +202,7 @@ This work is published from:
   Australia</span>.
 </p>"""
 
-class TestCC0Formatter:
+class TestCC0Formatter(object):
     def __init__(self):
         self.license = cc.license.by_code('CC0')
         self.html = cc.license.formatters.classes.CC0HTMLFormatter()
@@ -431,7 +433,7 @@ This work (<span property="dct:title">&lt;b&gt;&#39;HAXX0rs&#39; &amp; &#34;LAME
 </p>"""
 
 
-class TestPDMarkFormatter:
+class TestPDMarkFormatter(object):
     def __init__(self):
         self.formatter = cc.license.formatters.classes.PDMarkHTMLFormatter()
         self.license = cc.license.by_code('mark')
@@ -607,7 +609,7 @@ def test_publicdomain_formatter():
     #     license, {'format': ''}, 'es')
 
 
-class TestPublicApi:
+class TestPublicApi(object):
 
     def __init__(self):
         self.dir = dir(cc.license.formatters)
@@ -620,7 +622,7 @@ class TestPublicApi:
             assert f in self.dir
 
 
-class TestFilters:
+class TestFilters(object):
 
     def __init__(self):
         self.lic = cc.license.by_code('by')
@@ -661,7 +663,7 @@ class TestFilters:
         assert result != ["http://example.org/ASDFASDF"]
 
 
-class TestCustomization:
+class TestCustomization(object):
 
     def __init__(self):
         self.formatters = []

@@ -74,7 +74,7 @@ def get_licenses_by_code(code):
         # 'Invalid jurisdiction'
         return None
     if code == '':
-        if 'unported' not in _CACHE.keys():
+        if 'unported' not in list(_CACHE.keys()):
             _CACHE['unported'] = []
             uris = rdf_helper.get_license_uris(
                 'http://creativecommons.org/license/')

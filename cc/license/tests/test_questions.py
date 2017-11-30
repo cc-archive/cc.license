@@ -1,10 +1,13 @@
+from builtins import str
+from builtins import range
+from builtins import object
 
 import nose.tools
 import cc.license
 from cc.license import CCLicenseError
 from cc.license._lib.rdf_helper import questions_root as root
 
-class TestStandard:
+class TestStandard(object):
 
     def __init__(self):
         self.qc = cc.license.Question(root, 'standard', 'commercial')
@@ -46,7 +49,7 @@ class TestStandard:
             answers = q.answers()
             for answer in answers:
                 assert type(answer) is tuple
-                assert type(answer[0]) in (str, unicode)
+                assert type(answer[0]) in (str, str)
                 assert type(answer[1]) is str
             answers2 = q.answers('ja')
             for i in range(len(answers)):
@@ -56,13 +59,13 @@ class TestStandard:
         assert self.qd.answers() == self.qd.answers('en')
         assert self.qd.answers() != self.qd.answers('es')
 
-class TestSampling:
+class TestSampling(object):
     pass
 
-class TestPublicDomain:
+class TestPublicDomain(object):
     pass
 
-class TestCustomization:
+class TestCustomization(object):
 
     def __init__(self):
         sel = cc.license.selectors.choose('standard')

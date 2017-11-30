@@ -24,4 +24,4 @@ def choose(license_class):
 
 def list():
     """Return a list of available selector IDs."""
-    return SELECTORS.keys()
+    return list(SELECTORS.keys())

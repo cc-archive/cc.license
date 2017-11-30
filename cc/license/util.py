@@ -1,9 +1,13 @@
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import range
 import csv
 import pkg_resources
 import re
 
 from lxml import etree
-import StringIO
+import io
 
 
 LEFT_WHITE_SPACE_RE = re.compile('\A[ \n\t].*\Z', re.DOTALL)
@@ -129,7 +133,7 @@ def inner_xml(xml_text):
       >>> inner_xml('<div>This is some <i><b>really</b> silly</i> text!</div>')
       u'This is some <i><b>really</b> silly</i> text!'
     """
-    return unicode(INNER_XML_RE.match(xml_text).groupdict()['body'])
+    return str(INNER_XML_RE.match(xml_text).groupdict()['body'])
 
 
 def stripped_inner_xml(xml_string):
@@ -146,7 +150,7 @@ def stripped_inner_xml(xml_string):
       ... silly</i> text!</div>''')
       u'This is some <i><b>really</b> silly</i> text!'
     """
-    et = etree.parse(StringIO.StringIO(xml_string))
+    et = etree.parse(io.StringIO(xml_string))
     strip_xml(et.getroot())
     return inner_xml(etree.tostring(et))
 
@@ -161,7 +165,7 @@ def remove_blank_lines(string):
 
 
 def unicode_cleaner(string):
-    if isinstance(string, unicode):
+    if isinstance(string, str):
         return string
 
     try:
@@ -179,7 +183,7 @@ def escape(string):
     """
     # Simplest escaping possible, kinda borrowed from jinja2.
     return (
-        unicode(string)
+        str(string)
         .replace('&', '&amp;')
         .replace('>', '&gt;')
         .replace('<', '&lt;')

@@ -1,10 +1,12 @@
 """Unit tests utilizing RDFa parsing. Primarily for cc.license.formatter."""
+from builtins import str
+from builtins import object
 
 import cc.license
 import rdfadict
 import rdflib
 
-class TestHtmlFormatter:
+class TestHtmlFormatter(object):
     """Class layout and organization:
        There are six properties to be exercised.
        Tests are organized in groups, corresponding to the number

@@ -1,3 +1,4 @@
+from builtins import object
 import zope.interface
 import cc.license
 from cc.license._lib import interfaces, rdf_helper
@@ -10,7 +11,7 @@ from cc.license._lib.exceptions import SelectorQAError
 SELECTOR_BY_CODE_CACHE = {}
 
 
-class LicenseSelector:
+class LicenseSelector(object):
     zope.interface.implements(interfaces.ILicenseSelector)
 
     def __init__(self, uri):
@@ -111,7 +112,7 @@ class LicenseSelector:
         return list(self._questions)
 
     def has_license(self, license_uri):
-        if license_uri in self._licenses.keys():
+        if license_uri in list(self._licenses.keys()):
             return True
         else:
             if not rdf_helper.selector_has_license(self.uri, license_uri):
@@ -124,7 +125,7 @@ class LicenseSelector:
         
         for q in self.questions():
             # verify that all questions are answered 
-            if q.id not in answers_dict.keys():
+            if q.id not in list(answers_dict.keys()):
                 #"Invalid question answered."
                 return None
             # verify that answers have an acceptable value

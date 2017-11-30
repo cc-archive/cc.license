@@ -1,10 +1,12 @@
+from builtins import str
+from builtins import object
 
 import nose.tools
 import cc.license
 from cc.license import CCLicenseError
 from cc.license._lib.classes import License
 
-class TestAll:
+class TestAll(object):
 
     def __init__(self):
         self.stdsel = cc.license.selectors.choose('standard')
@@ -208,7 +210,7 @@ class TestAll:
         nose.tools.assert_equal(result, expected)
 
 
-class TestStandard:
+class TestStandard(object):
 
     def setUp(self):
         self.selector = cc.license.selectors.choose('standard')
@@ -236,7 +238,7 @@ class TestStandard:
         # Now, test automatic version selection - but FIXME
         # do that later.
 
-class TestSampling:
+class TestSampling(object):
 
     def setUp(self):
         self.selector = cc.license.selectors.choose('recombo')
@@ -245,7 +247,7 @@ class TestSampling:
         lic = self.selector.by_code('sampling')
         assert lic.title() == 'Sampling 1.0'
 
-class TestPublicDomain:
+class TestPublicDomain(object):
 
     def setUp(self):
         self.selector = cc.license.selectors.choose('publicdomain')
@@ -258,7 +260,7 @@ class TestPublicDomain:
         assert self.lic.title() == self.lic.title('en')
 
 
-class TestCustomization:
+class TestCustomization(object):
 
     def __init__(self):
         std = cc.license.selectors.choose('standard')

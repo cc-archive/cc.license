@@ -1,4 +1,5 @@
 """Unit tests and functional tests exercising cc.license._lib"""
+from builtins import object
 
 import nose.tools
 import cc.license
@@ -6,7 +7,7 @@ from cc.license import CCLicenseError
 import cc.license._lib as lib
 
 
-class TestUriDict:
+class TestUriDict(object):
 
     def __init__(self):
         self.malformed = (
@@ -47,7 +48,7 @@ class TestUriDict:
         f = dict(code='by-sa', version='1.0')
         assert lib.dict2uri(f) == 'http://creativecommons.org/licenses/by-sa/1.0/'
 
-class TestFunctions:
+class TestFunctions(object):
 
     def __init__(self):
         self.pairs = (

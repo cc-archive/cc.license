@@ -1,3 +1,5 @@
+from builtins import str
+from builtins import object
 
 import nose.tools
 from zope.interface import implementedBy
@@ -58,7 +60,7 @@ def test_functional_one():
     assert std.has_license(uri)
 
 
-class TestIssuers:
+class TestIssuers(object):
 
     def __init__(self):
         self.std = cc.license.selectors.choose('standard')
@@ -88,7 +90,7 @@ class TestIssuers:
 
     # TODO: test by_code
 
-class TestQuestions:
+class TestQuestions(object):
 
     def __init__(self):
         self.std = cc.license.selectors.choose('standard')
@@ -107,7 +109,7 @@ class TestQuestions:
         assert type(questions) == list
         assert len(questions) == 0
 
-class TestAnswersStandard:
+class TestAnswersStandard(object):
 
     def __init__(self):
         self.sel = cc.license.selectors.choose('standard')
@@ -157,7 +159,7 @@ class TestAnswersStandard:
         assert license.uri == 'http://creativecommons.org/licenses/by-sa/3.0/es/'
 
 
-class TestAnswersSampling:
+class TestAnswersSampling(object):
 
     def __init__(self):
         self.sel = cc.license.selectors.choose('recombo')
@@ -187,7 +189,7 @@ class TestAnswersSampling:
             lic = self.sel.by_answers(answer_dict)
             assert type(lic) == cc.license.License
 
-class TestAnswersPublicdomain:
+class TestAnswersPublicdomain(object):
 
     def __init__(self):
         self.sel = cc.license.selectors.choose('publicdomain')
@@ -207,7 +209,7 @@ class TestAnswersPublicdomain:
         assert lic == lic2
 
 
-class TestPublicApi:
+class TestPublicApi(object):
 
     def __init__(self):
         self.dir = dir(cc.license.selectors)
@@ -217,7 +219,7 @@ class TestPublicApi:
             assert f in self.dir
 
 
-class TestCustomization:
+class TestCustomization(object):
 
     def __init__(self):
         self.sels = []

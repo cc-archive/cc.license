@@ -1,3 +1,5 @@
+from builtins import map
+from builtins import str
 
 import pkg_resources
 
@@ -101,7 +103,7 @@ def query_to_single_value(subject, predicate, object,
     if len(with_lang) > 1:
         raise RdfHelperError("Somehow I found too many values.")
     if len(with_lang) == 1:
-        return with_lang.values()[0]
+        return list(with_lang.values())[0]
     else: # Nothing to 
         if default is default_flag_value:
             # Then no default was specified
@@ -110,7 +112,7 @@ def query_to_single_value(subject, predicate, object,
             return default
 
 def to_date(s):
-    return datetime.date(*map(int, s.split('-')))
+    return datetime.date(*list(map(int, s.split('-'))))
 
 def to_bool(s):
     s = s.lower()

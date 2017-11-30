@@ -1,6 +1,8 @@
 from __future__ import print_function
+from future import standard_library
+standard_library.install_aliases()
 
-from StringIO import StringIO
+from io import StringIO
 import lxml.etree
 import os
 

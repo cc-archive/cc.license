@@ -1,8 +1,11 @@
 from __future__ import absolute_import
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
 
 import copy
 from distutils.version import StrictVersion
-import urlparse
+import urllib.parse
 import RDF
 from . import rdf_helper
 
@@ -53,7 +56,7 @@ def by_code(code, jurisdiction=None, version=None):
     if cache_key in _BY_CODE_CACHE:
         return _BY_CODE_CACHE[cache_key]
 
-    for key, selector in cc.license.selectors.SELECTORS.items():
+    for key, selector in list(cc.license.selectors.SELECTORS.items()):
         license = selector.by_code(
             code,
             jurisdiction=jurisdiction,
@@ -72,7 +75,7 @@ def by_uri(uri):
     if uri in _BY_URI_CACHE:
         return _BY_URI_CACHE[uri]
 
-    for key, selector in cc.license.selectors.SELECTORS.items():
+    for key, selector in list(cc.license.selectors.SELECTORS.items()):
         if selector.has_license(uri):
             license =  selector.by_uri(uri)
             _BY_URI_CACHE[uri] = license
@@ -170,15 +173,15 @@ def dict2uri(license_info):
         # apparently urlparse.urljoin is retarded, or handles /'s differently
         # than i expect; if string is empty, concatenating yields a single '/'
         # which brings the URI up a level.
-        base = urlparse.urljoin(base, license_code)
+        base = urllib.parse.urljoin(base, license_code)
         if not base.endswith('/'):
             base += '/'
-        base = urlparse.urljoin(base, version)
+        base = urllib.parse.urljoin(base, version)
         if not base.endswith('/'):
             base += '/'
 
         if jurisdiction:
-            base = urlparse.urljoin(base, jurisdiction)
+            base = urllib.parse.urljoin(base, jurisdiction)
             if not base.endswith('/'):
                 base += '/'
 
@@ -243,8 +246,7 @@ def all_possible_license_versions(code, jurisdiction=None):
     jurisdiction_obj = cc.license.jurisdictions.by_code(str(jurisdiction or ''))
 
     # only keep results with the same jurisdiction
-    license_results = filter(
-        lambda lic: lic.jurisdiction == jurisdiction_obj, license_results)
+    license_results = [lic for lic in license_results if lic.jurisdiction == jurisdiction_obj]
 
     license_results.sort(sort_licenses)    
     ALL_POSSIBLE_VERSIONS_CACHE[cache_key] = license_results
@@ -292,7 +294,7 @@ def get_valid_jurisdictions(license_class='standard'):
         query_language="sparql")
 
     jurisdictions = set(
-        [unicode(result['jurisdiction'].uri)
+        [str(result['jurisdiction'].uri)
          for result in query.execute(rdf_helper.ALL_MODEL)])
 
     _VALID_JURISDICTIONS_CACHE[license_class] = jurisdictions
