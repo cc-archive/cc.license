@@ -33,8 +33,6 @@ setup(name='cc.license',
           'rdfadict',
           'cc.i18n',
           # Dependencies of dependencies
-          # For pyRdfa3 - see their github repo README
-          'html5lib<=0.95',
           # Moving from Python 2 to Python 3
           'future',
       ] + JINJA,
@@ -44,7 +42,7 @@ setup(name='cc.license',
           'https://github.com/creativecommons/cc.licenserdf/tarball/python3#egg=cc.licenserdf',
           'https://github.com/creativecommons/rdfadict/tarball/python3#egg=rdfadict',
           # We don't use pyRdfa but our dependencies do, so we need this here
-          'https://github.com/RDFLib/pyrdfa3/tarball/master#egg=pyRdfa',
+          'https://github.com/creativecommons/pyrdfa3/tarball/master#egg=pyRdfa',
       ],
 
       setup_requires=['setuptools-git',],
