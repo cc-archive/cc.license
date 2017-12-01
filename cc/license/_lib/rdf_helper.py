@@ -61,13 +61,15 @@ SEL_MODEL = init_model(SEL_RDF_PATH)
 
 # NOTE: 'object' shadows a global, but fixing it is nontrivial
 def query_to_language_value_dict(subject, predicate, object,
-                                 model=JURI_MODEL):
+                                 model=False):
     """Given a model and a subject, predicate, object (one of which
        is None), generate a dictionary of language values.
        The dictionary is in the form {'en' : u'Germany'}.
        Query is implicitly generated from subject, predicate, object."""
     # Assume either s, p, or o is None
     # so that would be what we want back.
+    if model == False:
+        model = JURI_MODEL
     is_none = [thing for thing in ('subject', 'predicate', 'object')
                if (eval(thing) is None)]
     die_unless( len(is_none) == 1, "You gave me more than one None, " +
@@ -93,11 +95,14 @@ default_flag_value = object() # TODO: ask asheesh why this is here
 # NOTE: 'object' shadows a global, but fixing it is nontrivial
 def query_to_single_value(subject, predicate, object,
                           default=default_flag_value,
-                          model=JURI_MODEL):
+                          model=False):
     """Much like query_to_language_value_dict, but only returns a single
        value. In fact, raises an exception if the query returns multiple
        values."""
-    
+
+    if model == False:
+        model = JURI_MODEL
+
     with_lang = query_to_language_value_dict(subject, predicate, object,
                                              model)
     if len(with_lang) > 1:
@@ -143,10 +148,12 @@ def uri2value(uri):
 
 # XXX all get_* helpers below are not directly tested
 
-def get_titles(uri, model=ALL_MODEL):
+def get_titles(uri, model=False):
     """Given a URI for an RDF resource, return a dictionary of
        corresponding to its dc:title properties. The indices will
        be locale codes, and the values will be titles."""
+    if model == False:
+        model = ALL_MODEL
     qstring = """
                      PREFIX dc: <http://purl.org/dc/elements/1.1/>
 
@@ -165,8 +172,10 @@ def get_titles(uri, model=ALL_MODEL):
         _titles[ tmp['language'] ] = tmp['string']
     return _titles
 
-def get_descriptions(uri, model=ALL_MODEL):
+def get_descriptions(uri, model=False):
     # Fixme: This function isn't hit by any tests.
+    if model == False:
+        model = ALL_MODEL
     qstring = """
               PREFIX dc: <http://purl.org/dc/elements/1.1/>
 
@@ -189,7 +198,9 @@ def get_descriptions(uri, model=ALL_MODEL):
             _descriptions[ tmp['language'] ] = tmp['string']
         return _descriptions
 
-def get_version(uri, model=ALL_MODEL):
+def get_version(uri, model=False):
+    if model == False:
+        model = ALL_MODEL
     qstring = """
               PREFIX dcq: <http://purl.org/dc/terms/>
 
@@ -205,7 +216,9 @@ def get_version(uri, model=ALL_MODEL):
     else:
         return solns[0]['version'].literal_value['string']
 
-def get_jurisdiction(uri, model=ALL_MODEL):
+def get_jurisdiction(uri, model=False):
+    if model == False:
+        model = ALL_MODEL
     qstring = """
               PREFIX cc: <http://creativecommons.org/ns#>
 
@@ -246,7 +259,9 @@ def get_unported_license_uris(model):
     return tuple(str(s['luri'].uri) for s in query.execute(model))
 '''
 
-def get_jurisdiction_licenses(uri, model=ALL_MODEL):
+def get_jurisdiction_licenses(uri, model=False):
+    if model == False:
+        model = ALL_MODEL
     # FIXME: This function is never hit by any unit tests.
     qstring = """
               PREFIX cc: <http://creativecommons.org/ns#>
@@ -263,16 +278,29 @@ def get_jurisdiction_licenses(uri, model=ALL_MODEL):
     else:
         return [str( l['license'].uri ) for l in solns]
 
-def get_deprecated(uri, model=ALL_MODEL):
+def get_deprecated(uri, model=False):
+    if model == False:
+        model = ALL_MODEL
+    # This has had to be made more complex to avoid a warning.
+    # Originally, instead of the SELECT and != we had:
+    #    ASK { <%s> cc:deprecatedOn ?date . }"""
+    # and
+    #    return query.execute(model).get_boolean()
+    # For why we don't, see here:
+    # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=729320
+    # https://stackoverflow.com/questions/13346198/boolean-checks-in-sparql-check-for-existence-of-a-statement
     qstring = """
               PREFIX cc: <http://creativecommons.org/ns#>
               PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-                
-              ASK { <%s> cc:deprecatedOn ?date . }"""
+              
+              SELECT ?date { <%s> cc:deprecatedOn ?date . }
+              """
     query = RDF.Query(qstring % uri, query_language='sparql')
-    return query.execute(model).get_boolean()
+    return query.execute(model).get_binding_value_by_name('date') != None
 
-def get_permits(uri, model=ALL_MODEL):
+def get_permits(uri, model=False):
+    if model == False:
+        model = ALL_MODEL
     qstring = """
               PREFIX cc: <http://creativecommons.org/ns#>
 
@@ -284,7 +312,9 @@ def get_permits(uri, model=ALL_MODEL):
     query = RDF.Query(qstring % uri, query_language='sparql')
     return tuple(str(p['permission'].uri) for p in query.execute(model))
 
-def get_requires(uri, model=ALL_MODEL):
+def get_requires(uri, model=False):
+    if model == False:
+        model = ALL_MODEL
     qstring = """
               PREFIX cc: <http://creativecommons.org/ns#>
 
@@ -296,7 +326,9 @@ def get_requires(uri, model=ALL_MODEL):
     query = RDF.Query(qstring % uri, query_language='sparql')
     return tuple(str(p['requirement'].uri) for p in query.execute(model))
 
-def get_prohibits(uri, model=ALL_MODEL):
+def get_prohibits(uri, model=False):
+    if model == False:
+        model = ALL_MODEL
     qstring = """
               PREFIX cc: <http://creativecommons.org/ns#>
 
@@ -308,7 +340,9 @@ def get_prohibits(uri, model=ALL_MODEL):
     query = RDF.Query(qstring % uri, query_language='sparql')
     return tuple(str(p['prohibition'].uri) for p in query.execute(model))
 
-def get_superseded(uri, model=ALL_MODEL):
+def get_superseded(uri, model=False):
+    if model == False:
+        model = ALL_MODEL
     """Watch out: returns a tuple and not just a value."""
     qstring = """
               PREFIX dcq: <http://purl.org/dc/terms/>
@@ -353,7 +387,9 @@ def get_selector_id(uri):
     solns = [i for i in query.execute(SEL_MODEL)]
     return str(solns[0]['lcode'].literal_value['string'])
 
-def get_license_uris(selector_uri, model=ALL_MODEL):
+def get_license_uris(selector_uri, model=False):
+    if model == False:
+        model = ALL_MODEL
     # FIXME: This function is never hit by any unit tests.
     qstring = """
               PREFIX cc: <http://creativecommons.org/ns#>
@@ -368,7 +404,9 @@ def get_license_uris(selector_uri, model=ALL_MODEL):
     return tuple(str(s['luri'].uri) for s in query.execute(model))
 
 
-def get_license_code(uri, model=ALL_MODEL):
+def get_license_code(uri, model=False):
+    if model == False:
+        model = ALL_MODEL
     qstring = """
               PREFIX dc: <http://purl.org/dc/elements/1.1/>
 
@@ -381,7 +419,9 @@ def get_license_code(uri, model=ALL_MODEL):
     solns = [i for i in query.execute(model)]
     return str(solns[0]['code'].literal_value['string'])
 
-def get_license_class(uri, model=ALL_MODEL):
+def get_license_class(uri, model=False):
+    if model == False:
+        model = ALL_MODEL
     qstring = """
               PREFIX cc: <http://creativecommons.org/ns#>
 
@@ -394,7 +434,9 @@ def get_license_class(uri, model=ALL_MODEL):
     solns = [i for i in query.execute(model)]
     return str(solns[0]['lclassuri'].uri)
 
-def get_logos(uri, model=ALL_MODEL):
+def get_logos(uri, model=False):
+    if model == False:
+        model = ALL_MODEL
     qstring = """
               PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 
@@ -407,7 +449,9 @@ def get_logos(uri, model=ALL_MODEL):
     return tuple(str(s['img'].uri) for s in query.execute(model))
 
 
-def selector_has_license(selector_uri, license_uri, model=ALL_MODEL):
+def selector_has_license(selector_uri, license_uri, model=False):
+    if model == False:
+        model = ALL_MODEL
     qstring = """
               PREFIX cc: <http://creativecommons.org/ns#>
 
