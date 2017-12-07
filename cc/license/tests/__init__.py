@@ -9,9 +9,9 @@ import os
 RELAX_PATH = os.path.join(os.path.dirname(__file__), 'schemata')
 
 def relax_validate(schema_filename, instance_buffer):
-    """Validates xml string instance_buffer against RelaxNG schema 
-       located in file schema_filename. By convention, schema_filename 
-       is a constant defined in the test module. Schema files are 
+    """Validates xml string instance_buffer against RelaxNG schema
+       located in file schema_filename. By convention, schema_filename
+       is a constant defined in the test module. Schema files are
        located in tests/schemata."""
 
     relaxng = lxml.etree.RelaxNG(lxml.etree.parse(schema_filename))

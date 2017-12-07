@@ -1,7 +1,7 @@
 from __future__ import absolute_import
 from builtins import str
 from builtins import object
-import RDF
+import rdflib
 import zope.interface
 
 from cc.i18n.gettext_i18n import ugettext_for_locale
@@ -44,8 +44,8 @@ class License(object):
                   PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
                 
                   ASK { <%s> rdf:type cc:License . }"""
-        query = RDF.Query(qstring % self.uri, query_language='sparql')
-        uri_exists = query.execute(rdf_helper.ALL_MODEL).get_boolean()
+        soln = rdf_helper.ALL_MODEL.query(qstring % self.uri)
+        uri_exists = bool(soln)
         if not uri_exists:
             raise ExistentialException("License <%(uri)s> does not exist in model given." % {
                               'uri': self.uri })

@@ -1,6 +1,6 @@
 from builtins import object
 import zope.interface
-import RDF
+from rdflib import URIRef
 
 import cc.license
 from cc.license._lib.exceptions import NoValuesFoundError, InvalidURIError
@@ -28,15 +28,15 @@ class Jurisdiction(object):
         self.code = cc.license.jurisdictions.uri2code(uri)
         self.id = uri
         self._titles = rdf_helper.get_titles(self.id, rdf_helper.JURI_MODEL)
-        id_uri = RDF.Uri(self.id)
+        id_uri = URIRef(self.id)
         try:
             self.local_url = rdf_helper.query_to_single_value(
-                id_uri, RDF.Uri(rdf_helper.NS_CC + 'jurisdictionSite'), None)
+                id_uri, URIRef(rdf_helper.NS_CC + 'jurisdictionSite'),None)
         except NoValuesFoundError:
             self.local_url = None
         try:
             self.launched = rdf_helper.query_to_single_value(
-                id_uri, RDF.Uri(rdf_helper.NS_CC + 'launched'), None)
+                id_uri, URIRef(rdf_helper.NS_CC + 'launched'), None)
         except NoValuesFoundError:
             self.launched = None
 

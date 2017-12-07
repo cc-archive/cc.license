@@ -53,7 +53,6 @@ class TestAll(object):
 
     def test_jurisdiction(self):
         lic = self.stdsel.by_code('by-sa')
-        print(lic.jurisdiction.title())
         assert lic.jurisdiction.title() == 'Unported'
         assert lic.jurisdiction == cc.license.jurisdictions.by_code('')
         lic2 = self.stdsel.by_code('by-nc', jurisdiction='jp')

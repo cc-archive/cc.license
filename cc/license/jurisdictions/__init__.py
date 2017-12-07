@@ -1,5 +1,4 @@
-
-import RDF
+from rdflib import URIRef
 import cc.license
 from cc.license._lib import rdf_helper
 
@@ -22,12 +21,11 @@ def list_uris():
     return list_t(_CACHE['uri'])
 
 def _list_uris():
-    cc_jurisdiction_url = RDF.Uri('http://creativecommons.org/ns#Jurisdiction')
+    cc_jurisdiction_url = URIRef('http://creativecommons.org/ns#Jurisdiction')
     # grab the url strings from the RDF Nodes
-    uris = [ rdf_helper.uri2value(j.subject)
+    uris = [ str(j)
              for j in
-             list_t(rdf_helper.JURI_MODEL.find_statements(
-                           RDF.Statement(None, None, cc_jurisdiction_url)))
+             rdf_helper.JURI_MODEL.subjects(None, cc_jurisdiction_url)
            ]
     uris.append('') # default jurisdiction
     return uris

@@ -24,8 +24,6 @@ To create an environment and install dependencies, run::
   $ cd cc.license
   $ virtualenv .
   $ . bin/activate
-  $ echo "/usr/lib/python2.7/dist-packages/" \
-      > lib/python2.7/site-packages/dist-packages.pth
   $ python bootstrap.py
 
 You should also create the .mo files that the cc.i18n module uses:

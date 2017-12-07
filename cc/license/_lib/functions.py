@@ -6,7 +6,7 @@ from builtins import str
 import copy
 from distutils.version import StrictVersion
 import future.moves.urllib.parse
-import RDF
+import rdflib
 from . import rdf_helper
 
 from cc.license.jurisdictions.classes import Jurisdiction
@@ -35,9 +35,8 @@ def locales():
             ?x rdf:type cc:Jurisdiction .
          }
                   """
-    query = RDF.Query(query_string, query_language='sparql')
-    return [s['lang'].literal_value['string']
-            for s in query.execute(rdf_helper.JURI_MODEL)]
+    solns = rdf_helper.JURI_MODEL.query(query_string)
+    return [str(s['lang']) for s in solns]
 
 
 _BY_CODE_CACHE = {}
@@ -101,7 +100,7 @@ def uri2dict(uri):
         raw_info = uri[len(base):]
         raw_info = raw_info.rstrip('/')
 
-        info_list = raw_info.split('/') 
+        info_list = raw_info.split('/')
 
         if len(info_list) not in (1,2,3):
             raise InvalidURIError("Invalid Creative Commons URI: <%s>"%uri)
@@ -142,7 +141,7 @@ def dict2uri(license_info):
         else:
             version = current_version(
                 license_code, license_info.get('jurisdiction'))
-            
+
         if license_code == 'CC0':
             return CC0_BASE + version + '/'
         elif license_code == 'mark':
@@ -198,7 +197,7 @@ def current_version(code, jurisdiction=None):
     if len(versions):
         current = str(versions[-1].version)
     return current
-    
+
 
 def sort_licenses(x, y):
     """
@@ -235,20 +234,19 @@ def all_possible_license_versions(code, jurisdiction=None):
               SELECT ?license
               WHERE {
                 ?license dc:identifier '%s' }"""
-    query = RDF.Query(
-        qstring % str(code),
-        query_language='sparql')
+    solns = rdf_helper.ALL_MODEL.query(qstring % str(code))
 
     license_results = [
-        cc.license.by_uri(str(result['license'].uri))
-        for result in query.execute(rdf_helper.ALL_MODEL)]
+        cc.license.by_uri(str(result['license']))
+        for result in solns]
 
     jurisdiction_obj = cc.license.jurisdictions.by_code(str(jurisdiction or ''))
 
     # only keep results with the same jurisdiction
-    license_results = [lic for lic in license_results if lic.jurisdiction == jurisdiction_obj]
+    license_results = [lic for lic in license_results
+                       if lic.jurisdiction == jurisdiction_obj]
 
-    license_results.sort(sort_licenses)    
+    license_results.sort(sort_licenses)
     ALL_POSSIBLE_VERSIONS_CACHE[cache_key] = license_results
 
     return license_results
@@ -270,7 +268,7 @@ def all_possible_answers(list_of_questions):
         new_adl = []
         for adict in adl:
             for enum in q.answers():
-                answer = enum[1] # the answer value 
+                answer = enum[1] # the answer value
                 aclone = adict.copy()
                 aclone[q.id] = answer
                 new_adl.append(aclone)
@@ -284,18 +282,17 @@ _VALID_JURISDICTIONS_CACHE = {}
 def get_valid_jurisdictions(license_class='standard'):
     if license_class in _VALID_JURISDICTIONS_CACHE:
         return _VALID_JURISDICTIONS_CACHE[license_class]
-    
+
     # TODO: use license_class here
-    query = RDF.Query(
+    solns = rdf_helper.ALL_MODEL.query(
         str('PREFIX cc: <http://creativecommons.org/ns#> '
             'SELECT ?jurisdiction WHERE '
             '{ ?license cc:licenseClass <http://creativecommons.org/license/> .'
-            '  ?license cc:jurisdiction ?jurisdiction }'),
-        query_language="sparql")
+            '  ?license cc:jurisdiction ?jurisdiction }'))
 
     jurisdictions = set(
-        [str(result['jurisdiction'].uri)
-         for result in query.execute(rdf_helper.ALL_MODEL)])
+        [str(result['jurisdiction'])
+         for result in solns])
 
     _VALID_JURISDICTIONS_CACHE[license_class] = jurisdictions
 
@@ -316,15 +313,15 @@ def get_selector_jurisdictions(selector_name='standard'):
     qstring = "\n".join(
         ["PREFIX cc: <http://creativecommons.org/ns#>",
          "SELECT ?license",
-         "WHERE {?license cc:licenseClass <%s>}" % str(selector.uri)])
-    query = RDF.Query(qstring, query_language="sparql")
+         "WHERE {?license cc:licenseClass <%s>}" % str(selector)])
+    solns = rdf_helper.ALL_MODEL.query(qstring)
 
     # This is so stupid, but if we add a WHERE clause for
     # jurisdictions in the query string it takes approximately 5
     # million years.
     licenses = [
-        cc.license.by_uri(str(result['license'].uri))
-        for result in query.execute(rdf_helper.ALL_MODEL)]
+        cc.license.by_uri(str(result['license']))
+        for result in solns]
 
     # We need to make sure jurisdictions are unique.  The easiest way
     # to do that is have a second set that keeps track of all the
