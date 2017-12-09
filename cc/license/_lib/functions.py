@@ -313,7 +313,7 @@ def get_selector_jurisdictions(selector_name='standard'):
     qstring = "\n".join(
         ["PREFIX cc: <http://creativecommons.org/ns#>",
          "SELECT ?license",
-         "WHERE {?license cc:licenseClass <%s>}" % str(selector)])
+         "WHERE {?license cc:licenseClass <%s>}" % str(selector.uri)])
     solns = rdf_helper.ALL_MODEL.query(qstring)
 
     # This is so stupid, but if we add a WHERE clause for
