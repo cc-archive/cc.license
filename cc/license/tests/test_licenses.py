@@ -224,7 +224,7 @@ class TestStandard(object):
     def test_bysa_generic(self):
         lic = self.selector.by_code('by-sa')
         assert lic.jurisdiction.title() == 'Unported'
-        # assert_true(lic.libre) # FIXME: Should this be here?
+        assert lic.libre
 
     def test_bysa_us(self):
         # nonexistent license returns None
@@ -233,7 +233,7 @@ class TestStandard(object):
 
         lic = self.selector.by_code('by-sa', jurisdiction='us', version='3.0')
         assert lic.jurisdiction.code == 'us'
-        # assert_true(lic.libre) # FIXME: Should this be here?
+        assert lic.libre
 
         # Now, test automatic version selection - but FIXME
         # do that later.

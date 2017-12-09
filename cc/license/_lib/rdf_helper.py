@@ -44,11 +44,9 @@ JURI_MODEL = init_model(JURI_RDF_PATH)
 SEL_MODEL = init_model(SEL_RDF_PATH)
 
 
-def query_to_language_value_dict(rdf_subject, rdf_predicate, rdf_object,
-                                 model=False):
-    """Given a model and a subject, predicate, object (one of which
-       is None), generate a dictionary of language values.
-       The dictionary is in the form {'en' : u'Germany'}.
+def query_to_value_list(rdf_subject, rdf_predicate, rdf_object, model=False):
+    """Given a model and a subject, predicate, object (one of which is None),
+       generate a list of matching values.
        Query is implicitly generated from subject, predicate, object."""
     if model == False:
         model = JURI_MODEL
@@ -58,41 +56,27 @@ def query_to_language_value_dict(rdf_subject, rdf_predicate, rdf_object,
                                         rdf_object]) == 1,
                 "You gave me more than one None, " +
                 "so I don't know what you want back")
-    # Get the index of the wanted item, specified as None
-    wanted = 0 if rdf_subject != None else 1 if rdf_predicate != None else 2
+    # The index of the wanted item, specified with None
+    wanted = 0 if (rdf_subject == None) else 1 if (rdf_predicate == None) else 2
     results = model.triples( (rdf_subject, rdf_predicate, rdf_object) )
-    # list of
-    interesting_ones = [result[wanted] for result in results]
-    #FIXME!!!!: We *never* get languages at the moment
-    values_with_lang = [uri2lang_and_value(result)
-                        for result in interesting_ones]
+    return [str(result[wanted]) for result in results]
 
-    # Now, collapse this into a dict, ensuring there are no duplicate keys
-    ret = {}
-    for (lang, val) in values_with_lang:
-        die_unless( lang not in ret, "Duplicate language found; blowing up")
-        ret[lang] = val
-    return ret
 
 default_flag_value = object() # TODO: ask asheesh why this is here
 
-# NOTE: 'object' shadows a global, but fixing it is nontrivial
 def query_to_single_value(rdf_subject, rdf_predicate, rdf_object,
                           default=default_flag_value,
                           model=False):
-    """Much like query_to_language_value_dict, but only returns a single
-       value. In fact, raises an exception if the query returns multiple
-       values."""
-
+    """Much like query_to_value_list, but only returns a single value. In fact,
+       it raises an exception if the query returns multiple values."""
     if model == False:
         model = JURI_MODEL
-
-    with_lang = query_to_language_value_dict(rdf_subject, rdf_predicate,
-                                             rdf_object, model)
-    if len(with_lang) > 1:
+    values = query_to_value_list(rdf_subject, rdf_predicate,
+                                        rdf_object, model)
+    if len(values) > 1:
         raise RdfHelperError("Somehow I found too many values.")
-    if len(with_lang) == 1:
-        return list(with_lang.values())[0]
+    if len(values) == 1:
+        return values[0]
     else: # Nothing to 
         if default is default_flag_value:
             # Then no default was specified
@@ -112,13 +96,6 @@ type2converter = {
     'http://www.w3.org/2001/XMLSchema-datatypes#boolean': to_bool,
     'http://www.w3.org/2001/XMLSchema-datatypes#date': to_date,
 }
-
-def uri2lang_and_value(uri):
-    #return(uri['language'], str(uri))
-    return(None, str(uri))
-
-def uri2value(uri):
-    return uri2lang_and_value(uri)[1]
 
 
 # XXX all get_* helpers below are not directly tested

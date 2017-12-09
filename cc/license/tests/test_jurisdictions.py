@@ -95,35 +95,34 @@ class TestJurisdictions(object):
 
     def __init__(self):
         self.langs = ('fr', 'ja', 'de', 'en')
-    #FIXME: What???
-    #     self.mx = cc.license.Jurisdiction(
-    #                  'http://creativecommons.org/international/mx/')
+        self.mx = cc.license.Jurisdiction(
+                     'http://creativecommons.org/international/mx/')
 
-    # def test_jurisdiction(self):
-    #     assert 'creativecommons.org.mx' in self.mx.local_url
-    #     assert self.mx.code == 'mx'
-    #     assert self.mx.launched
-    #     assert self.mx.id.endswith('mx/')
+    def test_jurisdiction(self):
+        assert 'creativecommons.org.mx' in self.mx.local_url
+        assert self.mx.code == 'mx'
+        assert self.mx.launched
+        assert self.mx.id.endswith('mx/')
 
-    # def test_unported(self):
-    #     j = cc.license.Jurisdiction('')
-    #     assert j.code == ''
-    #     assert j.id == ''
-    #     assert j.local_url == '' #XXX check me!
-    #     assert j.launched
+    def test_unported(self):
+        j = cc.license.Jurisdiction('')
+        assert j.code == ''
+        assert j.id == ''
+        assert j.local_url == '' #XXX check me!
+        assert j.launched
 
-    # def test_titles(self):
-    #     for t in self.langs:
-    #         title = self.mx.title(t)
-    #         assert isinstance(title, string_types)
-    #         assert len(title) != 0
+    def test_titles(self):
+        for t in self.langs:
+            title = self.mx.title(t)
+            assert isinstance(title, string_types)
+            assert len(title) != 0
 
-    # def test_title_default(self):
-    #     assert self.mx.title() == self.mx.title('en')
+    def test_title_default(self):
+        assert self.mx.title() == self.mx.title('en')
 
-    # def test_constructor_fails(self):
-    #     nose.tools.assert_raises(CCLicenseError,
-    #                          cc.license.Jurisdiction, 'lollerskates')
+    def test_constructor_fails(self):
+        nose.tools.assert_raises(CCLicenseError,
+                             cc.license.Jurisdiction, 'lollerskates')
 
 
 class TestPublicApi(object):
