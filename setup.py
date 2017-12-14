@@ -43,7 +43,7 @@ setup(name='cc.license',
           'https://github.com/creativecommons/cc.licenserdf/tarball/python3#egg=cc.licenserdf',
           'https://github.com/creativecommons/rdfadict/tarball/python3#egg=rdfadict',
           # We don't use pyRdfa but our dependencies do, so we need this here
-          'https://github.com/creativecommons/pyrdfa3/tarball/master#egg=pyRdfa',
+          'https://github.com/RDFLib/pyrdfa3/tarball/master#egg=pyRdfa',
       ],
 
       setup_requires=['setuptools-git',],
