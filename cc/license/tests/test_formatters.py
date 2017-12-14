@@ -3,14 +3,12 @@ from builtins import object
 from six import string_types
 
 import nose.tools
-from zope.interface import implementedBy
 import os
 
 import rdfadict
 
 import cc.license
 from cc.license import CCLicenseError
-from cc.license._lib.interfaces import ILicenseFormatter
 from cc.license.tests import relax_validate, RELAX_PATH
 
 RELAX_HTML = os.path.join(RELAX_PATH, 'html_rdfa.relax.xml')
@@ -26,7 +24,6 @@ def test_get_formatter():
     """formatters.choose() must return a valid IFormatter for each formatter."""
     for formatter_id in cc.license.formatters.list():
         f = cc.license.formatters.choose(formatter_id)
-        assert ILicenseFormatter in implementedBy(f.__class__)
         f2 = cc.license.formatters.choose(formatter_id)
         assert f2 is f # singletons
 

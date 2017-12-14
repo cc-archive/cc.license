@@ -1,6 +1,5 @@
 from __future__ import absolute_import
 from . import classes
-from . import interfaces
 from . import rdf_helper
 
 from .functions import (

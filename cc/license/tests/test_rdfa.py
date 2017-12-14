@@ -1,4 +1,5 @@
 """Unit tests utilizing RDFa parsing. Primarily for cc.license.formatter."""
+
 from builtins import str
 from builtins import object
 

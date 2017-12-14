@@ -33,6 +33,7 @@ setup(name='cc.license',
           'rdfadict',
           'cc.i18n',
           # Dependencies of dependencies
+          'html5lib',
           # Moving from Python 2 to Python 3
           'future',
       ] + JINJA,

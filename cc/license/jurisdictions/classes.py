@@ -1,13 +1,11 @@
 from builtins import object
-import zope.interface
 from rdflib import URIRef
 
 import cc.license
 from cc.license._lib.exceptions import NoValuesFoundError, InvalidURIError
-from cc.license._lib import interfaces, rdf_helper
+from cc.license._lib import rdf_helper
 
 class Jurisdiction(object):
-    zope.interface.implements(interfaces.IJurisdiction)
 
     def __init__(self, uri):
         """Creates an object representing a jurisdiction, given
@@ -71,9 +69,9 @@ class Jurisdiction(object):
         except KeyError as e:
             import sys
             tb = sys.exc_info()[2]
-            raise InvalidURIError, \
-                "Language %s does not exist for jurisdiction %s" \
-                % (language, self.code), tb
+            raise InvalidURIError(
+                "Language %s does not exist for jurisdiction %s"
+                % (language, self.code), tb)
 
     @property
     def default_language(self):

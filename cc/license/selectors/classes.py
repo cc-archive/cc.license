@@ -1,7 +1,6 @@
 from builtins import object
-import zope.interface
 import cc.license
-from cc.license._lib import interfaces, rdf_helper
+from cc.license._lib import rdf_helper
 from cc.license._lib.classes import License, Question, JurisdictionQuestion
 from cc.license._lib.exceptions import SelectorQAError
 
@@ -12,7 +11,6 @@ SELECTOR_BY_CODE_CACHE = {}
 
 
 class LicenseSelector(object):
-    zope.interface.implements(interfaces.ILicenseSelector)
 
     def __init__(self, uri):
         """Generates a LicenseSelector instance from a given URI.

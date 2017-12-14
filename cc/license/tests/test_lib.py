@@ -141,7 +141,7 @@ def test_sort_licenses():
     lic3 = cc.license.by_code('by', version='3.0')
 
     licenses = [lic2, lic1, lic3, lic2_5]
-    licenses.sort(lib.functions.sort_licenses)
+    licenses.sort(key=lib.functions.license_sort_key)
     assert licenses == [lic1, lic2, lic2_5, lic3]
 
 

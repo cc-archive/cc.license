@@ -1,7 +1,6 @@
 from future import standard_library
 standard_library.install_aliases()
-from builtins import str
-from builtins import range
+from builtins import open, range, str
 import csv
 import pkg_resources
 import re
@@ -60,7 +59,7 @@ def strip_xml(element):
       >>> import StringIO
       >>> etree_mess = etree.parse(StringIO.StringIO(xml_mess))
       >>> cleaned_root_mess = strip_xml(etree_mess.getroot())
-      >>> etree.tostring(cleaned_root_mess)
+      >>> etree.tounicode(cleaned_root_mess)
       '<help>How did <person>I</person> get to be so <cleanliness xmlns:clean="http://example.org/howclean/#" clean:cleanliness="filthy">messy</cleanliness>?</help>'
 
     Note that strip_xml operates on the mutability of the argument
@@ -152,7 +151,7 @@ def stripped_inner_xml(xml_string):
     """
     et = etree.parse(io.StringIO(xml_string))
     strip_xml(et.getroot())
-    return inner_xml(etree.tostring(et))
+    return inner_xml(etree.tounicode(et))
 
 
 def remove_blank_lines(string):
@@ -222,6 +221,6 @@ def locale_dict_fetch_with_fallbacks(data_dict, locale):
 CODE_COUNTRY_LIST = sorted([
     (unicode_cleaner(code), unicode_cleaner(country))
     for code, country in csv.reader(
-        file(pkg_resources.resource_filename('cc.license', 'iso3166.csv')))],
+        open(pkg_resources.resource_filename('cc.license', 'iso3166.csv')))],
     key=lambda country: country[1])
 CODE_COUNTRY_MAP = dict(CODE_COUNTRY_LIST)

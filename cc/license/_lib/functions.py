@@ -214,6 +214,10 @@ def sort_licenses(x, y):
         return -1
 
 
+def license_sort_key(x):
+    return StrictVersion(x.version)
+
+
 ALL_POSSIBLE_VERSIONS_CACHE = {}
 def all_possible_license_versions(code, jurisdiction=None):
     """
@@ -246,7 +250,7 @@ def all_possible_license_versions(code, jurisdiction=None):
     license_results = [lic for lic in license_results
                        if lic.jurisdiction == jurisdiction_obj]
 
-    license_results.sort(sort_licenses)
+    license_results.sort(key=license_sort_key)
     ALL_POSSIBLE_VERSIONS_CACHE[cache_key] = license_results
 
     return license_results

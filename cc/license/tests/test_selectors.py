@@ -2,11 +2,9 @@ from builtins import str
 from builtins import object
 
 import nose.tools
-from zope.interface import implementedBy
 
 import cc.license
 from cc.license import CCLicenseError
-from cc.license._lib.interfaces import ILicenseSelector
 from cc.license._lib import all_possible_answers
 
 def test_list_selectors():
@@ -20,7 +18,6 @@ def test_get_selector():
     """selectors.choose() must return a valid ISelector for each selector."""
     for selector_id in cc.license.selectors.list():
         s = cc.license.selectors.choose(selector_id)
-        assert ILicenseSelector in implementedBy(s.__class__)
         s2 = cc.license.selectors.choose(selector_id)
         assert s2 is s # singletons, in a way
 

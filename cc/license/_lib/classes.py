@@ -2,7 +2,6 @@ from __future__ import absolute_import
 from builtins import str
 from builtins import object
 import rdflib
-import zope.interface
 
 from cc.i18n.gettext_i18n import ugettext_for_locale
 from cc.i18n.util import locale_to_lower_upper
@@ -10,7 +9,6 @@ from cc.i18n import mappers
 
 import cc.license
 from cc.license.util import locale_dict_fetch_with_fallbacks
-from cc.license._lib import interfaces
 from cc.license._lib import rdf_helper
 from cc.license._lib.exceptions import SelectorQAError, ExistentialException
 from cc.license._lib.functions import all_possible_license_versions
@@ -18,7 +16,6 @@ from cc.licenserdf.util import inverse_translate
 
 class License(object):
     """Base class for ILicense implementation modeling a specific license."""
-    zope.interface.implements(interfaces.ILicense)
 
     def __init__(self, uri):
         # XXX do this as a dict later?
@@ -235,7 +232,6 @@ class License(object):
 
 
 class Question(object):
-    zope.interface.implements(interfaces.IQuestion)
 
     def __init__(self, root, lclass, id):
         """Given an etree root object, a license class string, and a question
@@ -315,9 +311,9 @@ class Question(object):
                                                          language) )
             else:
                 enum = ( label, k, None)
-                
+
             answers.append(enum)
-            
+
         self._answers[language] = answers
 
         return answers
@@ -329,7 +325,6 @@ class JurisdictionQuestion(object):
     information is kept up to date in jurisdictions.rdf, so we should
     pull from there for jurisdiction questions.
     """
-    #zope.interface.implements(interfaces.IQuestion)
 
     def __init__(self, lclass, lclass_uri):
         """
