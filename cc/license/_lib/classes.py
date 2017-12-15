@@ -346,7 +346,7 @@ class JurisdictionQuestion(object):
 
     def __str__(self):
         return "JurisdictionQuestion: %(label)s" % {'label': self.label()}
-            
+
     def label(self, language='en'):
         if language == '':
             language = 'en' # why not?
