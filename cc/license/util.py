@@ -221,6 +221,7 @@ def locale_dict_fetch_with_fallbacks(data_dict, locale):
 CODE_COUNTRY_LIST = sorted([
     (unicode_cleaner(code), unicode_cleaner(country))
     for code, country in csv.reader(
-        open(pkg_resources.resource_filename('cc.license', 'iso3166.csv')))],
+            open(pkg_resources.resource_filename('cc.license', 'iso3166.csv'),
+                 encoding='utf-8'))],
     key=lambda country: country[1])
 CODE_COUNTRY_MAP = dict(CODE_COUNTRY_LIST)
