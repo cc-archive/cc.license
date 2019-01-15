@@ -1,10 +1,14 @@
+from builtins import str
+from builtins import range
+from builtins import object
+from six import string_types
 
 import nose.tools
 import cc.license
 from cc.license import CCLicenseError
 from cc.license._lib.rdf_helper import questions_root as root
 
-class TestStandard:
+class TestStandard(object):
 
     def __init__(self):
         self.qc = cc.license.Question(root, 'standard', 'commercial')
@@ -25,7 +29,7 @@ class TestStandard:
                              root, 'standard', 'qwertyitis')
         nose.tools.assert_raises(CCLicenseError, cc.license.Question,
                              root, 'azerbaijan', 'icanhascheezburger')
-    
+
     def test_label(self):
         assert self.qd.label() == 'Allow modifications of your work?'
         assert self.qd.label('es') == \
@@ -46,8 +50,8 @@ class TestStandard:
             answers = q.answers()
             for answer in answers:
                 assert type(answer) is tuple
-                assert type(answer[0]) in (str, unicode)
-                assert type(answer[1]) is str
+                assert isinstance(answer[0], string_types)
+                assert isinstance(answer[1], string_types)
             answers2 = q.answers('ja')
             for i in range(len(answers)):
                 assert answers[i][1] == answers2[i][1]
@@ -56,13 +60,13 @@ class TestStandard:
         assert self.qd.answers() == self.qd.answers('en')
         assert self.qd.answers() != self.qd.answers('es')
 
-class TestSampling:
+class TestSampling(object):
     pass
 
-class TestPublicDomain:
+class TestPublicDomain(object):
     pass
 
-class TestCustomization:
+class TestCustomization(object):
 
     def __init__(self):
         sel = cc.license.selectors.choose('standard')

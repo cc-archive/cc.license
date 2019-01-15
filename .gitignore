@@ -15,3 +15,7 @@ dist
 /.coverage
 /coverage.xml
 /nosetests.xml
+include/
+lib/
+local/
+share/

@@ -11,12 +11,12 @@ the licensed work. The keys of this work_dict are as follows:
  - source_work
  - more_permissions_url
 """
+from future import standard_library
+standard_library.install_aliases()
+from builtins import object
 
-from urlparse import urlparse
+from urllib.parse import urlparse
 
-import zope.interface
-
-from cc.license._lib.interfaces import ILicenseFormatter
 from cc.license import util
 from cc.i18n.gettext_i18n import ugettext_for_locale
 from cc.i18n.gettext_i18n import fake_ugettext as _
@@ -143,7 +143,6 @@ def _translate_dctype(format):
 ### END HTMLFormatter support functions
 
 class HTMLFormatter(object):
-    zope.interface.implements(ILicenseFormatter)
 
     def __repr__(self):
         return "<LicenseFormatter object '%s'>" % self.id

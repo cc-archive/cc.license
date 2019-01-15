@@ -1,5 +1,4 @@
-
-import RDF
+from rdflib import URIRef
 import cc.license
 from cc.license._lib import rdf_helper
 
@@ -17,24 +16,23 @@ def list_uris():
     """Returns sequence of all jurisdiction codes possible. Jurisdiction
        codes are strings that yield a Jurisdiction object when passed
        to cc.license.jurisdiction.Jurisdiction"""
-    if not _CACHE.has_key('uri'):
+    if 'uri' not in _CACHE:
         _CACHE['uri'] = _list_uris()
     return list_t(_CACHE['uri'])
 
 def _list_uris():
-    cc_jurisdiction_url = RDF.Uri('http://creativecommons.org/ns#Jurisdiction')
+    cc_jurisdiction_url = URIRef('http://creativecommons.org/ns#Jurisdiction')
     # grab the url strings from the RDF Nodes
-    uris = [ rdf_helper.uri2value(j.subject)
+    uris = [ str(j)
              for j in
-             list_t(rdf_helper.JURI_MODEL.find_statements(
-                           RDF.Statement(None, None, cc_jurisdiction_url)))
+             rdf_helper.JURI_MODEL.subjects(None, cc_jurisdiction_url)
            ]
     uris.append('') # default jurisdiction
     return uris
 
 # is this a useful / desirable function to have?
 def list_codes():
-    if not _CACHE.has_key('code'):
+    if 'code' not in _CACHE:
         _CACHE['code'] = _list_codes()
     return list_t(_CACHE['code'])
 
@@ -42,7 +40,7 @@ def _list_codes():
     return [ uri2code(uri) for uri in list_uris() ]
 
 def list():
-    if not _CACHE.has_key('juri'):
+    if 'juri' not in _CACHE:
         _CACHE['juri'] = _list()
     return list_t(_CACHE['juri'])
 
@@ -65,7 +63,7 @@ def uri2code(uri):
         return '' # trivial case
     base = 'http://creativecommons.org/international/' 
     if not uri.startswith(base):
-        raise cc.license.InvalidURIError, "Invalid jurisdiction URI"
+        raise cc.license.InvalidURIError("Invalid jurisdiction URI")
     blen = len(base)
     return uri[blen:-1]
 
@@ -74,7 +72,7 @@ def get_licenses_by_code(code):
         # 'Invalid jurisdiction'
         return None
     if code == '':
-        if 'unported' not in _CACHE.keys():
+        if 'unported' not in list(_CACHE.keys()):
             _CACHE['unported'] = []
             uris = rdf_helper.get_license_uris(
                 'http://creativecommons.org/license/')

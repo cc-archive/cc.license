@@ -1,10 +1,10 @@
+from builtins import str
+from builtins import object
 
 import nose.tools
-from zope.interface import implementedBy
 
 import cc.license
 from cc.license import CCLicenseError
-from cc.license._lib.interfaces import ILicenseSelector
 from cc.license._lib import all_possible_answers
 
 def test_list_selectors():
@@ -18,7 +18,6 @@ def test_get_selector():
     """selectors.choose() must return a valid ISelector for each selector."""
     for selector_id in cc.license.selectors.list():
         s = cc.license.selectors.choose(selector_id)
-        assert ILicenseSelector in implementedBy(s.__class__)
         s2 = cc.license.selectors.choose(selector_id)
         assert s2 is s # singletons, in a way
 
@@ -28,7 +27,7 @@ def test_id_and_uri():
 
         assert ('http://creativecommons.org/license' in s.uri) or \
                 ('http://creativecommons.org/choose' in s.uri)
-    
+
 def test_get_selector_key_error():
     """selectors.choose() should raise a CCLicenseError if supplied 
        with an invalid selector id."""
@@ -58,7 +57,7 @@ def test_functional_one():
     assert std.has_license(uri)
 
 
-class TestIssuers:
+class TestIssuers(object):
 
     def __init__(self):
         self.std = cc.license.selectors.choose('standard')
@@ -88,7 +87,7 @@ class TestIssuers:
 
     # TODO: test by_code
 
-class TestQuestions:
+class TestQuestions(object):
 
     def __init__(self):
         self.std = cc.license.selectors.choose('standard')
@@ -107,7 +106,7 @@ class TestQuestions:
         assert type(questions) == list
         assert len(questions) == 0
 
-class TestAnswersStandard:
+class TestAnswersStandard(object):
 
     def __init__(self):
         self.sel = cc.license.selectors.choose('standard')
@@ -125,7 +124,7 @@ class TestAnswersStandard:
                                    'foo':'bar',
                                    'lolcats':'roflcopter'})
         assert type(lic) == cc.license.License
-        assert lic.title() == 'Attribution 3.0 Unported'
+        assert lic.title() == 'Attribution 4.0 International'
         lic2 = self.sel.by_code('by')
         assert lic == lic2
 
@@ -149,7 +148,7 @@ class TestAnswersStandard:
         # fi BY-SA license is 1.0 only, so issue unported instead
         license = self.sel.by_answers(
             {'commercial': 'y', 'derivatives': 'sa', 'jurisdiction': 'fi'})
-        assert license.uri == 'http://creativecommons.org/licenses/by-sa/3.0/'
+        assert license.uri == 'http://creativecommons.org/licenses/by-sa/4.0/'
 
         # Don't correct where unnecessary though
         license = self.sel.by_answers(
@@ -157,7 +156,7 @@ class TestAnswersStandard:
         assert license.uri == 'http://creativecommons.org/licenses/by-sa/3.0/es/'
 
 
-class TestAnswersSampling:
+class TestAnswersSampling(object):
 
     def __init__(self):
         self.sel = cc.license.selectors.choose('recombo')
@@ -187,7 +186,7 @@ class TestAnswersSampling:
             lic = self.sel.by_answers(answer_dict)
             assert type(lic) == cc.license.License
 
-class TestAnswersPublicdomain:
+class TestAnswersPublicdomain(object):
 
     def __init__(self):
         self.sel = cc.license.selectors.choose('publicdomain')
@@ -207,7 +206,7 @@ class TestAnswersPublicdomain:
         assert lic == lic2
 
 
-class TestPublicApi:
+class TestPublicApi(object):
 
     def __init__(self):
         self.dir = dir(cc.license.selectors)
@@ -217,7 +216,7 @@ class TestPublicApi:
             assert f in self.dir
 
 
-class TestCustomization:
+class TestCustomization(object):
 
     def __init__(self):
         self.sels = []

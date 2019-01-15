@@ -1,10 +1,12 @@
+from builtins import str
+from builtins import object
 
 import nose.tools
 import cc.license
 from cc.license import CCLicenseError
 from cc.license._lib.classes import License
 
-class TestAll:
+class TestAll(object):
 
     def __init__(self):
         self.stdsel = cc.license.selectors.choose('standard')
@@ -30,17 +32,17 @@ class TestAll:
         lic = self.stdsel.by_uri(uri)
         assert lic.version == u'1.0'
         lic2 = self.stdsel.by_code('by')
-        assert lic2.version == u'3.0'
+        assert lic2.version == u'4.0'
 
     def test_uri(self):
-        uri = 'http://creativecommons.org/licenses/by-sa/3.0/'
+        uri = 'http://creativecommons.org/licenses/by-sa/4.0/'
         lic = self.stdsel.by_uri(uri)
         assert lic.uri == uri
         lic2 = self.stdsel.by_code('by-sa')
         assert lic2.uri == uri
 
     def test_uri_multiple(self):
-        uri = 'http://creativecommons.org/licenses/by-nc-nd/3.0/'
+        uri = 'http://creativecommons.org/licenses/by-nc-nd/4.0/'
         lic = self.stdsel.by_uri(uri)
         assert lic.uri == uri
         lic2 = self.stdsel.by_uri(uri)
@@ -60,9 +62,9 @@ class TestAll:
     def test_title(self):
         lic = self.stdsel.by_code('by')
         assert lic.title() == lic.title('en')
-        assert lic.title('en') == u'Attribution 3.0 Unported'
-        assert lic.title('es') == u'Atribuci\xf3n 3.0 Unported'
-        assert lic.title('de') == u'Namensnennung 3.0 Unported'
+        assert lic.title('en') == u'Attribution 4.0 International'
+        assert lic.title('es') == u'Atribuci\xf3n 4.0 Internacional'
+        assert lic.title('de') == u'Namensnennung 4.0 International'
 
     def test_deprecated(self):
         lic = self.stdsel.by_code('by')
@@ -90,7 +92,7 @@ class TestAll:
 
         lic2 = self.stdsel.by_code('by', version='1.0')
         assert isinstance(lic2.current_version, License)
-        assert lic2.current_version.version == '3.0'
+        assert lic2.current_version.version == '4.0'
 
         lic2 = self.stdsel.by_code('by', jurisdiction="es")
         assert isinstance(lic2.current_version, License)
@@ -123,7 +125,7 @@ class TestAll:
             assert not u.libre
 
     def test_logo(self):
-        base = 'http://i.creativecommons.org/l/'
+        base = 'https://i.creativecommons.org/l/'
         by = self.stdsel.by_code('by')
         assert type(by.logo) is str
         assert by.logo.startswith(base)
@@ -155,7 +157,7 @@ class TestAll:
     def test_rdf(self):
         by = self.stdsel.by_code('by')
         expected = """<rdf:RDF xmlns="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-  <License rdf:about="http://creativecommons.org/licenses/by/3.0/">
+  <License rdf:about="http://creativecommons.org/licenses/by/4.0/">
     <permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks"/>
     <permits rdf:resource="http://creativecommons.org/ns#Distribution"/>
     <permits rdf:resource="http://creativecommons.org/ns#Reproduction"/>
@@ -208,7 +210,7 @@ class TestAll:
         nose.tools.assert_equal(result, expected)
 
 
-class TestStandard:
+class TestStandard(object):
 
     def setUp(self):
         self.selector = cc.license.selectors.choose('standard')
@@ -222,7 +224,7 @@ class TestStandard:
     def test_bysa_generic(self):
         lic = self.selector.by_code('by-sa')
         assert lic.jurisdiction.title() == 'Unported'
-        # assert_true(lic.libre) # FIXME: Should this be here?
+        assert lic.libre
 
     def test_bysa_us(self):
         # nonexistent license returns None
@@ -231,12 +233,12 @@ class TestStandard:
 
         lic = self.selector.by_code('by-sa', jurisdiction='us', version='3.0')
         assert lic.jurisdiction.code == 'us'
-        # assert_true(lic.libre) # FIXME: Should this be here?
+        assert lic.libre
 
         # Now, test automatic version selection - but FIXME
         # do that later.
 
-class TestSampling:
+class TestSampling(object):
 
     def setUp(self):
         self.selector = cc.license.selectors.choose('recombo')
@@ -245,7 +247,7 @@ class TestSampling:
         lic = self.selector.by_code('sampling')
         assert lic.title() == 'Sampling 1.0'
 
-class TestPublicDomain:
+class TestPublicDomain(object):
 
     def setUp(self):
         self.selector = cc.license.selectors.choose('publicdomain')
@@ -258,7 +260,7 @@ class TestPublicDomain:
         assert self.lic.title() == self.lic.title('en')
 
 
-class TestCustomization:
+class TestCustomization(object):
 
     def __init__(self):
         std = cc.license.selectors.choose('standard')

@@ -1,7 +1,16 @@
 from setuptools import setup, find_packages
 
+import sys
+if sys.version_info < (3, 0):
+    JINJA = [ 'jinja2']
+elif sys.version_info < (3, 6):
+    # https://stackoverflow.com/questions/43163201/pyinstaller-syntax-error-yield-inside-async-function-python-3-5-1/43177028
+    JINJA = [ 'jinja2==2.8.1' ]
+else:
+    JINJA = [ 'jinja2' ]
+
 setup(name='cc.license',
-      version='0.14.25',
+      version='0.15.0',
       namespace_packages = ['cc',],
       description="License selection based on ccREL-based metadata.",
       classifiers=[],
@@ -16,20 +25,25 @@ setup(name='cc.license',
       zip_safe=False,
       test_suite='nose.collector',
       install_requires=[
-        'rdflib<3.0',
-        'cc.licenserdf',
-        'setuptools',
-        'nose',
-        'lxml',
-        'rdfadict',
-        'python-gettext<2.0',
-        'jinja2',
-        'cc.i18n',
-      ],
+          'rdflib',
+          'cc.licenserdf',
+          'setuptools',
+          'nose',
+          'lxml',
+          'rdfadict',
+          'cc.i18n',
+          # Dependencies of dependencies
+          'html5lib',
+          # Moving from Python 2 to Python 3
+          'future',
+      ] + JINJA,
 
       dependency_links = [
-        'https://github.com/creativecommons/cc.i18n/tarball/master#egg=cc.i18n',
-        'https://github.com/creativecommons/cc.licenserdf/tarball/master#egg=cc.licenserdf',
+          'https://github.com/creativecommons/cc.i18n/tarball/python3#egg=cc.i18n',
+          'https://github.com/creativecommons/cc.licenserdf/tarball/python3#egg=cc.licenserdf',
+          'https://github.com/creativecommons/rdfadict/tarball/python3#egg=rdfadict',
+          # We don't use pyRdfa but our dependencies do, so we need this here
+          'https://github.com/RDFLib/pyrdfa3/tarball/master#egg=pyRdfa',
       ],
 
       setup_requires=['setuptools-git',],

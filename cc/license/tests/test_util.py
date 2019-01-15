@@ -1,4 +1,6 @@
-import StringIO
+from future import standard_library
+standard_library.install_aliases()
+import io
 
 from lxml import etree
 from nose.tools import assert_equal
@@ -6,7 +8,7 @@ from nose.tools import assert_equal
 from cc.license import util
 
 
-UNSTRIPPED_TEMPLATE_OUTPUT = """ <html xmlns="http://www.w3.org/1999/xhtml" xmlns:dc="http://purl.org/dc/elements/1.1/title">
+UNSTRIPPED_TEMPLATE_OUTPUT = u""" <html xmlns="http://www.w3.org/1999/xhtml" xmlns:dc="http://purl.org/dc/elements/1.1/title">
   <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">
     <img alt="Creative Commons License" style="border-width:0" />
   </a>

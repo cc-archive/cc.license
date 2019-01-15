@@ -1,9 +1,12 @@
+from future import standard_library
+standard_library.install_aliases()
+from builtins import open, range, str
 import csv
 import pkg_resources
 import re
 
 from lxml import etree
-import StringIO
+import io
 
 
 LEFT_WHITE_SPACE_RE = re.compile('\A[ \n\t].*\Z', re.DOTALL)
@@ -56,7 +59,7 @@ def strip_xml(element):
       >>> import StringIO
       >>> etree_mess = etree.parse(StringIO.StringIO(xml_mess))
       >>> cleaned_root_mess = strip_xml(etree_mess.getroot())
-      >>> etree.tostring(cleaned_root_mess)
+      >>> etree.tounicode(cleaned_root_mess)
       '<help>How did <person>I</person> get to be so <cleanliness xmlns:clean="http://example.org/howclean/#" clean:cleanliness="filthy">messy</cleanliness>?</help>'
 
     Note that strip_xml operates on the mutability of the argument
@@ -129,7 +132,7 @@ def inner_xml(xml_text):
       >>> inner_xml('<div>This is some <i><b>really</b> silly</i> text!</div>')
       u'This is some <i><b>really</b> silly</i> text!'
     """
-    return unicode(INNER_XML_RE.match(xml_text).groupdict()['body'])
+    return str(INNER_XML_RE.match(xml_text).groupdict()['body'])
 
 
 def stripped_inner_xml(xml_string):
@@ -146,9 +149,9 @@ def stripped_inner_xml(xml_string):
       ... silly</i> text!</div>''')
       u'This is some <i><b>really</b> silly</i> text!'
     """
-    et = etree.parse(StringIO.StringIO(xml_string))
+    et = etree.parse(io.StringIO(xml_string))
     strip_xml(et.getroot())
-    return inner_xml(etree.tostring(et))
+    return inner_xml(etree.tounicode(et))
 
 
 def remove_blank_lines(string):
@@ -161,7 +164,7 @@ def remove_blank_lines(string):
 
 
 def unicode_cleaner(string):
-    if isinstance(string, unicode):
+    if isinstance(string, str):
         return string
 
     try:
@@ -179,7 +182,7 @@ def escape(string):
     """
     # Simplest escaping possible, kinda borrowed from jinja2.
     return (
-        unicode(string)
+        str(string)
         .replace('&', '&amp;')
         .replace('>', '&gt;')
         .replace('<', '&lt;')
@@ -194,17 +197,17 @@ def locale_dict_fetch_with_fallbacks(data_dict, locale):
     good fallbacks.
     """
     # try returning the locale as-is
-    if data_dict.has_key(locale):
+    if locale in data_dict:
         return data_dict[locale]
 
     # nope?  try just returning the language...
     if '-' in locale:
         language, country = locale.split('-', 1)
-        if data_dict.has_key(language):
+        if language in data_dict:
             return data_dict[language]
 
     # still nope?  okay, try returning 'en', our default...
-    if data_dict.has_key('en'):
+    if 'en' in data_dict:
         return data_dict['en']
 
     # still no??  last attempt!
@@ -218,6 +221,7 @@ def locale_dict_fetch_with_fallbacks(data_dict, locale):
 CODE_COUNTRY_LIST = sorted([
     (unicode_cleaner(code), unicode_cleaner(country))
     for code, country in csv.reader(
-        file(pkg_resources.resource_filename('cc.license', 'iso3166.csv')))],
+            open(pkg_resources.resource_filename('cc.license', 'iso3166.csv'),
+                 encoding='utf-8'))],
     key=lambda country: country[1])
 CODE_COUNTRY_MAP = dict(CODE_COUNTRY_LIST)

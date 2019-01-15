@@ -1,8 +1,8 @@
-import classes
-import interfaces
-import rdf_helper
+from __future__ import absolute_import
+from . import classes
+from . import rdf_helper
 
-from functions import (
+from .functions import (
     dict2uri, uri2dict,
     code_from_uri, current_version,
     all_possible_license_versions, all_possible_answers)

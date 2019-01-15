@@ -1,13 +1,14 @@
+from builtins import str
+from builtins import object
+from six import string_types
 
 import nose.tools
-from zope.interface import implementedBy
 import os
 
 import rdfadict
 
 import cc.license
 from cc.license import CCLicenseError
-from cc.license._lib.interfaces import ILicenseFormatter
 from cc.license.tests import relax_validate, RELAX_PATH
 
 RELAX_HTML = os.path.join(RELAX_PATH, 'html_rdfa.relax.xml')
@@ -17,23 +18,22 @@ def test_list_formatters():
     formatters = cc.license.formatters.list()
     assert type(formatters) == list
     for f in formatters:
-        assert type(f) == str
+        assert isinstance(f, string_types)
 
 def test_get_formatter():
     """formatters.choose() must return a valid IFormatter for each formatter."""
     for formatter_id in cc.license.formatters.list():
         f = cc.license.formatters.choose(formatter_id)
-        assert ILicenseFormatter in implementedBy(f.__class__)
         f2 = cc.license.formatters.choose(formatter_id)
         assert f2 is f # singletons
-    
+
 def test_get_formatter_key_error():
-    """formatters.choose() should raise a CCLicenseError if supplied 
+    """formatters.choose() should raise a CCLicenseError if supplied
        with an invalid formatter id."""
     nose.tools.assert_raises(CCLicenseError,
                              cc.license.formatters.choose, 'roflcopter')
 
-class TestHTMLFormatter:
+class TestHTMLFormatter(object):
 
     def __init__(self):
         self.lic = cc.license.by_code('by')
@@ -200,7 +200,7 @@ This work is published from:
   Australia</span>.
 </p>"""
 
-class TestCC0Formatter:
+class TestCC0Formatter(object):
     def __init__(self):
         self.license = cc.license.by_code('CC0')
         self.html = cc.license.formatters.classes.CC0HTMLFormatter()
@@ -431,7 +431,7 @@ This work (<span property="dct:title">&lt;b&gt;&#39;HAXX0rs&#39; &amp; &#34;LAME
 </p>"""
 
 
-class TestPDMarkFormatter:
+class TestPDMarkFormatter(object):
     def __init__(self):
         self.formatter = cc.license.formatters.classes.PDMarkHTMLFormatter()
         self.license = cc.license.by_code('mark')
@@ -503,7 +503,7 @@ class TestPDMarkFormatter:
              'curator_href': 'CURATOR_URL'},
             locale='en')
         assert output.strip() == EXPECTED_PDMARK_WORKTITLE_AUTHOR_CURATOR
-        
+
     def test_worktitle_author(self):
         output = self.formatter.format(
             self.license,
@@ -565,7 +565,7 @@ class TestPDMarkFormatter:
 EXPECTED_PUBLICDOMAIN_PLAIN = (
     '<a rel="license" href="http://creativecommons.org/licenses/publicdomain/">'
     '<img alt="Creative Commons License" style="border-width:0"'
-    ' src="http://i.creativecommons.org/l/publicdomain/88x31.png" /></a><br />'
+    ' src="https://i.creativecommons.org/l/publicdomain/88x31.png" /></a><br />'
     'This work is in the '
     '<a rel="license" href="http://creativecommons.org/licenses/publicdomain/">'
     'Public Domain</a>.')
@@ -573,7 +573,7 @@ EXPECTED_PUBLICDOMAIN_PLAIN = (
 EXPECTED_PUBLICDOMAIN_WORKFORMAT = (
     '<a rel="license" href="http://creativecommons.org/licenses/publicdomain/">'
     '<img alt="Creative Commons License" style="border-width:0"'
-    ' src="http://i.creativecommons.org/l/publicdomain/88x31.png" /></a><br />'
+    ' src="https://i.creativecommons.org/l/publicdomain/88x31.png" /></a><br />'
     'This <span xmlns:dct="http://purl.org/dc/terms/"'
     ' href="http://purl.org/dc/dcmitype/MovingImage" rel="dct:type">work</span> '
     'is in the '
@@ -607,7 +607,7 @@ def test_publicdomain_formatter():
     #     license, {'format': ''}, 'es')
 
 
-class TestPublicApi:
+class TestPublicApi(object):
 
     def __init__(self):
         self.dir = dir(cc.license.formatters)
@@ -620,7 +620,7 @@ class TestPublicApi:
             assert f in self.dir
 
 
-class TestFilters:
+class TestFilters(object):
 
     def __init__(self):
         self.lic = cc.license.by_code('by')
@@ -661,7 +661,7 @@ class TestFilters:
         assert result != ["http://example.org/ASDFASDF"]
 
 
-class TestCustomization:
+class TestCustomization(object):
 
     def __init__(self):
         self.formatters = []

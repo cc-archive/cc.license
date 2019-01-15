@@ -1,9 +1,13 @@
+from __future__ import absolute_import
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
 
 import copy
 from distutils.version import StrictVersion
-import urlparse
-import RDF
-import rdf_helper
+import future.moves.urllib.parse
+import rdflib
+from . import rdf_helper
 
 from cc.license.jurisdictions.classes import Jurisdiction
 from cc.license._lib.exceptions import InvalidURIError
@@ -31,9 +35,8 @@ def locales():
             ?x rdf:type cc:Jurisdiction .
          }
                   """
-    query = RDF.Query(query_string, query_language='sparql')
-    return [s['lang'].literal_value['string']
-            for s in query.execute(rdf_helper.JURI_MODEL)]
+    solns = rdf_helper.JURI_MODEL.query(query_string)
+    return [str(s['lang']) for s in solns]
 
 
 _BY_CODE_CACHE = {}
@@ -49,10 +52,10 @@ def by_code(code, jurisdiction=None, version=None):
         version = str(version)
 
     cache_key = (code, jurisdiction, version)
-    if _BY_CODE_CACHE.has_key(cache_key):
+    if cache_key in _BY_CODE_CACHE:
         return _BY_CODE_CACHE[cache_key]
 
-    for key, selector in cc.license.selectors.SELECTORS.items():
+    for key, selector in list(cc.license.selectors.SELECTORS.items()):
         license = selector.by_code(
             code,
             jurisdiction=jurisdiction,
@@ -68,10 +71,10 @@ _BY_URI_CACHE = {}
 
 def by_uri(uri):
     """A LicenseSelector-less means of picking a License from a URI."""
-    if _BY_URI_CACHE.has_key(uri):
+    if uri in _BY_URI_CACHE:
         return _BY_URI_CACHE[uri]
 
-    for key, selector in cc.license.selectors.SELECTORS.items():
+    for key, selector in list(cc.license.selectors.SELECTORS.items()):
         if selector.has_license(uri):
             license =  selector.by_uri(uri)
             _BY_URI_CACHE[uri] = license
@@ -86,7 +89,7 @@ def code_from_uri(uri):
     elif uri.startswith(CC0_BASE):
         return 'CC0'
     else:
-        raise InvalidURIError, "Invalid License URI"
+        raise InvalidURIError("Invalid License URI")
 
 def uri2dict(uri):
     """Take a license uri and convert it into a dictionary of values."""
@@ -97,10 +100,10 @@ def uri2dict(uri):
         raw_info = uri[len(base):]
         raw_info = raw_info.rstrip('/')
 
-        info_list = raw_info.split('/') 
+        info_list = raw_info.split('/')
 
         if len(info_list) not in (1,2,3):
-            raise InvalidURIError, "Invalid Creative Commons URI: <%s>"%uri
+            raise InvalidURIError("Invalid Creative Commons URI: <%s>"%uri)
 
         retval = dict( code=info_list[0] )
         if len(info_list) > 1:
@@ -127,7 +130,7 @@ def uri2dict(uri):
 
 
     else:
-        raise InvalidURIError, "Invalid Creative Commons URI: <%s>" % uri
+        raise InvalidURIError("Invalid Creative Commons URI: <%s>" % uri)
 
 def dict2uri(license_info):
     """Take a dictionary of license values and convert it into a uri."""
@@ -138,7 +141,7 @@ def dict2uri(license_info):
         else:
             version = current_version(
                 license_code, license_info.get('jurisdiction'))
-            
+
         if license_code == 'CC0':
             return CC0_BASE + version + '/'
         elif license_code == 'mark':
@@ -151,7 +154,7 @@ def dict2uri(license_info):
         if license_code == 'publicdomain': # one URI for publicdomain
             return base + 'publicdomain/'
 
-        if license_info.has_key('jurisdiction'):
+        if 'jurisdiction' in license_info:
             jurisdiction = license_info['jurisdiction']
         else:
             jurisdiction = None
@@ -166,18 +169,18 @@ def dict2uri(license_info):
         if not version:
             version = current_version(license_code, jurisdiction)
 
-        # apparently urlparse.urljoin is retarded, or handles /'s differently
-        # than i expect; if string is empty, concatenating yields a single '/'
+        # Apparently urlparse.urljoin is broken, or handles /'s differently
+        # than I expect; if string is empty, concatenating yields a single '/'
         # which brings the URI up a level.
-        base = urlparse.urljoin(base, license_code)
+        base = future.moves.urllib.parse.urljoin(base, license_code)
         if not base.endswith('/'):
             base += '/'
-        base = urlparse.urljoin(base, version)
+        base = future.moves.urllib.parse.urljoin(base, version)
         if not base.endswith('/'):
             base += '/'
 
         if jurisdiction:
-            base = urlparse.urljoin(base, jurisdiction)
+            base = future.moves.urllib.parse.urljoin(base, jurisdiction)
             if not base.endswith('/'):
                 base += '/'
 
@@ -194,7 +197,7 @@ def current_version(code, jurisdiction=None):
     if len(versions):
         current = str(versions[-1].version)
     return current
-    
+
 
 def sort_licenses(x, y):
     """
@@ -211,6 +214,10 @@ def sort_licenses(x, y):
         return -1
 
 
+def license_sort_key(x):
+    return StrictVersion(x.version)
+
+
 ALL_POSSIBLE_VERSIONS_CACHE = {}
 def all_possible_license_versions(code, jurisdiction=None):
     """
@@ -222,7 +229,7 @@ def all_possible_license_versions(code, jurisdiction=None):
      A list of URIs.
     """
     cache_key = (code, jurisdiction)
-    if ALL_POSSIBLE_VERSIONS_CACHE.has_key(cache_key):
+    if cache_key in ALL_POSSIBLE_VERSIONS_CACHE:
         return ALL_POSSIBLE_VERSIONS_CACHE[cache_key]
 
     qstring = """
@@ -231,21 +238,19 @@ def all_possible_license_versions(code, jurisdiction=None):
               SELECT ?license
               WHERE {
                 ?license dc:identifier '%s' }"""
-    query = RDF.Query(
-        qstring % str(code),
-        query_language='sparql')
+    solns = rdf_helper.ALL_MODEL.query(qstring % str(code))
 
     license_results = [
-        cc.license.by_uri(str(result['license'].uri))
-        for result in query.execute(rdf_helper.ALL_MODEL)]
+        cc.license.by_uri(str(result['license']))
+        for result in solns]
 
     jurisdiction_obj = cc.license.jurisdictions.by_code(str(jurisdiction or ''))
 
     # only keep results with the same jurisdiction
-    license_results = filter(
-        lambda lic: lic.jurisdiction == jurisdiction_obj, license_results)
+    license_results = [lic for lic in license_results
+                       if lic.jurisdiction == jurisdiction_obj]
 
-    license_results.sort(sort_licenses)    
+    license_results.sort(key=license_sort_key)
     ALL_POSSIBLE_VERSIONS_CACHE[cache_key] = license_results
 
     return license_results
@@ -267,7 +272,7 @@ def all_possible_answers(list_of_questions):
         new_adl = []
         for adict in adl:
             for enum in q.answers():
-                answer = enum[1] # the answer value 
+                answer = enum[1] # the answer value
                 aclone = adict.copy()
                 aclone[q.id] = answer
                 new_adl.append(aclone)
@@ -279,20 +284,19 @@ def all_possible_answers(list_of_questions):
 _VALID_JURISDICTIONS_CACHE = {}
 
 def get_valid_jurisdictions(license_class='standard'):
-    if _VALID_JURISDICTIONS_CACHE.has_key(license_class):
+    if license_class in _VALID_JURISDICTIONS_CACHE:
         return _VALID_JURISDICTIONS_CACHE[license_class]
-    
+
     # TODO: use license_class here
-    query = RDF.Query(
+    solns = rdf_helper.ALL_MODEL.query(
         str('PREFIX cc: <http://creativecommons.org/ns#> '
             'SELECT ?jurisdiction WHERE '
             '{ ?license cc:licenseClass <http://creativecommons.org/license/> .'
-            '  ?license cc:jurisdiction ?jurisdiction }'),
-        query_language="sparql")
+            '  ?license cc:jurisdiction ?jurisdiction }'))
 
     jurisdictions = set(
-        [unicode(result['jurisdiction'].uri)
-         for result in query.execute(rdf_helper.ALL_MODEL)])
+        [str(result['jurisdiction'])
+         for result in solns])
 
     _VALID_JURISDICTIONS_CACHE[license_class] = jurisdictions
 
@@ -306,7 +310,7 @@ def get_selector_jurisdictions(selector_name='standard'):
     Get all of the launched jurisdictions that licenses in this
     selector are part of
     """
-    if _SELECTOR_JURISDICTIONS_CACHE.has_key(selector_name):
+    if selector_name in _SELECTOR_JURISDICTIONS_CACHE:
         return _SELECTOR_JURISDICTIONS_CACHE[selector_name]
 
     selector = cc.license.selectors.choose(selector_name)
@@ -314,14 +318,14 @@ def get_selector_jurisdictions(selector_name='standard'):
         ["PREFIX cc: <http://creativecommons.org/ns#>",
          "SELECT ?license",
          "WHERE {?license cc:licenseClass <%s>}" % str(selector.uri)])
-    query = RDF.Query(qstring, query_language="sparql")
+    solns = rdf_helper.ALL_MODEL.query(qstring)
 
     # This is so stupid, but if we add a WHERE clause for
     # jurisdictions in the query string it takes approximately 5
     # million years.
     licenses = [
-        cc.license.by_uri(str(result['license'].uri))
-        for result in query.execute(rdf_helper.ALL_MODEL)]
+        cc.license.by_uri(str(result['license']))
+        for result in solns]
 
     # We need to make sure jurisdictions are unique.  The easiest way
     # to do that is have a second set that keeps track of all the

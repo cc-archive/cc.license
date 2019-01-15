@@ -1,7 +1,7 @@
-import RDF
-import zope.interface
-import interfaces 
-import rdf_helper
+from __future__ import absolute_import
+from builtins import str
+from builtins import object
+import rdflib
 
 from cc.i18n.gettext_i18n import ugettext_for_locale
 from cc.i18n.util import locale_to_lower_upper
@@ -9,13 +9,13 @@ from cc.i18n import mappers
 
 import cc.license
 from cc.license.util import locale_dict_fetch_with_fallbacks
+from cc.license._lib import rdf_helper
 from cc.license._lib.exceptions import SelectorQAError, ExistentialException
 from cc.license._lib.functions import all_possible_license_versions
 from cc.licenserdf.util import inverse_translate
 
 class License(object):
     """Base class for ILicense implementation modeling a specific license."""
-    zope.interface.implements(interfaces.ILicense)
 
     def __init__(self, uri):
         # XXX do this as a dict later?
@@ -41,12 +41,11 @@ class License(object):
                   PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
                 
                   ASK { <%s> rdf:type cc:License . }"""
-        query = RDF.Query(qstring % self.uri, query_language='sparql')
-        uri_exists = query.execute(rdf_helper.ALL_MODEL).get_boolean()
+        soln = rdf_helper.ALL_MODEL.query(qstring % self.uri)
+        uri_exists = bool(soln)
         if not uri_exists:
-            raise ExistentialException, \
-                  "License <%(uri)s> does not exist in model given." % {
-                              'uri': self.uri }
+            raise ExistentialException("License <%(uri)s> does not exist in model given." % {
+                              'uri': self.uri })
 
     def __repr__(self):
         return "<License object '%(uri)s'>" % {'uri': self.uri}
@@ -61,7 +60,7 @@ class License(object):
     def title(self, language='en'):
         if self._titles is None:
             self._titles = rdf_helper.get_titles(self.uri)
-        i18n_title = self._titles['i18n']
+        i18n_title = self._titles['x-i18n']
         return inverse_translate(i18n_title, locale_to_lower_upper(language))
 
     @property
@@ -69,7 +68,7 @@ class License(object):
         if self._lclass is None:
             lclass_uri = rdf_helper.get_license_class(self.uri)
             # XXX this feels hackish
-            for value in cc.license.selectors.SELECTORS.values():
+            for value in list(cc.license.selectors.SELECTORS.values()):
                 if value.uri == lclass_uri:
                     self._lclass = value.id
         return self._lclass
@@ -204,7 +203,7 @@ class License(object):
         [(legalcode_uri, None, None)]
 
         """
-        if self._legalcodes.has_key(language):
+        if language in self._legalcodes:
             return self._legalcodes[language]
 
         gettext = ugettext_for_locale(language)
@@ -233,7 +232,6 @@ class License(object):
 
 
 class Question(object):
-    zope.interface.implements(interfaces.IQuestion)
 
     def __init__(self, root, lclass, id):
         """Given an etree root object, a license class string, and a question
@@ -271,8 +269,8 @@ class Question(object):
                     self._enums[eid] = (elabels, edesc,)
 
         if not _flag:
-            raise SelectorQAError, "Question identifier %(id)s not found" % \
-                    {'id': self.id}
+            raise SelectorQAError("Question identifier %(id)s not found" % \
+                    {'id': self.id})
 
     def __repr__(self):
         return "<Question object id='%(id)s'>" % {'id': self.id}
@@ -295,14 +293,14 @@ class Question(object):
         return locale_dict_fetch_with_fallbacks(self._descs, language)
 
     def answers(self, language='en'):
-        if self._answers.has_key(language):
+        if language in self._answers:
             return self._answers[language]
 
         if language == '':
             language = 'en' # why not?
             
         answers = []
-        for k in self._enums.keys():
+        for k in list(self._enums.keys()):
             label = locale_dict_fetch_with_fallbacks(self._enums[k][0],
                                                      language)
             # is there a description for this enum?
@@ -313,9 +311,9 @@ class Question(object):
                                                          language) )
             else:
                 enum = ( label, k, None)
-                
+
             answers.append(enum)
-            
+
         self._answers[language] = answers
 
         return answers
@@ -327,7 +325,6 @@ class JurisdictionQuestion(object):
     information is kept up to date in jurisdictions.rdf, so we should
     pull from there for jurisdiction questions.
     """
-    #zope.interface.implements(interfaces.IQuestion)
 
     def __init__(self, lclass, lclass_uri):
         """
@@ -349,7 +346,7 @@ class JurisdictionQuestion(object):
 
     def __str__(self):
         return "JurisdictionQuestion: %(label)s" % {'label': self.label()}
-            
+
     def label(self, language='en'):
         if language == '':
             language = 'en' # why not?

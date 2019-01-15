@@ -1,0 +1,2 @@
+include cc/license/iso3166.csv
+include cc/license/formatters/templates/cc0.html

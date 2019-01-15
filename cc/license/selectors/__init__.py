@@ -1,7 +1,8 @@
+from __future__ import absolute_import
 
 from cc.license._lib import rdf_helper
 from cc.license._lib.exceptions import CCLicenseError
-import classes
+from . import classes
 
 SELECTORS = {}
 
@@ -21,6 +22,8 @@ def choose(license_class):
     except KeyError:
         return None
 
+PYTHON_BUILTIN_LIST = list
+
 def list():
     """Return a list of available selector IDs."""
-    return SELECTORS.keys()
+    return PYTHON_BUILTIN_LIST(SELECTORS.keys())
