@@ -21,9 +21,9 @@ setup(
         'jinja2',
         'lxml',
         'nose',
-        'python-gettext<2.0',
+        'python-gettext',
         'rdfadict',
-        'rdflib<3.0',
+        'rdflib',
         'setuptools'],
 
     dependency_links=[
