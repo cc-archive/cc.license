@@ -11,6 +11,11 @@ python-rdflib, though having it shouldn't break anything), as it
 is not available through PyPI.
 
 
+# Preconditions
+The author, or the licenser in case the author did a contractual transfer of rights, need to have the exclusive rights on the work. If the work has already been published under a public license, it can be uploaded by any third party, once more on another platform, by using a compatible license, and making reference and attribution to the original license (e.g. by referring the URL of the original license).
+
+
+
 Developing
 ==========
 
