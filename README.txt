@@ -15,7 +15,7 @@ Developing
 ==========
 
 cc.license is available via `git <http://git.or.cz/>`_.  To checkout a
-copy of the code, just run::
+copy of the code, copy,paste and just run::
 
   $ git clone git://code.creativecommons.org/cc.license
 
