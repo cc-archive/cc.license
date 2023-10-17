@@ -2,6 +2,16 @@
 cc.license
 ==========
 
+----
+
+🛑 **As of 2023-09-27, this project was deprecated by the new CC Legal Tools**
+(cc-legal-tools-app_, cc-legal-tools-data_).
+
+.. _cc-legal-tools-app: https://github.com/creativecommons/cc-legal-tools-app
+.. _cc-legal-tools-data: https://github.com/creativecommons/cc-legal-tools-data
+
+----
+
 
 Installation
 ============
