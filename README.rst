@@ -12,6 +12,16 @@ cc.license
 
 ----
 
+Python app that runs part of the license engine on CC's website 
+
+
+ccEngine
+========
+
+This repository is part of the ccEngine: `cc-archive/cc.engine`_.
+
+.. _`cc-archive/cc.engine`: https://github.com/cc-archive/cc.engine
+
 
 Installation
 ============
